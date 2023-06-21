@@ -8,6 +8,7 @@
 /// @docImport 'list_tile.dart';
 library;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -610,7 +611,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
         routeName = searchFieldLabel;
     }
 
-    return Semantics(
+    return RositaSemantics(
       explicitChildNodes: true,
       scopesRoute: true,
       namesRoute: true,

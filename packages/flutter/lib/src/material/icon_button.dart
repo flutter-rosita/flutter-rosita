@@ -14,6 +14,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'button_style.dart';
@@ -785,7 +786,7 @@ class IconButton extends StatelessWidget {
       );
     }
 
-    return Semantics(
+    return RositaSemantics(
       button: true,
       enabled: onPressed != null,
       child: InkResponse(
@@ -892,7 +893,7 @@ class _SelectableIconButtonState extends State<_SelectableIconButton> {
       variant: widget.variant,
       toggleable: toggleable,
       tooltip: widget.tooltip,
-      child: Semantics(
+      child: RositaSemantics(
         selected: widget.isSelected,
         child: widget.child,
       ),

@@ -14,6 +14,7 @@ import 'dart:async';
 import 'dart:io' show File;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 
@@ -1316,10 +1317,11 @@ class _ImageState extends State<Image> with WidgetsBindingObserver {
       invertColors: _invertColors,
       isAntiAlias: widget.isAntiAlias,
       filterQuality: widget.filterQuality,
+      rositaImageProvider: widget.image,
     );
 
     if (!widget.excludeFromSemantics) {
-      result = Semantics(
+      result = RositaSemantics(
         container: widget.semanticLabel != null,
         image: true,
         label: widget.semanticLabel ?? '',

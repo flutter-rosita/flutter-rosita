@@ -11,6 +11,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'app_bar.dart';
@@ -1787,7 +1788,7 @@ class _TabBarState extends State<TabBar> {
           child: Stack(
             children: <Widget>[
               wrappedTabs[index],
-              Semantics(
+              RositaSemantics(
                 selected: index == _currentIndex,
                 label: localizations.tabLabel(tabIndex: index + 1, tabCount: tabCount),
               ),
@@ -2410,7 +2411,7 @@ class _TabPageSelectorState extends State<TabPageSelector> {
     return AnimatedBuilder(
       animation: _animation!,
       builder: (BuildContext context, Widget? child) {
-        return Semantics(
+        return RositaSemantics(
           label: localizations.tabLabel(tabIndex: _tabController.index + 1, tabCount: _tabController.length),
           child: Row(
             mainAxisSize: MainAxisSize.min,

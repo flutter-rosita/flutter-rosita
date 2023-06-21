@@ -6,6 +6,7 @@
 /// @docImport 'text_field.dart';
 library;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'date.dart';
@@ -260,7 +261,7 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
       ?? theme.inputDecorationTheme.border
       ?? (useMaterial3 ? const OutlineInputBorder() : const UnderlineInputBorder());
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       child: TextFormField(
         decoration: InputDecoration(

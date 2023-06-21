@@ -8,6 +8,7 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'basic.dart';
@@ -78,7 +79,9 @@ class _RenderSemanticsClipper extends RenderProxyBox {
     }
     _clipDetailsNotifier = newNotifier;
     _clipDetailsNotifier.addListener(markNeedsSemanticsUpdate);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -235,7 +238,7 @@ class ModalBarrier extends StatelessWidget {
       }
     }
 
-    Widget barrier = Semantics(
+    Widget barrier = RositaSemantics(
       onTapHint: semanticsOnTapHint,
       onTap: semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
       onDismiss: semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
@@ -265,8 +268,8 @@ class ModalBarrier extends StatelessWidget {
       );
     }
 
-    return BlockSemantics(
-      child: ExcludeSemantics(
+    return RositaBlockSemantics(
+      child: RositaExcludeSemantics(
         excluding: excluding,
         child: _ModalBarrierGestureDetector(
           onDismiss: handleDismiss,

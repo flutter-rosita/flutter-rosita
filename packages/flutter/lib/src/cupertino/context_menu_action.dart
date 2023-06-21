@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 import 'colors.dart';
 import 'context_menu.dart';
@@ -115,7 +116,7 @@ class _CupertinoContextMenuActionState extends State<CupertinoContextMenuAction>
           constraints: const BoxConstraints(
             minHeight: _kButtonHeight,
           ),
-          child: Semantics(
+          child: RositaSemantics(
             button: true,
             child: ColoredBox(
               color: _isPressed

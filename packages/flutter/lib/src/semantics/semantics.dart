@@ -2465,7 +2465,7 @@ class SemanticsNode with DiagnosticableTreeMixin {
   /// ```dart
   /// PhysicalModel( // A
   ///   color: Colors.amber,
-  ///   child: Semantics(
+  ///   child: RositaSemantics(
   ///     explicitChildNodes: true,
   ///     child: const PhysicalModel( // B
   ///       color: Colors.brown,

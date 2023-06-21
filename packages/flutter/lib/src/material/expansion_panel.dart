@@ -5,6 +5,7 @@
 /// @docImport 'divider_theme.dart';
 library;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'constants.dart';
@@ -406,7 +407,7 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
 
       if (!child.canTapOnHeader) {
         final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-        expandIconPadded = Semantics(
+        expandIconPadded = RositaSemantics(
           label: _isChildExpanded(index)? localizations.expandedIconTapHint : localizations.collapsedIconTapHint,
           container: true,
           child: expandIconPadded,

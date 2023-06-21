@@ -11,6 +11,7 @@
 library;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rosita.dart';
 
 import 'checkbox_theme.dart';
 import 'color_scheme.dart';
@@ -604,7 +605,7 @@ class _CheckboxState extends State<Checkbox> with TickerProviderStateMixin, Togg
       ?? checkboxTheme.splashRadius
       ?? defaults.splashRadius!;
 
-    return Semantics(
+    return RositaSemantics(
       label: widget.semanticLabel,
       checked: widget.value ?? false,
       mixed: widget.tristate ? widget.value == null : null,

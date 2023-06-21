@@ -10,6 +10,7 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart' show TickerProvider;
 
 import 'framework.dart';
@@ -255,7 +256,7 @@ class _FloatingHeaderState extends State<_FloatingHeader> {
   Widget build(BuildContext context) => widget.child;
 }
 
-class _SliverPersistentHeaderElement extends RenderObjectElement {
+class _SliverPersistentHeaderElement extends RenderObjectElement with RositaSingleChildElementMixin {
   _SliverPersistentHeaderElement(
     _SliverPersistentHeaderRenderObjectWidget super.widget, {
     this.floating = false,
@@ -264,7 +265,10 @@ class _SliverPersistentHeaderElement extends RenderObjectElement {
   final bool floating;
 
   @override
-  _RenderSliverPersistentHeaderForWidgetsMixin get renderObject => super.renderObject as _RenderSliverPersistentHeaderForWidgetsMixin;
+  _RenderSliverPersistentHeaderForWidgetsMixin get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject)
+          as _RenderSliverPersistentHeaderForWidgetsMixin;
 
   @override
   void mount(Element? parent, Object? newSlot) {
@@ -297,6 +301,9 @@ class _SliverPersistentHeaderElement extends RenderObjectElement {
   }
 
   Element? child;
+
+  @override
+  Element? get rositaChild => child;
 
   void _build(double shrinkOffset, bool overlapsContent) {
     owner!.buildScope(this, () {

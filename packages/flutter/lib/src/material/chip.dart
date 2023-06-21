@@ -16,6 +16,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'chip_theme.dart';
 import 'color_scheme.dart';
@@ -1279,7 +1280,7 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
       ?? chipTheme.iconTheme?.size
       ?? theme.chipTheme.iconTheme?.size
       ?? _ChipDefaultsM3(context, widget.isEnabled).iconTheme!.size!;
-    return Semantics(
+    return RositaSemantics(
       container: true,
       button: true,
       child: _wrapWithTooltip(
@@ -1485,7 +1486,7 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
         child: result,
       ),
     );
-    return Semantics(
+    return RositaSemantics(
       button: widget.tapEnabled,
       container: true,
       selected: widget.selected,

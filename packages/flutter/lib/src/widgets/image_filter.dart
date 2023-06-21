@@ -10,6 +10,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'framework.dart';
 
@@ -72,7 +73,7 @@ class ImageFiltered extends SingleChildRenderObjectWidget {
   }
 }
 
-class _ImageFilterRenderObject extends RenderProxyBox {
+class _ImageFilterRenderObject extends RenderProxyBox with RositaRenderImageFilterMixin {
   _ImageFilterRenderObject(this._imageFilter, this._enabled);
 
   bool get enabled => _enabled;
