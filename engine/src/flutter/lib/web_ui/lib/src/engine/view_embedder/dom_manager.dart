@@ -44,7 +44,7 @@ class DomManager {
   factory DomManager({required double devicePixelRatio}) {
     final DomElement rootElement = domDocument.createElement(DomManager.flutterViewTagName);
     final DomElement platformViewsHost = domDocument.createElement(DomManager.glassPaneTagName);
-    final DomShadowRoot renderingHost = _attachShadowRoot(platformViewsHost);
+    final DomNode renderingHost = _attachShadowRoot(platformViewsHost);
     final DomElement sceneHost = domDocument.createElement(DomManager.sceneHostTagName);
     final DomElement textEditingHost = domDocument.createElement(DomManager.textEditingHostTagName);
     final DomElement semanticsHost = domDocument.createElement(DomManager.semanticsHostTagName);
@@ -138,7 +138,7 @@ class DomManager {
   final DomElement platformViewsHost;
 
   /// Hosts all rendering elements and canvases.
-  final DomShadowRoot renderingHost;
+  final DomNode renderingHost;
 
   /// Hosts the <flt-scene> element.
   ///
@@ -205,16 +205,16 @@ class DomManager {
   }
 }
 
-DomShadowRoot _attachShadowRoot(DomElement element) {
-  assert(
-    getJsProperty<Object?>(element, 'attachShadow') != null,
-    'ShadowDOM is not supported in this browser.',
-  );
+DomNode _attachShadowRoot(DomElement element) {
+  // assert(
+  //   getJsProperty<Object?>(element, 'attachShadow') != null,
+  //   'ShadowDOM is not supported in this browser.',
+  // );
 
-  return element.attachShadow(<String, dynamic>{
+  return getJsProperty<Object?>(element, 'attachShadow') != null ? element.attachShadow(<String, dynamic>{
     'mode': 'open',
     // This needs to stay false to prevent issues like this:
     // - https://github.com/flutter/flutter/issues/85759
     'delegatesFocus': false,
-  });
+  }) : domDocument.createElement('shadow-root');
 }

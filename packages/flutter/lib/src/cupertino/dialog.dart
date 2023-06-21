@@ -16,6 +16,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'interface_level.dart';
@@ -462,7 +463,7 @@ class _CupertinoAlertDialogState extends State<CupertinoAlertDialog> {
                         child: _ActionSheetGestureDetector(
                           child: CupertinoPopupSurface(
                             isSurfacePainted: false,
-                            child: Semantics(
+                            child: RositaSemantics(
                               role: SemanticsRole.alertDialog,
                               namesRoute: true,
                               scopesRoute: true,
@@ -1329,7 +1330,7 @@ class _CupertinoActionSheetState extends State<CupertinoActionSheet> {
       child: ScrollConfiguration(
         // A CupertinoScrollbar is built-in below
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: Semantics(
+        child: RositaSemantics(
           namesRoute: true,
           scopesRoute: true,
           explicitChildNodes: true,
@@ -1495,7 +1496,7 @@ class _CupertinoActionSheetActionState extends State<CupertinoActionSheetAction>
         behavior: HitTestBehavior.opaque,
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: _kActionSheetButtonMinHeight),
-          child: Semantics(
+          child: RositaSemantics(
             button: true,
             onTap: widget.onPressed,
             child: Padding(
@@ -2202,7 +2203,7 @@ class _CupertinoDialogActionState extends State<CupertinoDialogAction> implement
       fit: BoxFit.scaleDown,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: fontSizeRatio * (dialogWidth - (2 * padding))),
-        child: Semantics(
+        child: RositaSemantics(
           button: true,
           onTap: widget.onPressed,
           child: DefaultTextStyle(

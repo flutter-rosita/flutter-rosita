@@ -10,6 +10,7 @@
 library;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -569,7 +570,7 @@ class _Visibility extends SingleChildRenderObjectWidget {
   }
 }
 
-class _RenderVisibility extends RenderProxyBox {
+class _RenderVisibility extends RenderProxyBox with RositaRenderVisibilityMixin {
   _RenderVisibility(this._visible, this._maintainSemantics);
 
   bool get visible => _visible;
@@ -589,7 +590,9 @@ class _RenderVisibility extends RenderProxyBox {
       return;
     }
     _maintainSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -634,7 +637,7 @@ class _SliverVisibility extends SingleChildRenderObjectWidget {
   }
 }
 
-class _RenderSliverVisibility extends RenderProxySliver {
+class _RenderSliverVisibility extends RenderProxySliver with RositaRenderVisibilityMixin {
   _RenderSliverVisibility(this._visible, this._maintainSemantics);
 
   bool get visible => _visible;
@@ -654,7 +657,9 @@ class _RenderSliverVisibility extends RenderProxySliver {
       return;
     }
     _maintainSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

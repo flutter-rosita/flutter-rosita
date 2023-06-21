@@ -9,6 +9,7 @@ library;
 
 import 'dart:math' as math;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -44,7 +45,7 @@ class _AccountPictures extends StatelessWidget {
                 (otherAccountsPictures ?? <Widget>[]).take(3).map<Widget>((Widget picture) {
                   return Padding(
                     padding: const EdgeInsetsDirectional.only(start: 8.0),
-                    child: Semantics(
+                    child: RositaSemantics(
                       container: true,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
@@ -57,7 +58,7 @@ class _AccountPictures extends StatelessWidget {
         ),
         Positioned(
           top: 0.0,
-          child: Semantics(
+          child: RositaSemantics(
             explicitChildNodes: true,
             child: SizedBox.fromSize(size: currentAccountPictureSize, child: currentAccountPicture),
           ),
@@ -169,7 +170,7 @@ class _AccountDetailsState extends State<_AccountDetails> with SingleTickerProvi
         if (widget.onTap != null)
           LayoutId(
             id: _AccountDetailsLayout.dropdownIcon,
-            child: Semantics(
+            child: RositaSemantics(
               container: true,
               button: true,
               onTap: widget.onTap,
@@ -356,7 +357,7 @@ class _UserAccountsDrawerHeaderState extends State<UserAccountsDrawerHeader> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     assert(debugCheckHasMaterialLocalizations(context));
-    return Semantics(
+    return RositaSemantics(
       container: true,
       label: MaterialLocalizations.of(context).signedInLabel,
       child: DrawerHeader(

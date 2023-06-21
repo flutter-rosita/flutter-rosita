@@ -17,6 +17,7 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'default_selection_style.dart';
@@ -740,38 +741,47 @@ class Text extends StatelessWidget {
         ),
       );
     } else {
-      result = RichText(
-        textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
-        textDirection:
-            textDirection, // RichText uses Directionality.of to obtain a default if this is null.
-        locale: locale, // RichText uses Localizations.localeOf to obtain a default if this is null
-        softWrap: softWrap ?? defaultTextStyle.softWrap,
-        overflow: overflow ?? effectiveTextStyle?.overflow ?? defaultTextStyle.overflow,
-        textScaler: textScaler,
-        maxLines: maxLines ?? defaultTextStyle.maxLines,
-        strutStyle: strutStyle,
-        textWidthBasis: textWidthBasis ?? defaultTextStyle.textWidthBasis,
-        textHeightBehavior:
-            textHeightBehavior ??
-            defaultTextStyle.textHeightBehavior ??
-            DefaultTextHeightBehavior.maybeOf(context),
-        selectionColor:
-            selectionColor ??
-            DefaultSelectionStyle.of(context).selectionColor ??
-            DefaultSelectionStyle.defaultColor,
-        text: TextSpan(
-          style: effectiveTextStyle,
-          text: data,
-          children: textSpan != null ? <InlineSpan>[textSpan!] : null,
-        ),
-      );
+      result = kIsRosita && data != null
+          ? RositaRichText(
+            data,
+            style: effectiveTextStyle,
+            textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+            textDirection: textDirection,
+            overflow: overflow ?? effectiveTextStyle?.overflow ?? defaultTextStyle.overflow,
+            maxLines: maxLines ?? defaultTextStyle.maxLines,
+          )
+          : RichText(
+              textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+              textDirection:
+                  textDirection, // RichText uses Directionality.of to obtain a default if this is null.
+              locale: locale, // RichText uses Localizations.localeOf to obtain a default if this is null
+              softWrap: softWrap ?? defaultTextStyle.softWrap,
+              overflow: overflow ?? effectiveTextStyle?.overflow ?? defaultTextStyle.overflow,
+              textScaler: textScaler,
+              maxLines: maxLines ?? defaultTextStyle.maxLines,
+              strutStyle: strutStyle,
+              textWidthBasis: textWidthBasis ?? defaultTextStyle.textWidthBasis,
+              textHeightBehavior:
+                  textHeightBehavior ??
+                  defaultTextStyle.textHeightBehavior ??
+                  DefaultTextHeightBehavior.maybeOf(context),
+              selectionColor:
+                  selectionColor ??
+                  DefaultSelectionStyle.of(context).selectionColor ??
+                  DefaultSelectionStyle.defaultColor,
+              text: TextSpan(
+                style: effectiveTextStyle,
+                text: data,
+                children: textSpan != null ? <InlineSpan>[textSpan!] : null,
+              ),
+            );
     }
     if (semanticsLabel != null || semanticsIdentifier != null) {
-      result = Semantics(
+      result = RositaSemantics(
         textDirection: textDirection,
         label: semanticsLabel,
         identifier: semanticsIdentifier,
-        child: ExcludeSemantics(excluding: semanticsLabel != null, child: result),
+        child: RositaExcludeSemantics(excluding: semanticsLabel != null, child: result),
       );
     }
     return result;
