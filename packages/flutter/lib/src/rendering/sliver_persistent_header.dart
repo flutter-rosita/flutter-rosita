@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 
@@ -117,7 +118,7 @@ class PersistentHeaderShowOnScreenConfiguration {
 ///
 /// Subclasses must implement [performLayout], [minExtent], and [maxExtent], and
 /// typically also will implement [updateChild].
-abstract class RenderSliverPersistentHeader extends RenderSliver with RenderObjectWithChildMixin<RenderBox>, RenderSliverHelpers {
+abstract class RenderSliverPersistentHeader extends RenderSliver with RenderObjectWithChildMixin<RenderBox>, RenderSliverHelpers, RositaRenderSliverPersistentHeader {
   /// Creates a sliver that changes its size when scrolled to the start of the
   /// viewport.
   ///

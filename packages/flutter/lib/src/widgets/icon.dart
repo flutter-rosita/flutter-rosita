@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'debug.dart';
@@ -266,7 +267,7 @@ class Icon extends StatelessWidget {
 
     final IconData? icon = this.icon;
     if (icon == null) {
-      return Semantics(
+      return RositaSemantics(
         label: semanticLabel,
         child: SizedBox(width: iconSize, height: iconSize),
       );
@@ -296,7 +297,14 @@ class Icon extends StatelessWidget {
       leadingDistribution: TextLeadingDistribution.even,
     );
 
-    Widget iconWidget = RichText(
+    Widget iconWidget = kIsRosita
+        ? RositaRichText(
+      String.fromCharCode(icon!.codePoint),
+      overflow: TextOverflow.visible,
+      textDirection: textDirection,
+      style: fontStyle,
+    )
+        : RichText(
       overflow: TextOverflow.visible, // Never clip.
       textDirection: textDirection, // Since we already fetched it for the assert...
       text: TextSpan(
@@ -319,9 +327,9 @@ class Icon extends StatelessWidget {
       }
     }
 
-    return Semantics(
+    return RositaSemantics(
       label: semanticLabel,
-      child: ExcludeSemantics(
+      child: RositaExcludeSemantics(
         child: SizedBox(
           width: iconSize,
           height: iconSize,

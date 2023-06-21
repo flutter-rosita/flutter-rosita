@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'debug.dart';
@@ -359,7 +360,9 @@ class _TextSelectionToolbarTrailingEdgeAlignRenderBox extends RenderProxyBox {
   @override
   void applyPaintTransform(RenderObject child, Matrix4 transform) {
     final ToolbarItemsParentData childParentData = child.parentData! as ToolbarItemsParentData;
-    transform.translate(childParentData.offset.dx, childParentData.offset.dy);
+    if (childParentData.offset != Offset.zero) {
+      transform.translate(childParentData.offset.dx, childParentData.offset.dy);
+    }
     super.applyPaintTransform(child, transform);
   }
 }

@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -895,7 +896,7 @@ class ListTile extends StatelessWidget {
       splashColor: splashColor,
       autofocus: autofocus,
       enableFeedback: enableFeedback ?? tileTheme.enableFeedback ?? true,
-      child: Semantics(
+      child: RositaSemantics(
         selected: selected,
         enabled: enabled,
         child: Ink(

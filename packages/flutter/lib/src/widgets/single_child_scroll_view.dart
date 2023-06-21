@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'focus_manager.dart';
@@ -327,7 +328,7 @@ class _SingleChildViewportElement extends SingleChildRenderObjectElement with No
   _SingleChildViewportElement(_SingleChildViewport super.widget);
 }
 
-class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMixin<RenderBox> implements RenderAbstractViewport {
+class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMixin<RenderBox>, RositaRenderSingleChildViewport implements RenderAbstractViewport {
   _RenderSingleChildViewport({
     AxisDirection axisDirection = AxisDirection.down,
     required ViewportOffset offset,
@@ -339,6 +340,8 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
     this.child = child;
   }
 
+  @override
+  AxisDirection get rositaAxisDirection => _axisDirection;
   AxisDirection get axisDirection => _axisDirection;
   AxisDirection _axisDirection;
   set axisDirection(AxisDirection value) {
@@ -351,6 +354,8 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
 
   Axis get axis => axisDirectionToAxis(axisDirection);
 
+  @override
+  ViewportOffset get rositaOffset => _offset;
   ViewportOffset get offset => _offset;
   ViewportOffset _offset;
   set offset(ViewportOffset value) {
@@ -376,13 +381,17 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
   void _hasScrolled() {
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -558,7 +567,10 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     final Offset paintOffset = _paintOffset;
-    transform.translate(paintOffset.dx, paintOffset.dy);
+
+    if (paintOffset != Offset.zero) {
+      transform.translate(paintOffset.dx, paintOffset.dy);
+    }
   }
 
   @override

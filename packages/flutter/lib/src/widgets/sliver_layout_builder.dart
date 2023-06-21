@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'framework.dart';
 import 'layout_builder.dart';

@@ -6,6 +6,7 @@ import 'dart:io' show Platform;
 import 'dart:ui' as ui show FlutterView, Scene, SceneBuilder, SemanticsUpdate;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'binding.dart';
@@ -126,7 +127,7 @@ class ViewConfiguration {
 ///
 /// After the bootstrapping is complete, the [compositeFrame] method may be used
 /// to obtain the rendered output.
-class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox> {
+class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>, RositaRenderViewMixin {
   /// Creates the root of the render tree.
   ///
   /// Typically created by the binding (e.g., [RendererBinding]).
@@ -255,6 +256,9 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   Matrix4? _rootTransform;
 
   TransformLayer _updateMatricesAndCreateNewRootLayer() {
+    if (kIsRosita) {
+      rositaMarkNeedsLayout();
+    }
     assert(hasConfiguration);
     _rootTransform = configuration.toMatrix();
     final TransformLayer rootLayer = TransformLayer(transform: _rootTransform);
