@@ -11,6 +11,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'color_scheme.dart';
 import 'material.dart';
@@ -131,7 +132,7 @@ abstract class ProgressIndicator extends StatefulWidget {
     if (value != null) {
       expandedSemanticsValue ??= '${(value! * 100).round()}%';
     }
-    return Semantics(label: semanticsLabel, value: expandedSemanticsValue, child: child);
+    return RositaSemantics(label: semanticsLabel, value: expandedSemanticsValue, child: child);
   }
 }
 

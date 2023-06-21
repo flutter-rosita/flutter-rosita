@@ -22,6 +22,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'automatic_keep_alive.dart';
 import 'basic.dart';
@@ -854,7 +855,9 @@ class SliverMultiBoxAdaptorElement extends RenderObjectElement
   final bool _replaceMovedChildren;
 
   @override
-  RenderSliverMultiBoxAdaptor get renderObject => super.renderObject as RenderSliverMultiBoxAdaptor;
+  RenderSliverMultiBoxAdaptor get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as RenderSliverMultiBoxAdaptor;
 
   @override
   void update(covariant SliverMultiBoxAdaptorWidget newWidget) {

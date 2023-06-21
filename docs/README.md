@@ -1,37 +1,62 @@
-This wiki is primarily aimed at engineers building or making contributions to Flutter.
+<img alt="Flutter Rosita" src="assets/rosita_full_logo.png" width="185" height="185">
 
-If you are new to Flutter, then you will find more general information on the Flutter project, including tutorials and samples, on our website at [flutter.dev](https://flutter.dev). For specific information about Flutter's APIs, consider our API reference which can be found at the [api.flutter.dev](https://api.flutter.dev/).
+# Flutter Rosita
 
-If you want to know what we're likely to do in the future, our [roadmap](./roadmap/Roadmap.md) may be of interest.
+Enhance Your [Flutter](https://github.com/flutter/flutter) Web Experience with Flutter Rosita
 
-If you intend to contribute to Flutter, welcome! You are encouraged to start with [our contributor guide](../CONTRIBUTING.md), which helps onboard new team members. It points to the most relevant pages on this wiki. You are also invited to join our [Discord](./contributing/Chat.md) server.
+Flutter Rosita is a fork of the popular Flutter framework, designed to address the performance challenges of web-based applications built with standard Flutter Web. If you've found the HTML rendering in Flutter Web to be sluggish or unresponsive, Rosita offers a compelling solution.
 
+By introducing thoughtful modifications to the core Flutter engine, Rosita delivers a noticeable boost in rendering speed and overall responsiveness. This makes it an attractive option for developers who require a fast, reactive user interface for their web-based projects.
 
-## Index of notable sections
+However, it's important to note that Rosita may require some trade-offs in certain areas to achieve these performance gains. So, if you're willing to prioritize speed and responsiveness over absolute flexibility, then Rosita could be the right choice for your Flutter Web development needs.
 
-* [Actionable bugs](./triage/README.md#what-makes-an-issue-actionable), and the closing of unactionable bugs
-* [Breaking changes](./contributing/Tree-hygiene.md#handling-breaking-changes)
-* [Cherrypick process](./releases/Flutter-Cherrypick-Process.md)
-* [Closing issues](./contributing/issue_hygiene/README.md#closing-issues)
-* [Dashboards](./infra/Dashboards.md)
-* [Debugging a broken engine autoroll](./engine/Debugging-the-engine.md#bisecting-a-roll-failure)
-* [Deprecations](./contributing/Tree-hygiene.md#deprecations)
-* [Design documents](./contributing/Design-Documents.md)
-* [Discord](./contributing/Chat.md)
-* [Engineering Philosophy](./contributing/Style-guide-for-Flutter-repo.md#philosophy)
-* [Flaky tests](./contributing/issue_hygiene/README.md#flaky-tests)
-* [flutter.dev is down](./In-case-of-emergency.md)
-* [Issue prioritization](./contributing/issue_hygiene/README.md#priorities)
-* [Labels](./contributing/issue_hygiene/README.md#labels)
-* [Milestones](./contributing/issue_hygiene/README.md#milestones)
-* [Plugin compatibility policy](./contributing/Style-guide-for-Flutter-repo.md#plugin-compatibility)
-* [Reviewing code](./contributing/Tree-hygiene.md#getting-a-code-review)
-* [RFC process](./contributing/issue_hygiene/README.md#how-to-propose-a-specific-change)
-* [Status of popular issues](./contributing/issue_hygiene/Popular-issues.md)
-* [Style guide for Flutter repo](./contributing/Style-guide-for-Flutter-repo.md)
-* [Submitting code, process for](./contributing/Tree-hygiene.md#overview)
-* [Support levels, definitions of](./about/Values.md#support)
-* [Symbolicating stack traces](./engine/Crashes.md)
-* [Threading in the Engine](./about/The-Engine-architecture.md#threading)
-* [When will my bug be fixed?](./contributing/issue_hygiene/README.md#when-will-my-bug-be-fixed)
-* [Security best practices](./infra/Security.md#best-practices)
+Elevate your Flutter web experiences with Flutter Rosita - a performance-focused fork that can help transform your online applications.
+
+## Installation
+
+- [Linux](linux-install.md)
+- [Windows](windows-install.md)
+- [macOS](macos-install.md)
+
+## Usage
+
+`flutter-rosita` substitutes the original [`flutter`](https://docs.flutter.dev/reference/flutter-cli) CLI command. Only the command line interface is supported.
+
+```sh
+# Update package config with Flutter Rosita
+flutter-rosita pub get
+
+# Build the project and run WEB (either in debug or release mode).
+flutter-rosita run
+flutter-rosita run --release
+
+# Build the project for WEB (release mode).
+flutter-rosita build web
+```
+
+## Rosita Widgets
+
+To optimize the performance of the Flutter Rosita app, we can use special widgets. In order to do so, we need to add a dependency in the pubspec.yaml file.
+
+```yaml
+dependencies:
+  rosita: ^0.6.0
+```
+
+### RositaFadeImage vs FadeInImage / CachedNetworkImage / OctoImage
+
+```dart
+kIsRosita ? RositaFadeImage.network(imageUrl) : FadeInImage.assetNetwork(...)
+```
+
+### RositaImage vs Image
+
+```dart
+kIsRosita ? RositaImage.network(imageUrl) : Image.network(imageUrl)
+```
+
+### RositaSvgPicture vs SvgPicture
+
+```dart
+kIsRosita ? RositaSvgPicture.asset('assets/logo.svg') : SvgPicture.asset('assets/logo.svg')
+```

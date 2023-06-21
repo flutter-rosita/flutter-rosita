@@ -7,6 +7,7 @@
 library;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -809,7 +810,7 @@ class _SnackBarState extends State<SnackBar> {
       snackBar = SafeArea(top: false, bottom: false, child: snackBar);
     }
 
-    snackBar = Semantics(
+    snackBar = RositaSemantics(
       container: true,
       liveRegion: true,
       onDismiss: () {

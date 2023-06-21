@@ -10,11 +10,13 @@
 /// @docImport 'text_form_field.dart';
 library;
 
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'button_style.dart';
@@ -370,7 +372,7 @@ class _HelperErrorState extends State<_HelperError> with SingleTickerProviderSta
 
   Widget _buildHelper() {
     assert(widget.helper != null || widget.helperText != null);
-    return Semantics(
+    return RositaSemantics(
       container: true,
       child: FadeTransition(
         opacity: Tween<double>(begin: 1.0, end: 0.0).animate(_controller),
@@ -389,7 +391,7 @@ class _HelperErrorState extends State<_HelperError> with SingleTickerProviderSta
 
   Widget _buildError() {
     assert(widget.error != null || widget.errorText != null);
-    return Semantics(
+    return RositaSemantics(
       container: true,
       child: FadeTransition(
         opacity: _controller,
@@ -677,7 +679,7 @@ class _RenderDecorationLayout {
 
 // The workhorse: layout and paint a _Decorator widget's _Decoration.
 class _RenderDecoration extends RenderBox
-    with SlottedContainerRenderObjectMixin<_DecorationSlot, RenderBox> {
+    with SlottedContainerRenderObjectMixin<_DecorationSlot, RenderBox>, RositaCanvasMixin, RositaPaintRenderObjectMixin {
   _RenderDecoration({
     required _Decoration decoration,
     required TextDirection textDirection,
@@ -699,6 +701,9 @@ class _RenderDecoration extends RenderBox
   double get subtextGap => material3 ? 4.0 : 8.0;
   double get prefixToInputGap => material3 ? 4.0 : 0.0;
   double get inputToSuffixGap => material3 ? 4.0 : 0.0;
+
+  @override
+  bool get rositaNeededCheckRectOverflow => true;
 
   RenderBox? get icon => childForSlot(_DecorationSlot.icon);
   RenderBox? get input => childForSlot(_DecorationSlot.input);
@@ -785,7 +790,9 @@ class _RenderDecoration extends RenderBox
       return;
     }
     _isFocused = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   bool get expands => _expands;
@@ -1491,6 +1498,8 @@ class _RenderDecoration extends RenderBox
       decoration.borderGap.start = null;
       decoration.borderGap.extent = 0.0;
     }
+
+    rositaMarkNeedsPaint();
   }
 
   void _paintLabel(PaintingContext context, Offset offset) {
@@ -1499,9 +1508,19 @@ class _RenderDecoration extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    int rositaCounter = 0;
+
     void doPaint(RenderBox? child) {
       if (child != null) {
         context.paintChild(child, _boxParentData(child).offset + offset);
+
+        if (kIsRosita) {
+          rositaCounter++;
+
+          if (child.hasHtmlElement) {
+            child.htmlElement.style.zIndex = '$rositaCounter';
+          }
+        }
       }
     }
 
@@ -1551,13 +1570,32 @@ class _RenderDecoration extends RenderBox
           Matrix4.identity()
             ..translate(dx, labelOffset.dy + dy)
             ..scale(scale);
-      layer = context.pushTransform(
-        needsCompositing,
-        offset,
-        _labelTransform!,
-        _paintLabel,
-        oldLayer: layer as TransformLayer?,
-      );
+
+      if (kIsRosita) {
+        final RenderBox labelElement = label!;
+        // ignore: always_specify_types
+        final labelHtmlElement = labelElement.hasHtmlElement
+            ? labelElement.htmlElement
+            : labelElement.findFirstChildWithHtmlElement()?.htmlElement;
+
+        if (labelHtmlElement != null) {
+          // ignore: always_specify_types
+          final style = labelHtmlElement.style;
+
+          scheduleMicrotask(() {
+            style.transform =
+            'translate(${dx - labelWidth / 2 * (1 - scale)}px,${(labelOffset.dy + dy) * scale}px)scale($scale)';
+          });
+        }
+      } else {
+        layer = context.pushTransform(
+          needsCompositing,
+          offset,
+          _labelTransform!,
+          _paintLabel,
+          oldLayer: layer as TransformLayer?,
+        );
+      }
     } else {
       layer = null;
     }
@@ -1729,7 +1767,7 @@ class _AffixText extends StatelessWidget {
           duration: _kTransitionDuration,
           curve: _kTransitionCurve,
           opacity: labelIsFloating ? 1.0 : 0.0,
-          child: Semantics(
+          child: RositaSemantics(
             sortKey: semanticsSortKey,
             tagForChildren: semanticsTag,
             child: child ?? (text == null ? null : Text(text!, style: style)),
@@ -2365,7 +2403,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
             : null;
 
     if (input != null && needsSemanticsSortOrder) {
-      input = Semantics(sortKey: _inputSemanticsSortOrder, child: input);
+      input = RositaSemantics(sortKey: _inputSemanticsSortOrder, child: input);
     }
 
     final bool decorationIsDense = decoration.isDense ?? false;
@@ -2416,7 +2454,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
                           iconSize: WidgetStatePropertyAll<double>(iconSize),
                         ).merge(iconButtonTheme.style),
                       ),
-                      child: Semantics(child: decoration.prefixIcon),
+                      child: RositaSemantics(child: decoration.prefixIcon),
                     ),
                   ),
                 ),
@@ -2454,7 +2492,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
                           iconSize: WidgetStatePropertyAll<double>(iconSize),
                         ).merge(iconButtonTheme.style),
                       ),
-                      child: Semantics(child: decoration.suffixIcon),
+                      child: RositaSemantics(child: decoration.suffixIcon),
                     ),
                   ),
                 ),
@@ -2477,7 +2515,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
     if (decoration.counter != null) {
       counter = decoration.counter;
     } else if (decoration.counterText != null && decoration.counterText != '') {
-      counter = Semantics(
+      counter = RositaSemantics(
         container: true,
         liveRegion: isFocused,
         child: Text(

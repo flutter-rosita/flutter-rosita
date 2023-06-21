@@ -90,7 +90,7 @@ final String _defaultDartUiLocation = path.join(
 final String _flutter = path.join(
   _flutterRoot,
   'bin',
-  Platform.isWindows ? 'flutter.bat' : 'flutter',
+  Platform.isWindows ? 'flutter-rosita.bat.bat' : 'flutter-rosita.bat',
 );
 
 Future<void> main(List<String> arguments) async {

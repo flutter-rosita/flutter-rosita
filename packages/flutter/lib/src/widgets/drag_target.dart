@@ -8,6 +8,7 @@ library;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'basic.dart';
@@ -985,7 +986,7 @@ class _DragAvatar<T extends Object> extends Drag {
     return Positioned(
       left: _overlayOffset.dx,
       top: _overlayOffset.dy,
-      child: ExcludeSemantics(
+      child: RositaExcludeSemantics(
         excluding: ignoringFeedbackSemantics,
         child: IgnorePointer(ignoring: ignoringFeedbackPointer, child: feedback),
       ),

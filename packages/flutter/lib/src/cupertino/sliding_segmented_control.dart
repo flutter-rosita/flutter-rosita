@@ -14,6 +14,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 
@@ -750,7 +751,7 @@ class _SegmentedControlState<T extends Object> extends State<CupertinoSlidingSeg
         TextDirection.ltr || TextDirection.rtl => _SegmentLocation.inbetween,
       };
       children.add(
-        Semantics(
+        RositaSemantics(
           button: true,
           onTap: () {
             if (widget.disabledChildren.contains(entry.key)) {

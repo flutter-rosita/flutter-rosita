@@ -8,6 +8,7 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'basic.dart';
@@ -1096,7 +1097,7 @@ class SliverReorderableListState extends State<SliverReorderableList>
     //
     // Also apply the relevant custom accessibility actions for moving the item
     // up, down, to the start, and to the end of the list.
-    return Semantics(container: true, customSemanticsActions: semanticsActions, child: child);
+    return RositaSemantics(container: true, customSemanticsActions: semanticsActions, child: child);
   }
 
   @protected

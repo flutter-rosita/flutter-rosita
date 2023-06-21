@@ -17,6 +17,11 @@ dependencies:
   vector_math: 2.1.4
   sky_engine:
     sdk: flutter
+  rosita: ^0.7.0
+
+dependency_overrides:
+  rosita:
+    path: ../rosita
 
 dev_dependencies:
   flutter_driver:

@@ -9,6 +9,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'box.dart';
@@ -256,7 +257,8 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
   void adoptChild(RenderObject child) {
     super.adoptChild(child);
     final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData! as SliverMultiBoxAdaptorParentData;
+    // ignore: cast_nullable_to_non_nullable
+    (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
     if (!childParentData._keptAlive) {
       childManager.didAdoptChild(child as RenderBox);
     }
@@ -300,7 +302,8 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     // In this case, the child is no longer in the childList but might be stored in
     // [_keepAliveBucket]. We need to update the location of the child in the bucket.
     final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData! as SliverMultiBoxAdaptorParentData;
+        // ignore: cast_nullable_to_non_nullable
+        (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
     if (!childParentData.keptAlive) {
       super.move(child, after: after);
       childManager.didAdoptChild(child); // updates the slot in the parentData
@@ -328,14 +331,16 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
         }
         return true;
       }());
-      _keepAliveBucket[childParentData.index!] = child;
+      // ignore: cast_nullable_to_non_nullable
+      _keepAliveBucket[rositaCastNullableToNonNullable ? childParentData.index as int : childParentData.index!] = child;
     }
   }
 
   @override
   void remove(RenderBox child) {
     final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData! as SliverMultiBoxAdaptorParentData;
+        // ignore: cast_nullable_to_non_nullable
+        (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
     if (!childParentData._keptAlive) {
       super.remove(child);
       return;
@@ -360,9 +365,13 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     invokeLayoutCallback<SliverConstraints>((SliverConstraints constraints) {
       assert(constraints == this.constraints);
       if (_keepAliveBucket.containsKey(index)) {
-        final RenderBox child = _keepAliveBucket.remove(index)!;
+        final RenderBox child = rositaCastNullableToNonNullable
+            // ignore: cast_nullable_to_non_nullable
+            ? _keepAliveBucket.remove(index) as RenderBox
+            : _keepAliveBucket.remove(index)!;
         final SliverMultiBoxAdaptorParentData childParentData =
-            child.parentData! as SliverMultiBoxAdaptorParentData;
+            // ignore: cast_nullable_to_non_nullable
+            (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
         assert(childParentData._keptAlive);
         dropChild(child);
         child.parentData = childParentData;
@@ -376,11 +385,13 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
 
   void _destroyOrCacheChild(RenderBox child) {
     final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData! as SliverMultiBoxAdaptorParentData;
+        // ignore: cast_nullable_to_non_nullable
+        (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
     if (childParentData.keepAlive) {
       assert(!childParentData._keptAlive);
       remove(child);
-      _keepAliveBucket[childParentData.index!] = child;
+      // ignore: cast_nullable_to_non_nullable
+      _keepAliveBucket[rositaCastNullableToNonNullable ? childParentData.index as int : childParentData.index!] = child;
       child.parentData = childParentData;
       super.adoptChild(child);
       childParentData._keptAlive = true;
@@ -449,8 +460,10 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     if (firstChild != null) {
       assert(firstChild == lastChild);
       assert(indexOf(firstChild!) == index);
-      final SliverMultiBoxAdaptorParentData firstChildParentData =
-          firstChild!.parentData! as SliverMultiBoxAdaptorParentData;
+      // ignore: cast_nullable_to_non_nullable
+      final SliverMultiBoxAdaptorParentData firstChildParentData = (rositaCastNullableToNonNullable
+          ? firstChild!.parentData
+          : firstChild!.parentData!) as SliverMultiBoxAdaptorParentData;
       firstChildParentData.layoutOffset = layoutOffset;
       return true;
     }
@@ -477,10 +490,14 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     bool parentUsesSize = false,
   }) {
     assert(_debugAssertChildListLocked());
-    final int index = indexOf(firstChild!) - 1;
+    // ignore: cast_nullable_to_non_nullable
+    final int index = indexOf(rositaCastNullableToNonNullable ? firstChild as RenderBox : firstChild!) - 1;
     _createOrObtainChild(index, after: null);
-    if (indexOf(firstChild!) == index) {
-      firstChild!.layout(childConstraints, parentUsesSize: parentUsesSize);
+    // ignore: cast_nullable_to_non_nullable
+    if (indexOf(rositaCastNullableToNonNullable ? firstChild as RenderBox : firstChild!) == index) {
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? firstChild as RenderBox : firstChild!)
+          .layout(childConstraints, parentUsesSize: parentUsesSize);
       return firstChild;
     }
     childManager.setDidUnderflow(true);
@@ -507,7 +524,8 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
   }) {
     assert(_debugAssertChildListLocked());
     assert(after != null);
-    final int index = indexOf(after!) + 1;
+    // ignore: cast_nullable_to_non_nullable
+    final int index = indexOf(rositaCastNullableToNonNullable ? after as RenderBox : after!) + 1;
     _createOrObtainChild(index, after: after);
     final RenderBox? child = childAfter(after);
     if (child != null && indexOf(child) == index) {
@@ -582,11 +600,13 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     assert(childCount >= leadingGarbage + trailingGarbage);
     invokeLayoutCallback<SliverConstraints>((SliverConstraints constraints) {
       while (leadingGarbage > 0) {
-        _destroyOrCacheChild(firstChild!);
+        // ignore: cast_nullable_to_non_nullable
+        _destroyOrCacheChild(rositaCastNullableToNonNullable ? firstChild as RenderBox : firstChild!);
         leadingGarbage -= 1;
       }
       while (trailingGarbage > 0) {
-        _destroyOrCacheChild(lastChild!);
+        // ignore: cast_nullable_to_non_nullable
+        _destroyOrCacheChild(rositaCastNullableToNonNullable ? lastChild as RenderBox : lastChild!);
         trailingGarbage -= 1;
       }
       // Ask the child manager to remove the children that are no longer being
@@ -594,9 +614,11 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
       // to prepare our list ahead of time.)
       _keepAliveBucket.values
           .where((RenderBox child) {
-            final SliverMultiBoxAdaptorParentData childParentData =
-                child.parentData! as SliverMultiBoxAdaptorParentData;
-            return !childParentData.keepAlive;
+        // ignore: cast_nullable_to_non_nullable
+        final SliverMultiBoxAdaptorParentData childParentData = (rositaCastNullableToNonNullable
+            ? child.parentData
+            : child.parentData!) as SliverMultiBoxAdaptorParentData;
+        return !childParentData.keepAlive;
           })
           .toList()
           .forEach(_childManager.removeChild);
@@ -614,9 +636,11 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
   /// [SliverMultiBoxAdaptorParentData.index] field of the child's [parentData].
   int indexOf(RenderBox child) {
     final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData! as SliverMultiBoxAdaptorParentData;
+    // ignore: cast_nullable_to_non_nullable
+    (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
     assert(childParentData.index != null);
-    return childParentData.index!;
+    // ignore: cast_nullable_to_non_nullable
+    return rositaCastNullableToNonNullable ? childParentData.index as int : childParentData.index!;
   }
 
   /// Returns the dimension of the given child in the main axis, as given by the
@@ -654,14 +678,17 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
 
   @override
   double childMainAxisPosition(RenderBox child) {
-    return childScrollOffset(child)! - constraints.scrollOffset;
+    // ignore: cast_nullable_to_non_nullable
+    return (rositaCastNullableToNonNullable ? childScrollOffset(child) as double : childScrollOffset(child)!) -
+        constraints.scrollOffset;
   }
 
   @override
   double? childScrollOffset(RenderObject child) {
     assert(child.parent == this);
     final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData! as SliverMultiBoxAdaptorParentData;
+    // ignore: cast_nullable_to_non_nullable
+    (rositaCastNullableToNonNullable ? child.parentData : child.parentData!) as SliverMultiBoxAdaptorParentData;
     return childParentData.layoutOffset;
   }
 

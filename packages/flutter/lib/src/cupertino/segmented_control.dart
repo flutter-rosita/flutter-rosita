@@ -11,6 +11,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'theme.dart';
 
@@ -413,7 +414,7 @@ class _SegmentedControlState<T extends Object> extends State<CupertinoSegmentedC
             data: iconTheme,
             child: DefaultTextStyle(
               style: textStyle,
-              child: Semantics(
+              child: RositaSemantics(
                 button: true,
                 inMutuallyExclusiveGroup: true,
                 selected: widget.groupValue == currentKey,
