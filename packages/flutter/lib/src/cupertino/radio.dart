@@ -10,6 +10,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -292,7 +293,7 @@ class _CupertinoRadioState<T> extends State<CupertinoRadio<T>> with TickerProvid
         accessibilitySelected = widget._selected;
     }
 
-    return Semantics(
+    return RositaSemantics(
       inMutuallyExclusiveGroup: true,
       checked: widget._selected,
       selected: accessibilitySelected,

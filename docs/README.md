@@ -1,36 +1,29 @@
-This wiki is primarily aimed at engineers building or making contributions to Flutter.
+<img alt="Flutter Rosita" src="assets/rosita_full_logo.png" width="185" height="185">
 
-If you are new to Flutter, then you will find more general information on the Flutter project, including tutorials and samples, on our Web site at [flutter.dev](https://flutter.dev). For specific information about Flutter's APIs, consider our API reference which can be found at the [api.flutter.dev](https://api.flutter.dev/).
+# Flutter Rosita
 
-If you want to know what we're likely to do in the future, our [roadmap](./roadmap/Roadmap.md) may be of interest.
+Flutter Rosita is a fork with changes to speed up WEB rendering.
 
-If you intend to contribute to Flutter, welcome! You are encouraged to start with [our contributor guide](../CONTRIBUTING.md), which helps onboard new team members. It points to the most relevant pages on this wiki. You are also invited to join our [Discord](./contributing/Chat.md) server.
+It is worth trying Rosita if Flutter WEB html renderer is not fast enough for you, and if you are willing to make compromises to improve interface responsiveness.
 
+## Installation
 
-## Index of notable sections
+- [Linux](linux-install.md)
+- [Windows](windows-install.md)
+- [macOS](macos-install.md)
 
-* [Actionable bugs](./triage/README.md#what-makes-an-issue-actionable), and the closing of unactionable bugs
-* [Breaking changes](./contributing/Tree-hygiene.md#handling-breaking-changes)
-* [Cherrypick process](./releases/Flutter-Cherrypick-Process.md)
-* [Closing issues](./contributing/issue_hygiene/README.md#closing-issues)
-* [Dashboards](./infra/Dashboards.md)
-* [Debugging a broken engine autoroll](./engine/Debugging-the-engine.md#bisecting-a-roll-failure)
-* [Deprecations](./contributing/Tree-hygiene.md#deprecations)
-* [Design documents](./contributing/Design-Documents.md)
-* [Discord](./contributing/Chat.md)
-* [Engineering Philosophy](./contributing/Style-guide-for-Flutter-repo.md#philosophy)
-* [Flaky tests](./contributing/issue_hygiene/README.md#flaky-tests)
-* [flutter.dev is down](./In-case-of-emergency.md)
-* [Issue prioritization](./contributing/issue_hygiene/README.md#priorities)
-* [Labels](./contributing/issue_hygiene/README.md#labels)
-* [Milestones](./contributing/issue_hygiene/README.md#milestones)
-* [Plugin compatibility policy](./contributing/Style-guide-for-Flutter-repo.md#plugin-compatibility)
-* [Reviewing code](./contributing/Tree-hygiene.md#getting-a-code-review)
-* [RFC process](./contributing/issue_hygiene/README.md#how-to-propose-a-specific-change)
-* [Status of popular issues](./contributing/issue_hygiene/Popular-issues.md)
-* [Submitting code, process for](./contributing/Tree-hygiene.md#overview)
-* [Support levels, definitions of](./about/Values.md#support)
-* [Symbolicating stack traces](./engine/Crashes.md)
-* [Threading in the Engine](./about/The-Engine-architecture.md#threading)
-* [When will my bug be fixed?](./contributing/issue_hygiene/README.md#when-will-my-bug-be-fixed)
-* [Security best practices](./infra/Security.md#best-practices)
+## Usage
+
+`flutter-rosita` substitutes the original [`flutter`](https://docs.flutter.dev/reference/flutter-cli) CLI command. Only the command line interface is supported.
+
+```sh
+# Update package config with Flutter Rosita
+flutter-rosita pub get
+
+# Build the project and run WEB (either in debug or release mode).
+flutter-rosita run
+flutter-rosita run --release
+
+# Build the project for WEB (release mode).
+flutter-rosita build web
+```

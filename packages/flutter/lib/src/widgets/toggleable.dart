@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'actions.dart';
 import 'basic.dart';
@@ -342,7 +343,7 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
         onTap: isInteractive ? _handleTap : null,
         onTapUp: isInteractive ? _handleTapEnd : null,
         onTapCancel: isInteractive ? _handleTapEnd : null,
-        child: Semantics(
+        child: RositaSemantics(
           enabled: isInteractive,
           child: CustomPaint(
             size: size,

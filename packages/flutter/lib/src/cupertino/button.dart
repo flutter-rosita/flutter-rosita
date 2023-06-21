@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -314,7 +315,7 @@ class _CupertinoButtonState extends State<CupertinoButton> with SingleTickerProv
           onTapUp: enabled ? _handleTapUp : null,
           onTapCancel: enabled ? _handleTapCancel : null,
           onTap: widget.onPressed,
-          child: Semantics(
+          child: RositaSemantics(
             button: true,
             child: ConstrainedBox(
               constraints: widget.minSize == null

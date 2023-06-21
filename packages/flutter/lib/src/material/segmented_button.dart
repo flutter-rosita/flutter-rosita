@@ -8,6 +8,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button_style.dart';
 import 'button_style_button.dart';
@@ -518,7 +519,7 @@ class SegmentedButtonState<T> extends State<SegmentedButton<T>> {
         : button;
 
       return MergeSemantics(
-        child: Semantics(
+        child: RositaSemantics(
           checked: segmentSelected,
           inMutuallyExclusiveGroup: widget.multiSelectionEnabled ? null : true,
           child: buttonWithTooltip,

@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'framework.dart';
 

@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button_style.dart';
 import 'color_scheme.dart';
@@ -809,7 +810,7 @@ class ToggleButtons extends StatelessWidget {
       }
 
       return MergeSemantics(
-        child: Semantics(
+        child: RositaSemantics(
           container: true,
           checked: isSelected[index],
           enabled: onPressed != null,

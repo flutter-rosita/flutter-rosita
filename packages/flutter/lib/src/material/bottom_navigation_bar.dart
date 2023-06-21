@@ -5,6 +5,7 @@
 import 'dart:collection' show Queue;
 import 'dart:math' as math;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 
@@ -603,14 +604,14 @@ class _BottomNavigationTile extends StatelessWidget {
       );
     }
 
-    result = Semantics(
+    result = RositaSemantics(
       selected: selected,
       button: true,
       container: true,
       child: Stack(
         children: <Widget>[
           result,
-          Semantics(
+          RositaSemantics(
             label: indexLabel,
           ),
         ],
@@ -1136,7 +1137,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> with TickerPr
       BottomNavigationBarType.shifting => _backgroundColor,
     };
 
-    return Semantics(
+    return RositaSemantics(
       explicitChildNodes: true,
       child: _Bar(
         layout: layout,

@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:rosita/rosita.dart';
 
 import 'actions.dart';
 import 'autofill.dart';
@@ -5247,7 +5248,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
                     viewportBuilder: (BuildContext context, ViewportOffset offset) {
                       return CompositedTransformTarget(
                         link: _toolbarLayerLink,
-                        child: Semantics(
+                        child: RositaSemantics(
                           onCopy: _semanticsOnCopy(controls),
                           onCut: _semanticsOnCut(controls),
                           onPaste: _semanticsOnPaste(controls),

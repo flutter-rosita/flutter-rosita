@@ -8,6 +8,7 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'debug.dart';
@@ -1322,7 +1323,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
             onExit: handleMouseExit,
             child: DefaultSelectionStyle.merge(
               mouseCursor: effectiveMouseCursor,
-              child: Semantics(
+              child: RositaSemantics(
                 onTap: widget.excludeFromSemantics || widget.onTap == null ? null : simulateTap,
                 onLongPress: widget.excludeFromSemantics || widget.onLongPress == null ? null : simulateLongPress,
                 child: GestureDetector(

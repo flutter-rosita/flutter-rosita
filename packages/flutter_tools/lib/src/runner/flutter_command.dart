@@ -710,6 +710,7 @@ abstract class FlutterCommand extends Command<void> {
   void usesWebRendererOption() {
     argParser.addOption(
       FlutterOptions.kWebRendererFlag,
+      defaultsTo: WebRendererMode.html.name, // TODO: @ead check
       allowed: WebRendererMode.values.map((WebRendererMode e) => e.name),
       help: 'The renderer implementation to use when building for the web.',
       allowedHelp: CliEnum.allowedHelp(WebRendererMode.values)
@@ -1308,6 +1309,8 @@ abstract class FlutterCommand extends Command<void> {
       }
       dartDefines.add('FLUTTER_APP_FLAVOR=$flavor');
     }
+
+    dartDefines.add('ROSITA=true');
 
     return BuildInfo(buildMode,
       flavor,
