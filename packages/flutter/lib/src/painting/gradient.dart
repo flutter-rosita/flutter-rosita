@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui show Gradient, lerpDouble;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'alignment.dart';

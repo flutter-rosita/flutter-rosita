@@ -7,6 +7,7 @@ import 'dart:ui' as ui show Color, Gradient, Image, ImageFilter;
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
@@ -198,7 +199,7 @@ abstract class RenderProxyBoxWithHitTestBehavior extends RenderProxyBox {
 /// For example, if you wanted [child] to have a minimum height of 50.0 logical
 /// pixels, you could use `const BoxConstraints(minHeight: 50.0)` as the
 /// [additionalConstraints].
-class RenderConstrainedBox extends RenderProxyBox {
+class RenderConstrainedBox extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render box that constrains its child.
   ///
   /// The [additionalConstraints] argument must be valid.
@@ -435,7 +436,7 @@ class RenderLimitedBox extends RenderProxyBox {
 /// find a feasible size after consulting each constraint, the render object
 /// will eventually select a size for the child that meets the layout
 /// constraints but fails to meet the aspect ratio constraints.
-class RenderAspectRatio extends RenderProxyBox {
+class RenderAspectRatio extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates as render object with a specific aspect ratio.
   ///
   /// The [aspectRatio] argument must be a finite, positive value.
@@ -856,7 +857,7 @@ class RenderIgnoreBaseline extends RenderProxyBox {
 /// expensive because it requires painting the child into an intermediate
 /// buffer. For the value 0.0, the child is not painted at all. For the
 /// value 1.0, the child is painted immediately without an intermediate buffer.
-class RenderOpacity extends RenderProxyBox {
+class RenderOpacity extends RenderProxyBox with RositaRenderOpacityMixin {
   /// Creates a partially transparent render object.
   ///
   /// The [opacity] argument must be between 0.0 and 1.0, inclusive.
@@ -901,8 +902,10 @@ class RenderOpacity extends RenderProxyBox {
       markNeedsCompositingBitsUpdate();
     }
     markNeedsCompositedLayerUpdate();
-    if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -918,7 +921,9 @@ class RenderOpacity extends RenderProxyBox {
       return;
     }
     _alwaysIncludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -1017,7 +1022,9 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
       return;
     }
     _alwaysIncludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -1043,8 +1050,10 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
         markNeedsCompositingBitsUpdate();
       }
       markNeedsCompositedLayerUpdate();
-      if (oldAlpha == 0 || _alpha == 0) {
-        markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        if (oldAlpha == 0 || _alpha == 0) {
+          markNeedsSemanticsUpdate();
+        }
       }
     }
   }
@@ -1082,7 +1091,7 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
 ///
 /// This is a variant of [RenderOpacity] that uses an [Animation<double>] rather
 /// than a [double] to control the opacity.
-class RenderAnimatedOpacity extends RenderProxyBox with RenderAnimatedOpacityMixin<RenderBox> {
+class RenderAnimatedOpacity extends RenderProxyBox with RenderAnimatedOpacityMixin<RenderBox>, RositaRenderAnimatedOpacityMixin {
   /// Creates a partially transparent render object.
   RenderAnimatedOpacity({
     required Animation<double> opacity,
@@ -1405,7 +1414,9 @@ abstract class _RenderCustomClip<T> extends RenderProxyBox {
   void _markNeedsClip() {
     _clip = null;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   T get _defaultClip;
@@ -1488,7 +1499,7 @@ abstract class _RenderCustomClip<T> extends RenderProxyBox {
 /// By default, [RenderClipRect] prevents its child from painting outside its
 /// bounds, but the size and location of the clip rect can be customized using a
 /// custom [clipper].
-class RenderClipRect extends _RenderCustomClip<Rect> {
+class RenderClipRect extends _RenderCustomClip<Rect> with RositaRenderClipRectMixin {
   /// Creates a rectangular clip.
   ///
   /// If [clipper] is null, the clip will match the layout size and position of
@@ -1558,7 +1569,7 @@ class RenderClipRect extends _RenderCustomClip<Rect> {
 /// By default, [RenderClipRRect] uses its own bounds as the base rectangle for
 /// the clip, but the size and location of the clip can be customized using a
 /// custom [clipper].
-class RenderClipRRect extends _RenderCustomClip<RRect> {
+class RenderClipRRect extends _RenderCustomClip<RRect> with RositaRenderClipRRectMixin {
   /// Creates a rounded-rectangular clip.
   ///
   /// The [borderRadius] defaults to [BorderRadius.zero], i.e. a rectangle with
@@ -1661,7 +1672,7 @@ class RenderClipRRect extends _RenderCustomClip<RRect> {
 /// By default, inscribes an axis-aligned oval into its layout dimensions and
 /// prevents its child from painting outside that oval, but the size and
 /// location of the clip oval can be customized using a custom [clipper].
-class RenderClipOval extends _RenderCustomClip<Rect> {
+class RenderClipOval extends _RenderCustomClip<Rect> with RositaRenderClipOvalMixin {
   /// Creates an oval-shaped clip.
   ///
   /// If [clipper] is null, the oval will be inscribed into the layout size and
@@ -1754,7 +1765,7 @@ class RenderClipOval extends _RenderCustomClip<Rect> {
 ///  * To clip to a rectangle, consider [RenderClipRect].
 ///  * To clip to an oval or circle, consider [RenderClipOval].
 ///  * To clip to a rounded rectangle, consider [RenderClipRRect].
-class RenderClipPath extends _RenderCustomClip<Path> {
+class RenderClipPath extends _RenderCustomClip<Path> with RositaRenderClipPathMixin {
   /// Creates a path clip.
   ///
   /// If [clipper] is null, the clip will be a rectangle that matches the layout
@@ -1902,7 +1913,7 @@ abstract class _RenderPhysicalModelBase<T> extends _RenderCustomClip<T> {
 /// rectangle.
 ///
 /// A physical model layer casts a shadow based on its [elevation].
-class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> {
+class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> with RositaRenderPhysicalModelMixin {
   /// Creates a rounded-rectangular clip.
   ///
   /// The [color] is required.
@@ -2058,7 +2069,7 @@ class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> {
 ///
 ///  * [RenderPhysicalModel], which is optimized for rounded rectangles and
 ///    circles.
-class RenderPhysicalShape extends _RenderPhysicalModelBase<Path> {
+class RenderPhysicalShape extends _RenderPhysicalModelBase<Path> with RositaRenderPhysicalShapeMixin{
   /// Creates an arbitrary shape clip.
   ///
   /// The [color] and [clipper] parameters are required.
@@ -2172,7 +2183,7 @@ enum DecorationPosition {
 }
 
 /// Paints a [Decoration] either before or after its child paints.
-class RenderDecoratedBox extends RenderProxyBox {
+class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMixin {
   /// Creates a decorated box.
   ///
   /// The [decoration], [position], and [configuration] arguments must not be
@@ -2306,7 +2317,7 @@ class RenderDecoratedBox extends RenderProxyBox {
 }
 
 /// Applies a transformation before painting its child.
-class RenderTransform extends RenderProxyBox {
+class RenderTransform extends RenderProxyBox with RositaRenderTransform {
   /// Creates a render object that transforms its child.
   RenderTransform({
     required Matrix4 transform,
@@ -2337,7 +2348,9 @@ class RenderTransform extends RenderProxyBox {
     }
     _origin = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The alignment of the origin, relative to the size of the box.
@@ -2359,7 +2372,9 @@ class RenderTransform extends RenderProxyBox {
     }
     _alignment = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The text direction with which to resolve [alignment].
@@ -2374,7 +2389,9 @@ class RenderTransform extends RenderProxyBox {
     }
     _textDirection = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -2401,7 +2418,9 @@ class RenderTransform extends RenderProxyBox {
     }
     _transform = Matrix4.copy(value);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The filter quality with which to apply the transform as a bitmap operation.
@@ -2425,43 +2444,58 @@ class RenderTransform extends RenderProxyBox {
   void setIdentity() {
     _transform!.setIdentity();
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a rotation about the x axis into the transform.
   void rotateX(double radians) {
     _transform!.rotateX(radians);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a rotation about the y axis into the transform.
   void rotateY(double radians) {
     _transform!.rotateY(radians);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a rotation about the z axis into the transform.
   void rotateZ(double radians) {
     _transform!.rotateZ(radians);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a translation by (x, y, z) into the transform.
   void translate(double x, [ double y = 0.0, double z = 0.0 ]) {
     _transform!.translate(x, y, z);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a scale into the transform.
   void scale(double x, [ double? y, double? z ]) {
     _transform!.scale(x, y, z);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
+
+  // ignore: public_member_api_docs
+  Matrix4? get rositaTransform => _transform;
 
   Matrix4? get _effectiveTransform {
     final Alignment? resolvedAlignment = alignment?.resolve(textDirection);
@@ -2557,7 +2591,11 @@ class RenderTransform extends RenderProxyBox {
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    transform.multiply(_effectiveTransform!);
+    final effectiveTransform = _effectiveTransform!;
+
+    if(!effectiveTransform.isIdentity()) {
+      transform.multiply(effectiveTransform);
+    }
   }
 
   @override
@@ -2572,7 +2610,7 @@ class RenderTransform extends RenderProxyBox {
 }
 
 /// Scales and positions its child within itself according to [fit].
-class RenderFittedBox extends RenderProxyBox {
+class RenderFittedBox extends RenderProxyBox with RositaRenderFittedBoxMixin {
   /// Scales and positions its child within itself.
   RenderFittedBox({
     BoxFit fit = BoxFit.contain,
@@ -2744,7 +2782,9 @@ class RenderFittedBox extends RenderProxyBox {
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -2842,7 +2882,10 @@ class RenderFittedBox extends RenderProxyBox {
       transform.setZero();
     } else {
       _updatePaintData();
-      transform.multiply(_transform!);
+      final paintTransform = _transform!;
+      if(!paintTransform.isIdentity()) {
+        transform.multiply(paintTransform);
+      }
     }
   }
 
@@ -2864,7 +2907,7 @@ class RenderFittedBox extends RenderProxyBox {
 /// Hit tests will only be detected inside the bounds of the
 /// [RenderFractionalTranslation], even if the contents are offset such that
 /// they overflow.
-class RenderFractionalTranslation extends RenderProxyBox {
+class RenderFractionalTranslation extends RenderProxyBox with RositaRenderFractionalTranslationMixin {
   /// Creates a render object that translates its child's painting.
   RenderFractionalTranslation({
     required Offset translation,
@@ -2885,7 +2928,9 @@ class RenderFractionalTranslation extends RenderProxyBox {
     }
     _translation = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -2932,10 +2977,12 @@ class RenderFractionalTranslation extends RenderProxyBox {
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    transform.translate(
-      translation.dx * size.width,
-      translation.dy * size.height,
-    );
+    if (translation.dx != 0 || translation.dy != 0) {
+      transform.translate(
+        translation.dx * size.width,
+        translation.dy * size.height,
+      );
+    }
   }
 
   @override
@@ -2998,7 +3045,7 @@ typedef PointerSignalEventListener = void Function(PointerSignalEvent event);
 /// If it has a child, defers to the child for sizing behavior.
 ///
 /// If it does not have a child, grows to fit the parent-provided constraints.
-class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
+class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior with RositaSkipRenderObjectMixin {
   /// Creates a render object that forwards pointer events to callbacks.
   ///
   /// The [behavior] argument defaults to [HitTestBehavior.deferToChild].
@@ -3123,7 +3170,7 @@ class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
 ///
 ///  * [MouseRegion], a widget that listens to hover events using
 ///    [RenderMouseRegion].
-class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior implements MouseTrackerAnnotation {
+class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSkipRenderObjectMixin implements MouseTrackerAnnotation {
   /// Creates a render object that forwards pointer events to callbacks.
   ///
   /// All parameters are optional. By default this method creates an opaque
@@ -3209,6 +3256,8 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior implements Mou
   MouseCursor _cursor;
   set cursor(MouseCursor value) {
     if (_cursor != value) {
+      RositaCursorUtils.onChange();
+
       _cursor = value;
       // A repaint is needed in order to trigger a device update of
       // [MouseTracker] so that this new value can be found.
@@ -3224,10 +3273,14 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior implements Mou
   void attach(PipelineOwner owner) {
     super.attach(owner);
     _validForMouseTracker = true;
+
+    RositaCursorUtils.onChange();
   }
 
   @override
   void detach() {
+    RositaCursorUtils.onChange();
+
     // It's possible that the renderObject be detached during mouse events
     // dispatching, set the [MouseTrackerAnnotation.validForMouseTracker] false to prevent
     // the callbacks from being called.
@@ -3283,7 +3336,7 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior implements Mou
 /// ratio of cases where the repaint boundary was useful vs the cases where it
 /// was not. These counts can also be inspected programmatically using
 /// [debugAsymmetricPaintCount] and [debugSymmetricPaintCount] respectively.
-class RenderRepaintBoundary extends RenderProxyBox {
+class RenderRepaintBoundary extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a repaint boundary around [child].
   RenderRepaintBoundary({ RenderBox? child }) : super(child);
 
@@ -3532,7 +3585,7 @@ class RenderRepaintBoundary extends RenderProxyBox {
 ///
 ///  * [RenderAbsorbPointer], which takes the pointer events but prevents any
 ///    nodes in the subtree from seeing them.
-class RenderIgnorePointer extends RenderProxyBox {
+class RenderIgnorePointer extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that is invisible to hit testing.
   RenderIgnorePointer({
     RenderBox? child,
@@ -3559,8 +3612,10 @@ class RenderIgnorePointer extends RenderProxyBox {
       return;
     }
     _ignoring = value;
-    if (ignoringSemantics == null) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (ignoringSemantics == null) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3580,7 +3635,9 @@ class RenderIgnorePointer extends RenderProxyBox {
       return;
     }
     _ignoringSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -3621,7 +3678,7 @@ class RenderIgnorePointer extends RenderProxyBox {
 /// Lays the child out as if it was in the tree, but without painting anything,
 /// without making the child available for hit testing, and without taking any
 /// room in the parent.
-class RenderOffstage extends RenderProxyBox {
+class RenderOffstage extends RenderProxyBox with RositaRenderOffstageMixin {
   /// Creates an offstage render object.
   RenderOffstage({
     bool offstage = true,
@@ -3781,7 +3838,7 @@ class RenderOffstage extends RenderProxyBox {
 ///
 ///  * [RenderIgnorePointer], which has the opposite effect: removing the
 ///    subtree from considering entirely for the purposes of hit testing.
-class RenderAbsorbPointer extends RenderProxyBox {
+class RenderAbsorbPointer extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that absorbs pointers during hit testing.
   RenderAbsorbPointer({
     RenderBox? child,
@@ -3809,8 +3866,10 @@ class RenderAbsorbPointer extends RenderProxyBox {
       return;
     }
     _absorbing = value;
-    if (ignoringSemantics == null) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (ignoringSemantics == null) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3831,7 +3890,9 @@ class RenderAbsorbPointer extends RenderProxyBox {
       return;
     }
     _ignoringSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -3899,7 +3960,7 @@ class RenderMetaData extends RenderProxyBoxWithHitTestBehavior {
 
 /// Listens for the specified gestures from the semantics server (e.g.
 /// an accessibility tool).
-class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
+class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior with RositaSkipRenderObjectMixin {
   /// Creates a render object that listens for specific semantic gestures.
   RenderSemanticsGestureHandler({
     super.child,
@@ -3934,7 +3995,9 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
       return;
     }
     _validActions = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Called when the user taps on the render object.
@@ -3946,8 +4009,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
     }
     final bool hadHandler = _onTap != null;
     _onTap = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3960,8 +4025,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
     }
     final bool hadHandler = _onLongPress != null;
     _onLongPress = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3974,8 +4041,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
     }
     final bool hadHandler = _onHorizontalDragUpdate != null;
     _onHorizontalDragUpdate = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3988,8 +4057,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
     }
     final bool hadHandler = _onVerticalDragUpdate != null;
     _onVerticalDragUpdate = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -4089,7 +4160,7 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
 }
 
 /// Add annotations to the [SemanticsNode] for this subtree.
-class RenderSemanticsAnnotations extends RenderProxyBox {
+class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that attaches a semantic annotation.
   ///
   /// If the [SemanticsProperties.attributedLabel] is not null, the [textDirection] must also not be null.
@@ -4120,7 +4191,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
     }
     _properties = value;
     _updateAttributedFields(_properties);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// If 'container' is true, this [RenderObject] will introduce a new
@@ -4137,7 +4210,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
       return;
     }
     _container = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether descendants of this [RenderObject] are allowed to add semantic
@@ -4160,7 +4235,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
       return;
     }
     _explicitChildNodes = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether descendants of this [RenderObject] should have their semantic
@@ -4176,7 +4253,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
       return;
     }
     _excludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether to block user interactions for the semantics subtree.
@@ -4254,7 +4333,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
       return;
     }
     _textDirection = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4542,7 +4623,7 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
 ///
 /// This is useful in a stack where an opaque mask should prevent interactions
 /// with the render objects painted below the mask.
-class RenderBlockSemantics extends RenderProxyBox {
+class RenderBlockSemantics extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Create a render object that blocks semantics for nodes below it in paint
   /// order.
   RenderBlockSemantics({
@@ -4560,7 +4641,9 @@ class RenderBlockSemantics extends RenderProxyBox {
       return;
     }
     _blocking = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4603,7 +4686,7 @@ class RenderMergeSemantics extends RenderProxyBox {
 ///
 /// Useful e.g. for hiding text that is redundant with other text next
 /// to it (e.g. text included only for the visual effect).
-class RenderExcludeSemantics extends RenderProxyBox {
+class RenderExcludeSemantics extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that ignores the semantics of its subtree.
   RenderExcludeSemantics({
     RenderBox? child,
@@ -4619,7 +4702,9 @@ class RenderExcludeSemantics extends RenderProxyBox {
       return;
     }
     _excluding = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4647,7 +4732,7 @@ class RenderExcludeSemantics extends RenderProxyBox {
 /// See also:
 ///
 ///  * [CustomScrollView], for an explanation of scroll semantics.
-class RenderIndexedSemantics extends RenderProxyBox {
+class RenderIndexedSemantics extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that annotates the child semantics with an index.
   RenderIndexedSemantics({
     RenderBox? child,
@@ -4663,7 +4748,9 @@ class RenderIndexedSemantics extends RenderProxyBox {
       return;
     }
     _index = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4956,7 +5043,11 @@ class RenderFollowerLayer extends RenderProxyBox {
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    transform.multiply(getCurrentTransform());
+    final currentTransform = getCurrentTransform();
+
+    if(!currentTransform.isIdentity()) {
+      transform.multiply(currentTransform);
+    }
   }
 
   @override

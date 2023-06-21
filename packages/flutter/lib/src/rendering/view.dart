@@ -6,6 +6,7 @@ import 'dart:io' show Platform;
 import 'dart:ui' as ui show FlutterView, Scene, SceneBuilder, SemanticsUpdate;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'binding.dart';
@@ -103,7 +104,7 @@ class ViewConfiguration {
 /// The view represents the total output surface of the render tree and handles
 /// bootstrapping the rendering pipeline. The view has a unique child
 /// [RenderBox], which is required to fill the entire output surface.
-class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox> {
+class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>, RositaRenderViewMixin {
   /// Creates the root of the render tree.
   ///
   /// Typically created by the binding (e.g., [RendererBinding]).
@@ -219,6 +220,9 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   Matrix4? _rootTransform;
 
   TransformLayer _updateMatricesAndCreateNewRootLayer() {
+    if (kIsRosita) {
+      rositaMarkNeedsLayout();
+    }
     _rootTransform = configuration.toMatrix();
     final TransformLayer rootLayer = TransformLayer(transform: _rootTransform);
     rootLayer.attach(this);
@@ -288,7 +292,10 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     assert(_rootTransform != null);
-    transform.multiply(_rootTransform!);
+    final rootTransform = _rootTransform!;
+    if (!rootTransform.isIdentity()) {
+      transform.multiply(rootTransform);
+    }
     super.applyPaintTransform(child, transform);
   }
 

@@ -8,6 +8,7 @@ import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle, Gradient, LineMetrics
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
@@ -252,7 +253,7 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
 }
 
 /// A render object that displays a paragraph of text.
-class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RelayoutWhenSystemFontsChangeMixin {
+class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RelayoutWhenSystemFontsChangeMixin, RositaRenderParagraphMixin {
   /// Creates a paragraph render object.
   ///
   /// The [maxLines] property may be null (and indeed defaults to null), but if
@@ -340,14 +341,18 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
       case RenderComparison.metadata:
         _textPainter.text = value;
         _cachedCombinedSemanticsInfos = null;
-        markNeedsSemanticsUpdate();
+        if (rositaEnableSemantics) {
+          markNeedsSemanticsUpdate();
+        }
       case RenderComparison.paint:
         _textPainter.text = value;
         _cachedAttributedLabels = null;
         _canComputeIntrinsicsCached = null;
         _cachedCombinedSemanticsInfos = null;
         markNeedsPaint();
-        markNeedsSemanticsUpdate();
+        if (rositaEnableSemantics) {
+          markNeedsSemanticsUpdate();
+        }
       case RenderComparison.layout:
         _textPainter.text = value;
         _overflowShader = null;

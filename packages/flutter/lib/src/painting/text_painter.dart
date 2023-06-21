@@ -16,6 +16,7 @@ import 'dart:ui' as ui show
   TextStyle;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'basic_types.dart';
@@ -1058,13 +1059,27 @@ class TextPainter {
   /// that contribute to the [preferredLineHeight]. If [text] is null or if it
   /// specifies no styles, the default [TextStyle] values are used (a 10 pixel
   /// sans-serif font).
-  double get preferredLineHeight => _getOrCreateLayoutTemplate().height;
+  double get preferredLineHeight {
+    final RositaCanvasParagraphData? paragraphData = _rositaParagraphData;
+
+    if (paragraphData != null) {
+      return paragraphData.lineHeight;
+    }
+
+    return _getOrCreateLayoutTemplate().height;
+  }
 
   /// The width at which decreasing the width of the text would prevent it from
   /// painting itself completely within its bounds.
   ///
   /// Valid only after [layout] has been called.
   double get minIntrinsicWidth {
+    final RositaCanvasParagraphData? paragraphData = _rositaParagraphData;
+
+    if (paragraphData != null) {
+      return paragraphData.minIntrinsicWidth;
+    }
+
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.minIntrinsicLineExtent;
   }
@@ -1073,6 +1088,12 @@ class TextPainter {
   ///
   /// Valid only after [layout] has been called.
   double get maxIntrinsicWidth {
+    final RositaCanvasParagraphData? paragraphData = _rositaParagraphData;
+
+    if (paragraphData != null) {
+      return paragraphData.maxIntrinsicWidth;
+    }
+
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.maxIntrinsicLineExtent;
   }
@@ -1081,6 +1102,12 @@ class TextPainter {
   ///
   /// Valid only after [layout] has been called.
   double get width {
+    final Size? size = _rositaSize;
+
+    if (size != null) {
+      return size.width;
+    }
+
     assert(_debugAssertTextLayoutIsValid);
     assert(!_debugNeedsRelayout);
     return _layoutCache!.contentWidth;
@@ -1090,6 +1117,12 @@ class TextPainter {
   ///
   /// Valid only after [layout] has been called.
   double get height {
+    final Size? size = _rositaSize;
+
+    if (size != null) {
+      return size.height;
+    }
+
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.height;
   }
@@ -1098,6 +1131,12 @@ class TextPainter {
   ///
   /// Valid only after [layout] has been called.
   Size get size {
+    final Size? size = _rositaSize;
+
+    if (size != null) {
+      return size;
+    }
+
     assert(_debugAssertTextLayoutIsValid);
     assert(!_debugNeedsRelayout);
     return Size(width, height);
@@ -1108,6 +1147,12 @@ class TextPainter {
   ///
   /// Valid only after [layout] has been called.
   double computeDistanceToActualBaseline(TextBaseline baseline) {
+    final RositaCanvasParagraphData? paragraphData = _rositaParagraphData;
+
+    if (paragraphData != null) {
+      return paragraphData.boundingBoxAscent;
+    }
+
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.getDistanceToBaseline(baseline);
   }
@@ -1141,6 +1186,9 @@ class TextPainter {
     return builder.build();
   }
 
+  RositaCanvasParagraphData? _rositaParagraphData;
+  Size? _rositaSize;
+
   /// Computes the visual position of the glyphs for painting the text.
   ///
   /// The text will layout with a width that's as close to its max intrinsic
@@ -1151,6 +1199,21 @@ class TextPainter {
   /// The [text] and [textDirection] properties must be non-null before this is
   /// called.
   void layout({ double minWidth = 0.0, double maxWidth = double.infinity }) {
+    if (kIsRosita) {
+      final textStyle = _text?.style;
+
+      if (textStyle != null) {
+        _rositaParagraphData ??= RositaParagraphUtils.buildParagraphData(
+          text: plainText,
+          style: textStyle,
+        );
+
+        _rositaParagraphData!.layout(minWidth: minWidth, maxWidth: maxWidth, textScaler: textScaler);
+
+        _rositaSize = _rositaParagraphData!.size;
+      }
+    }
+
     assert(!maxWidth.isNaN);
     assert(!minWidth.isNaN);
     assert(() {
@@ -1249,8 +1312,15 @@ class TextPainter {
       paragraph.dispose();
       assert(debugSize == size);
     }
-    assert(!_rebuildParagraphForPaint);
-    canvas.drawParagraph(layoutCache.paragraph, offset + layoutCache.paintOffset);
+
+    if (canvas is RositaCanvas) {
+      canvas.drawRositaParagraph(this, offset + layoutCache.paintOffset);
+    } else {
+      rositaSkipCallback(() {
+        assert(!_rebuildParagraphForPaint);
+        canvas.drawParagraph(layoutCache.paragraph, offset + layoutCache.paintOffset);
+      });
+    }
   }
 
   // Returns true if value falls in the valid range of the UTF16 encoding.

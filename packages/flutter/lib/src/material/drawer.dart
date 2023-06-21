@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -703,7 +704,7 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
 
       final Widget child = _DrawerControllerScope(
         controller: widget,
-        child: RepaintBoundary(
+        child: RositaRepaintBoundary(
           child: Stack(
             children: <Widget>[
               BlockSemantics(
@@ -726,7 +727,7 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
                 child: Align(
                   alignment: _drawerInnerAlignment,
                   widthFactor: _controller.value,
-                  child: RepaintBoundary(
+                  child: RositaRepaintBoundary(
                     child: FocusScope(
                       key: _drawerKey,
                       node: _focusScopeNode,

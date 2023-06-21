@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'layer.dart';
@@ -439,7 +440,9 @@ class RenderStack extends RenderBox
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

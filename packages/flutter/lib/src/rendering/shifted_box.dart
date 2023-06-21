@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'box.dart';
 import 'debug.dart';
@@ -23,7 +24,7 @@ typedef BoxConstraintsTransform = BoxConstraints Function(BoxConstraints constra
 
 /// Abstract class for one-child-layout render boxes that provide control over
 /// the child's position.
-abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
+abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixin<RenderBox>, RositaSkipRenderObjectMixin {
   /// Initializes the [child] property for subclasses.
   RenderShiftedBox(RenderBox? child) {
     this.child = child;
@@ -800,7 +801,9 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

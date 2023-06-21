@@ -7,6 +7,7 @@ import 'dart:ui_web' as ui_web;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'framework.dart';
@@ -105,6 +106,9 @@ class _HtmlElementViewController extends PlatformViewController {
       'params': creationParams,
     };
     await SystemChannels.platform_views.invokeMethod<void>('create', args);
+
+    RositaPlatformViewRegister.createPlatformView(viewId: viewId, viewType: viewType);
+
     _initialized = true;
   }
 
@@ -124,6 +128,8 @@ class _HtmlElementViewController extends PlatformViewController {
   Future<void> dispose() async {
     if (_initialized) {
       await SystemChannels.platform_views.invokeMethod<void>('dispose', viewId);
+
+      RositaPlatformViewRegister.disposePlatformView(viewId);
     }
   }
 }

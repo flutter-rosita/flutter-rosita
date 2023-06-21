@@ -72,9 +72,9 @@ or
     flutterRoot,
     'bin',
     if (Platform.isWindows)
-      'flutter.bat'
+      'flutter-rosita.bat'
     else
-      'flutter',
+      'flutter-rosita',
   ]);
   final String bundlePlatform = targetPlatform;
   final String target = '${buildMode}_bundle_${bundlePlatform}_assets';

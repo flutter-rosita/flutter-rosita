@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -847,7 +848,7 @@ class _NavigationBarDestinationLayout extends StatelessWidget {
           children: <Widget>[
             LayoutId(
               id: _NavigationDestinationLayoutDelegate.iconId,
-              child: RepaintBoundary(
+              child: RositaRepaintBoundary(
                 key: iconKey,
                 child: icon,
               ),
@@ -857,7 +858,7 @@ class _NavigationBarDestinationLayout extends StatelessWidget {
               child: FadeTransition(
                 alwaysIncludeSemantics: true,
                 opacity: animation,
-                child: RepaintBoundary(
+                child: RositaRepaintBoundary(
                   key: _labelKey,
                   child: label,
                 ),

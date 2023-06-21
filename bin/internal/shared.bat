@@ -41,7 +41,7 @@ IF NOT EXIST "%cache_dir%" (
 :acquire_lock
 2>NUL (
   REM "3" is now stderr because of "2>NUL".
-  CALL :subroutine %* 2>&3 9> "%cache_dir%\flutter.bat.lock" || GOTO acquire_lock
+  CALL :subroutine %* 2>&3 9> "%cache_dir%\flutter-rosita.bat.lock" || GOTO acquire_lock
 )
 GOTO :after_subroutine
 

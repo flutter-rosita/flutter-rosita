@@ -9,6 +9,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show Brightness, clampDouble;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'text_selection_toolbar_button.dart';
@@ -770,7 +771,10 @@ class _CupertinoTextSelectionToolbarItemsElement extends RenderObjectElement {
   final Set<Element> _forgottenChildren = HashSet<Element>();
 
   @override
-  _RenderCupertinoTextSelectionToolbarItems get renderObject => super.renderObject as _RenderCupertinoTextSelectionToolbarItems;
+  _RenderCupertinoTextSelectionToolbarItems get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject)
+          as _RenderCupertinoTextSelectionToolbarItems;
 
   void _updateRenderObject(RenderBox? child, _CupertinoTextSelectionToolbarItemsSlot slot) {
     switch (slot) {

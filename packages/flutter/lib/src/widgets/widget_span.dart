@@ -6,6 +6,7 @@ import 'dart:ui' as ui show ParagraphBuilder, PlaceholderAlignment;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';

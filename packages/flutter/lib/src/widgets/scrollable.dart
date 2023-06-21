@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -927,10 +928,12 @@ class ScrollableState extends State<Scrollable> with TickerProviderStateMixin, R
   }
 
   bool _handleScrollMetricsNotification(ScrollMetricsNotification notification) {
-    if (notification.depth == 0) {
-      final RenderObject? scrollSemanticsRenderObject = _scrollSemanticsKey.currentContext?.findRenderObject();
-      if (scrollSemanticsRenderObject != null) {
-        scrollSemanticsRenderObject.markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (notification.depth == 0) {
+        final RenderObject? scrollSemanticsRenderObject = _scrollSemanticsKey.currentContext?.findRenderObject();
+        if (scrollSemanticsRenderObject != null) {
+          scrollSemanticsRenderObject.markNeedsSemanticsUpdate();
+        }
       }
     }
     return false;
@@ -1550,7 +1553,9 @@ class _RenderScrollSemantics extends RenderProxyBox {
        _allowImplicitScrolling = allowImplicitScrolling,
        _semanticChildCount = semanticChildCount,
        super(child) {
-    position.addListener(markNeedsSemanticsUpdate);
+    if (rositaEnableSemantics) {
+      position.addListener(markNeedsSemanticsUpdate);
+    }
   }
 
   /// Whether this render object is excluded from the semantic tree.
@@ -1560,10 +1565,14 @@ class _RenderScrollSemantics extends RenderProxyBox {
     if (value == _position) {
       return;
     }
-    _position.removeListener(markNeedsSemanticsUpdate);
+    if (rositaEnableSemantics) {
+      _position.removeListener(markNeedsSemanticsUpdate);
+    }
     _position = value;
-    _position.addListener(markNeedsSemanticsUpdate);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      _position.addListener(markNeedsSemanticsUpdate);
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether this node can be scrolled implicitly.
@@ -1574,7 +1583,9 @@ class _RenderScrollSemantics extends RenderProxyBox {
       return;
     }
     _allowImplicitScrolling = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   int? get semanticChildCount => _semanticChildCount;
@@ -1584,7 +1595,9 @@ class _RenderScrollSemantics extends RenderProxyBox {
       return;
     }
     _semanticChildCount = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

@@ -6,6 +6,7 @@ import 'dart:ui' as ui show SemanticsUpdate;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -441,7 +442,14 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
 
   void _handlePersistentFrameCallback(Duration timeStamp) {
     drawFrame();
-    _scheduleMouseTrackerUpdate();
+    if (kIsRosita) {
+      rositaDrawFrame();
+    }
+
+    if (RositaCursorUtils.changed) {
+      RositaCursorUtils.callAfterDrawFrame();
+      _scheduleMouseTrackerUpdate();
+    }
   }
 
   bool _debugMouseTrackerUpdateScheduled = false;
@@ -575,15 +583,28 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   @protected
   void drawFrame() {
     rootPipelineOwner.flushLayout();
-    rootPipelineOwner.flushCompositingBits();
-    rootPipelineOwner.flushPaint();
+    if (rositaEnableUpdateCompositingBits) {
+      rootPipelineOwner.flushCompositingBits();
+    }
+    rositaSkipCallback(rootPipelineOwner.flushPaint);
     if (sendFramesToEngine) {
       for (final RenderView renderView in renderViews) {
-        renderView.compositeFrame(); // this sends the bits to the GPU
+        rositaSkipCallback(renderView.compositeFrame); // this sends the bits to the GPU
       }
-      rootPipelineOwner.flushSemantics(); // this sends the semantics to the OS.
+      if (rositaEnableSemantics) {
+        rootPipelineOwner.flushSemantics(); // this sends the semantics to the OS.
+      }
       _firstFrameSent = true;
     }
+  }
+
+  @protected
+  // ignore: public_member_api_docs
+  void rositaDrawFrame() {
+    pipelineOwner.rositaFlushDetach();
+    pipelineOwner.rositaFlushAttach();
+    pipelineOwner.rositaFlushLayout();
+    pipelineOwner.rositaFlushPaint();
   }
 
   @override

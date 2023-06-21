@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'theme.dart';
@@ -552,7 +553,9 @@ class _RenderCupertinoSwitch extends RenderConstrainedBox {
       return;
     }
     _value = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   Color get activeColor => _activeColor;
@@ -605,7 +608,9 @@ class _RenderCupertinoSwitch extends RenderConstrainedBox {
     _onChanged = value;
     if (wasInteractive != isInteractive) {
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

@@ -363,7 +363,7 @@ flutter:
 
   Future<ProcessResult> resultOfFlutterCommand(String command, List<String> options) {
     return Process.run(
-      path.join(flutterDirectory.path, 'bin', Platform.isWindows ? 'flutter.bat' : 'flutter'),
+      path.join(flutterDirectory.path, 'bin', Platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita'),
       <String>[command, ...options],
       workingDirectory: rootPath,
     );

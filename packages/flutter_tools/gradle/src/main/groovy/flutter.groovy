@@ -323,7 +323,7 @@ class FlutterPlugin implements Plugin<Project> {
             }
         }
 
-        String flutterExecutableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "flutter.bat" : "flutter"
+        String flutterExecutableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "flutter-rosita.bat" : "flutter-rosita"
         flutterExecutable = Paths.get(flutterRoot.absolutePath, "bin", flutterExecutableName).toFile()
 
         // Validate that the provided Gradle, Java, AGP, and KGP versions are all within our
