@@ -22,6 +22,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'constants.dart';
@@ -1025,7 +1026,9 @@ class _RenderRangeSlider extends RenderBox with RelayoutWhenSystemFontsChangeMix
       _state.startPositionController.value = convertedValues.start;
       _state.endPositionController.value = convertedValues.end;
     }
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   TargetPlatform _platform;
@@ -1035,7 +1038,9 @@ class _RenderRangeSlider extends RenderBox with RelayoutWhenSystemFontsChangeMix
       return;
     }
     _platform = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   DeviceGestureSettings? get gestureSettings => _drag.gestureSettings;
@@ -1051,7 +1056,9 @@ class _RenderRangeSlider extends RenderBox with RelayoutWhenSystemFontsChangeMix
       return;
     }
     _semanticFormatterCallback = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   int? get divisions => _divisions;
@@ -1124,7 +1131,9 @@ class _RenderRangeSlider extends RenderBox with RelayoutWhenSystemFontsChangeMix
     _onChanged = value;
     if (wasEnabled != isEnabled) {
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

@@ -20,6 +20,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'basic.dart';
@@ -989,7 +990,9 @@ class _TheaterElement extends MultiChildRenderObjectElement {
   _TheaterElement(_Theater super.widget);
 
   @override
-  _RenderTheater get renderObject => super.renderObject as _RenderTheater;
+  _RenderTheater get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as _RenderTheater;
 
   @override
   void insertRenderObjectChild(RenderBox child, IndexedSlot<Element?> slot) {
@@ -1153,7 +1156,7 @@ class _TheaterParentData extends StackParentData {
 }
 
 class _RenderTheater extends RenderBox
-    with ContainerRenderObjectMixin<RenderBox, StackParentData>, _RenderTheaterMixin {
+    with ContainerRenderObjectMixin<RenderBox, StackParentData>, _RenderTheaterMixin, RositaRenderTheaterMixin {
   _RenderTheater({
     List<RenderBox>? children,
     required TextDirection textDirection,
@@ -1245,7 +1248,9 @@ class _RenderTheater extends RenderBox
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -1286,6 +1291,7 @@ class _RenderTheater extends RenderBox
   void markNeedsLayout() {
     if (!_skipMarkNeedsLayout) {
       super.markNeedsLayout();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -2045,9 +2051,13 @@ final class _OverlayEntryLocation extends LinkedListEntry<_OverlayEntryLocation>
     );
     _overlayChildRenderBox = child;
     _childModel._add(this);
-    _theater.markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      _theater.markNeedsPaint();
+    }
     _theater.markNeedsCompositingBitsUpdate();
-    _theater.markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      _theater.markNeedsSemanticsUpdate();
+    }
   }
 
   void _removeFromChildModel(_RenderDeferredLayoutBox child) {
@@ -2055,9 +2065,13 @@ final class _OverlayEntryLocation extends LinkedListEntry<_OverlayEntryLocation>
     _overlayChildRenderBox = null;
     assert(_childModel._sortedTheaterSiblings?.contains(this) ?? false);
     _childModel._remove(this);
-    _theater.markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      _theater.markNeedsPaint();
+    }
     _theater.markNeedsCompositingBitsUpdate();
-    _theater.markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      _theater.markNeedsSemanticsUpdate();
+    }
   }
 
   void _addChild(_RenderDeferredLayoutBox child) {
@@ -2235,7 +2249,8 @@ class _OverlayPortalElement extends RenderObjectElement {
 
   @override
   _RenderLayoutSurrogateProxyBox get renderObject =>
-      super.renderObject as _RenderLayoutSurrogateProxyBox;
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as _RenderLayoutSurrogateProxyBox;
 
   Element? _overlayChild;
   Element? _child;
@@ -2544,6 +2559,9 @@ final class _RenderDeferredLayoutBox extends RenderProxyBox
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     final BoxParentData childParentData = child.parentData! as BoxParentData;
     final Offset offset = childParentData.offset;
+
+    if (offset == Offset.zero) return;
+
     transform.translateByDouble(offset.dx, offset.dy, 0, 1);
   }
 }

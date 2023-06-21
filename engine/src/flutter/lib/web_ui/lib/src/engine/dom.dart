@@ -466,8 +466,8 @@ extension type DomElement._(JSObject _) implements DomNode {
   external bool hasAttribute(String name);
 
   @JS('attachShadow')
-  external DomShadowRoot _attachShadow(JSAny initDict);
-  DomShadowRoot attachShadow(Map<Object?, Object?> initDict) => _attachShadow(initDict.toJSAnyDeep);
+  external DomNode _attachShadow(JSAny initDict);
+  DomNode attachShadow(Map<Object?, Object?> initDict) => _attachShadow(initDict.toJSAnyDeep);
 
   external DomShadowRoot? get shadowRoot;
 

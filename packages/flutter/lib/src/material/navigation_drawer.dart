@@ -5,6 +5,7 @@
 /// @docImport 'scaffold.dart';
 library;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -446,7 +447,7 @@ class _NavigationDestinationSemantics extends StatelessWidget {
     return _StatusTransitionWidgetBuilder(
       animation: destinationInfo.selectedAnimation,
       builder: (BuildContext context, Widget? child) {
-        return Semantics(
+        return RositaSemantics(
           selected: destinationInfo.selectedAnimation.isForwardOrCompleted,
           container: true,
           child: child,
@@ -456,7 +457,7 @@ class _NavigationDestinationSemantics extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           child,
-          Semantics(
+          RositaSemantics(
             label: localizations.tabLabel(
               tabIndex: destinationInfo.index + 1,
               tabCount: destinationInfo.totalNumberOfDestinations,

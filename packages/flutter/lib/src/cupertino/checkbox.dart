@@ -9,6 +9,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -422,7 +423,7 @@ class _CupertinoCheckboxState extends State<CupertinoCheckbox>
                   : SystemMouseCursors.basic);
         });
 
-    return Semantics(
+    return RositaSemantics(
       label: widget.semanticLabel,
       checked: widget.value ?? false,
       mixed: widget.tristate ? widget.value == null : null,

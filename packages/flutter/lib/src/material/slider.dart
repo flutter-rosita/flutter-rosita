@@ -16,8 +16,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/services.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -1001,7 +1003,7 @@ class _SliderState extends State<Slider> with TickerProviderStateMixin {
       child: result,
     );
 
-    return Semantics(
+    return RositaSemantics(
       label: widget.label,
       container: true,
       slider: true,
@@ -1146,7 +1148,7 @@ class _SliderRenderObjectWidget extends LeafRenderObjectWidget {
   }
 }
 
-class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
+class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin, RositaCanvasMixin, RositaPaintRenderObjectMixin {
   _RenderSlider({
     required double value,
     required double? secondaryTrackValue,
@@ -1285,7 +1287,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
     } else {
       _state.positionController.value = convertedValue;
     }
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   double? get secondaryTrackValue => _secondaryTrackValue;
@@ -1297,7 +1301,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
     }
     _secondaryTrackValue = newValue;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   DeviceGestureSettings? get gestureSettings => _drag.gestureSettings;
@@ -1313,7 +1319,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
       return;
     }
     _platform = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   SemanticFormatterCallback? _semanticFormatterCallback;
@@ -1323,7 +1331,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
       return;
     }
     _semanticFormatterCallback = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   int? get divisions => _divisions;
@@ -1391,7 +1401,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
         _state.enableController.reverse();
       }
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -1417,7 +1429,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
     }
     _hasFocus = value;
     _updateForFocus(_hasFocus);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// True if this slider is being hovered over by a pointer.

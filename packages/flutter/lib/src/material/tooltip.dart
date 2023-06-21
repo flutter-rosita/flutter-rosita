@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -929,7 +930,7 @@ class TooltipState extends State<Tooltip> with SingleTickerProviderStateMixin {
         widget.excludeFromSemantics ??
         _tooltipTheme.excludeFromSemantics ??
         _defaultExcludeFromSemantics;
-    Widget result = Semantics(
+    Widget result = RositaSemantics(
       tooltip: excludeFromSemantics ? null : _tooltipMessage,
       child: widget.child,
     );
@@ -1043,7 +1044,7 @@ class _TooltipOverlay extends StatelessWidget {
         child: DefaultTextStyle(
           style: textStyle,
           textAlign: textAlign,
-          child: Semantics(
+          child: RositaSemantics(
             container: true,
             child: Container(
               decoration: decoration,

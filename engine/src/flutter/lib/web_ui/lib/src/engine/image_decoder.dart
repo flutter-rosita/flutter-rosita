@@ -86,7 +86,7 @@ abstract class BrowserImageDecoder implements ui.Codec {
 
       // Flutter doesn't have an API for progressive loading of images, so we
       // wait until the image is fully decoded.
-      await webDecoder.completed.toDart;
+      // await webDecoder.completed.toDart;
       frameCount = webDecoder.tracks.selectedTrack!.frameCount.toInt();
 
       // We coerce the DOM's `repetitionCount` into an int by explicitly
@@ -133,18 +133,20 @@ abstract class BrowserImageDecoder implements ui.Codec {
       );
     }
 
-    final DecodeResult result = await webDecoder
-        .decode(DecodeOptions(frameIndex: _nextFrameIndex))
-        .toDart;
-    final VideoFrame frame = result.image;
-    _nextFrameIndex = (_nextFrameIndex + 1) % frameCount;
+    throw UnimplementedError();
+
+    // final DecodeResult result = await webDecoder
+    //     .decode(DecodeOptions(frameIndex: _nextFrameIndex))
+    //     .toDart;
+    // final VideoFrame frame = result.image;
+    // _nextFrameIndex = (_nextFrameIndex + 1) % frameCount;
 
     // Duration can be null if the image is not animated. However, Flutter
     // requires a non-null value. 0 indicates that the frame is meant to be
     // displayed indefinitely, which is fine for a static image.
-    final Duration duration = Duration(microseconds: frame.duration?.toInt() ?? 0);
-    final ui.Image image = generateImageFromVideoFrame(frame);
-    return AnimatedImageFrameInfo(duration, image);
+    // final Duration duration = Duration(microseconds: frame.duration?.toInt() ?? 0);
+    // final ui.Image image = generateImageFromVideoFrame(frame);
+    // return AnimatedImageFrameInfo(duration, image);
   }
 
   /// Creates a [ui.Image] from a [VideoFrame]. Implementers of this class

@@ -12,6 +12,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -436,7 +437,7 @@ class _HourControl extends StatelessWidget {
       alwaysUse24HourFormat: alwaysUse24HourFormat,
     );
 
-    return Semantics(
+    return RositaSemantics(
       value: '${localizations.timePickerHourModeAnnouncement} $formattedHour',
       excludeSemantics: true,
       increasedValue: formattedNextHour,
@@ -516,7 +517,7 @@ class _TimeSelectorSeparator extends StatelessWidget {
         height = defaultTheme.hourMinuteInputSize.height;
     }
 
-    return ExcludeSemantics(
+    return RositaExcludeSemantics(
       child: SizedBox(
         width: timeOfDayFormat == TimeOfDayFormat.frenchCanadian ? 36 : 24,
         height: height,
@@ -552,7 +553,7 @@ class _MinuteControl extends StatelessWidget {
     );
     final String formattedPreviousMinute = localizations.formatMinute(previousMinute);
 
-    return Semantics(
+    return RositaSemantics(
       excludeSemantics: true,
       value: '${localizations.timePickerMinuteModeAnnouncement} $formattedMinute',
       increasedValue: formattedNextMinute,
@@ -736,7 +737,7 @@ class _AmPmButton extends StatelessWidget {
       color: resolvedBackgroundColor,
       child: InkWell(
         onTap: onPressed,
-        child: Semantics(
+        child: RositaSemantics(
           checked: selected,
           inMutuallyExclusiveGroup: true,
           button: true,
@@ -1854,7 +1855,7 @@ class _TimePickerInputState extends State<_TimePickerInput> with RestorationMixi
                             ),
                           ),
                           if (!hourHasError.value && !minuteHasError.value)
-                            ExcludeSemantics(
+                            RositaExcludeSemantics(
                               child: Text(
                                 widget.hourLabelText ??
                                     MaterialLocalizations.of(context).timePickerHourLabel,
@@ -1888,7 +1889,7 @@ class _TimePickerInputState extends State<_TimePickerInput> with RestorationMixi
                             ),
                           ),
                           if (!hourHasError.value && !minuteHasError.value)
-                            ExcludeSemantics(
+                            RositaExcludeSemantics(
                               child: Text(
                                 widget.minuteLabelText ??
                                     MaterialLocalizations.of(context).timePickerMinuteLabel,
@@ -2157,7 +2158,7 @@ class _HourMinuteTextFieldState extends State<_HourMinuteTextField> with Restora
       child: MediaQuery.withNoTextScaling(
         child: UnmanagedRestorationScope(
           bucket: bucket,
-          child: Semantics(
+          child: RositaSemantics(
             label: widget.semanticHintText,
             child: TextFormField(
               restorationId: 'hour_minute_text_form_field',
@@ -2908,13 +2909,13 @@ class _TimePickerState extends State<_TimePicker> with RestorationMixin {
         };
         final Widget dial = Padding(
           padding: dialPadding,
-          child: Semantics(
+          child: RositaSemantics(
             label: switch (_hourMinuteMode.value) {
               _HourMinuteMode.hour => localizations.timePickerHourModeAnnouncement,
               _HourMinuteMode.minute => localizations.timePickerMinuteModeAnnouncement,
             },
             liveRegion: true,
-            child: ExcludeSemantics(
+            child: RositaExcludeSemantics(
               child: SizedBox.fromSize(
                 size: defaultTheme.dialSize,
                 child: AspectRatio(

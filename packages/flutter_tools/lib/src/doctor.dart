@@ -559,7 +559,7 @@ class FlutterValidator extends DoctorValidator {
 
     try {
       final FlutterVersion version = _flutterVersion();
-      final String? gitUrl = _platform.environment['FLUTTER_GIT_URL'];
+      final String? gitUrl = _platform.environment['FLUTTER_ROSITA_GIT_URL'];
       versionChannel = version.channel;
       frameworkVersion = version.frameworkVersion;
 
@@ -743,7 +743,7 @@ class FlutterValidator extends DoctorValidator {
         );
       }
       if (errorMessage.contains(
-        'Either remove "FLUTTER_GIT_URL" from the environment or set it to',
+        'Either remove "FLUTTER_ROSITA_GIT_URL" from the environment or set it to',
       )) {
         return ValidationMessage.hint(
           _userMessages.flutterUpstreamRepositoryUrlEnvMismatch(repositoryUrl!),

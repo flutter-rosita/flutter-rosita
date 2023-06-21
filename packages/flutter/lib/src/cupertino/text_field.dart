@@ -11,6 +11,7 @@ import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -1294,7 +1295,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
     final String clearLabel =
         widget.clearButtonSemanticLabel ?? CupertinoLocalizations.of(context).clearButtonLabel;
 
-    return Semantics(
+    return RositaSemantics(
       button: true,
       label: clearLabel,
       child: GestureDetector(
@@ -1550,7 +1551,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
 
     final Widget paddedEditable = Padding(
       padding: widget.padding,
-      child: RepaintBoundary(
+      child: RositaRepaintBoundary(
         child: UnmanagedRestorationScope(
           bucket: bucket,
           child: EditableText(
@@ -1627,7 +1628,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
       ),
     );
 
-    return Semantics(
+    return RositaSemantics(
       enabled: enabled,
       onTap: !enabled || widget.readOnly
           ? null

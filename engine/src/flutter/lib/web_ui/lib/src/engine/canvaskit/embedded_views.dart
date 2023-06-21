@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:ui/src/engine.dart';
 import 'package:ui/ui.dart' as ui;
 
+
 /// Used for clipping and filter svg resources.
 ///
 /// Position needs to be absolute since these svgs are sandwiched between
@@ -14,6 +15,22 @@ final SVGSVGElement kSvgResourceHeader = createSVGSVGElement()
   ..setAttribute('width', 0)
   ..setAttribute('height', 0)
   ..style.position = 'absolute';
+
+import '../../engine.dart' show PlatformViewManager, configuration, longestIncreasingSubsequence;
+import '../display.dart';
+import '../dom.dart';
+import '../platform_views/slots.dart';
+import '../svg.dart';
+import '../util.dart';
+import '../vector_math.dart';
+import 'canvas.dart';
+import 'layer.dart';
+import 'overlay_scene_optimizer.dart';
+import 'painting.dart';
+import 'path.dart';
+import 'picture.dart';
+import 'picture_recorder.dart';
+import 'rasterizer.dart';
 
 /// This composites HTML views into the [ui.Scene].
 class HtmlViewEmbedder {

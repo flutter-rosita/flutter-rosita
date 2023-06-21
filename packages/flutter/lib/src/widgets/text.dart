@@ -17,6 +17,7 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'default_selection_style.dart';
@@ -711,13 +712,17 @@ class Text extends StatelessWidget {
     late Widget result;
     if (registrar != null) {
       result = MouseRegion(
-        cursor: DefaultSelectionStyle.of(context).mouseCursor ?? SystemMouseCursors.text,
+        cursor: DefaultSelectionStyle
+            .of(context)
+            .mouseCursor ?? SystemMouseCursors.text,
         child: _SelectableTextContainer(
           textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
           textDirection:
-              textDirection, // RichText uses Directionality.of to obtain a default if this is null.
+          textDirection,
+          // RichText uses Directionality.of to obtain a default if this is null.
           locale:
-              locale, // RichText uses Localizations.localeOf to obtain a default if this is null
+          locale,
+          // RichText uses Localizations.localeOf to obtain a default if this is null
           softWrap: softWrap ?? defaultTextStyle.softWrap,
           overflow: overflow ?? effectiveTextStyle?.overflow ?? defaultTextStyle.overflow,
           textScaler: textScaler,
@@ -725,12 +730,14 @@ class Text extends StatelessWidget {
           strutStyle: strutStyle,
           textWidthBasis: textWidthBasis ?? defaultTextStyle.textWidthBasis,
           textHeightBehavior:
-              textHeightBehavior ??
+          textHeightBehavior ??
               defaultTextStyle.textHeightBehavior ??
               DefaultTextHeightBehavior.maybeOf(context),
           selectionColor:
-              selectionColor ??
-              DefaultSelectionStyle.of(context).selectionColor ??
+          selectionColor ??
+              DefaultSelectionStyle
+                  .of(context)
+                  .selectionColor ??
               DefaultSelectionStyle.defaultColor,
           text: TextSpan(
             style: effectiveTextStyle,
@@ -739,6 +746,15 @@ class Text extends StatelessWidget {
             children: textSpan != null ? <InlineSpan>[textSpan!] : null,
           ),
         ),
+      );
+    } else if (kIsRosita && data != null) {
+      result = RositaRichText(
+        data,
+        style: effectiveTextStyle,
+        textAlign: textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+        textDirection: textDirection,
+        overflow: overflow ?? effectiveTextStyle?.overflow ?? defaultTextStyle.overflow,
+        maxLines: maxLines ?? defaultTextStyle.maxLines,
       );
     } else {
       result = RichText(
@@ -769,11 +785,11 @@ class Text extends StatelessWidget {
       );
     }
     if (semanticsLabel != null || semanticsIdentifier != null) {
-      result = Semantics(
+      result = RositaSemantics(
         textDirection: textDirection,
         label: semanticsLabel,
         identifier: semanticsIdentifier,
-        child: ExcludeSemantics(excluding: semanticsLabel != null, child: result),
+        child: RositaExcludeSemantics(excluding: semanticsLabel != null, child: result),
       );
     }
     return result;

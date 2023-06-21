@@ -8,6 +8,7 @@ library;
 
 import 'dart:math' as math;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
@@ -2500,7 +2501,7 @@ class _CupertinoTimerPickerState extends State<CupertinoTimerPicker> {
             ? localizations.timerPickerHour(index) + label
             : label + localizations.timerPickerHour(index);
 
-        return Semantics(
+        return RositaSemantics(
           label: semanticsLabel,
           excludeSemantics: true,
           child: _buildPickerNumberLabel(localizations.timerPickerHour(index), additionalPadding),
@@ -2570,7 +2571,7 @@ class _CupertinoTimerPickerState extends State<CupertinoTimerPicker> {
             ? localizations.timerPickerMinute(minute) + label
             : label + localizations.timerPickerMinute(minute);
 
-        return Semantics(
+        return RositaSemantics(
           label: semanticsLabel,
           excludeSemantics: true,
           child: _buildPickerNumberLabel(
@@ -2639,7 +2640,7 @@ class _CupertinoTimerPickerState extends State<CupertinoTimerPicker> {
             ? localizations.timerPickerSecond(second) + label
             : label + localizations.timerPickerSecond(second);
 
-        return Semantics(
+        return RositaSemantics(
           label: semanticsLabel,
           excludeSemantics: true,
           child: _buildPickerNumberLabel(

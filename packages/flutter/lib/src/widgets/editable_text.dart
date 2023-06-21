@@ -24,6 +24,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:rosita/rosita.dart';
 
 import '_web_browser_detection_io.dart' if (dart.library.js_util) '_web_browser_detection_web.dart';
 import 'actions.dart';
@@ -5748,7 +5749,7 @@ class EditableTextState extends State<EditableText>
                         viewportBuilder: (BuildContext context, ViewportOffset offset) {
                           return CompositedTransformTarget(
                             link: _toolbarLayerLink,
-                            child: Semantics(
+                            child: RositaSemantics(
                               inputType: inputType,
                               onCopy: _semanticsOnCopy(controls),
                               onCut: _semanticsOnCut(controls),

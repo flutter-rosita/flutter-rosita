@@ -20,6 +20,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'binding.dart';
@@ -2207,7 +2208,7 @@ class RawScrollbarState<T extends RawScrollbar> extends State<T> with TickerProv
       onNotification: _handleScrollMetricsNotification,
       child: NotificationListener<ScrollNotification>(
         onNotification: _handleScrollNotification,
-        child: RepaintBoundary(
+        child: RositaRepaintBoundary(
           child: Listener(
             onPointerSignal: _receivedPointerSignal,
             child: RawGestureDetector(
@@ -2245,7 +2246,7 @@ class RawScrollbarState<T extends RawScrollbar> extends State<T> with TickerProv
                 child: CustomPaint(
                   key: _scrollbarPainterKey,
                   foregroundPainter: scrollbarPainter,
-                  child: RepaintBoundary(child: widget.child),
+                  child: RositaRepaintBoundary(child: widget.child),
                 ),
               ),
             ),

@@ -10,6 +10,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -482,7 +483,7 @@ class _DatePickerModeToggleButtonState extends State<_DatePickerModeToggleButton
         child: Row(
           children: <Widget>[
             Flexible(
-              child: Semantics(
+              child: RositaSemantics(
                 label: MaterialLocalizations.of(context).selectYearSemanticsLabel,
                 button: true,
                 container: true,
@@ -851,7 +852,7 @@ class _MonthPickerState extends State<_MonthPicker> {
         DatePickerTheme.of(context).subHeaderForegroundColor ??
         DatePickerTheme.defaults(context).subHeaderForegroundColor;
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       explicitChildNodes: true,
       child: Column(
@@ -1223,7 +1224,7 @@ class _DayState extends State<_Day> {
     }
 
     if (widget.isDisabled) {
-      dayWidget = ExcludeSemantics(child: dayWidget);
+      dayWidget = RositaExcludeSemantics(child: dayWidget);
     } else {
       dayWidget = InkResponse(
         focusNode: widget.focusNode,
@@ -1232,7 +1233,7 @@ class _DayState extends State<_Day> {
         overlayColor: dayOverlayColor,
         customBorder: dayShape,
         containedInkWell: true,
-        child: Semantics(
+        child: RositaSemantics(
           // We want the day of month to be spoken first irrespective of the
           // locale-specific preferences or TextDirection. This is because
           // an accessibility user is more likely to be interested in the
@@ -1479,7 +1480,7 @@ class _YearPickerState extends State<YearPicker> {
         height: decorationHeight,
         width: decorationWidth,
         alignment: Alignment.center,
-        child: Semantics(
+        child: RositaSemantics(
           selected: isSelected,
           button: true,
           child: Text(widget.calendarDelegate.formatYear(year, localizations), style: itemStyle),
@@ -1488,7 +1489,7 @@ class _YearPickerState extends State<YearPicker> {
     );
 
     if (isDisabled) {
-      yearItem = ExcludeSemantics(child: yearItem);
+      yearItem = RositaExcludeSemantics(child: yearItem);
     } else {
       DateTime date = widget.calendarDelegate.getMonth(
         year,

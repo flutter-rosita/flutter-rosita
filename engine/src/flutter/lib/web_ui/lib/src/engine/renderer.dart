@@ -23,16 +23,7 @@ Renderer get renderer => _renderer;
 /// of functionality needed by the rest of the generic web engine code.
 abstract class Renderer {
   factory Renderer._internal() {
-    if (FlutterConfiguration.flutterWebUseSkwasm) {
-      return SkwasmRenderer();
-    } else if (FlutterConfiguration.useSkia) {
-      return CanvasKitRenderer();
-    } else {
-      throw StateError(
-        'Wrong combination of configuration flags. Was expecting either CanvasKit or Skwasm to be '
-        'selected.',
-      );
-    }
+    return HtmlRenderer(); // ROSITA uses HTML renderer
   }
 
   String get rendererTag;
