@@ -9,6 +9,7 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -470,7 +471,9 @@ class _RenderCupertinoPickerSemantics extends RenderProxyBox {
       return;
     }
     _textDirection = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   int _currentIndex = 0;
@@ -488,7 +491,9 @@ class _RenderCupertinoPickerSemantics extends RenderProxyBox {
       return;
     }
     _currentIndex = controller.selectedItem;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

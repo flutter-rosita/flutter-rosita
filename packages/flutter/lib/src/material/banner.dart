@@ -7,6 +7,7 @@
 /// @docImport 'text_button.dart';
 library;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'banner_theme.dart';
@@ -441,7 +442,7 @@ class _MaterialBannerState extends State<MaterialBanner> {
       end: Offset.zero,
     ).animate(_slideOutCurvedAnimation!);
 
-    materialBanner = Semantics(
+    materialBanner = RositaSemantics(
       container: true,
       liveRegion: true,
       onDismiss: () {

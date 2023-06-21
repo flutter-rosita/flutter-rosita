@@ -12,6 +12,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -845,11 +846,21 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
     return MatrixUtils.transformPoint(object.getTransformTo(null), object.semanticBounds.topLeft);
   }
 
+  Rect? _rositaRect;
+
+  Duration _rositaFrameTimeStamp = Duration.zero;
+
   /// Returns the global rectangle of the attached widget's [RenderObject], in
   /// logical units.
   ///
   /// Rect is the rectangle of the transformed widget in global coordinates.
   Rect get rect {
+    final Duration currentFrameTimeStamp = SchedulerBinding.instance.currentSystemFrameTimeStamp;
+    final Rect? rositaRect = _rositaRect;
+
+    if (_rositaFrameTimeStamp == currentFrameTimeStamp && rositaRect != null) {
+      return rositaRect;
+    }
     assert(
       context != null,
       "Tried to get the bounds of a focus node that didn't have its context set yet.\n"
@@ -865,7 +876,10 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
       object.getTransformTo(null),
       object.semanticBounds.bottomRight,
     );
-    return Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
+
+    _rositaFrameTimeStamp = currentFrameTimeStamp;
+
+    return _rositaRect = Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
   }
 
   /// Removes the focus on this node by moving the primary focus to another node.

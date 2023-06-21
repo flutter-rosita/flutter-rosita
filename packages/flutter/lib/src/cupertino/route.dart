@@ -22,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -189,7 +190,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
     Animation<double> secondaryAnimation,
   ) {
     final Widget child = buildContent(context);
-    return Semantics(scopesRoute: true, explicitChildNodes: true, child: child);
+    return RositaSemantics(scopesRoute: true, explicitChildNodes: true, child: child);
   }
 
   // Called by _CupertinoBackGestureDetector when a pop ("back") drag start

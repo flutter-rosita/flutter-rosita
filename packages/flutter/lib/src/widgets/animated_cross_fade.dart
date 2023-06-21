@@ -9,6 +9,7 @@
 library;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'animated_size.dart';
 import 'basic.dart';
@@ -356,7 +357,7 @@ class _AnimatedCrossFadeState extends State<AnimatedCrossFade> with TickerProvid
       key: bottomKey,
       enabled: _controller.isAnimating,
       child: IgnorePointer(
-        child: ExcludeSemantics(
+        child: RositaExcludeSemantics(
           // Always exclude the semantics of the widget that's fading out.
           child: ExcludeFocus(
             excluding: widget.excludeBottomFocus,
@@ -370,7 +371,7 @@ class _AnimatedCrossFadeState extends State<AnimatedCrossFade> with TickerProvid
       enabled: true, // Top widget always has its animations enabled.
       child: IgnorePointer(
         ignoring: false,
-        child: ExcludeSemantics(
+        child: RositaExcludeSemantics(
           excluding: false, // Always publish semantics for the widget that's fading in.
           child: ExcludeFocus(
             excluding: false,
