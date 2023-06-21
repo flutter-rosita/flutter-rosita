@@ -15,6 +15,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -344,7 +345,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
           // be retrieved at paint time (after layout), not at build time.
           getSelectedItemOffset: () => route.getItemOffset(route.selectedIndex),
         ),
-        child: Semantics(
+        child: RositaSemantics(
           role: SemanticsRole.menu,
           scopesRoute: true,
           namesRoute: true,
@@ -1751,7 +1752,7 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
 
     final bool childHasButtonSemantic =
         hintIndex != null || (_selectedIndex != null && widget.selectedItemBuilder == null);
-    return Semantics(
+    return RositaSemantics(
       button: !childHasButtonSemantic,
       expanded: _isMenuExpanded,
       child: Actions(actions: _actionMap, child: result),

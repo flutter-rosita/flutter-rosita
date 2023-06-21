@@ -11,6 +11,7 @@ library;
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -1008,7 +1009,7 @@ class _NavigationBarDestinationSemantics extends StatelessWidget {
     return _StatusTransitionWidgetBuilder(
       animation: destinationInfo.selectedAnimation,
       builder: (BuildContext context, Widget? child) {
-        return Semantics(enabled: enabled, button: true, child: child);
+        return RositaSemantics(enabled: enabled, button: true, child: child);
       },
       child: kIsWeb
           ? child
@@ -1016,7 +1017,7 @@ class _NavigationBarDestinationSemantics extends StatelessWidget {
               alignment: Alignment.center,
               children: <Widget>[
                 child,
-                Semantics(
+                RositaSemantics(
                   label: localizations.tabLabel(
                     tabIndex: destinationInfo.index + 1,
                     tabCount: destinationInfo.totalNumberOfDestinations,

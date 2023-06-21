@@ -10,6 +10,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -485,7 +486,7 @@ class _DatePickerModeToggleButtonState extends State<_DatePickerModeToggleButton
         child: Row(
           children: <Widget>[
             Flexible(
-              child: Semantics(
+              child: RositaSemantics(
                 label: MaterialLocalizations.of(context).selectYearSemanticsLabel,
                 button: true,
                 container: true,
@@ -855,7 +856,7 @@ class _MonthPickerState extends State<_MonthPicker> {
         DatePickerTheme.of(context).subHeaderForegroundColor ??
         DatePickerTheme.defaults(context).subHeaderForegroundColor;
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       explicitChildNodes: true,
       child: Column(
@@ -1240,7 +1241,7 @@ class _DayState extends State<_Day> {
     if (Theme.of(context).useMaterial3 && orientation == Orientation.portrait) {
       dayWidget = Padding(padding: const EdgeInsets.all(4.0), child: dayWidget);
     }
-    dayWidget = Semantics(
+    dayWidget = RositaSemantics(
       // We want the day of month to be spoken first irrespective of the
       // locale-specific preferences or TextDirection. This is because
       // an accessibility user is more likely to be interested in the
@@ -1498,7 +1499,7 @@ class _YearPickerState extends State<YearPicker> {
         height: decorationHeight,
         width: decorationWidth,
         alignment: Alignment.center,
-        child: Semantics(
+        child: RositaSemantics(
           selected: isSelected,
           enabled: !isDisabled,
           button: true,

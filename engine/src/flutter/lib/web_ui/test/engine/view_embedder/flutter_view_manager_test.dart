@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_util';
 
 import 'package:test/bootstrap/browser.dart';
 import 'package:test/test.dart';
@@ -17,11 +18,14 @@ void main() {
 Future<void> doTests() async {
   group('FlutterViewManager', () {
     final EnginePlatformDispatcher platformDispatcher = EnginePlatformDispatcher.instance;
-    final viewManager = FlutterViewManager(platformDispatcher);
+    final FlutterViewManager viewManager = FlutterViewManager(platformDispatcher);
 
     group('registerView', () {
       test('can register view', () {
-        final view = EngineFlutterView(platformDispatcher, createDomElement('div'));
+        final EngineFlutterView view = EngineFlutterView(
+          platformDispatcher,
+          createDomElement('div'),
+        );
         final int viewId = view.viewId;
 
         viewManager.registerView(view);
@@ -30,7 +34,10 @@ Future<void> doTests() async {
       });
 
       test('fails if the same viewId is already registered', () {
-        final view = EngineFlutterView(platformDispatcher, createDomElement('div'));
+        final EngineFlutterView view = EngineFlutterView(
+          platformDispatcher,
+          createDomElement('div'),
+        );
 
         viewManager.registerView(view);
 
@@ -40,9 +47,14 @@ Future<void> doTests() async {
       });
 
       test('stores JSOptions that getOptions can retrieve', () {
-        final view = EngineFlutterView(platformDispatcher, createDomElement('div'));
+        final EngineFlutterView view = EngineFlutterView(
+          platformDispatcher,
+          createDomElement('div'),
+        );
         final int viewId = view.viewId;
-        final expectedOptions = JsFlutterViewOptions(hostElement: createDomElement('div'));
+        final JsFlutterViewOptions expectedOptions =
+            jsify(<String, Object?>{'hostElement': createDomElement('div')})
+                as JsFlutterViewOptions;
 
         viewManager.registerView(view, jsViewOptions: expectedOptions);
 
@@ -53,7 +65,10 @@ Future<void> doTests() async {
 
     group('unregisterView', () {
       test('unregisters a view', () {
-        final view = EngineFlutterView(platformDispatcher, createDomElement('div'));
+        final EngineFlutterView view = EngineFlutterView(
+          platformDispatcher,
+          createDomElement('div'),
+        );
         final int viewId = view.viewId;
 
         viewManager.registerView(view);
@@ -83,7 +98,10 @@ Future<void> doTests() async {
       );
 
       test('on view registered/unregistered - fires event', () async {
-        final view = EngineFlutterView(platformDispatcher, createDomElement('div'));
+        final EngineFlutterView view = EngineFlutterView(
+          platformDispatcher,
+          createDomElement('div'),
+        );
         final int viewId = view.viewId;
 
         final Future<List<void>> viewCreatedEvents = onViewCreated.toList();
@@ -113,7 +131,7 @@ Future<void> doTests() async {
     group('findViewForElement', () {
       test('finds view for root and descendant elements', () {
         final DomElement host = createDomElement('div');
-        final view = EngineFlutterView(platformDispatcher, host);
+        final EngineFlutterView view = EngineFlutterView(platformDispatcher, host);
 
         viewManager.registerView(view);
 
@@ -133,7 +151,7 @@ Future<void> doTests() async {
 
       test('returns null for host element', () {
         final DomElement host = createDomElement('div');
-        final view = EngineFlutterView(platformDispatcher, host);
+        final EngineFlutterView view = EngineFlutterView(platformDispatcher, host);
         viewManager.registerView(view);
 
         expect(viewManager.findViewForElement(host), isNull);
@@ -141,7 +159,7 @@ Future<void> doTests() async {
 
       test("returns null for elements that don't belong to any view", () {
         final DomElement host = createDomElement('div');
-        final view = EngineFlutterView(platformDispatcher, host);
+        final EngineFlutterView view = EngineFlutterView(platformDispatcher, host);
         viewManager.registerView(view);
 
         final DomElement disconnectedElement = createDomElement('div');
@@ -156,7 +174,7 @@ Future<void> doTests() async {
 
       test('does not recognize elements from unregistered views', () {
         final DomElement host = createDomElement('div');
-        final view = EngineFlutterView(platformDispatcher, host);
+        final EngineFlutterView view = EngineFlutterView(platformDispatcher, host);
         viewManager.registerView(view);
 
         final DomElement rootElement = view.dom.rootElement;

@@ -35,3 +35,4 @@ part 'semantics.dart';
 part 'text.dart';
 part 'tile_mode.dart';
 part 'window.dart';
+part 'rosita.dart';

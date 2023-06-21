@@ -27,7 +27,6 @@ export interface WasmApplicationBuild extends ApplicationBuildBase {
 export type ApplicationBuild = JSApplicationBuild | WasmApplicationBuild;
 
 export interface BuildConfig {
-  /** @deprecated Flutter's service worker is deprecated and will be removed in a future Flutter release*/
   serviceWorkerVersion: string;
   engineRevision: string;
   useLocalCanvasKit?: boolean;
@@ -40,8 +39,6 @@ export interface BrowserEnvironment {
   hasChromiumBreakIterators: boolean;
   supportsWasmGC: boolean;
   crossOriginIsolated: boolean;
-  webGLVersion: number;
-  isChromeExtension: boolean;
 }
 
 type CanvasKitVariant =
@@ -58,7 +55,6 @@ export interface FlutterConfiguration {
   canvasKitBaseUrl?: string;
   canvasKitVariant?: CanvasKitVariant;
   renderer?: WebRenderer;
-  enableWimp?: boolean;
   hostElement?: HTMLElement;
   fontFallbackBaseUrl?: string;
   /** @deprecated use `entrypointBaseUrl` instead*/
@@ -68,7 +64,6 @@ export interface FlutterConfiguration {
   wasmAllowList?: WasmAllowList;
 }
 
-/** @deprecated Flutter's service worker is deprecated and will be removed in a future Flutter release*/
 export interface ServiceWorkerSettings {
   serviceWorkerVersion: string;
   serviceWorkerUrl?: string;

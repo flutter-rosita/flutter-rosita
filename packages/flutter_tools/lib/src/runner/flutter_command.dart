@@ -1457,6 +1457,8 @@ abstract class FlutterCommand extends Command<void> {
     _addFlutterVersionToDartDefines(globals.flutterVersion, dartDefines);
     _addFeatureFlagsToDartDefines(dartDefines);
 
+    dartDefines.add('ROSITA=true');
+
     return BuildInfo(
       buildMode,
       flavor,

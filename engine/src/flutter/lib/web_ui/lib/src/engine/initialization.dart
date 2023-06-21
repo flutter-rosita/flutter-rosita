@@ -56,7 +56,7 @@ void debugEmulateHotRestart() {
   while (_hotRestartListeners.isNotEmpty) {
     final List<ui.VoidCallback> copyOfListeners = _hotRestartListeners.toList();
     _hotRestartListeners.clear();
-    for (final listener in copyOfListeners) {
+    for (final ui.VoidCallback listener in copyOfListeners) {
       listener();
     }
   }
@@ -221,6 +221,32 @@ Future<void> _downloadAssetFonts() async {
   }
 
   if (_debugAssetManager != null || _assetManager != null) {
-    await renderer.fontCollection.loadAssetFonts(await fetchFontManifest(ui_web.assetManager));
+    // ROSITA: START LOADING FONTS
+    final fontManifest = await fetchFontManifest(ui_web.assetManager);
+
+    for (final el in fontManifest.families) {
+      for (final asset in el.fontAssets) {
+        final fullAssetPath = 'url(assets/${asset.asset})'.toJS;
+        final font = createDomFontFace(
+          el.name,
+          fullAssetPath,
+          asset.descriptors,
+        );
+
+        await font.load();
+
+        (domWindow.document as DomHTMLDocument).fonts?.add(font);
+      }
+    }
+    // ROSITA: END LOADING FONTS
+
+    await renderer.fontCollection.loadAssetFonts(fontManifest);
   }
 }
+
+bool get debugDisableFontFallbacks => _debugDisableFontFallbacks;
+set debugDisableFontFallbacks(bool value) {
+  _debugDisableFontFallbacks = value;
+}
+
+bool _debugDisableFontFallbacks = false;

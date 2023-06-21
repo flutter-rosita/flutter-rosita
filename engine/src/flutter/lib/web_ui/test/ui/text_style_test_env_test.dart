@@ -22,18 +22,18 @@ Future<void> testMain() async {
   // Previously the logic that set the effective font family would forget the
   // original value and would print incorrect value in toString.
   test('TextStyle remembers original fontFamily value', () {
-    final style1 = ui.TextStyle();
+    final ui.TextStyle style1 = ui.TextStyle();
     expect(style1.toString(), contains('fontFamily: unspecified'));
 
-    final style2 = ui.TextStyle(fontFamily: 'Hello');
+    final ui.TextStyle style2 = ui.TextStyle(fontFamily: 'Hello');
     expect(style2.toString(), contains('fontFamily: Hello'));
   });
 
   test('ParagraphStyle remembers original fontFamily value', () {
-    final style1 = ui.ParagraphStyle();
+    final ui.ParagraphStyle style1 = ui.ParagraphStyle();
     expect(style1.toString(), contains('fontFamily: unspecified'));
 
-    final style2 = ui.ParagraphStyle(fontFamily: 'Hello');
+    final ui.ParagraphStyle style2 = ui.ParagraphStyle(fontFamily: 'Hello');
     expect(style2.toString(), contains('fontFamily: Hello'));
   });
 }

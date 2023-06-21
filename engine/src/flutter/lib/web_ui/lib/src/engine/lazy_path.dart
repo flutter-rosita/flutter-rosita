@@ -8,7 +8,7 @@ import 'dart:typed_data';
 import 'package:ui/src/engine.dart';
 import 'package:ui/ui.dart' as ui;
 
-abstract class DisposablePath implements LayerPath {
+abstract class DisposablePath implements ScenePath {
   @override
   DisposablePathMetrics computeMetrics({bool forceClosed = false});
 
@@ -34,11 +34,11 @@ abstract class DisposablePathMetric implements ui.PathMetric {
   void dispose();
 }
 
-sealed class PathCommand {
+sealed class LazyPathCommand {
   void apply(DisposablePath path);
 }
 
-final class MoveToCommand implements PathCommand {
+final class MoveToCommand implements LazyPathCommand {
   MoveToCommand(this.x, this.y);
 
   final double x;
@@ -50,7 +50,7 @@ final class MoveToCommand implements PathCommand {
   }
 }
 
-final class RelativeMoveToCommand implements PathCommand {
+final class RelativeMoveToCommand implements LazyPathCommand {
   RelativeMoveToCommand(this.dx, this.dy);
 
   final double dx;
@@ -62,7 +62,7 @@ final class RelativeMoveToCommand implements PathCommand {
   }
 }
 
-final class LineToCommand implements PathCommand {
+final class LineToCommand implements LazyPathCommand {
   LineToCommand(this.x, this.y);
 
   final double x;
@@ -74,7 +74,7 @@ final class LineToCommand implements PathCommand {
   }
 }
 
-final class RelativeLineToCommand implements PathCommand {
+final class RelativeLineToCommand implements LazyPathCommand {
   RelativeLineToCommand(this.dx, this.dy);
 
   final double dx;
@@ -86,7 +86,7 @@ final class RelativeLineToCommand implements PathCommand {
   }
 }
 
-final class QuadraticBezierToCommand implements PathCommand {
+final class QuadraticBezierToCommand implements LazyPathCommand {
   QuadraticBezierToCommand(this.x1, this.y1, this.x2, this.y2);
 
   final double x1;
@@ -100,7 +100,7 @@ final class QuadraticBezierToCommand implements PathCommand {
   }
 }
 
-final class RelativeQuadraticBezierToCommand implements PathCommand {
+final class RelativeQuadraticBezierToCommand implements LazyPathCommand {
   RelativeQuadraticBezierToCommand(this.x1, this.y1, this.x2, this.y2);
 
   final double x1;
@@ -114,7 +114,7 @@ final class RelativeQuadraticBezierToCommand implements PathCommand {
   }
 }
 
-final class CubicToCommand implements PathCommand {
+final class CubicToCommand implements LazyPathCommand {
   CubicToCommand(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3);
 
   final double x1;
@@ -130,7 +130,7 @@ final class CubicToCommand implements PathCommand {
   }
 }
 
-final class RelativeCubicToCommand implements PathCommand {
+final class RelativeCubicToCommand implements LazyPathCommand {
   RelativeCubicToCommand(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3);
 
   final double x1;
@@ -146,7 +146,7 @@ final class RelativeCubicToCommand implements PathCommand {
   }
 }
 
-final class ConicToCommand implements PathCommand {
+final class ConicToCommand implements LazyPathCommand {
   ConicToCommand(this.x1, this.y1, this.x2, this.y2, this.w);
 
   final double x1;
@@ -161,7 +161,7 @@ final class ConicToCommand implements PathCommand {
   }
 }
 
-final class RelativeConicToCommand implements PathCommand {
+final class RelativeConicToCommand implements LazyPathCommand {
   RelativeConicToCommand(this.x1, this.y1, this.x2, this.y2, this.w);
 
   final double x1;
@@ -176,7 +176,7 @@ final class RelativeConicToCommand implements PathCommand {
   }
 }
 
-final class ArcToCommand implements PathCommand {
+final class ArcToCommand implements LazyPathCommand {
   ArcToCommand(this.rect, this.startAngle, this.sweepAngle, this.forceMoveTo);
 
   final ui.Rect rect;
@@ -190,7 +190,7 @@ final class ArcToCommand implements PathCommand {
   }
 }
 
-final class ArcToPointCommand implements PathCommand {
+final class ArcToPointCommand implements LazyPathCommand {
   ArcToPointCommand(
     this.arcEnd, {
     required this.radius,
@@ -217,7 +217,7 @@ final class ArcToPointCommand implements PathCommand {
   }
 }
 
-final class RelativeArcToPointCommand implements PathCommand {
+final class RelativeArcToPointCommand implements LazyPathCommand {
   RelativeArcToPointCommand(
     this.arcEndDelta, {
     required this.radius,
@@ -244,7 +244,7 @@ final class RelativeArcToPointCommand implements PathCommand {
   }
 }
 
-final class AddRectCommand implements PathCommand {
+final class AddRectCommand implements LazyPathCommand {
   AddRectCommand(this.rect);
 
   final ui.Rect rect;
@@ -255,7 +255,7 @@ final class AddRectCommand implements PathCommand {
   }
 }
 
-final class AddOvalCommand implements PathCommand {
+final class AddOvalCommand implements LazyPathCommand {
   AddOvalCommand(this.oval);
 
   final ui.Rect oval;
@@ -266,7 +266,7 @@ final class AddOvalCommand implements PathCommand {
   }
 }
 
-final class AddArcCommand implements PathCommand {
+final class AddArcCommand implements LazyPathCommand {
   AddArcCommand(this.oval, this.startAngle, this.sweepAngle);
 
   final ui.Rect oval;
@@ -279,7 +279,7 @@ final class AddArcCommand implements PathCommand {
   }
 }
 
-final class AddPolygonCommand implements PathCommand {
+final class AddPolygonCommand implements LazyPathCommand {
   AddPolygonCommand(this.points, this.close);
 
   final List<ui.Offset> points;
@@ -291,7 +291,7 @@ final class AddPolygonCommand implements PathCommand {
   }
 }
 
-final class AddRRectCommand implements PathCommand {
+final class AddRRectCommand implements LazyPathCommand {
   AddRRectCommand(this.rrect);
 
   final ui.RRect rrect;
@@ -302,7 +302,7 @@ final class AddRRectCommand implements PathCommand {
   }
 }
 
-final class AddRSuperellipseCommand implements PathCommand {
+final class AddRSuperellipseCommand implements LazyPathCommand {
   AddRSuperellipseCommand(this.rSuperellipse);
 
   final ui.RSuperellipse rSuperellipse;
@@ -313,7 +313,7 @@ final class AddRSuperellipseCommand implements PathCommand {
   }
 }
 
-final class AddPathCommand implements PathCommand {
+final class AddPathCommand implements LazyPathCommand {
   AddPathCommand(this.path, this.offset, {this.matrix4});
 
   final LazyPath path;
@@ -326,7 +326,7 @@ final class AddPathCommand implements PathCommand {
   }
 }
 
-final class ExtendWithPathCommand implements PathCommand {
+final class ExtendWithPathCommand implements LazyPathCommand {
   ExtendWithPathCommand(this.path, this.offset, {this.matrix4});
 
   final LazyPath path;
@@ -339,7 +339,7 @@ final class ExtendWithPathCommand implements PathCommand {
   }
 }
 
-final class ClosePathCommand implements PathCommand {
+final class ClosePathCommand implements LazyPathCommand {
   @override
   void apply(DisposablePath path) {
     path.close();
@@ -355,7 +355,7 @@ abstract class DisposablePathConstructors {
   );
 }
 
-class LazyPath implements LayerPath, Collectable {
+class LazyPath implements ScenePath, Collectable {
   factory LazyPath(DisposablePathConstructors constructors) =>
       LazyPath._(constructors, ui.PathFillType.nonZero, () => constructors.createNew());
   LazyPath._(this.constructors, this._fillType, this.initializer) : _commands = [];
@@ -418,7 +418,7 @@ class LazyPath implements LayerPath, Collectable {
   }
 
   DisposablePath? _cachedPath;
-  final List<PathCommand> _commands;
+  final List<LazyPathCommand> _commands;
 
   DisposablePath get builtPath {
     if (_cachedPath != null) {
@@ -426,7 +426,7 @@ class LazyPath implements LayerPath, Collectable {
     }
     final DisposablePath path = initializer();
     path.fillType = _fillType;
-    for (final PathCommand command in _commands) {
+    for (final command in _commands) {
       command.apply(path);
     }
 
@@ -435,7 +435,7 @@ class LazyPath implements LayerPath, Collectable {
     return path;
   }
 
-  void _addCommand(PathCommand command) {
+  void _addCommand(LazyPathCommand command) {
     _commands.add(command);
     if (_cachedPath != null) {
       command.apply(_cachedPath!);
@@ -679,7 +679,7 @@ class LazyPathMetricIterator implements Iterator<ui.PathMetric>, Collectable {
     _cachedIterator?.dispose();
     _cachedIterator = null;
 
-    for (final DisposablePathMetric metric in _metrics) {
+    for (final metric in _metrics) {
       metric.dispose();
     }
     _metrics.clear();
@@ -690,7 +690,7 @@ class LazyPathMetricIterator implements Iterator<ui.PathMetric>, Collectable {
       return;
     }
     _cachedIterator = path.builtPath.computeMetrics(forceClosed: forceClosed).iterator;
-    for (var i = 0; i < _nextIndex; i++) {
+    for (int i = 0; i < _nextIndex; i++) {
       if (_cachedIterator!.moveNext()) {
         _metrics.add(_cachedIterator!.current);
       } else {

@@ -17,6 +17,7 @@ import 'dart:ui' as ui show ViewConstraints, lerpDouble;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:vector_math/vector_math_64.dart' show Matrix4, Vector3;
 
 import 'debug.dart';
@@ -960,9 +961,9 @@ class BoxHitTestEntry extends HitTestEntry<RenderBox> {
 ///
 /// ** See code in examples/api/lib/rendering/box/parent_data.0.dart **
 /// {@end-tool}
-class BoxParentData extends ParentData {
+class BoxParentData extends ParentData with RositaBoxParentDataMixin {
   /// The offset at which to paint the child in the parent's coordinate system.
-  Offset offset = Offset.zero;
+  // Offset offset = Offset.zero; // Use rosita offset
 
   @override
   String toString() => 'offset=$offset';
@@ -1569,7 +1570,7 @@ final class _LayoutCacheStorage {
 /// implementation that offsets the child's baseline information by the position
 /// of the child relative to the parent. If you do not inherited from either of
 /// these classes, however, you must implement the algorithm yourself.
-abstract class RenderBox extends RenderObject {
+abstract class RenderBox extends RenderObject with RositaRenderBoxMixin {
   @override
   void setupParentData(covariant RenderObject child) {
     if (child.parentData is! BoxParentData) {
@@ -2235,7 +2236,9 @@ abstract class RenderBox extends RenderObject {
   }
 
   /// Whether this render object has undergone layout and has a [size].
-  bool get hasSize => _size != null;
+  bool get hasSize => kIsRosita ? _rositaHasSize : _size != null;
+
+  bool _rositaHasSize = false;
 
   /// The size of this render box computed during layout.
   ///
@@ -2360,6 +2363,7 @@ abstract class RenderBox extends RenderObject {
       return true;
     }());
     _size = value;
+    _rositaHasSize = true;
     assert(() {
       debugAssertDoesMeetConstraints();
       return true;
@@ -3035,6 +3039,9 @@ abstract class RenderBox extends RenderObject {
     }());
     final childParentData = child.parentData! as BoxParentData;
     final Offset offset = childParentData.offset;
+
+    if (offset == Offset.zero) return;
+
     transform.translateByDouble(offset.dx, offset.dy, 0, 1);
   }
 

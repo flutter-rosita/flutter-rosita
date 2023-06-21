@@ -19,6 +19,8 @@ import 'common.dart';
 import 'environment.dart';
 import 'package_lock.dart';
 
+const String kBlankPageUrl = 'about:blank';
+
 /// Provides an environment for desktop Chrome.
 class ChromeEnvironment implements BrowserEnvironment {
   ChromeEnvironment({required bool useDwarf, required List<String> flags})
@@ -71,8 +73,8 @@ class Chrome extends Browser {
     required bool useDwarf,
     required List<String> flags,
   }) {
-    final remoteDebuggerCompleter = Completer<Uri>.sync();
-    final exceptionCompleter = Completer<String>();
+    final Completer<Uri> remoteDebuggerCompleter = Completer<Uri>.sync();
+    final Completer<String> exceptionCompleter = Completer<String>();
     return Chrome._(
       BrowserProcess(() async {
         // A good source of various Chrome CLI options:
@@ -85,11 +87,11 @@ class Chrome extends Browser {
         // --disable-gpu
         // --disallow-non-exact-resource-reuse
         // --disable-font-subpixel-positioning
-        final isChromeNoSandbox = Platform.environment['CHROME_NO_SANDBOX'] == 'true';
+        final bool isChromeNoSandbox = Platform.environment['CHROME_NO_SANDBOX'] == 'true';
         final String dir = await generateUserDirectory(installation, useDwarf);
-        final args = <String>[
+        final List<String> args = <String>[
           '--user-data-dir=$dir',
-          url.toString(),
+          kBlankPageUrl,
           if (!debug) '--headless',
           if (isChromeNoSandbox) '--no-sandbox',
           // When headless, this is the actual size of the viewport.
@@ -155,10 +157,10 @@ class Chrome extends Browser {
     // Using DWARF debugging info requires installation of a Chrome extension.
     // We can prompt for this, but in order to avoid prompting on every single
     // browser launch, we cache the user directory after it has been installed.
-    final baselineUserDirectory = Directory(
+    final Directory baselineUserDirectory = Directory(
       path.join(environment.webUiDartToolDir.path, 'chrome_user_data_base'),
     );
-    final dwarfExtensionInstallDirectory = Directory(
+    final Directory dwarfExtensionInstallDirectory = Directory(
       path.join(
         baselineUserDirectory.path,
         'Default',
@@ -231,7 +233,7 @@ class Chrome extends Browser {
   // TODO(yjbanov): extends tests to Window, https://github.com/flutter/flutter/issues/65673
   @override
   Future<Image> captureScreenshot(math.Rectangle<num>? region) async {
-    final chromeConnection = wip.ChromeConnection('localhost', kDevtoolsPort);
+    final wip.ChromeConnection chromeConnection = wip.ChromeConnection('localhost', kDevtoolsPort);
     final wip.ChromeTab? chromeTab = await chromeConnection.getTab(
       (wip.ChromeTab chromeTab) => chromeTab.url.contains('localhost'),
     );
@@ -308,7 +310,7 @@ Future<Process> _spawnChromiumProcess(
 
     // Wait until the DevTools are listening before trying to connect. This is
     // only required for flutter_test --platform=chrome and not flutter run.
-    var hitGlibcBug = false;
+    bool hitGlibcBug = false;
     await process.stderr
         .transform(utf8.decoder)
         .transform(const LineSplitter())
@@ -323,7 +325,7 @@ Future<Process> _spawnChromiumProcess(
           (String line) => line.startsWith('DevTools listening'),
           orElse: () {
             if (hitGlibcBug) {
-              const message =
+              const String message =
                   'Encountered glibc bug '
                   'https://sourceware.org/bugzilla/show_bug.cgi?id=19329. '
                   'Will try launching browser again.';
@@ -369,10 +371,11 @@ Future<Process> _spawnChromiumProcess(
 /// page.
 Future<Uri> getRemoteDebuggerUrl(Uri base) async {
   try {
-    final client = HttpClient();
+    final HttpClient client = HttpClient();
     final HttpClientRequest request = await client.getUrl(base.resolve('/json/list'));
     final HttpClientResponse response = await request.close();
-    final jsonObject = await json.fuse(utf8).decoder.bind(response).single as List<dynamic>?;
+    final List<dynamic>? jsonObject =
+        await json.fuse(utf8).decoder.bind(response).single as List<dynamic>?;
     return base.resolve(
       (jsonObject!.first as Map<dynamic, dynamic>)['devtoolsFrontendUrl'] as String,
     );
@@ -384,9 +387,9 @@ Future<Uri> getRemoteDebuggerUrl(Uri base) async {
 }
 
 Future<void> setupChromiumTab(Uri url, Completer<String> exceptionCompleter) async {
-  final chromeConnection = wip.ChromeConnection('localhost', kDevtoolsPort);
+  final wip.ChromeConnection chromeConnection = wip.ChromeConnection('localhost', kDevtoolsPort);
   final wip.ChromeTab? chromeTab = await chromeConnection.getTab(
-    (wip.ChromeTab chromeTab) => chromeTab.url == url.toString(),
+    (wip.ChromeTab chromeTab) => chromeTab.url == kBlankPageUrl,
   );
   final wip.WipConnection wipConnection = await chromeTab!.connect();
 
@@ -399,4 +402,8 @@ Future<void> setupChromiumTab(Uri url, Completer<String> exceptionCompleter) asy
       exceptionCompleter.complete('$text: $description');
     }
   });
+
+  await wipConnection.page.enable();
+
+  await wipConnection.page.navigate(url.toString());
 }

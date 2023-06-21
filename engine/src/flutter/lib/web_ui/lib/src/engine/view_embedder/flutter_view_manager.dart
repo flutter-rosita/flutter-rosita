@@ -41,7 +41,7 @@ class FlutterViewManager {
   }
 
   EngineFlutterView createAndRegisterView(JsFlutterViewOptions jsViewOptions) {
-    final view = EngineFlutterView(
+    final EngineFlutterView view = EngineFlutterView(
       _dispatcher,
       jsViewOptions.hostElement,
       viewConstraints: jsViewOptions.viewConstraints,
@@ -101,7 +101,7 @@ class FlutterViewManager {
   }
 
   EngineFlutterView? findViewForElement(DomElement? element) {
-    const viewRootSelector =
+    const String viewRootSelector =
         '${DomManager.flutterViewTagName}[${GlobalHtmlAttributes.flutterViewIdAttributeName}]';
     final DomElement? viewRoot = element?.closest(viewRootSelector);
     if (viewRoot == null) {

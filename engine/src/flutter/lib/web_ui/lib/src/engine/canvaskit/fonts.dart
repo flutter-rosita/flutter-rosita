@@ -97,8 +97,8 @@ class SkiaFontCollection implements FlutterFontCollection {
   /// Loads fonts from `FontManifest.json`.
   @override
   Future<AssetFontsResult> loadAssetFonts(FontManifest manifest) async {
-    final pendingDownloads = <Future<FontDownloadResult>>[];
-    var loadedRoboto = false;
+    final List<Future<FontDownloadResult>> pendingDownloads = <Future<FontDownloadResult>>[];
+    bool loadedRoboto = false;
     for (final FontFamily family in manifest.families) {
       if (family.name == 'Roboto') {
         loadedRoboto = true;
@@ -117,8 +117,8 @@ class SkiaFontCollection implements FlutterFontCollection {
       pendingDownloads.add(_downloadFont('Roboto', _robotoUrl, 'Roboto'));
     }
 
-    final fontFailures = <String, FontLoadError>{};
-    final downloadedFonts = <(String, UnregisteredFont)>[];
+    final Map<String, FontLoadError> fontFailures = <String, FontLoadError>{};
+    final List<(String, UnregisteredFont)> downloadedFonts = <(String, UnregisteredFont)>[];
     for (final FontDownloadResult result in await Future.wait(pendingDownloads)) {
       if (result.font != null) {
         downloadedFonts.add((result.assetName, result.font!));
@@ -130,7 +130,7 @@ class SkiaFontCollection implements FlutterFontCollection {
     // Make sure CanvasKit is actually loaded
     await renderer.initialize();
 
-    final loadedFonts = <String>[];
+    final List<String> loadedFonts = <String>[];
     for (final (String assetName, UnregisteredFont unregisteredFont) in downloadedFonts) {
       final Uint8List bytes = unregisteredFont.bytes.asUint8List();
       final SkTypeface? typeface = canvasKit.Typeface.MakeFreeTypeFaceFromData(bytes.buffer);
@@ -221,7 +221,7 @@ class SkiaFontCollection implements FlutterFontCollection {
 class RegisteredFont {
   RegisteredFont(this.bytes, this.family, this.typeface) {
     // This is a hack which causes Skia to cache the decoded font.
-    final skFont = SkFont(typeface);
+    final SkFont skFont = SkFont(typeface);
     skFont.getGlyphBounds(<int>[0], null, null);
   }
 
@@ -261,25 +261,25 @@ class SkiaFallbackRegistry implements FallbackFontRegistry {
 
   @override
   List<int> getMissingCodePoints(List<int> codeUnits, List<String> fontFamilies) {
-    final fonts = <SkFont>[];
-    for (final font in fontFamilies) {
+    final List<SkFont> fonts = <SkFont>[];
+    for (final String font in fontFamilies) {
       final List<SkFont>? typefacesForFamily = _fontCollection.familyToFontMap[font];
       if (typefacesForFamily != null) {
         fonts.addAll(typefacesForFamily);
       }
     }
-    final codePointsSupported = List<bool>.filled(codeUnits.length, false);
-    final testString = String.fromCharCodes(codeUnits);
-    for (final font in fonts) {
+    final List<bool> codePointsSupported = List<bool>.filled(codeUnits.length, false);
+    final String testString = String.fromCharCodes(codeUnits);
+    for (final SkFont font in fonts) {
       final Uint16List glyphs = font.getGlyphIDs(testString);
       assert(glyphs.length == codePointsSupported.length);
-      for (var i = 0; i < glyphs.length; i++) {
+      for (int i = 0; i < glyphs.length; i++) {
         codePointsSupported[i] |= glyphs[i] != 0;
       }
     }
 
-    final missingCodeUnits = <int>[];
-    for (var i = 0; i < codePointsSupported.length; i++) {
+    final List<int> missingCodeUnits = <int>[];
+    for (int i = 0; i < codePointsSupported.length; i++) {
       if (!codePointsSupported[i]) {
         missingCodeUnits.add(codeUnits[i]);
       }

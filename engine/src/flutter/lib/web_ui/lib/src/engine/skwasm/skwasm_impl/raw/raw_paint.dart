@@ -14,7 +14,7 @@ final class RawPaint extends Opaque {}
 typedef PaintHandle = Pointer<RawPaint>;
 
 typedef _PaintCreateInitSignature =
-    PaintHandle Function(Bool, Int, Int, Int, Float, Int, Int, Float, Bool);
+    PaintHandle Function(Bool, Int, Int, Int, Float, Int, Int, Float);
 
 @Native<_PaintCreateInitSignature>(symbol: 'paint_create', isLeaf: true)
 external PaintHandle paintCreate(
@@ -26,7 +26,6 @@ external PaintHandle paintCreate(
   int strokeCap,
   int strokeJoin,
   double strokeMiterLimit,
-  bool invertColors,
 );
 
 @Native<Void Function(PaintHandle)>(symbol: 'paint_dispose', isLeaf: true)
@@ -34,6 +33,9 @@ external void paintDispose(PaintHandle paint);
 
 @Native<Void Function(PaintHandle, ShaderHandle)>(symbol: 'paint_setShader', isLeaf: true)
 external void paintSetShader(PaintHandle handle, ShaderHandle shader);
+
+@Native<Void Function(PaintHandle, Bool)>(symbol: 'paint_setDither', isLeaf: true)
+external void paintSetDither(PaintHandle handle, bool isDither);
 
 @Native<Void Function(PaintHandle, ImageFilterHandle)>(symbol: 'paint_setImageFilter', isLeaf: true)
 external void paintSetImageFilter(PaintHandle handle, ImageFilterHandle filter);

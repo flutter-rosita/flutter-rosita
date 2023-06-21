@@ -14,6 +14,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 
 import 'box.dart';
@@ -300,7 +301,7 @@ class RevealedOffset {
 ///    placed inside a [RenderSliver] (the opposite of this class).
 abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMixin<RenderSliver>>
     extends RenderBox
-    with ContainerRenderObjectMixin<RenderSliver, ParentDataClass>
+    with ContainerRenderObjectMixin<RenderSliver, ParentDataClass>, RositaRenderViewportBaseMixin
     implements RenderAbstractViewport {
   /// Initializes fields for subclasses.
   ///
@@ -530,7 +531,9 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -729,6 +732,8 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
       // move on to the next child
       child = advance(child);
     }
+
+    rositaCheckVisualOverflow();
 
     // we made it without a correction, whee!
     return 0.0;
@@ -2086,6 +2091,7 @@ class RenderShrinkWrappingViewport extends RenderViewportBase<SliverLogicalConta
   void applyPaintTransform(RenderObject child, Matrix4 transform) {
     // Hit test logic relies on this always providing an invertible matrix.
     final Offset offset = paintOffsetOf(child as RenderSliver);
+    if (offset == Offset.zero) return;
     transform.translateByDouble(offset.dx, offset.dy, 0, 1);
   }
 

@@ -72,14 +72,6 @@ class SemanticIncrementable extends SemanticRole {
   }
 
   @override
-  bool get acceptsPointerEvents {
-    return switch (semanticsObject.hitTestBehavior) {
-      ui.SemanticsHitTestBehavior.transparent => false,
-      _ => true,
-    };
-  }
-
-  @override
   bool focusAsRouteDefault() {
     _element.focusWithoutScroll();
     return true;
@@ -153,20 +145,20 @@ class SemanticIncrementable extends SemanticRole {
 
     _pendingResync = false;
 
-    final surrogateTextValue = '$_currentSurrogateValue';
+    final String surrogateTextValue = '$_currentSurrogateValue';
     _element.value = surrogateTextValue;
     _element.setAttribute('aria-valuenow', surrogateTextValue);
     _element.setAttribute('aria-valuetext', semanticsObject.value!);
 
     final bool canIncrease = semanticsObject.increasedValue!.isNotEmpty;
-    final surrogateMaxTextValue = canIncrease
+    final String surrogateMaxTextValue = canIncrease
         ? '${_currentSurrogateValue + 1}'
         : surrogateTextValue;
     _element.max = surrogateMaxTextValue;
     _element.setAttribute('aria-valuemax', surrogateMaxTextValue);
 
     final bool canDecrease = semanticsObject.decreasedValue!.isNotEmpty;
-    final surrogateMinTextValue = canDecrease
+    final String surrogateMinTextValue = canDecrease
         ? '${_currentSurrogateValue - 1}'
         : surrogateTextValue;
     _element.min = surrogateMinTextValue;

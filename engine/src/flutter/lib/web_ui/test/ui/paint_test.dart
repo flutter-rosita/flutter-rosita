@@ -34,7 +34,7 @@ Future<void> testMain() async {
   });
 
   test('toString()', () {
-    final paint = ui.Paint();
+    final ui.Paint paint = ui.Paint();
     paint.blendMode = ui.BlendMode.darken;
     paint.style = ui.PaintingStyle.fill;
     paint.strokeWidth = 1.2;
@@ -72,7 +72,7 @@ Future<void> testMain() async {
   });
 
   test('.from copies every field', () {
-    final paint = ui.Paint();
+    final ui.Paint paint = ui.Paint();
     paint.blendMode = ui.BlendMode.darken;
     paint.style = ui.PaintingStyle.fill;
     paint.strokeWidth = 1.2;
@@ -94,7 +94,7 @@ Future<void> testMain() async {
     paint.strokeMiterLimit = 1.8;
     paint.imageFilter = ui.ImageFilter.blur(sigmaX: 1.9, sigmaY: 2.1, tileMode: ui.TileMode.mirror);
 
-    final copy = ui.Paint.from(paint);
+    final ui.Paint copy = ui.Paint.from(paint);
 
     expect(copy.blendMode, paint.blendMode);
     expect(copy.style, paint.style);

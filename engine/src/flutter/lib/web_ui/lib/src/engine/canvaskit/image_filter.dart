@@ -4,8 +4,12 @@
 
 import 'dart:typed_data';
 
-import 'package:ui/src/engine.dart';
+import 'package:ui/src/engine/vector_math.dart';
 import 'package:ui/ui.dart' as ui;
+
+import '../util.dart';
+import 'canvaskit_api.dart';
+import 'color_filter.dart';
 
 typedef SkImageFilterBorrow = void Function(SkImageFilter);
 
@@ -33,15 +37,12 @@ abstract class CkManagedSkImageFilterConvertible implements ui.ImageFilter {
   ui.TileMode? get backdropTileMode;
 
   Matrix4 get transform;
-
-  @override
-  String toString() => 'ImageFilter.$debugShortDescription';
 }
 
 /// The CanvasKit implementation of [ui.ImageFilter].
 ///
 /// Currently only supports `blur`, `matrix`, and ColorFilters.
-abstract class CkImageFilter implements CkManagedSkImageFilterConvertible, LayerImageFilter {
+abstract class CkImageFilter implements CkManagedSkImageFilterConvertible {
   factory CkImageFilter.blur({
     required double sigmaX,
     required double sigmaY,
@@ -61,16 +62,6 @@ abstract class CkImageFilter implements CkManagedSkImageFilterConvertible, Layer
 
   CkImageFilter._();
 
-  /// Returns the identity matrix image filter.
-  /// This is used to replicate effect of applying no filter.
-  static SkImageFilter _createIdentityMatrixFilter() {
-    return canvasKit.ImageFilter.MakeMatrixTransform(
-      toSkMatrixFromFloat32(Matrix4.identity().storage),
-      toSkFilterOptions(ui.FilterQuality.none),
-      null,
-    );
-  }
-
   // The blur ImageFilter will override this and return the necessary
   // value to hand to the saveLayer call. It is the only filter type that
   // needs to pass along a tile mode so we just return a default value of
@@ -80,18 +71,6 @@ abstract class CkImageFilter implements CkManagedSkImageFilterConvertible, Layer
 
   @override
   Matrix4 get transform => Matrix4.identity();
-
-  @override
-  ui.Rect filterBounds(ui.Rect input) {
-    late ui.Rect result;
-    withSkImageFilter((SkImageFilter filter) {
-      result = rectFromSkIRect(filter.getOutputBounds(toSkRect(input)));
-    }, defaultBlurTileMode: ui.TileMode.decal);
-    return result;
-  }
-
-  @override
-  String toString() => 'ImageFilter.$debugShortDescription';
 }
 
 class CkColorFilterImageFilter extends CkImageFilter {
@@ -104,7 +83,7 @@ class CkColorFilterImageFilter extends CkImageFilter {
     SkImageFilterBorrow borrow, {
     ui.TileMode defaultBlurTileMode = ui.TileMode.clamp,
   }) {
-    final SkImageFilter skImageFilter = colorFilter.initRawImageFilter();
+    final skImageFilter = colorFilter.initRawImageFilter();
     borrow(skImageFilter);
     skImageFilter.delete();
   }
@@ -119,9 +98,6 @@ class CkColorFilterImageFilter extends CkImageFilter {
     }
     return other is CkColorFilterImageFilter && other.colorFilter == colorFilter;
   }
-
-  @override
-  String get debugShortDescription => colorFilter.toString();
 
   @override
   String toString() => colorFilter.toString();
@@ -143,10 +119,15 @@ class _CkBlurImageFilter extends CkImageFilter {
     SkImageFilterBorrow borrow, {
     ui.TileMode defaultBlurTileMode = ui.TileMode.clamp,
   }) {
-    /// Returns the identity matrix filter when both sigmaX and sigmaY are 0.
+    /// Return the identity matrix when both sigmaX and sigmaY are 0. Replicates
+    /// effect of applying no filter
     final SkImageFilter skImageFilter;
     if (sigmaX == 0 && sigmaY == 0) {
-      skImageFilter = CkImageFilter._createIdentityMatrixFilter();
+      skImageFilter = canvasKit.ImageFilter.MakeMatrixTransform(
+        toSkMatrixFromFloat32(Matrix4.identity().storage),
+        toSkFilterOptions(ui.FilterQuality.none),
+        null,
+      );
     } else {
       skImageFilter = canvasKit.ImageFilter.MakeBlur(
         sigmaX,
@@ -175,7 +156,9 @@ class _CkBlurImageFilter extends CkImageFilter {
   int get hashCode => Object.hash(sigmaX, sigmaY, tileMode);
 
   @override
-  String get debugShortDescription => 'blur($sigmaX, $sigmaY, ${tileModeString(tileMode)})';
+  String toString() {
+    return 'ImageFilter.blur($sigmaX, $sigmaY, ${tileModeString(tileMode)})';
+  }
 }
 
 class _CkMatrixImageFilter extends CkImageFilter {
@@ -193,7 +176,7 @@ class _CkMatrixImageFilter extends CkImageFilter {
     SkImageFilterBorrow borrow, {
     ui.TileMode defaultBlurTileMode = ui.TileMode.clamp,
   }) {
-    final SkImageFilter skImageFilter = canvasKit.ImageFilter.MakeMatrixTransform(
+    final skImageFilter = canvasKit.ImageFilter.MakeMatrixTransform(
       toSkMatrixFromFloat64(matrix),
       toSkFilterOptions(filterQuality),
       null,
@@ -216,7 +199,7 @@ class _CkMatrixImageFilter extends CkImageFilter {
   int get hashCode => Object.hash(filterQuality, Object.hashAll(matrix));
 
   @override
-  String get debugShortDescription => 'matrix($matrix, $filterQuality)';
+  String toString() => 'ImageFilter.matrix($matrix, $filterQuality)';
 
   @override
   Matrix4 get transform => _transform;
@@ -233,14 +216,7 @@ class _CkDilateImageFilter extends CkImageFilter {
     SkImageFilterBorrow borrow, {
     ui.TileMode defaultBlurTileMode = ui.TileMode.clamp,
   }) {
-    // Returns the identity matrix filter when both radiusX and radiusY are 0.
-    final SkImageFilter skImageFilter;
-    if (radiusX == 0 && radiusY == 0) {
-      skImageFilter = CkImageFilter._createIdentityMatrixFilter();
-    } else {
-      skImageFilter = canvasKit.ImageFilter.MakeDilate(radiusX, radiusY, null);
-    }
-
+    final skImageFilter = canvasKit.ImageFilter.MakeDilate(radiusX, radiusY, null);
     borrow(skImageFilter);
     skImageFilter.delete();
   }
@@ -257,7 +233,9 @@ class _CkDilateImageFilter extends CkImageFilter {
   int get hashCode => Object.hash(radiusX, radiusY);
 
   @override
-  String get debugShortDescription => 'dilate($radiusX, $radiusY)';
+  String toString() {
+    return 'ImageFilter.dilate($radiusX, $radiusY)';
+  }
 }
 
 class _CkErodeImageFilter extends CkImageFilter {
@@ -271,14 +249,7 @@ class _CkErodeImageFilter extends CkImageFilter {
     SkImageFilterBorrow borrow, {
     ui.TileMode defaultBlurTileMode = ui.TileMode.clamp,
   }) {
-    // Returns the identity matrix filter when both radiusX and radiusY are 0.
-    final SkImageFilter skImageFilter;
-    if (radiusX == 0 && radiusY == 0) {
-      skImageFilter = CkImageFilter._createIdentityMatrixFilter();
-    } else {
-      skImageFilter = canvasKit.ImageFilter.MakeErode(radiusX, radiusY, null);
-    }
-
+    final skImageFilter = canvasKit.ImageFilter.MakeErode(radiusX, radiusY, null);
     borrow(skImageFilter);
     skImageFilter.delete();
   }
@@ -295,7 +266,9 @@ class _CkErodeImageFilter extends CkImageFilter {
   int get hashCode => Object.hash(radiusX, radiusY);
 
   @override
-  String get debugShortDescription => 'erode($radiusX, $radiusY)';
+  String toString() {
+    return 'ImageFilter.erode($radiusX, $radiusY)';
+  }
 }
 
 class _CkComposeImageFilter extends CkImageFilter {
@@ -311,7 +284,7 @@ class _CkComposeImageFilter extends CkImageFilter {
   }) {
     outer.withSkImageFilter((skOuter) {
       inner.withSkImageFilter((skInner) {
-        final SkImageFilter skImageFilter = canvasKit.ImageFilter.MakeCompose(skOuter, skInner);
+        final skImageFilter = canvasKit.ImageFilter.MakeCompose(skOuter, skInner);
         borrow(skImageFilter);
         skImageFilter.delete();
       }, defaultBlurTileMode: defaultBlurTileMode);
@@ -330,9 +303,7 @@ class _CkComposeImageFilter extends CkImageFilter {
   int get hashCode => Object.hash(outer, inner);
 
   @override
-  String get debugShortDescription =>
-      '${inner.debugShortDescription} -> ${outer.debugShortDescription}';
-
-  @override
-  String toString() => 'ImageFilter.compose(source -> $debugShortDescription -> result)';
+  String toString() {
+    return 'ImageFilter.compose($outer, $inner)';
+  }
 }

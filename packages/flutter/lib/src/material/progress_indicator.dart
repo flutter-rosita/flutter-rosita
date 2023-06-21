@@ -12,6 +12,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'color_scheme.dart';
 import 'material.dart';
@@ -150,7 +151,7 @@ abstract class ProgressIndicator extends StatefulWidget {
       expandedSemanticsValue ??= '${(_effectiveValue! * 100).round()}';
       isProgressBar = true;
     }
-    return Semantics(
+    return RositaSemantics(
       label: semanticsLabel,
       role: isProgressBar ? SemanticsRole.progressBar : SemanticsRole.loadingSpinner,
       minValue: isProgressBar ? '0' : null,

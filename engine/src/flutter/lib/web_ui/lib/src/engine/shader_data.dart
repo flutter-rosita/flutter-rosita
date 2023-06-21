@@ -30,11 +30,14 @@ class ShaderData {
       throw const FormatException('Invalid Shader Data');
     }
 
-    final uniforms = List<UniformData>.filled(rawUniforms.length, UniformData.empty);
+    final List<UniformData> uniforms = List<UniformData>.filled(
+      rawUniforms.length,
+      UniformData.empty,
+    );
 
-    var textureCount = 0;
-    var floatCount = 0;
-    for (var i = 0; i < rawUniforms.length; i += 1) {
+    int textureCount = 0;
+    int floatCount = 0;
+    for (int i = 0; i < rawUniforms.length; i += 1) {
       final Object? rawUniformData = rawUniforms[i];
       if (rawUniformData is! Map<String, Object?>) {
         throw const FormatException('Invalid Shader Data');
@@ -49,7 +52,6 @@ class ShaderData {
       if (type == null) {
         throw const FormatException('Invalid Shader Data');
       }
-      var uniformFloatCount = 0;
       if (type == UniformType.SampledImage) {
         textureCount += 1;
       } else {
@@ -65,20 +67,15 @@ class ShaderData {
 
         final int units = rows * columns;
 
-        uniformFloatCount = (bitWidth ~/ 32) * units;
+        int value = (bitWidth ~/ 32) * units;
 
         if (arrayElements > 1) {
-          uniformFloatCount *= arrayElements;
+          value *= arrayElements;
         }
 
-        floatCount += uniformFloatCount;
+        floatCount += value;
       }
-      uniforms[i] = UniformData(
-        name: name,
-        location: location,
-        type: type,
-        floatCount: uniformFloatCount,
-      );
+      uniforms[i] = UniformData(name: name, location: location, type: type);
     }
     return ShaderData(
       source: source,
@@ -95,24 +92,13 @@ class ShaderData {
 }
 
 class UniformData {
-  const UniformData({
-    required this.name,
-    required this.location,
-    required this.type,
-    required this.floatCount,
-  });
+  const UniformData({required this.name, required this.location, required this.type});
 
   final String name;
   final UniformType type;
   final int location;
-  final int floatCount;
 
-  static const UniformData empty = UniformData(
-    name: '',
-    location: -1,
-    type: UniformType.Float,
-    floatCount: -1,
-  );
+  static const UniformData empty = UniformData(name: '', location: -1, type: UniformType.Float);
 }
 
 enum UniformType {

@@ -109,7 +109,7 @@ class SemanticsTextEditingStrategy extends DefaultTextEditingStrategy {
     style = null;
     geometry = null;
 
-    for (var i = 0; i < subscriptions.length; i++) {
+    for (int i = 0; i < subscriptions.length; i++) {
       subscriptions[i].cancel();
     }
     subscriptions.clear();
@@ -208,12 +208,7 @@ class SemanticTextField extends SemanticRole {
   }
 
   @override
-  bool get acceptsPointerEvents {
-    return switch (semanticsObject.hitTestBehavior) {
-      ui.SemanticsHitTestBehavior.transparent => false,
-      _ => true,
-    };
-  }
+  bool get acceptsPointerEvents => true;
 
   /// The element used for editing, e.g. `<input>`, `<textarea>`, which is
   /// different from the host [element].
@@ -235,7 +230,7 @@ class SemanticTextField extends SemanticRole {
   }
 
   DomHTMLTextAreaElement _createMultiLineField() {
-    final DomHTMLTextAreaElement textArea = createMultilineTextArea();
+    final textArea = createMultilineTextArea();
 
     if (semanticsObject.flags.isObscured) {
       // -webkit-text-security is not standard, but it's the best we can do.
@@ -354,32 +349,17 @@ class SemanticTextField extends SemanticRole {
       // text area can't be annotated with input type
       return;
     }
-    final input = editableElement as DomHTMLInputElement;
+    final DomHTMLInputElement input = editableElement as DomHTMLInputElement;
     if (semanticsObject.flags.isObscured) {
       input.type = 'password';
     } else {
-      // For email inputs, prefer type="text" with inputmode="email" so that
-      // browsers keep selection APIs enabled while still providing email
-      // keyboards and hints. This avoids InvalidStateError and enables
-      // proper selection/cursor operations.
-      input.removeAttribute('inputmode');
-      input.removeAttribute('autocapitalize');
-      input.autocomplete = 'off';
-      input.type = 'text';
-
-      switch (semanticsObject.inputType) {
-        case ui.SemanticsInputType.search:
-          input.type = 'search';
-        case ui.SemanticsInputType.url:
-          input.type = 'url';
-        case ui.SemanticsInputType.phone:
-          input.type = 'tel';
-        case ui.SemanticsInputType.email:
-          input.setAttribute('inputmode', 'email');
-          input.setAttribute('autocapitalize', 'none');
-          input.autocomplete = 'email';
-        default:
-      }
+      input.type = switch (semanticsObject.inputType) {
+        ui.SemanticsInputType.search => 'search',
+        ui.SemanticsInputType.email => 'email',
+        ui.SemanticsInputType.url => 'url',
+        ui.SemanticsInputType.phone => 'tel',
+        _ => 'text',
+      };
     }
   }
 

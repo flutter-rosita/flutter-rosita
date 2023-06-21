@@ -33,7 +33,7 @@ Future<void> testMain() async {
     expect(placeholder.isConnected, isTrue);
 
     // Sending a semantics update should auto-enable engine semantics.
-    final tester = SemanticsTester(owner());
+    final SemanticsTester tester = SemanticsTester(owner());
     tester.updateNode(id: 0);
     tester.apply();
 

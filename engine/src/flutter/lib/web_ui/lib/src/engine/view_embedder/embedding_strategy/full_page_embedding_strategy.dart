@@ -4,7 +4,6 @@
 
 import 'package:ui/src/engine/dom.dart';
 import 'package:ui/src/engine/util.dart';
-import 'package:ui/ui.dart' as ui;
 
 import '../hot_restart_cache_handler.dart' show registerElementForCleanup;
 import 'embedding_strategy.dart';
@@ -25,11 +24,6 @@ class FullPageEmbeddingStrategy implements EmbeddingStrategy {
 
   @override
   DomEventTarget get globalEventTarget => domWindow;
-
-  @override
-  void setLocale(ui.Locale locale) {
-    domDocument.documentElement!.setAttribute('lang', locale.toLanguageTag());
-  }
 
   @override
   void attachViewRoot(DomElement rootElement) {

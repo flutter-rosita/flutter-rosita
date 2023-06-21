@@ -23,27 +23,20 @@ class CkPathMetrics extends IterableBase<ui.PathMetric> implements DisposablePat
 
 class CkContourMeasureIter implements DisposablePathMetricIterator {
   CkContourMeasureIter(this._metrics) {
-    _skPathRef = UniqueRef<SkPath>(
-      this,
-      _metrics._path.snapshotSkPath(),
-      'SkContourMeasureIter:SkPath',
-    );
     _ref = UniqueRef<SkContourMeasureIter>(
       this,
-      SkContourMeasureIter(_skPathRef.nativeObject, _metrics._forceClosed, 1.0),
-      'CkContourMeasureIter:SkContourMeasureIter',
+      SkContourMeasureIter(_metrics._path.skiaObject, _metrics._forceClosed, 1.0),
+      'Iterator<PathMetric>',
     );
   }
 
   @override
   void dispose() {
     _ref.dispose();
-    _skPathRef.dispose();
   }
 
   final CkPathMetrics _metrics;
   late final UniqueRef<SkContourMeasureIter> _ref;
-  late final UniqueRef<SkPath> _skPathRef;
 
   SkContourMeasureIter get skiaObject => _ref.nativeObject;
 
@@ -106,9 +99,7 @@ class CkContourMeasure implements DisposablePathMetric {
   @override
   CkPath extractPath(double start, double end, {bool startWithMoveTo = true}) {
     final SkPath skPath = skiaObject.getSegment(start, end, startWithMoveTo);
-    final extractedCkPath = CkPath.fromSkPath(skPath, _metrics._path.fillType);
-    skPath.delete();
-    return extractedCkPath;
+    return CkPath.fromSkPath(skPath, _metrics._path.fillType);
   }
 
   @override

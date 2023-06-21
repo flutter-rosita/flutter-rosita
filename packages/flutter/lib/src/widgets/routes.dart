@@ -19,6 +19,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -1102,7 +1103,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
       if (widget.route.animation != null) widget.route.animation!,
       if (widget.route.secondaryAnimation != null) widget.route.secondaryAnimation!,
     ];
-    _listenable = Listenable.merge(animations);
+    _listenable = Listenable.merge(rositaOptimizeModalScope ? const<Listenable>[] : animations);
   }
 
   @override
@@ -1203,7 +1204,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                     controller: primaryScrollController,
                     child: FocusScope.withExternalFocusNode(
                       focusScopeNode: focusScopeNode, // immutable
-                      child: RepaintBoundary(
+                      child: RositaRepaintBoundary(
                         child: ListenableBuilder(
                           listenable: _listenable, // immutable
                           builder: (BuildContext context, Widget? child) {
@@ -1228,7 +1229,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                               ),
                             );
                           },
-                          child: _page ??= RepaintBoundary(
+                          child: _page ??= RositaRepaintBoundary(
                             key: widget.route._subtreeKey, // immutable
                             child: Builder(
                               builder: (BuildContext context) {
@@ -2285,7 +2286,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     );
     if (semanticsDismissible && barrierDismissible) {
       // To be sorted after the _modalScope.
-      barrier = Semantics(sortKey: const OrdinalSortKey(1.0), child: barrier);
+      barrier = RositaSemantics(sortKey: const OrdinalSortKey(1.0), child: barrier);
     }
     return barrier;
   }
@@ -2337,7 +2338,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
   // one of the builders
   Widget _buildModalScope(BuildContext context) {
     // To be sorted before the _modalBarrier.
-    return _modalScopeCache ??= Semantics(
+    return _modalScopeCache ??= RositaSemantics(
       sortKey: const OrdinalSortKey(0.0),
       child: _ModalScope<T>(
         key: _scopeKey,
@@ -2639,7 +2640,7 @@ class RawDialogRoute<T> extends PopupRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    return Semantics(
+    return RositaSemantics(
       scopesRoute: true,
       explicitChildNodes: true,
       child: DisplayFeatureSubScreen(

@@ -21,14 +21,15 @@ void testMain() {
   });
 
   test('collects frame timings', () async {
-    final dispatcher = ui.PlatformDispatcher.instance as EnginePlatformDispatcher;
+    final EnginePlatformDispatcher dispatcher =
+        ui.PlatformDispatcher.instance as EnginePlatformDispatcher;
     List<ui.FrameTiming>? timings;
     dispatcher.onReportTimings = (List<ui.FrameTiming> data) {
       timings = data;
     };
-    var frameDone = Completer<void>();
+    Completer<void> frameDone = Completer<void>();
     dispatcher.onDrawFrame = () {
-      final sceneBuilder = ui.SceneBuilder();
+      final ui.SceneBuilder sceneBuilder = ui.SceneBuilder();
       sceneBuilder
         ..pushOffset(0, 0)
         ..pop();

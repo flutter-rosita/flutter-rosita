@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:test/bootstrap/browser.dart';
 import 'package:test/test.dart';
+
 import 'package:ui/src/engine.dart';
 import 'package:ui/ui.dart' as ui;
 
@@ -277,7 +278,7 @@ void testMain() {
 
   test('FragmentProgram can be created from JSON IPLR bundle', () {
     final Uint8List data = utf8.encode(kJsonIPLR);
-    final program = CkFragmentProgram.fromBytes('test', data);
+    final CkFragmentProgram program = CkFragmentProgram.fromBytes('test', data);
 
     expect(program.effect, isNotNull);
     expect(program.floatCount, 32);
@@ -286,7 +287,7 @@ void testMain() {
     expect(program.name, 'test');
 
     {
-      final shader = program.fragmentShader() as CkFragmentShader;
+      final CkFragmentShader shader = program.fragmentShader() as CkFragmentShader;
 
       shader.setFloat(0, 4);
       expect(reason: 'SkShaders are created lazily', shader.ref, isNull);
@@ -303,7 +304,7 @@ void testMain() {
     }
 
     {
-      final shader = program.fragmentShader() as CkFragmentShader;
+      final CkFragmentShader shader = program.fragmentShader() as CkFragmentShader;
       shader.setFloat(0, 5);
 
       final SkShader skShader1 = shader.getSkShader(ui.FilterQuality.none);
@@ -327,9 +328,6 @@ void testMain() {
         isNot(same(skShader2)),
       );
 
-      final ui.UniformFloatSlot slot = shader.getUniformFloat('u_rotation1', 1);
-      expect(slot.shaderIndex, equals(3));
-
       shader.dispose();
       expect(shader.debugDisposed, true);
       expect(
@@ -343,7 +341,7 @@ void testMain() {
 
   test('FragmentProgram can be created from JSON IPLR bundle with arrays and matrices', () {
     final Uint8List data = utf8.encode(kJsonArrayIPLR);
-    final program = CkFragmentProgram.fromBytes('test', data);
+    final CkFragmentProgram program = CkFragmentProgram.fromBytes('test', data);
 
     expect(program.effect, isNotNull);
     expect(
@@ -354,70 +352,5 @@ void testMain() {
     expect(program.textureCount, 0);
     expect(program.uniforms, hasLength(7));
     expect(program.name, 'test');
-  });
-
-  test('getUniformVec2 works with correct datatype', () {
-    final Uint8List data = utf8.encode(kJsonArrayIPLR);
-    final program = CkFragmentProgram.fromBytes('test', data);
-    final shader = program.fragmentShader() as CkFragmentShader;
-    shader.getUniformVec2('uSize').set(6.0, 7.0);
-  });
-  test('getUniformVec3 works with correct datatype', () {
-    final Uint8List data = utf8.encode(kJsonArrayIPLR);
-    final program = CkFragmentProgram.fromBytes('test', data);
-    final shader = program.fragmentShader() as CkFragmentShader;
-    shader.getUniformVec3('uLoneVector').set(11.0, 22.0, 19.96);
-  });
-
-  test('getUniformVec4 works with correct datatype', () {
-    final Uint8List data = utf8.encode(kJsonIPLR);
-    final program = CkFragmentProgram.fromBytes('test', data);
-    final shader = program.fragmentShader() as CkFragmentShader;
-    shader.getUniformVec4('u_color').set(0.8, 0.1, 0.3, 1.0);
-  });
-
-  group('Uniform by-name accessors throw errors with incorrect datatypes.', () {
-    late CkFragmentShader shader;
-    setUp(() {
-      final Uint8List data = utf8.encode(kJsonArrayIPLR);
-      final program = CkFragmentProgram.fromBytes('test', data);
-      shader = program.fragmentShader() as CkFragmentShader;
-    });
-    test('getUniformVec2', () {
-      expect(
-        () => shader.getUniformVec2('uLoneMatrix'),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Uniform `uLoneMatrix` has size 16, not size 2.',
-          ),
-        ),
-      );
-    });
-    test('getUniformVec3', () {
-      expect(
-        () => shader.getUniformVec3('uSize'),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Uniform `uSize` has size 2, not size 3.',
-          ),
-        ),
-      );
-    });
-    test('getUniformVec4', () {
-      expect(
-        () => shader.getUniformVec4('uLoneMatrix'),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Uniform `uLoneMatrix` has size 16, not size 4.',
-          ),
-        ),
-      );
-    });
   });
 }

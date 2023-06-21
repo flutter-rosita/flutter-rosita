@@ -282,7 +282,7 @@ abstract class Paint {
   factory Paint() => engine.renderer.createPaint();
 
   factory Paint.from(Paint other) {
-    final paint = Paint();
+    final Paint paint = Paint();
     paint
       ..blendMode = other.blendMode
       ..color = other.color
@@ -353,7 +353,7 @@ abstract class Gradient implements Shader {
     Float64List? matrix4,
   ]) {
     final Float32List? matrix = matrix4 == null ? null : engine.toMatrix32(matrix4);
-    return engine.renderer.createLinearGradient(from, to, colors, colorStops, tileMode, matrix);
+    return RositaGradientLinearShader(from, to, colors, colorStops, tileMode, matrix);
   }
 
   factory Gradient.radial(
@@ -371,7 +371,9 @@ abstract class Gradient implements Shader {
     // If focal == center and the focal radius is 0.0, it's still a regular radial gradient
     final Float32List? matrix32 = matrix4 != null ? engine.toMatrix32(matrix4) : null;
     if (focal == null || (focal == center && focalRadius == 0.0)) {
-      return engine.renderer.createRadialGradient(
+      return RositaGradientRadialShader(
+        focal,
+        focalRadius,
         center,
         radius,
         colors,
@@ -383,7 +385,7 @@ abstract class Gradient implements Shader {
       assert(
         center != Offset.zero || focal != Offset.zero,
       ); // will result in exception(s) in Skia side
-      return engine.renderer.createConicalGradient(
+      return RositaGradientRadialShader(
         focal,
         focalRadius,
         center,
@@ -403,7 +405,7 @@ abstract class Gradient implements Shader {
     double startAngle = 0.0,
     double endAngle = math.pi * 2,
     Float64List? matrix4,
-  ]) => engine.renderer.createSweepGradient(
+  ]) => RositaGradientSweepShader(
     center,
     colors,
     colorStops,
@@ -443,10 +445,6 @@ class ColorFilter implements ImageFilter {
   const factory ColorFilter.matrix(List<double> matrix) = engine.EngineColorFilter.matrix;
   const factory ColorFilter.linearToSrgbGamma() = engine.EngineColorFilter.linearToSrgbGamma;
   const factory ColorFilter.srgbToLinearGamma() = engine.EngineColorFilter.srgbToLinearGamma;
-  factory ColorFilter.saturation(double saturation) = engine.EngineColorFilter.saturation;
-
-  @override
-  String get debugShortDescription => toString();
 }
 
 // These enum values must be kept in sync with SkBlurStyle.
@@ -521,7 +519,7 @@ class _MatrixColorTransform implements _ColorTransform {
 }
 
 _ColorTransform _getColorTransform(ColorSpace source, ColorSpace destination) {
-  const srgbToP3 = _MatrixColorTransform(<double>[
+  const _MatrixColorTransform srgbToP3 = _MatrixColorTransform(<double>[
     0.808052267214446, 0.220292047628890, -0.139648846160100,
     0.145738111193222, //
     0.096480880462996, 0.916386732581291, -0.086093928394828,
@@ -558,17 +556,8 @@ _ColorTransform _getColorTransform(ColorSpace source, ColorSpace destination) {
 enum FilterQuality { none, low, medium, high }
 
 class ImageFilter {
-  factory ImageFilter.blur({
-    double sigmaX = 0.0,
-    double sigmaY = 0.0,
-    TileMode? tileMode,
-    Rect? bounds,
-  }) => engine.renderer.createBlurImageFilter(
-    sigmaX: sigmaX,
-    sigmaY: sigmaY,
-    tileMode: tileMode,
-    bounds: bounds,
-  );
+  factory ImageFilter.blur({double sigmaX = 0.0, double sigmaY = 0.0, TileMode? tileMode}) =>
+      RositaBlurImageFilter(sigmaX: sigmaX, sigmaY: sigmaY, tileMode: tileMode);
 
   factory ImageFilter.dilate({double radiusX = 0.0, double radiusY = 0.0}) =>
       engine.renderer.createDilateImageFilter(radiusX: radiusX, radiusY: radiusY);
@@ -595,8 +584,6 @@ class ImageFilter {
   }
 
   static bool get isShaderFilterSupported => false;
-
-  String get debugShortDescription => toString();
 }
 
 enum ColorSpace { sRGB, extendedSRGB, displayP3 }
@@ -607,19 +594,24 @@ enum ImageByteFormat { rawRgba, rawStraightRgba, rawUnmodified, png }
 // This must be kept in sync with the `PixelFormat` enum in Skwasm's image.cpp.
 enum PixelFormat { rgba8888, bgra8888, rgbaFloat32 }
 
-enum TargetPixelFormat { dontCare, rgbaFloat32 }
-
 typedef ImageDecoderCallback = void Function(Image result);
 
 abstract class FrameInfo {
-  Duration get duration;
+  FrameInfo._();
+  Duration get duration => Duration(milliseconds: _durationMillis);
+  int get _durationMillis => 0;
   Image get image;
 }
 
-abstract class Codec {
-  int get frameCount;
-  int get repetitionCount;
-  Future<FrameInfo> getNextFrame();
+class Codec {
+  Codec._();
+  int get frameCount => 0;
+  int get repetitionCount => 0;
+  Future<FrameInfo> getNextFrame() {
+    return engine.futurize<FrameInfo>(_getNextFrame);
+  }
+
+  String? _getNextFrame(engine.Callback<FrameInfo> callback) => null;
   void dispose() {}
 }
 
@@ -726,10 +718,10 @@ Future<Codec> createBmp(Uint8List pixels, int width, int height, int rowBytes, P
   // The header is in the 108-byte BITMAPV4HEADER format, or as called by
   // Chromium, WindowsV4. Do not use the 56-byte or 52-byte Adobe formats, since
   // they're not supported.
-  const dibSize = 0x6C /* 108: BITMAPV4HEADER */;
+  const int dibSize = 0x6C /* 108: BITMAPV4HEADER */;
   const int headerSize = dibSize + 0x0E;
   final int bufferSize = headerSize + (width * height * 4);
-  final bmpData = ByteData(bufferSize);
+  final ByteData bmpData = ByteData(bufferSize);
   // 'BM' header
   bmpData.setUint16(0x00, 0x424D);
   // Size of data
@@ -767,12 +759,12 @@ Future<Codec> createBmp(Uint8List pixels, int width, int height, int rowBytes, P
   // Bitmask A
   bmpData.setUint32(0x42, 0xFF000000, Endian.little);
 
-  var destinationByte = headerSize;
-  final combinedPixels = Uint32List.sublistView(pixels);
+  int destinationByte = headerSize;
+  final Uint32List combinedPixels = Uint32List.sublistView(pixels);
   // BMP is scanlined from bottom to top. Rearrange here.
   for (int rowCount = height - 1; rowCount >= 0; rowCount -= 1) {
     int sourcePixel = rowCount * rowBytes;
-    for (var colCount = 0; colCount < width; colCount += 1) {
+    for (int colCount = 0; colCount < width; colCount += 1) {
       bmpData.setUint32(destinationByte, combinedPixels[sourcePixel], Endian.little);
       destinationByte += 4;
       sourcePixel += 1;
@@ -792,7 +784,6 @@ void decodeImageFromPixels(
   int? targetWidth,
   int? targetHeight,
   bool allowUpscaling = true,
-  TargetPixelFormat targetFormat = TargetPixelFormat.dontCare,
 }) => engine.renderer.decodeImageFromPixels(
   pixels,
   width,
@@ -804,9 +795,6 @@ void decodeImageFromPixels(
   targetHeight: targetHeight,
   allowUpscaling: allowUpscaling,
 );
-
-Image decodeImageFromPixelsSync(Uint8List pixels, int width, int height, PixelFormat format) =>
-    throw UnimplementedError('`decodeImageFromPixelsSync` is not implemented for web targets.');
 
 class Shadow {
   const Shadow({
@@ -862,15 +850,15 @@ class Shadow {
     }
     a ??= <Shadow>[];
     b ??= <Shadow>[];
-    final result = <Shadow>[];
+    final List<Shadow> result = <Shadow>[];
     final int commonLength = math.min(a.length, b.length);
-    for (var i = 0; i < commonLength; i += 1) {
+    for (int i = 0; i < commonLength; i += 1) {
       result.add(Shadow.lerp(a[i], b[i], t)!);
     }
-    for (var i = commonLength; i < a.length; i += 1) {
+    for (int i = commonLength; i < a.length; i += 1) {
       result.add(a[i].scale(1.0 - t));
     }
-    for (var i = commonLength; i < b.length; i += 1) {
+    for (int i = commonLength; i < b.length; i += 1) {
       result.add(b[i].scale(t));
     }
     return result;
@@ -913,7 +901,7 @@ abstract class ImageShader implements Shader {
 class ImmutableBuffer {
   ImmutableBuffer._(this._length);
   static Future<ImmutableBuffer> fromUint8List(Uint8List list) async {
-    final instance = ImmutableBuffer._(list.length);
+    final ImmutableBuffer instance = ImmutableBuffer._(list.length);
     instance._list = list;
     return instance;
   }
@@ -961,7 +949,7 @@ class ImageDescriptor {
   ImageDescriptor._() : _width = null, _height = null, _rowBytes = null, _format = null;
 
   static Future<ImageDescriptor> encoded(ImmutableBuffer buffer) async {
-    final descriptor = ImageDescriptor._();
+    final ImageDescriptor descriptor = ImageDescriptor._();
     descriptor._data = buffer._list;
     return descriptor;
   }
@@ -981,11 +969,7 @@ class ImageDescriptor {
   int get bytesPerPixel =>
       throw UnsupportedError('ImageDescriptor.bytesPerPixel is not supported on web.');
   void dispose() => _data = null;
-  Future<Codec> instantiateCodec({
-    int? targetWidth,
-    int? targetHeight,
-    TargetPixelFormat targetFormat = TargetPixelFormat.dontCare,
-  }) async {
+  Future<Codec> instantiateCodec({int? targetWidth, int? targetHeight}) async {
     if (_data == null) {
       throw StateError('Object is disposed');
     }
@@ -1010,54 +994,14 @@ abstract class FragmentProgram {
   FragmentShader fragmentShader();
 }
 
-abstract class UniformFloatSlot {
-  UniformFloatSlot(this.name, this.index);
-
-  void set(double val);
-
-  int get shaderIndex;
-
-  final String name;
-
-  final int index;
-}
-
-abstract class UniformVec2Slot {
-  void set(double x, double y);
-}
-
-abstract class UniformVec3Slot {
-  void set(double x, double y, double z);
-}
-
-abstract class UniformVec4Slot {
-  void set(double x, double y, double z, double w);
-}
-
-abstract class ImageSamplerSlot {
-  void set(Image val);
-  int get shaderIndex;
-  String get name;
-}
-
 abstract class FragmentShader implements Shader {
   void setFloat(int index, double value);
 
-  void setImageSampler(int index, Image image, {FilterQuality filterQuality = FilterQuality.none});
+  void setImageSampler(int index, Image image);
 
   @override
   void dispose();
 
   @override
   bool get debugDisposed;
-
-  UniformFloatSlot getUniformFloat(String name, [int? index]);
-
-  UniformVec2Slot getUniformVec2(String name);
-
-  UniformVec3Slot getUniformVec3(String name);
-
-  UniformVec4Slot getUniformVec4(String name);
-
-  ImageSamplerSlot getImageSampler(String name);
 }

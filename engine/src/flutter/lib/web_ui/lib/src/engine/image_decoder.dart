@@ -65,7 +65,7 @@ abstract class BrowserImageDecoder implements ui.Codec {
 
   Future<ImageDecoder> _createWebDecoder() async {
     try {
-      final webDecoder = ImageDecoder(
+      final ImageDecoder webDecoder = ImageDecoder(
         ImageDecoderOptions(
           type: contentType,
           data: dataSource,
@@ -86,7 +86,7 @@ abstract class BrowserImageDecoder implements ui.Codec {
 
       // Flutter doesn't have an API for progressive loading of images, so we
       // wait until the image is fully decoded.
-      await webDecoder.completed.toDart;
+      // await webDecoder.completed.toDart;
       frameCount = webDecoder.tracks.selectedTrack!.frameCount.toInt();
 
       // We coerce the DOM's `repetitionCount` into an int by explicitly
@@ -133,27 +133,20 @@ abstract class BrowserImageDecoder implements ui.Codec {
       );
     }
 
-    final DecodeResult result = await webDecoder
-        // Using `completeFramesOnly: false` to get frames even from partially decoded images.
-        // Typically, this wouldn't work well in Flutter because Flutter doesn't support progressive
-        // image rendering. So this could result in frames being rendered at lower quality than
-        // expected.
-        //
-        // However, since we wait for the entire image to be decoded using [webDecoder.completed],
-        // this ends up being a non-issue in practice.
-        //
-        // For more details, see: https://issues.chromium.org/issues/456445108
-        .decode(DecodeOptions(frameIndex: _nextFrameIndex, completeFramesOnly: false))
-        .toDart;
-    final VideoFrame frame = result.image;
-    _nextFrameIndex = (_nextFrameIndex + 1) % frameCount;
+    throw UnimplementedError();
+
+    // final DecodeResult result = await webDecoder
+    //     .decode(DecodeOptions(frameIndex: _nextFrameIndex))
+    //     .toDart;
+    // final VideoFrame frame = result.image;
+    // _nextFrameIndex = (_nextFrameIndex + 1) % frameCount;
 
     // Duration can be null if the image is not animated. However, Flutter
     // requires a non-null value. 0 indicates that the frame is meant to be
     // displayed indefinitely, which is fine for a static image.
-    final duration = Duration(microseconds: frame.duration?.toInt() ?? 0);
-    final ui.Image image = generateImageFromVideoFrame(frame);
-    return AnimatedImageFrameInfo(duration, image);
+    // final Duration duration = Duration(microseconds: frame.duration?.toInt() ?? 0);
+    // final ui.Image image = generateImageFromVideoFrame(frame);
+    // return AnimatedImageFrameInfo(duration, image);
   }
 
   /// Creates a [ui.Image] from a [VideoFrame]. Implementers of this class
@@ -255,14 +248,14 @@ ui.Image scaleImageIfNeeded(
     return image;
   }
 
-  final outputRect = ui.Rect.fromLTWH(
+  final ui.Rect outputRect = ui.Rect.fromLTWH(
     0,
     0,
     scaledSize.width.toDouble(),
     scaledSize.height.toDouble(),
   );
-  final recorder = ui.PictureRecorder();
-  final canvas = ui.Canvas(recorder, outputRect);
+  final ui.PictureRecorder recorder = ui.PictureRecorder();
+  final ui.Canvas canvas = ui.Canvas(recorder, outputRect);
 
   canvas.drawImageRect(
     image,
@@ -275,15 +268,4 @@ ui.Image scaleImageIfNeeded(
   picture.dispose();
   image.dispose();
   return finalImage;
-}
-
-/// Thrown when the web engine fails to decode an image, either due to a
-/// network issue, corrupted image contents, or missing codec.
-class ImageCodecException implements Exception {
-  ImageCodecException(this._message);
-
-  final String _message;
-
-  @override
-  String toString() => 'ImageCodecException: $_message';
 }

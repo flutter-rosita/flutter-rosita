@@ -16,6 +16,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show clampDouble, kIsWeb;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'chip_theme.dart';
 import 'color_scheme.dart';
@@ -1500,7 +1501,7 @@ class _RawChipState extends State<RawChip> with TickerProviderStateMixin<RawChip
       constraints: constraints,
       child: Center(widthFactor: 1.0, heightFactor: 1.0, child: result),
     );
-    return Semantics(
+    return RositaSemantics(
       button: widget.tapEnabled,
       container: true,
       // On web, aria-selected only works for certain roles: gridcell, option, row and tab.

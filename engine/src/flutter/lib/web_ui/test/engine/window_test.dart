@@ -4,14 +4,13 @@
 
 import 'dart:async';
 import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
+import 'dart:js_util' as js_util;
 import 'dart:typed_data';
 
 import 'package:test/bootstrap/browser.dart';
 import 'package:test/test.dart';
 import 'package:ui/src/engine.dart';
 import 'package:ui/ui.dart' as ui;
-import 'package:ui/ui_web/src/ui_web.dart' as ui_web;
 
 import '../common/matchers.dart';
 import '../common/test_initialization.dart';
@@ -26,7 +25,7 @@ void main() {
   internalBootstrapBrowserTest(() => testMain);
 }
 
-void testMain() {
+Future<void> testMain() async {
   setUpImplicitView();
 
   test('onTextScaleFactorChanged preserves the zone', () {
@@ -166,7 +165,7 @@ void testMain() {
   });
 
   test('invokeOnKeyData returns normally when onKeyData is null', () {
-    const keyData = ui.KeyData(
+    const ui.KeyData keyData = ui.KeyData(
       timeStamp: Duration(milliseconds: 1),
       type: ui.KeyEventType.repeat,
       physical: kPhysicalKeyA,
@@ -197,7 +196,7 @@ void testMain() {
       expect(myWindow.onKeyData, same(onKeyData));
     });
 
-    const keyData = ui.KeyData(
+    const ui.KeyData keyData = ui.KeyData(
       timeStamp: Duration(milliseconds: 1),
       type: ui.KeyEventType.repeat,
       physical: kPhysicalKeyA,
@@ -271,7 +270,7 @@ void testMain() {
     expect(eventLog, [ui.SemanticsAction.focus]);
     eventLog.clear();
 
-    var tapCalled = false;
+    bool tapCalled = false;
     EnginePlatformDispatcher.instance.onBeginFrame = (_) {
       // Inside onBeginFrame: should be delayed
       EnginePlatformDispatcher.instance.invokeOnSemanticsAction(
@@ -283,7 +282,7 @@ void testMain() {
       tapCalled = true;
     };
 
-    var increaseCalled = false;
+    bool increaseCalled = false;
     EnginePlatformDispatcher.instance.onDrawFrame = () {
       // Inside onDrawFrame: should be delayed
       EnginePlatformDispatcher.instance.invokeOnSemanticsAction(
@@ -336,7 +335,7 @@ void testMain() {
   });
 
   test('onAccessibilityFeaturesChanged is called when semantics is enabled', () {
-    var a11yChangeInvoked = false;
+    bool a11yChangeInvoked = false;
     myWindow.onAccessibilityFeaturesChanged = () {
       a11yChangeInvoked = true;
     };
@@ -368,11 +367,11 @@ void testMain() {
   });
 
   test('sendPlatformMessage preserves the zone', () async {
-    final completer = Completer<void>();
+    final Completer<void> completer = Completer<void>();
     final Zone innerZone = Zone.current.fork();
 
     innerZone.runGuarded(() {
-      final inputData = ByteData(4);
+      final ByteData inputData = ByteData(4);
       inputData.setUint32(0, 42);
       myWindow.sendPlatformMessage('flutter/debug-echo', inputData, (ByteData? outputData) {
         expect(Zone.current, innerZone);
@@ -384,9 +383,9 @@ void testMain() {
   });
 
   test('sendPlatformMessage responds even when channel is unknown', () async {
-    var responded = false;
+    bool responded = false;
 
-    final inputData = ByteData(4);
+    final ByteData inputData = ByteData(4);
     inputData.setUint32(0, 42);
     myWindow.sendPlatformMessage('flutter/__unknown__channel__', null, (ByteData? outputData) {
       responded = true;
@@ -416,7 +415,7 @@ void testMain() {
 
   // Emulates the framework sending a request for screen orientation lock.
   Future<bool> sendSetPreferredOrientations(List<dynamic> orientations) {
-    final completer = Completer<bool>();
+    final Completer<bool> completer = Completer<bool>();
     final ByteData? inputData = const JSONMethodCodec().encodeMethodCall(
       MethodCall('SystemChrome.setPreferredOrientations', orientations),
     );
@@ -433,25 +432,29 @@ void testMain() {
   test('sets preferred screen orientation', () async {
     final DomScreen? original = domWindow.screen;
 
-    final lockCalls = <String>[];
-    var unlockCount = 0;
-    var simulateError = false;
+    final List<String> lockCalls = <String>[];
+    int unlockCount = 0;
+    bool simulateError = false;
 
     // The `orientation` property cannot be overridden, so this test overrides the entire `screen`.
-    domWindow['screen'] = <String, Object?>{
-      'orientation': <String, Object?>{
-        'lock': (String lockType) {
-          lockCalls.add(lockType);
-          if (simulateError) {
-            throw Error();
-          }
-          return Future<JSNumber>.value(0.toJS).toJS;
-        }.toJS,
-        'unlock': () {
-          unlockCount += 1;
-        }.toJS,
-      },
-    }.jsify();
+    js_util.setProperty(
+      domWindow,
+      'screen',
+      js_util.jsify(<Object?, Object?>{
+        'orientation': <Object?, Object?>{
+          'lock': (String lockType) {
+            lockCalls.add(lockType);
+            if (simulateError) {
+              throw Error();
+            }
+            return Future<JSNumber>.value(0.toJS).toJS;
+          }.toJS,
+          'unlock': () {
+            unlockCount += 1;
+          }.toJS,
+        },
+      }),
+    );
 
     // Sanity-check the test setup.
     expect(lockCalls, <String>[]);
@@ -507,7 +510,7 @@ void testMain() {
     expect(lockCalls, <String>[ScreenOrientation.lockTypePortraitSecondary]);
     expect(unlockCount, 0);
 
-    domWindow['screen'] = original;
+    js_util.setProperty(domWindow, 'screen', original);
   });
 
   /// Regression test for https://github.com/flutter/flutter/issues/66128.
@@ -515,39 +518,46 @@ void testMain() {
     final DomScreen? original = domWindow.screen;
 
     // The `orientation` property cannot be overridden, so this test overrides the entire `screen`.
-    domWindow['screen'] = <Object?, Object?>{'orientation': null}.jsify();
+    js_util.setProperty(
+      domWindow,
+      'screen',
+      js_util.jsify(<Object?, Object?>{'orientation': null}),
+    );
     expect(domWindow.screen!.orientation, isNull);
     expect(await sendSetPreferredOrientations(<dynamic>[]), isFalse);
-    domWindow['screen'] = original;
+    js_util.setProperty(domWindow, 'screen', original);
   });
 
-  test('SingletonFlutterWindow implements locale, locales, and locale change notifications', () {
-    // This will count how many times we notified about locale changes.
-    var localeChangedCount = 0;
-    myWindow.onLocaleChanged = () {
-      localeChangedCount += 1;
-    };
+  test(
+    'SingletonFlutterWindow implements locale, locales, and locale change notifications',
+    () async {
+      // This will count how many times we notified about locale changes.
+      int localeChangedCount = 0;
+      myWindow.onLocaleChanged = () {
+        localeChangedCount += 1;
+      };
 
-    // We populate the initial list of locales automatically (only test that we
-    // got some locales; some contributors may be in different locales, so we
-    // can't test the exact contents).
-    expect(myWindow.locale, isA<ui.Locale>());
-    expect(myWindow.locales, isNotEmpty);
+      // We populate the initial list of locales automatically (only test that we
+      // got some locales; some contributors may be in different locales, so we
+      // can't test the exact contents).
+      expect(myWindow.locale, isA<ui.Locale>());
+      expect(myWindow.locales, isNotEmpty);
 
-    // Trigger a change notification (reset locales because the notification
-    // doesn't actually change the list of languages; the test only observes
-    // that the list is populated again).
-    EnginePlatformDispatcher.instance.debugResetLocales();
-    expect(myWindow.locales, isEmpty);
-    expect(myWindow.locale, equals(const ui.Locale.fromSubtags()));
-    expect(localeChangedCount, 0);
-    domWindow.dispatchEvent(createDomEvent('Event', 'languagechange'));
-    expect(myWindow.locales, isNotEmpty);
-    expect(localeChangedCount, 1);
-  });
+      // Trigger a change notification (reset locales because the notification
+      // doesn't actually change the list of languages; the test only observes
+      // that the list is populated again).
+      EnginePlatformDispatcher.instance.debugResetLocales();
+      expect(myWindow.locales, isEmpty);
+      expect(myWindow.locale, equals(const ui.Locale.fromSubtags()));
+      expect(localeChangedCount, 0);
+      domWindow.dispatchEvent(createDomEvent('Event', 'languagechange'));
+      expect(myWindow.locales, isNotEmpty);
+      expect(localeChangedCount, 1);
+    },
+  );
 
   test('dispatches browser event on flutter/service_worker channel', () async {
-    final completer = Completer<void>();
+    final Completer<void> completer = Completer<void>();
     domWindow.addEventListener(
       'flutter-first-frame',
       createDomEventListener((DomEvent e) => completer.complete()),
@@ -567,7 +577,7 @@ void testMain() {
 
   test('sets global html attributes', () {
     final DomElement host = createDomHTMLDivElement();
-    final view = EngineFlutterView(dispatcher, host);
+    final EngineFlutterView view = EngineFlutterView(dispatcher, host);
 
     expect(host.getAttribute('flt-renderer'), 'canvaskit');
     expect(host.getAttribute('flt-build-mode'), 'debug');
@@ -586,7 +596,8 @@ void testMain() {
     // The existing viewport meta tag should've been removed.
     expect(existingMeta.isConnected, isFalse);
     // And a new one should've been added.
-    final newMeta = domDocument.head!.querySelector('meta[name="viewport"]') as DomHTMLMetaElement?;
+    final DomHTMLMetaElement? newMeta =
+        domDocument.head!.querySelector('meta[name="viewport"]') as DomHTMLMetaElement?;
     expect(newMeta, isNotNull);
     newMeta!;
     expect(newMeta.getAttribute('flt-viewport'), isNotNull);
@@ -606,9 +617,9 @@ void testMain() {
     expect(implicit1.viewId, kImplicitViewId);
     expect(implicit2.viewId, kImplicitViewId);
 
-    final view1 = EngineFlutterView(dispatcher, host);
-    final view2 = EngineFlutterView(dispatcher, host);
-    final view3 = EngineFlutterView(dispatcher, host);
+    final EngineFlutterView view1 = EngineFlutterView(dispatcher, host);
+    final EngineFlutterView view2 = EngineFlutterView(dispatcher, host);
+    final EngineFlutterView view3 = EngineFlutterView(dispatcher, host);
 
     expect(view1.viewId, isNot(kImplicitViewId));
     expect(view2.viewId, isNot(kImplicitViewId));
@@ -627,11 +638,11 @@ void testMain() {
 
   test('registration', () {
     final DomHTMLDivElement host = createDomHTMLDivElement();
-    final dispatcher = EnginePlatformDispatcher();
+    final EnginePlatformDispatcher dispatcher = EnginePlatformDispatcher();
     expect(dispatcher.viewManager.views, isEmpty);
 
     // Creating the view shouldn't register it.
-    final view = EngineFlutterView(dispatcher, host);
+    final EngineFlutterView view = EngineFlutterView(dispatcher, host);
     expect(dispatcher.viewManager.views, isEmpty);
     dispatcher.viewManager.registerView(view);
     expect(dispatcher.viewManager.views, <EngineFlutterView>[view]);
@@ -645,7 +656,7 @@ void testMain() {
 
   test('dispose', () {
     final DomHTMLDivElement host = createDomHTMLDivElement();
-    final view = EngineFlutterView(EnginePlatformDispatcher.instance, host);
+    final EngineFlutterView view = EngineFlutterView(EnginePlatformDispatcher.instance, host);
 
     // First, let's make sure the view's root element was inserted into the
     // host, and the dimensions provider is active.
@@ -739,10 +750,7 @@ void testMain() {
         ..height = 'auto';
 
       // Resize the host to 20x20 (physical pixels).
-      view.handleFrameworkResize(const ui.Size.square(50));
-
-      // The view's physicalSize should be updated too.
-      expect(view.physicalSize, const ui.Size(50.0, 50.0));
+      view.resize(const ui.Size.square(50));
 
       await view.onResize.first;
 
@@ -756,7 +764,7 @@ void testMain() {
   });
 
   group('physicalConstraints', () {
-    const dpr = 2.5;
+    const double dpr = 2.5;
     late DomHTMLDivElement host;
     late EngineFlutterView view;
 
@@ -773,7 +781,7 @@ void testMain() {
       EngineFlutterDisplay.instance.debugOverrideDevicePixelRatio(null);
     });
 
-    test('JsViewConstraints are passed and used to compute physicalConstraints', () {
+    test('JsViewConstraints are passed and used to compute physicalConstraints', () async {
       view = EngineFlutterView(
         EnginePlatformDispatcher.instance,
         host,
@@ -795,30 +803,6 @@ void testMain() {
             ) *
             dpr,
       );
-    });
-  });
-
-  group('keyboard resize behavior', () {
-    setUp(() {
-      // Simulate keyboard being up.
-      textEditing.isEditing = true;
-      ui_web.browser.debugOperatingSystemOverride = ui_web.OperatingSystem.android;
-    });
-
-    tearDown(() {
-      textEditing.isEditing = false;
-      ui_web.browser.debugOperatingSystemOverride = null;
-    });
-
-    test('physicalSize remains unchanged when keyboard is up', () {
-      final ui.Size initialPhysicalSize = myWindow.physicalSize;
-
-      // Pick a smaller size.
-      final ui.Size newSize = initialPhysicalSize ~/ 2;
-      myWindow.handleFrameworkResize(newSize);
-
-      // View's `physicalSize` should remain unchanged.
-      expect(myWindow.physicalSize, initialPhysicalSize);
     });
   });
 }

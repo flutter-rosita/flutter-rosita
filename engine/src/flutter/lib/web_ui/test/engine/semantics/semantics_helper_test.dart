@@ -21,7 +21,7 @@ void testMain() {
     setUp(() {
       EngineSemantics.instance.semanticsEnabled = false;
       desktopSemanticsEnabler = DesktopSemanticsEnabler();
-      placeholder = desktopSemanticsEnabler.accessibilityPlaceholder;
+      placeholder = desktopSemanticsEnabler.prepareAccessibilityPlaceholder();
       domDocument.body!.append(placeholder!);
     });
 
@@ -69,18 +69,14 @@ void testMain() {
 
       // Tab should not enable semantics
       {
-        final DomKeyboardEvent event = createDomKeyboardEvent('keydown', <String, Object>{
-          'key': 'Tab',
-        });
+        final event = createDomKeyboardEvent('keydown', <String, Object>{'key': 'Tab'});
         expect(testSemanticsEnabler.shouldEnableSemantics(event), isTrue);
         expect(testSemanticsEnabler.tryEnableSemanticsCallCount, 0);
       }
 
       // Enter key is allowed to try to enable semantics
       {
-        final DomKeyboardEvent event = createDomKeyboardEvent('keydown', <String, Object>{
-          'key': 'Enter',
-        });
+        final event = createDomKeyboardEvent('keydown', <String, Object>{'key': 'Enter'});
         expect(testSemanticsEnabler.shouldEnableSemantics(event), isFalse);
         expect(testSemanticsEnabler.tryEnableSemanticsCallCount, 1);
       }
@@ -97,16 +93,6 @@ void testMain() {
         expect(shouldForwardToFramework, isFalse);
       },
     );
-
-    test('Can update placeholder label', () {
-      const testLabel = 'Test label for placeholder';
-      desktopSemanticsEnabler.updatePlaceholderLabel(testLabel);
-      expect(placeholder!.getAttribute('aria-label'), testLabel);
-
-      const anotherLabel = 'Another label for placeholder';
-      desktopSemanticsEnabler.dispose();
-      expect(() => desktopSemanticsEnabler.updatePlaceholderLabel(anotherLabel), returnsNormally);
-    });
 
     test('disposes of the placeholder', () {
       domDocument.body!.append(placeholder!);
@@ -126,7 +112,7 @@ void testMain() {
       setUp(() {
         EngineSemantics.instance.semanticsEnabled = false;
         mobileSemanticsEnabler = MobileSemanticsEnabler();
-        placeholder = mobileSemanticsEnabler.accessibilityPlaceholder;
+        placeholder = mobileSemanticsEnabler.prepareAccessibilityPlaceholder();
         domDocument.body!.append(placeholder!);
       });
 
@@ -152,16 +138,6 @@ void testMain() {
         final bool shouldForwardToFramework = mobileSemanticsEnabler.tryEnableSemantics(event);
 
         expect(shouldForwardToFramework, isTrue);
-      });
-
-      test('Can update placeholder label', () {
-        const testLabel = 'Test label for placeholder';
-        mobileSemanticsEnabler.updatePlaceholderLabel(testLabel);
-        expect(placeholder!.getAttribute('aria-label'), testLabel);
-
-        const anotherLabel = 'Another label for placeholder';
-        mobileSemanticsEnabler.dispose();
-        expect(() => mobileSemanticsEnabler.updatePlaceholderLabel(anotherLabel), returnsNormally);
       });
 
       test('Enables semantics when receiving a relevant event', () {
@@ -207,7 +183,7 @@ class FakeSemanticsEnabler extends SemanticsEnabler {
   bool get isWaitingToEnableSemantics => true;
 
   @override
-  void updatePlaceholderLabel(String message) {
+  DomElement prepareAccessibilityPlaceholder() {
     throw UnimplementedError();
   }
 

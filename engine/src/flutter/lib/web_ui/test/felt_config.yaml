@@ -18,10 +18,6 @@ compile-configs:
     renderer: skwasm
 
 test-sets:
-  # Tests for the new WebParagraph
-  - name: experimental-webparagraph
-    directory: webparagraph
-
   # Tests for non-renderer logic
   - name: engine
     directory: engine
@@ -29,10 +25,6 @@ test-sets:
   # Tests for canvaskit-renderer-specific functionality
   - name: canvaskit
     directory: canvaskit
-
-  # Tests for skwasm-renderer-specific functionality
-  - name: skwasm
-    directory: skwasm
 
   # Tests for renderer functionality that can be run on any renderer
   - name: ui
@@ -43,10 +35,6 @@ test-sets:
     directory: fallbacks
 
 test-bundles:
-  - name: dart2js-canvaskit-experimental-webparagraph
-    test-set: experimental-webparagraph
-    compile-configs: dart2js-canvaskit
-
   - name: dart2js-canvaskit-engine
     test-set: engine
     compile-configs: dart2js-canvaskit
@@ -67,10 +55,6 @@ test-bundles:
     test-set: ui
     compile-configs: dart2wasm-skwasm
 
-  - name: dart2wasm-skwasm-skwasm
-    test-set: skwasm
-    compile-configs: dart2wasm-skwasm
-
   - name: fallbacks
     test-set: fallbacks
     compile-configs:
@@ -81,10 +65,7 @@ run-configs:
   - name: chrome-experimental-webparagraph
     browser: chrome
     browser-flags:
-      - --enable-experimental-web-platform-features
-      # This is supposed to be the right flag, but for some reason it doesn't work at the moment so
-      # we are using the more general one above.
-      # - --enable-features=ExtendedTextMetrics
+      - --enable-features=ExtendedTextMetrics
     canvaskit-variant: experimentalWebParagraph
 
   - name: chrome
@@ -105,12 +86,6 @@ run-configs:
   - name: chrome-full
     browser: chrome
     canvaskit-variant: full
-
-  - name: chrome-wimp
-    browser: chrome
-    canvaskit-variant: chromium
-    cross-origin-isolated: true
-    enable-wimp: true
 
   - name: edge
     browser: edge
@@ -143,20 +118,10 @@ run-configs:
 
 test-suites:
   - name: chrome-dart2js-experimental-webparagraph-ui
-    test-bundle: dart2js-canvaskit-experimental-webparagraph
+    test-bundle: dart2js-canvaskit-ui
     run-config: chrome-experimental-webparagraph
     artifact-deps: [ canvaskit_experimental_webparagraph ]
     enable-ci: false
-
-  - name: chrome-dart2wasm-wimp-ui
-    test-bundle: dart2wasm-skwasm-ui
-    run-config: chrome-wimp
-    artifact-deps: [ skwasm ]
-
-  - name: chrome-dart2wasm-wimp-skwasm
-    test-bundle: dart2wasm-skwasm-skwasm
-    run-config: chrome-wimp
-    artifact-deps: [ skwasm ]
 
   - name: chrome-dart2js-canvaskit-engine
     test-bundle: dart2js-canvaskit-engine
@@ -271,18 +236,8 @@ test-suites:
     run-config: chrome-coi
     artifact-deps: [ skwasm ]
 
-  - name: chrome-coi-dart2wasm-skwasm-skwasm
-    test-bundle: dart2wasm-skwasm-skwasm
-    run-config: chrome-coi
-    artifact-deps: [ skwasm ]
-
   - name: chrome-force-st-dart2wasm-skwasm-ui
     test-bundle: dart2wasm-skwasm-ui
-    run-config: chrome-force-st
-    artifact-deps: [ skwasm ]
-
-  - name: chrome-force-st-dart2wasm-skwasm-skwasm
-    test-bundle: dart2wasm-skwasm-skwasm
     run-config: chrome-force-st
     artifact-deps: [ skwasm ]
 

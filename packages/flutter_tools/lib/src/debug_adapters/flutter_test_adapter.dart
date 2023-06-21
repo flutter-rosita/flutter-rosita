@@ -57,7 +57,7 @@ class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
         fileSystem.path.join(
           Cache.flutterRoot!,
           'bin',
-          platform.isWindows ? 'flutter.bat' : 'flutter',
+          platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita',
         );
     final int? removeArgs = args.customToolReplacesArgs;
     if (args.customTool != null && removeArgs != null) {

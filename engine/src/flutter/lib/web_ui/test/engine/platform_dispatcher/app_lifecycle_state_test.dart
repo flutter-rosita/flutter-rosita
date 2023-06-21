@@ -14,7 +14,7 @@ void main() {
 void testMain() {
   group(AppLifecycleState, () {
     test('listens to changes in view manager', () {
-      final viewManager = FlutterViewManager(EnginePlatformDispatcher.instance);
+      final FlutterViewManager viewManager = FlutterViewManager(EnginePlatformDispatcher.instance);
       final AppLifecycleState state = AppLifecycleState.create(viewManager);
 
       ui.AppLifecycleState? currentState;

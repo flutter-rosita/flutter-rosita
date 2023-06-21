@@ -60,10 +60,10 @@ void testMain() {
     });
 
     test('high contrast in accessibilityFeatures has the correct value', () {
-      final mockHighContrast = MockHighContrastSupport();
+      final MockHighContrastSupport mockHighContrast = MockHighContrastSupport();
       HighContrastSupport.instance = mockHighContrast;
 
-      final dispatcher = EnginePlatformDispatcher();
+      final EnginePlatformDispatcher dispatcher = EnginePlatformDispatcher();
 
       expect(dispatcher.accessibilityFeatures.highContrast, isTrue);
       mockHighContrast.isEnabled = false;
@@ -74,12 +74,12 @@ void testMain() {
     });
 
     test('AppLifecycleState transitions through all states', () {
-      final states = <ui.AppLifecycleState>[];
+      final List<ui.AppLifecycleState> states = <ui.AppLifecycleState>[];
       void listener(ui.AppLifecycleState state) {
         states.add(state);
       }
 
-      final mockAppLifecycleState = MockAppLifecycleState();
+      final MockAppLifecycleState mockAppLifecycleState = MockAppLifecycleState();
 
       expect(mockAppLifecycleState.appLifecycleState, ui.AppLifecycleState.resumed);
 
@@ -157,7 +157,7 @@ void testMain() {
 
     test('responds to flutter/skia Skia.setResourceCacheMaxBytes', () async {
       const MethodCodec codec = JSONMethodCodec();
-      final completer = Completer<ByteData?>();
+      final Completer<ByteData?> completer = Completer<ByteData?>();
       ui.PlatformDispatcher.instance.sendPlatformMessage(
         'flutter/skia',
         codec.encodeMethodCall(
@@ -173,7 +173,7 @@ void testMain() {
 
     test('responds to flutter/platform HapticFeedback.vibrate', () async {
       const MethodCodec codec = JSONMethodCodec();
-      final completer = Completer<ByteData?>();
+      final Completer<ByteData?> completer = Completer<ByteData?>();
       ui.PlatformDispatcher.instance.sendPlatformMessage(
         'flutter/platform',
         codec.encodeMethodCall(const MethodCall('HapticFeedback.vibrate')),
@@ -187,7 +187,7 @@ void testMain() {
 
     test('responds to flutter/platform SystemChrome.setSystemUIOverlayStyle', () async {
       const MethodCodec codec = JSONMethodCodec();
-      final completer = Completer<ByteData?>();
+      final Completer<ByteData?> completer = Completer<ByteData?>();
       ui.PlatformDispatcher.instance.sendPlatformMessage(
         'flutter/platform',
         codec.encodeMethodCall(
@@ -203,7 +203,7 @@ void testMain() {
 
     test('responds to flutter/contextmenu enable', () async {
       const MethodCodec codec = JSONMethodCodec();
-      final completer = Completer<ByteData?>();
+      final Completer<ByteData?> completer = Completer<ByteData?>();
       ui.PlatformDispatcher.instance.sendPlatformMessage(
         'flutter/contextmenu',
         codec.encodeMethodCall(const MethodCall('enableContextMenu')),
@@ -217,7 +217,7 @@ void testMain() {
 
     test('responds to flutter/contextmenu disable', () async {
       const MethodCodec codec = JSONMethodCodec();
-      final completer = Completer<ByteData?>();
+      final Completer<ByteData?> completer = Completer<ByteData?>();
       ui.PlatformDispatcher.instance.sendPlatformMessage(
         'flutter/contextmenu',
         codec.encodeMethodCall(const MethodCall('disableContextMenu')),
@@ -229,21 +229,8 @@ void testMain() {
       expect(codec.decodeEnvelope(response!), true);
     });
 
-    test('can set application locale', () async {
-      final DomElement host1 = createDomHTMLDivElement();
-      final view1 = EngineFlutterView(dispatcher, host1);
-      final EngineFlutterView view2 = EngineFlutterView.implicit(dispatcher, null);
-      dispatcher.viewManager
-        ..registerView(view1)
-        ..registerView(view2);
-
-      dispatcher.setApplicationLocale(const ui.Locale('es', 'MX'));
-      expect(host1.getAttribute('lang'), 'es-MX');
-      expect(domDocument.querySelector('html')!.getAttribute('lang'), 'es-MX');
-    });
-
     test('can find text scale factor', () async {
-      const deltaTolerance = 1e-5;
+      const double deltaTolerance = 1e-5;
 
       final DomElement root = domDocument.documentElement!;
       final String oldFontSize = root.style.fontSize;
@@ -271,7 +258,6 @@ void testMain() {
       expect(findBrowserTextScaleFactor(), 1.0);
     });
 
-    // Regression test for https://github.com/flutter/flutter/issues/178271.
     test("calls onTextScaleFactorChanged when the <html> element's font-size changes", () async {
       final DomElement root = domDocument.documentElement!;
       final String oldFontSize = root.style.fontSize;
@@ -282,170 +268,32 @@ void testMain() {
         ui.PlatformDispatcher.instance.onTextScaleFactorChanged = oldCallback;
       });
 
-      // Wait for next frame.
-      Future<void> waitForResizeObserver() {
-        final completer = Completer<void>();
-        domWindow.requestAnimationFrame((_) {
-          Timer.run(completer.complete);
-        });
-        return completer.future;
-      }
-
       root.style.fontSize = '16px';
 
-      var isCalled = false;
+      bool isCalled = false;
       ui.PlatformDispatcher.instance.onTextScaleFactorChanged = () {
         isCalled = true;
       };
 
       root.style.fontSize = '20px';
-      await waitForResizeObserver();
+      await Future<void>.delayed(Duration.zero);
       expect(root.style.fontSize, '20px');
       expect(isCalled, isTrue);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.25); // = 20px / 16px
+      expect(ui.PlatformDispatcher.instance.textScaleFactor, findBrowserTextScaleFactor());
 
       isCalled = false;
 
       root.style.fontSize = '16px';
-      await waitForResizeObserver();
+      await Future<void>.delayed(Duration.zero);
       expect(root.style.fontSize, '16px');
       expect(isCalled, isTrue);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.0); // = 16px / 16px
-    });
-
-    test('calls onMetricsChanged when the typography measurement element size changes', () async {
-      final DomElement root = domDocument.documentElement!;
-      final DomElement style = createDomHTMLStyleElement(null);
-      final ui.VoidCallback? oldCallback = ui.PlatformDispatcher.instance.onMetricsChanged;
-
-      // Wait for next frame.
-      Future<void> waitForResizeObserver() {
-        final completer = Completer<void>();
-        domWindow.requestAnimationFrame((_) {
-          Timer.run(completer.complete);
-        });
-        return completer.future;
-      }
-
-      addTearDown(() {
-        style.text = null;
-        style.remove();
-        ui.PlatformDispatcher.instance.onMetricsChanged = oldCallback;
-      });
-
-      var isCalled = false;
-      ui.PlatformDispatcher.instance.onMetricsChanged = () {
-        isCalled = true;
-      };
-
-      const expectedLineHeightScaleFactor = 2.0;
-      const expectedLetterSpacing = 1.0;
-      const expectedWordSpacing = 4.0;
-      const expectedParagraphSpacing = 10.0;
-
-      style.text =
-          'html *{ line-height: 2 !important; word-spacing: 4px !important; letter-spacing: 1px !important; margin-bottom: 10px !important; }';
-      root.append(style);
-      await waitForResizeObserver();
-      expect(root.contains(style), isTrue);
-      expect(isCalled, isTrue);
-      expect(
-        ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride,
-        expectedLineHeightScaleFactor,
-      );
-      expect(ui.PlatformDispatcher.instance.letterSpacingOverride, expectedLetterSpacing);
-      expect(ui.PlatformDispatcher.instance.wordSpacingOverride, expectedWordSpacing);
-      expect(ui.PlatformDispatcher.instance.paragraphSpacingOverride, expectedParagraphSpacing);
-
-      isCalled = false;
-
-      style.remove();
-      await waitForResizeObserver();
-      expect(root.contains(style), isFalse);
-      expect(isCalled, isTrue);
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, null);
-      expect(ui.PlatformDispatcher.instance.letterSpacingOverride, null);
-      expect(ui.PlatformDispatcher.instance.wordSpacingOverride, null);
-      expect(ui.PlatformDispatcher.instance.paragraphSpacingOverride, null);
-
-      isCalled = false;
-
-      root.append(style);
-      await waitForResizeObserver();
-      expect(root.contains(style), isTrue);
-      expect(isCalled, isTrue);
-      expect(
-        ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride,
-        expectedLineHeightScaleFactor,
-      );
-      expect(ui.PlatformDispatcher.instance.letterSpacingOverride, expectedLetterSpacing);
-      expect(ui.PlatformDispatcher.instance.wordSpacingOverride, expectedWordSpacing);
-      expect(ui.PlatformDispatcher.instance.paragraphSpacingOverride, expectedParagraphSpacing);
-    });
-
-    // Regression test for https://github.com/flutter/flutter/issues/178856.
-    test('updates lineHeightScaleFactorOverride only when line-height is explicitly set', () async {
-      final DomElement root = domDocument.documentElement!;
-      final DomElement style = createDomHTMLStyleElement(null);
-
-      // Wait for next frame.
-      Future<void> waitForResizeObserver() {
-        final completer = Completer<void>();
-        domWindow.requestAnimationFrame((_) {
-          Timer.run(completer.complete);
-        });
-        return completer.future;
-      }
-
-      addTearDown(() {
-        style.text = null;
-        style.remove();
-      });
-
-      style.text = '*{ font-size: 20px !important; }';
-      root.append(style);
-      await waitForResizeObserver();
-      expect(root.contains(style), isTrue);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.25); // = 20px / 16px
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, null);
-
-      style.remove();
-      await waitForResizeObserver();
-      expect(root.contains(style), isFalse);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.0); // = 16px / 16px
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, null);
-
-      style.text = '*{ font-size: 20px !important; line-height: 2 !important; }';
-      root.append(style);
-      await waitForResizeObserver();
-      expect(root.contains(style), isTrue);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.25); // = 20px / 16px
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, 2.0);
-
-      style.remove();
-      await waitForResizeObserver();
-      expect(root.contains(style), isFalse);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.0); // = 16px / 16px
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, null);
-
-      style.text = '*{ font-size: 32px !important; line-height: 3 !important; }';
-      root.append(style);
-      await waitForResizeObserver();
-      expect(root.contains(style), isTrue);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 2.0); // = 32px / 16px
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, 3.0);
-
-      style.remove();
-      await waitForResizeObserver();
-      expect(root.contains(style), isFalse);
-      expect(ui.PlatformDispatcher.instance.textScaleFactor, 1.0); // = 16px / 16px
-      expect(ui.PlatformDispatcher.instance.lineHeightScaleFactorOverride, null);
+      expect(ui.PlatformDispatcher.instance.textScaleFactor, findBrowserTextScaleFactor());
     });
 
     test('disposes all its views', () {
-      final view1 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
-      final view2 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
-      final view3 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
+      final EngineFlutterView view1 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
+      final EngineFlutterView view2 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
+      final EngineFlutterView view3 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
 
       dispatcher.viewManager
         ..registerView(view1)
@@ -463,8 +311,8 @@ void testMain() {
     });
 
     test('connects view disposal to metrics changed event', () {
-      final view1 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
-      final view2 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
+      final EngineFlutterView view1 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
+      final EngineFlutterView view2 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
 
       dispatcher.viewManager
         ..registerView(view1)
@@ -473,7 +321,7 @@ void testMain() {
       expect(view1.isDisposed, isFalse);
       expect(view2.isDisposed, isFalse);
 
-      var onMetricsChangedCalled = false;
+      bool onMetricsChangedCalled = false;
       dispatcher.onMetricsChanged = () {
         onMetricsChangedCalled = true;
       };
@@ -488,13 +336,13 @@ void testMain() {
     });
 
     test('disconnects view disposal event on dispose', () {
-      final view1 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
+      final EngineFlutterView view1 = EngineFlutterView(dispatcher, createDomHTMLDivElement());
 
       dispatcher.viewManager.registerView(view1);
 
       expect(view1.isDisposed, isFalse);
 
-      var onMetricsChangedCalled = false;
+      bool onMetricsChangedCalled = false;
       dispatcher.onMetricsChanged = () {
         onMetricsChangedCalled = true;
       };
@@ -506,8 +354,8 @@ void testMain() {
     });
 
     test('invokeOnViewFocusChange calls onViewFocusChange', () {
-      final dispatchedViewFocusEvents = <ui.ViewFocusEvent>[];
-      const viewFocusEvent = ui.ViewFocusEvent(
+      final List<ui.ViewFocusEvent> dispatchedViewFocusEvents = <ui.ViewFocusEvent>[];
+      const ui.ViewFocusEvent viewFocusEvent = ui.ViewFocusEvent(
         viewId: 0,
         state: ui.ViewFocusState.focused,
         direction: ui.ViewFocusDirection.undefined,
@@ -523,7 +371,7 @@ void testMain() {
     test('invokeOnViewFocusChange preserves the zone', () {
       final Zone zone1 = Zone.current.fork();
       final Zone zone2 = Zone.current.fork();
-      const viewFocusEvent = ui.ViewFocusEvent(
+      const ui.ViewFocusEvent viewFocusEvent = ui.ViewFocusEvent(
         viewId: 0,
         state: ui.ViewFocusState.focused,
         direction: ui.ViewFocusDirection.undefined,
@@ -550,20 +398,9 @@ void testMain() {
       expect(dispatcher.accessibilityPlaceholder.isConnected, isFalse);
     });
 
-    test('accessibility placeholder label can be updated', () {
-      final DomElement placeholder = domDocument.querySelector('flt-semantics-placeholder')!;
-
-      const testLabel = 'Test accessibility label';
-      ui_web.accessibilityPlaceholderMessage = testLabel;
-      expect(placeholder.getAttribute('aria-label'), testLabel);
-
-      ui_web.accessibilityPlaceholderMessage = 'Enable accessibility';
-      expect(placeholder.getAttribute('aria-label'), 'Enable accessibility');
-    });
-
     test('scheduleWarmupFrame should call both callbacks', () async {
-      var beginFrameCalled = false;
-      final drawFrameCalled = Completer<void>();
+      bool beginFrameCalled = false;
+      final Completer<void> drawFrameCalled = Completer<void>();
       dispatcher.scheduleWarmUpFrame(
         beginFrame: () {
           expect(drawFrameCalled.isCompleted, false);
@@ -584,40 +421,12 @@ void testMain() {
     group('NavigationTarget', () {
       test('creates with element and nodeId', () {
         final DomElement element = createDomHTMLDivElement();
-        const nodeId = 123;
+        const int nodeId = 123;
 
-        final target = NavigationTarget(element, nodeId);
+        final NavigationTarget target = NavigationTarget(element, nodeId);
 
         expect(target.element, equals(element));
         expect(target.nodeId, equals(nodeId));
-      });
-    });
-
-    group('parseBrowserLanguages', () {
-      test('returns the default locale when no browser languages are present', () {
-        EnginePlatformDispatcher.debugOverrideBrowserLanguages([]);
-        addTearDown(() => EnginePlatformDispatcher.debugOverrideBrowserLanguages(null));
-
-        expect(EnginePlatformDispatcher.parseBrowserLanguages(), const [ui.Locale('en', 'US')]);
-      });
-
-      test('returns locales list parsed from browser languages', () {
-        EnginePlatformDispatcher.debugOverrideBrowserLanguages([
-          'uk-UA',
-          'en',
-          'ar-Arab-SA',
-          'zh-Hant-HK',
-          'de-DE',
-        ]);
-        addTearDown(() => EnginePlatformDispatcher.debugOverrideBrowserLanguages(null));
-
-        expect(EnginePlatformDispatcher.parseBrowserLanguages(), const [
-          ui.Locale('uk', 'UA'),
-          ui.Locale('en'),
-          ui.Locale.fromSubtags(languageCode: 'ar', scriptCode: 'Arab', countryCode: 'SA'),
-          ui.Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'),
-          ui.Locale('de', 'DE'),
-        ]);
       });
     });
 
@@ -667,13 +476,13 @@ void testMain() {
       });
 
       test('handles events from multiple navigation element types', () {
-        final navElements = <DomElement>[
+        final List<DomElement> navElements = <DomElement>[
           createDomHTMLButtonElement()..setAttribute('role', 'button'),
           createDomElement('a')..setAttribute('role', 'link'),
           createDomHTMLDivElement()..setAttribute('role', 'tab'),
         ];
 
-        for (var i = 0; i < navElements.length; i++) {
+        for (int i = 0; i < navElements.length; i++) {
           final DomElement element = navElements[i];
           element.setAttribute('id', '$kFlutterSemanticNodePrefix${100 + i}');
           element.tabIndex = 0;
@@ -681,12 +490,12 @@ void testMain() {
         }
 
         addTearDown(() {
-          for (final element in navElements) {
+          for (final DomElement element in navElements) {
             element.remove();
           }
         });
 
-        for (final element in navElements) {
+        for (final DomElement element in navElements) {
           final DomMouseEvent atEvent = createTestClickEvent();
 
           expect(() => element.dispatchEvent(atEvent), returnsNormally);
@@ -713,7 +522,7 @@ void testMain() {
       test('handles elements with semantics focus action but no tabindex', () {
         semantics().semanticsEnabled = true;
 
-        final tester = SemanticsTester(owner());
+        final SemanticsTester tester = SemanticsTester(owner());
         tester.updateNode(
           id: 0,
           children: <SemanticsNodeUpdate>[
@@ -743,7 +552,7 @@ void testMain() {
       test('prioritizes tabindex over semantics focus action for focus finding', () {
         semantics().semanticsEnabled = true;
 
-        final tester = SemanticsTester(owner());
+        final SemanticsTester tester = SemanticsTester(owner());
         tester.updateNode(
           id: 0,
           children: <SemanticsNodeUpdate>[
@@ -772,7 +581,7 @@ void testMain() {
       test('finds child elements with semantics focus action', () {
         semantics().semanticsEnabled = true;
 
-        final tester = SemanticsTester(owner());
+        final SemanticsTester tester = SemanticsTester(owner());
         tester.updateNode(
           id: 0,
           children: <SemanticsNodeUpdate>[

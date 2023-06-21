@@ -4,8 +4,14 @@
 
 import 'dart:typed_data';
 
-import 'package:ui/src/engine.dart';
+import 'package:ui/src/engine/vector_math.dart';
 import 'package:ui/ui.dart' as ui;
+
+import '../color_filter.dart';
+import '../util.dart';
+import 'canvaskit_api.dart';
+import 'image_filter.dart';
+import 'native_memory.dart';
 
 /// Owns a [SkColorFilter] and manages its lifecycle.
 ///
@@ -40,7 +46,7 @@ class ManagedSkColorFilter {
 }
 
 /// CanvasKit implementation of [ui.ColorFilter].
-abstract class CkColorFilter implements CkManagedSkImageFilterConvertible, LayerImageFilter {
+abstract class CkColorFilter implements CkManagedSkImageFilterConvertible {
   const CkColorFilter();
 
   /// Converts this color filter into an image filter.
@@ -86,18 +92,6 @@ abstract class CkColorFilter implements CkManagedSkImageFilterConvertible, Layer
 
   @override
   Matrix4 get transform => Matrix4.identity();
-
-  @override
-  ui.Rect filterBounds(ui.Rect input) {
-    late ui.Rect result;
-    withSkImageFilter((SkImageFilter filter) {
-      result = rectFromSkIRect(filter.getOutputBounds(toSkRect(input)));
-    }, defaultBlurTileMode: ui.TileMode.decal);
-    return result;
-  }
-
-  @override
-  String get debugShortDescription => toString();
 }
 
 /// A reusable identity transform matrix.
@@ -106,9 +100,9 @@ abstract class CkColorFilter implements CkManagedSkImageFilterConvertible, Layer
 Float32List _identityTransform = _computeIdentityTransform();
 
 Float32List _computeIdentityTransform() {
-  final result = Float32List(20);
-  const translationIndices = <int>[0, 6, 12, 18];
-  for (final i in translationIndices) {
+  final Float32List result = Float32List(20);
+  const List<int> translationIndices = <int>[0, 6, 12, 18];
+  for (final int i in translationIndices) {
     result[i] = 1;
   }
   _identityTransform = result;
@@ -167,9 +161,9 @@ class CkMatrixColorFilter extends CkColorFilter {
   /// See [https://api.flutter.dev/flutter/dart-ui/ColorFilter/ColorFilter.matrix.html].
   Float32List get _normalizedMatrix {
     assert(matrix.length == 20, 'Color Matrix must have 20 entries.');
-    final result = Float32List(20);
-    const translationIndices = <int>[4, 9, 14, 19];
-    for (var i = 0; i < 20; i++) {
+    final Float32List result = Float32List(20);
+    const List<int> translationIndices = <int>[4, 9, 14, 19];
+    for (int i = 0; i < 20; i++) {
       if (translationIndices.contains(i)) {
         result[i] = matrix[i] / 255.0;
       } else {

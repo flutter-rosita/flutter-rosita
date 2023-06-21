@@ -11,6 +11,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'button_style.dart';
@@ -475,7 +476,7 @@ class PopupMenuItemState<T, W extends PopupMenuItem<T>> extends State<W> {
   /// [SemanticsRole.menuItemCheckbox] and include checked state information.
   @protected
   Widget buildSemantics({required Widget child}) {
-    return Semantics(
+    return RositaSemantics(
       role: SemanticsRole.menuItem,
       enabled: widget.enabled,
       button: true,
@@ -762,7 +763,7 @@ class _PopupMenuState<T> extends State<_PopupMenu<T>> {
           const BoxConstraints(minWidth: _kMenuMinWidth, maxWidth: _kMenuMaxWidth),
       child: IntrinsicWidth(
         stepWidth: _kMenuWidthStep,
-        child: Semantics(
+        child: RositaSemantics(
           role: SemanticsRole.menu,
           scopesRoute: true,
           namesRoute: true,

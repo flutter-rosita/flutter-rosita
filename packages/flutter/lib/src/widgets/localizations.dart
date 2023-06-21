@@ -11,6 +11,7 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'app.dart';
 import 'basic.dart';
@@ -730,7 +731,7 @@ class _LocalizationsState extends State<Localizations> {
     if (_locale == null) {
       return const SizedBox.shrink();
     }
-    return Semantics(
+    return RositaSemantics(
       // If this is not application level, we need to explicit mark the
       // semantics subtree with the locale.
       localeForSubtree: widget.isApplicationLevel ? null : widget.locale,

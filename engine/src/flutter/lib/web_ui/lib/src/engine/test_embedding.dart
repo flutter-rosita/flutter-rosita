@@ -15,7 +15,7 @@ const bool _debugLogHistoryActions = false;
 class TestHistoryEntry {
   const TestHistoryEntry(this.state, this.title, this.url);
 
-  final Object? state;
+  final dynamic state;
   final String? title;
   final String url;
 
@@ -45,7 +45,7 @@ class TestUrlStrategy implements ui_web.UrlStrategy {
   String getPath() => currentEntry.url;
 
   @override
-  Object? getState() => currentEntry.state;
+  dynamic getState() => currentEntry.state;
 
   int _currentEntryIndex;
   int get currentEntryIndex => _currentEntryIndex;
@@ -147,7 +147,7 @@ class TestUrlStrategy implements ui_web.UrlStrategy {
   /// like a real browser.
   void _firePopStateEvent() {
     assert(withinAppHistory);
-    for (var i = 0; i < listeners.length; i++) {
+    for (int i = 0; i < listeners.length; i++) {
       listeners[i](currentEntry.state);
     }
 
@@ -161,8 +161,8 @@ class TestUrlStrategy implements ui_web.UrlStrategy {
 
   @override
   String toString() {
-    final lines = <String>[];
-    for (var i = 0; i < history.length; i++) {
+    final List<String> lines = <String>[];
+    for (int i = 0; i < history.length; i++) {
       final TestHistoryEntry entry = history[i];
       lines.add(_currentEntryIndex == i ? '* $entry' : '  $entry');
     }

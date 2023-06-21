@@ -21,7 +21,7 @@ Future<void> testMain() async {
   );
 
   test('empty paragraph', () {
-    const fontSize = 10.0;
+    const double fontSize = 10.0;
     final ui.Paragraph paragraph = ui.ParagraphBuilder(
       ui.ParagraphStyle(fontSize: fontSize),
     ).build();
@@ -34,7 +34,7 @@ Future<void> testMain() async {
 
   test('Basic line related metrics', () {
     const double fontSize = 10;
-    final builder = ui.ParagraphBuilder(
+    final ui.ParagraphBuilder builder = ui.ParagraphBuilder(
       ui.ParagraphStyle(
         fontStyle: ui.FontStyle.normal,
         fontWeight: ui.FontWeight.normal,
@@ -60,8 +60,9 @@ Future<void> testMain() async {
   });
 
   test('respects paragraph height', () {
-    final builder = ui.ParagraphBuilder(ui.ParagraphStyle(fontSize: 10, height: 1.5))
-      ..addText('A' * 10);
+    final ui.ParagraphBuilder builder = ui.ParagraphBuilder(
+      ui.ParagraphStyle(fontSize: 10, height: 1.5),
+    )..addText('A' * 10);
     final ui.Paragraph paragraph = builder.build();
     paragraph.layout(const ui.ParagraphConstraints(width: double.infinity));
 
@@ -73,7 +74,7 @@ Future<void> testMain() async {
 
   test('Basic glyph metrics', () {
     const double fontSize = 10;
-    final builder = ui.ParagraphBuilder(
+    final ui.ParagraphBuilder builder = ui.ParagraphBuilder(
       ui.ParagraphStyle(
         fontStyle: ui.FontStyle.normal,
         fontWeight: ui.FontWeight.normal,
@@ -102,8 +103,8 @@ Future<void> testMain() async {
   });
 
   test('Basic glyph metrics - hit test', () {
-    const fontSize = 10.0;
-    final builder = ui.ParagraphBuilder(
+    const double fontSize = 10.0;
+    final ui.ParagraphBuilder builder = ui.ParagraphBuilder(
       ui.ParagraphStyle(fontSize: fontSize, fontFamily: 'FlutterTest'),
     )..addText('Test\nTest');
     final ui.Paragraph paragraph = builder.build();
@@ -122,10 +123,10 @@ Future<void> testMain() async {
   });
 
   test('rounding hack is always disabled', () {
-    const fontSize = 1.25;
-    const text = '12345';
+    const double fontSize = 1.25;
+    const String text = '12345';
     assert((fontSize * text.length).truncate() != fontSize * text.length);
-    final builder = ui.ParagraphBuilder(
+    final ui.ParagraphBuilder builder = ui.ParagraphBuilder(
       ui.ParagraphStyle(fontSize: fontSize, fontFamily: 'FlutterTest'),
     );
     builder.addText(text);
@@ -150,7 +151,7 @@ Future<void> testMain() async {
     });
 
     test('overrides with flutter test font', () {
-      final builder = ui.ParagraphBuilder(ui.ParagraphStyle());
+      final ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle());
       builder.pushStyle(ui.TextStyle(fontSize: 10.0, fontFamily: 'Roboto'));
       builder.addText('XXXX');
       final ui.Paragraph paragraph = builder.build();
@@ -167,7 +168,7 @@ Future<void> testMain() async {
     });
 
     test('uses flutter test font by default', () {
-      final builder = ui.ParagraphBuilder(ui.ParagraphStyle());
+      final ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle());
       builder.pushStyle(ui.TextStyle(fontSize: 10.0));
       builder.addText('XXXX');
       final ui.Paragraph paragraph = builder.build();
@@ -193,7 +194,7 @@ Future<void> testMain() async {
     });
 
     test('uses specified font', () {
-      final builder = ui.ParagraphBuilder(ui.ParagraphStyle());
+      final ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle());
       builder.pushStyle(ui.TextStyle(fontSize: 16.0, fontFamily: 'Roboto'));
       builder.addText('O');
       final ui.Paragraph paragraph = builder.build();

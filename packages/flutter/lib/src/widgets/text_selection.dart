@@ -13,6 +13,7 @@ import 'package:characters/characters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -1779,7 +1780,7 @@ class SelectionOverlay {
     }
     return TapRegion(
       groupId: SelectableRegion,
-      child: TextFieldTapRegion(child: ExcludeSemantics(child: handle)),
+      child: TextFieldTapRegion(child: RositaExcludeSemantics(child: handle)),
     );
   }
 
@@ -1810,7 +1811,7 @@ class SelectionOverlay {
     }
     return TapRegion(
       groupId: SelectableRegion,
-      child: TextFieldTapRegion(child: ExcludeSemantics(child: handle)),
+      child: TextFieldTapRegion(child: RositaExcludeSemantics(child: handle)),
     );
   }
 

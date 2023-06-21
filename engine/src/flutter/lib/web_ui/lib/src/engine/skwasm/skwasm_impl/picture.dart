@@ -6,10 +6,8 @@ import 'package:ui/src/engine.dart';
 import 'package:ui/src/engine/skwasm/skwasm_impl.dart';
 import 'package:ui/ui.dart' as ui;
 
-class SkwasmPicture extends SkwasmObjectWrapper<RawPicture> implements LayerPicture {
-  SkwasmPicture.fromHandle(PictureHandle handle, {this.isClone = false}) : super(handle, _registry);
-
-  final bool isClone;
+class SkwasmPicture extends SkwasmObjectWrapper<RawPicture> implements ScenePicture {
+  SkwasmPicture.fromHandle(PictureHandle handle) : super(handle, _registry);
 
   static final SkwasmFinalizationRegistry<RawPicture> _registry =
       SkwasmFinalizationRegistry<RawPicture>((PictureHandle handle) => pictureDispose(handle));
@@ -23,17 +21,12 @@ class SkwasmPicture extends SkwasmObjectWrapper<RawPicture> implements LayerPict
   @override
   void dispose() {
     super.dispose();
-    if (!isClone) {
-      ui.Picture.onDispose?.call(this);
-    }
+    ui.Picture.onDispose?.call(this);
   }
 
   @override
-  ui.Image toImageSync(
-    int width,
-    int height, {
-    ui.TargetPixelFormat targetFormat = ui.TargetPixelFormat.dontCare,
-  }) => SkwasmImage(imageCreateFromPicture(handle, width, height));
+  ui.Image toImageSync(int width, int height) =>
+      SkwasmImage(imageCreateFromPicture(handle, width, height));
 
   @override
   ui.Rect get cullRect {
@@ -43,24 +36,10 @@ class SkwasmPicture extends SkwasmObjectWrapper<RawPicture> implements LayerPict
       return s.convertRectFromNative(rect);
     });
   }
-
-  @override
-  LayerPicture clone() {
-    pictureRef(handle);
-    return SkwasmPicture.fromHandle(handle, isClone: true);
-  }
-
-  @override
-  String toString() {
-    return 'SkwasmPicture(${handle.address})';
-  }
-
-  @override
-  bool get isDisposed => debugDisposed;
 }
 
 class SkwasmPictureRecorder extends SkwasmObjectWrapper<RawPictureRecorder>
-    implements LayerPictureRecorder {
+    implements ScenePictureRecorder {
   SkwasmPictureRecorder() : super(pictureRecorderCreate(), _registry);
 
   static final SkwasmFinalizationRegistry<RawPictureRecorder> _registry =
@@ -72,7 +51,7 @@ class SkwasmPictureRecorder extends SkwasmObjectWrapper<RawPictureRecorder>
   SkwasmPicture endRecording() {
     isRecording = false;
 
-    final picture = SkwasmPicture.fromHandle(pictureRecorderEndRecording(handle));
+    final SkwasmPicture picture = SkwasmPicture.fromHandle(pictureRecorderEndRecording(handle));
     ui.Picture.onCreate?.call(picture);
     dispose();
     return picture;

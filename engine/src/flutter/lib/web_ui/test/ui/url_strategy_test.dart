@@ -33,7 +33,7 @@ Future<void> testMain() async {
   });
 
   test('can set a custom URL strategy', () {
-    final customUrlStrategy = TestUrlStrategy();
+    final TestUrlStrategy customUrlStrategy = TestUrlStrategy();
     ui_web.urlStrategy = customUrlStrategy;
 
     expect(ui_web.urlStrategy, customUrlStrategy);
