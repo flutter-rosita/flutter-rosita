@@ -14,6 +14,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -989,8 +990,8 @@ class _AppBarState extends State<AppBar> {
     Widget? title = widget.title;
     if (title != null) {
       title = _AppBarTitleBox(child: title);
-      if (!widget.excludeHeaderSemantics) {
-        title = Semantics(
+      if (rositaEnableSemantics && !widget.excludeHeaderSemantics) {
+        title = RositaSemantics(
           namesRoute: switch (theme.platform) {
             TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.linux || TargetPlatform.windows => true,
             TargetPlatform.iOS || TargetPlatform.macOS => null,
@@ -1120,12 +1121,12 @@ class _AppBarState extends State<AppBar> {
       appBar = Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
-          Semantics(
+          RositaSemantics(
             sortKey: const OrdinalSortKey(1.0),
             explicitChildNodes: true,
             child: widget.flexibleSpace,
           ),
-          Semantics(
+          RositaSemantics(
             sortKey: const OrdinalSortKey(0.0),
             explicitChildNodes: true,
             // Creates a material widget to prevent the flexibleSpace from
@@ -1149,7 +1150,7 @@ class _AppBarState extends State<AppBar> {
         theme.useMaterial3 ? const Color(0x00000000) : null,
       );
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: overlayStyle,
@@ -1169,7 +1170,7 @@ class _AppBarState extends State<AppBar> {
             // `scrolledUnderElevation`.
             ?? (theme.useMaterial3 ? theme.colorScheme.surfaceTint : null),
           shape: widget.shape ?? appBarTheme.shape ?? defaults.shape,
-          child: Semantics(
+          child: RositaSemantics(
             explicitChildNodes: true,
             child: appBar,
           ),
@@ -1311,7 +1312,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         title: effectiveTitle,
         actions: actions,
         flexibleSpace: (title == null && flexibleSpace != null && !excludeHeaderSemantics)
-          ? Semantics(
+          ? RositaSemantics(
               header: true,
               child: flexibleSpace,
             )

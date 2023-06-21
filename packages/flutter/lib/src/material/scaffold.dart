@@ -21,6 +21,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'app_bar.dart';
@@ -3279,7 +3280,7 @@ class _StandardBottomSheetState extends State<_StandardBottomSheet> {
           child: child,
         );
       },
-      child: Semantics(
+      child: RositaSemantics(
         container: true,
         onDismiss: !widget.isPersistent ? close : null,
         child:  NotificationListener<DraggableScrollableNotification>(

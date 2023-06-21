@@ -7,6 +7,7 @@ library;
 
 import 'dart:math' as math;
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -184,7 +185,7 @@ class _ExpandIconState extends State<ExpandIcon> with SingleTickerProviderStateM
     final MaterialLocalizations localizations = MaterialLocalizations.of(context);
     final String onTapHint = widget.isExpanded ? localizations.expandedIconTapHint : localizations.collapsedIconTapHint;
 
-    return Semantics(
+    return RositaSemantics(
       onTapHint: widget.onPressed == null ? null : onTapHint,
       child: IconButton(
         padding: widget.padding,

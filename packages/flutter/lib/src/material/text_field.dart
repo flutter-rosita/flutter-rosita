@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'adaptive_text_selection_toolbar.dart';
@@ -1025,7 +1026,7 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
       );
       // If buildCounter returns null, don't add a counter widget to the field.
       if (builtCounter != null) {
-        counter = Semantics(
+        counter = RositaSemantics(
           container: true,
           liveRegion: isFocused,
           child: builtCounter,
@@ -1445,7 +1446,7 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
         };
     }
 
-    Widget child = RepaintBoundary(
+    Widget child = RositaRepaintBoundary(
       child: UnmanagedRestorationScope(
         bucket: bucket,
         child: EditableText(
@@ -1561,7 +1562,7 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
           child: AnimatedBuilder(
             animation: controller, // changes the _currentLength
             builder: (BuildContext context, Widget? child) {
-              return Semantics(
+              return RositaSemantics(
                 enabled: _isEnabled,
                 maxValueLength: semanticsMaxValueLength,
                 currentValueLength: _currentLength,

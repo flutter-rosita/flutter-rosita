@@ -7,6 +7,7 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -399,7 +400,7 @@ class _CupertinoButtonState extends State<CupertinoButton> with SingleTickerProv
           onTapCancel: enabled ? _handleTapCancel : null,
           onTap: widget.onPressed,
           onLongPress: widget.onLongPress,
-          child: Semantics(
+          child: RositaSemantics(
             button: true,
             child: ConstrainedBox(
               constraints: BoxConstraints(

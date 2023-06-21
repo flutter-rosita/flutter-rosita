@@ -8,6 +8,7 @@
 library;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'framework.dart';
 import 'scroll_delegate.dart';
@@ -174,7 +175,9 @@ class _SliverPrototypeExtentListElement extends SliverMultiBoxAdaptorElement {
   _SliverPrototypeExtentListElement(SliverPrototypeExtentList super.widget);
 
   @override
-  _RenderSliverPrototypeExtentList get renderObject => super.renderObject as _RenderSliverPrototypeExtentList;
+  _RenderSliverPrototypeExtentList get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as _RenderSliverPrototypeExtentList;
 
   Element? _prototype;
   static final Object _prototypeSlot = Object();

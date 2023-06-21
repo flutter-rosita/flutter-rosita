@@ -15,6 +15,7 @@
 library;
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -266,7 +267,7 @@ class Drawer extends StatelessWidget {
     final ShapeBorder? effectiveShape = shape ?? (isDrawerStart
       ? (drawerTheme.shape ?? defaults.shape)
       : (drawerTheme.endShape ?? defaults.endShape));
-    return Semantics(
+    return RositaSemantics(
       scopesRoute: true,
       namesRoute: true,
       explicitChildNodes: true,
@@ -703,16 +704,16 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
 
       final Widget child = _DrawerControllerScope(
         controller: widget,
-        child: RepaintBoundary(
+        child: RositaRepaintBoundary(
           child: Stack(
             children: <Widget>[
-              BlockSemantics(
-                child: ExcludeSemantics(
+              RositaBlockSemantics(
+                child: RositaExcludeSemantics(
                   // On Android, the back button is used to dismiss a modal.
                   excluding: platformHasBackButton,
                   child: GestureDetector(
                     onTap: close,
-                    child: Semantics(
+                    child: RositaSemantics(
                       label: MaterialLocalizations.of(context).modalBarrierDismissLabel,
                       child: drawerScrim,
                     ),
@@ -724,7 +725,7 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
                 child: Align(
                   alignment: _drawerInnerAlignment,
                   widthFactor: _controller.value,
-                  child: RepaintBoundary(
+                  child: RositaRepaintBoundary(
                     child: FocusScope(
                       key: _drawerKey,
                       node: _focusScopeNode,

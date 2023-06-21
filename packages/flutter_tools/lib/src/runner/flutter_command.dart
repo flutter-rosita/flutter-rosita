@@ -721,6 +721,7 @@ abstract class FlutterCommand extends Command<void> {
     argParser.addOption(
       hide: true,
       FlutterOptions.kWebRendererFlag,
+      defaultsTo: WebRendererMode.html.name,
       allowed: WebRendererMode.values.map((WebRendererMode e) => e.name),
       help: 'This option is deprecated and will be removed in a future Flutter '
             'release.\n'
@@ -1350,6 +1351,8 @@ abstract class FlutterCommand extends Command<void> {
       }
       dartDefines.add('FLUTTER_APP_FLAVOR=$flavor');
     }
+
+    dartDefines.add('ROSITA=true');
 
     return BuildInfo(buildMode,
       flavor,
