@@ -6,6 +6,7 @@ import 'dart:ui' as ui show SemanticsUpdate;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -493,7 +494,7 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   void drawFrame() {
     pipelineOwner.flushLayout();
     pipelineOwner.flushCompositingBits();
-    pipelineOwner.flushPaint();
+    rositaSkipCallback(() => pipelineOwner.flushPaint());
     if (sendFramesToEngine) {
       renderView.compositeFrame(); // this sends the bits to the GPU
       pipelineOwner.flushSemantics(); // this also sends the semantics to the OS.

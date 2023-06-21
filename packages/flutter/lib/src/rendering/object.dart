@@ -9,6 +9,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 
@@ -1569,7 +1570,7 @@ const String _flutterRenderingLibrary = 'package:flutter/rendering.dart';
 /// [RenderObject.markNeedsLayout] so that if a parent has queried the intrinsic
 /// or baseline information, it gets marked dirty whenever the child's geometry
 /// changes.
-abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarget {
+abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin implements HitTestTarget {
   /// Initializes internal fields for subclasses.
   RenderObject() {
     if (kFlutterMemoryAllocationsEnabled) {
@@ -2511,6 +2512,12 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     if (!kReleaseMode && debugProfileLayoutsEnabled) {
       FlutterTimeline.finishSync();
     }
+
+    RendererBinding.instance.addPostFrameCallback((_) {
+      if (hasHtmlElement) {
+        rositaLayout();
+      }
+    });
   }
 
   /// If a subclass has a "size" (the state controlled by `parentUsesSize`,

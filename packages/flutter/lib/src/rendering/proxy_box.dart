@@ -7,6 +7,7 @@ import 'dart:ui' as ui show Color, Gradient, Image, ImageFilter;
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
@@ -1914,7 +1915,7 @@ final Paint _transparentPaint = Paint()..color = const Color(0x00000000);
 /// rectangle.
 ///
 /// A physical model layer casts a shadow based on its [elevation].
-class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> {
+class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> with RositaRenderPhysicalModelMixin {
   /// Creates a rounded-rectangular clip.
   ///
   /// The [color] is required.
@@ -2074,7 +2075,7 @@ class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> {
 ///
 ///  * [RenderPhysicalModel], which is optimized for rounded rectangles and
 ///    circles.
-class RenderPhysicalShape extends _RenderPhysicalModelBase<Path> {
+class RenderPhysicalShape extends _RenderPhysicalModelBase<Path> with RositaRenderPhysicalShapeMixin{
   /// Creates an arbitrary shape clip.
   ///
   /// The [color] and [clipper] parameters are required.
@@ -2326,7 +2327,7 @@ class RenderDecoratedBox extends RenderProxyBox {
 }
 
 /// Applies a transformation before painting its child.
-class RenderTransform extends RenderProxyBox {
+class RenderTransform extends RenderProxyBox with RositaRenderTransform {
   /// Creates a render object that transforms its child.
   ///
   /// The [transform] argument must not be null.
@@ -4106,7 +4107,7 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
 }
 
 /// Add annotations to the [SemanticsNode] for this subtree.
-class RenderSemanticsAnnotations extends RenderProxyBox {
+class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that attaches a semantic annotation.
   ///
   /// The [container] argument must not be null.

@@ -7,6 +7,7 @@ import 'dart:ui' as ui show lerpDouble;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 
 import 'package:vector_math/vector_math_64.dart';
 
@@ -1359,7 +1360,7 @@ class _IntrinsicDimensionsCacheEntry {
 /// implementation that offsets the child's baseline information by the position
 /// of the child relative to the parent. If you do not inherited from either of
 /// these classes, however, you must implement the algorithm yourself.
-abstract class RenderBox extends RenderObject {
+abstract class RenderBox extends RenderObject with RositaRenderBoxMixin {
   @override
   void setupParentData(covariant RenderObject child) {
     if (child.parentData is! BoxParentData) {
