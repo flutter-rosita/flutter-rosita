@@ -276,7 +276,7 @@ class FlutterDebugAdapter extends FlutterBaseDebugAdapter with VmServiceInfoFile
         fileSystem.path.join(
           Cache.flutterRoot!,
           'bin',
-          platform.isWindows ? 'flutter.bat' : 'flutter',
+          platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita',
         );
     final int? removeArgs = customToolReplacesArgs;
     if (customTool != null && removeArgs != null) {

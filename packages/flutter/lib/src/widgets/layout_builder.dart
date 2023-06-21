@@ -10,6 +10,7 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:rosita/rosita.dart';
 
 import 'debug.dart';
 import 'framework.dart';
@@ -106,7 +107,7 @@ abstract class ConstrainedLayoutBuilder<ConstraintType extends Constraints>
   final Widget Function(BuildContext context, ConstraintType constraints) builder;
 }
 
-class _LayoutBuilderElement<LayoutInfoType> extends RenderObjectElement {
+class _LayoutBuilderElement<LayoutInfoType> extends RenderObjectElement with RositaSingleChildElementMixin {
   _LayoutBuilderElement(AbstractLayoutBuilder<LayoutInfoType> super.widget);
 
   @override
@@ -114,6 +115,9 @@ class _LayoutBuilderElement<LayoutInfoType> extends RenderObjectElement {
       super.renderObject as RenderAbstractLayoutBuilderMixin<LayoutInfoType, RenderObject>;
 
   Element? _child;
+
+  @override
+  Element? get rositaChild => _child;
 
   @override
   BuildScope get buildScope => _buildScope;

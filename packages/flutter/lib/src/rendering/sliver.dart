@@ -17,6 +17,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 
 import 'box.dart';
 import 'debug.dart';
@@ -1135,7 +1136,9 @@ class SliverPhysicalParentData extends ParentData {
   /// [SliverPhysicalParentData].
   void applyPaintTransform(Matrix4 transform) {
     // Hit test logic relies on this always providing an invertible matrix.
-    transform.translate(paintOffset.dx, paintOffset.dy);
+    if (paintOffset != Offset.zero) {
+      transform.translate(paintOffset.dx, paintOffset.dy);
+    }
   }
 
   @override
@@ -1306,7 +1309,7 @@ List<DiagnosticsNode> _debugCompareFloats(
 /// If the subclass positions children in the cross-axis at a position other
 /// than zero, then it should override [childCrossAxisPosition]. For example
 /// [RenderSliverGrid] overrides this method.
-abstract class RenderSliver extends RenderObject {
+abstract class RenderSliver extends RenderObject with RositaRenderSliverMixin {
   /// Whether this sliver should be included in the semantics tree.
   ///
   /// This value is used by [RenderViewportBase] to ensure a sliver is
@@ -1913,12 +1916,16 @@ mixin RenderSliverHelpers implements RenderSliver {
         if (!rightWayUp) {
           delta = geometry!.paintExtent - child.size.width - delta;
         }
-        transform.translate(delta, crossAxisDelta);
+        if (delta != 0 || crossAxisDelta != 0) {
+          transform.translate(delta, crossAxisDelta);
+        }
       case Axis.vertical:
         if (!rightWayUp) {
           delta = geometry!.paintExtent - child.size.height - delta;
         }
-        transform.translate(crossAxisDelta, delta);
+        if (crossAxisDelta != 0 || delta != 0) {
+          transform.translate(crossAxisDelta, delta);
+        }
     }
   }
 }

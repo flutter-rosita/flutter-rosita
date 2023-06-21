@@ -13,6 +13,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart' show CupertinoDialogAction;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide Flow;
 
@@ -1424,7 +1425,7 @@ class _MasterDetailFlowState extends State<_MasterDetailFlow> implements _PageOp
   MaterialPageRoute<void> _masterPageRoute(BuildContext context) {
     return MaterialPageRoute<dynamic>(
       builder: (BuildContext c) {
-        return BlockSemantics(
+        return RositaBlockSemantics(
           child: _MasterPage(
             leading:
                 Navigator.of(context).canPop()
@@ -1450,7 +1451,7 @@ class _MasterDetailFlowState extends State<_MasterDetailFlow> implements _PageOp
             // No need for setState() as rebuild happens on navigation pop.
             focus = _Focus.master;
           },
-          child: BlockSemantics(child: widget.detailPageBuilder(context, arguments, null)),
+          child: RositaBlockSemantics(child: widget.detailPageBuilder(context, arguments, null)),
         );
       },
     );

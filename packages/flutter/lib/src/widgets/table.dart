@@ -10,6 +10,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'debug.dart';
@@ -281,7 +282,9 @@ class _TableElement extends RenderObjectElement {
   _TableElement(Table super.widget);
 
   @override
-  RenderTable get renderObject => super.renderObject as RenderTable;
+  RenderTable get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as RenderTable;
 
   List<_TableElementRow> _children = const <_TableElementRow>[];
 

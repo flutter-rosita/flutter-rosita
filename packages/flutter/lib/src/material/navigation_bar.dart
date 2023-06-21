@@ -11,6 +11,7 @@ library;
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -929,14 +930,14 @@ class _NavigationBarDestinationLayout extends StatelessWidget {
           children: <Widget>[
             LayoutId(
               id: _NavigationDestinationLayoutDelegate.iconId,
-              child: RepaintBoundary(key: iconKey, child: icon),
+              child: RositaRepaintBoundary(key: iconKey, child: icon),
             ),
             LayoutId(
               id: _NavigationDestinationLayoutDelegate.labelId,
               child: FadeTransition(
                 alwaysIncludeSemantics: true,
                 opacity: animation,
-                child: RepaintBoundary(key: _labelKey, child: label),
+                child: RositaRepaintBoundary(key: _labelKey, child: label),
               ),
             ),
           ],
@@ -1014,7 +1015,7 @@ class _NavigationBarDestinationSemantics extends StatelessWidget {
     return _StatusTransitionWidgetBuilder(
       animation: destinationInfo.selectedAnimation,
       builder: (BuildContext context, Widget? child) {
-        return Semantics(enabled: enabled, button: true, child: child);
+        return RositaSemantics(enabled: enabled, button: true, child: child);
       },
       child:
           kIsWeb
@@ -1023,7 +1024,7 @@ class _NavigationBarDestinationSemantics extends StatelessWidget {
                 alignment: Alignment.center,
                 children: <Widget>[
                   child,
-                  Semantics(
+                  RositaSemantics(
                     label: localizations.tabLabel(
                       tabIndex: destinationInfo.index + 1,
                       tabCount: destinationInfo.totalNumberOfDestinations,

@@ -13,6 +13,7 @@ import 'package:characters/characters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -1626,7 +1627,7 @@ class SelectionOverlay {
         dragStartBehavior: dragStartBehavior,
       );
     }
-    return TextFieldTapRegion(child: ExcludeSemantics(child: handle));
+    return TextFieldTapRegion(child: RositaExcludeSemantics(child: handle));
   }
 
   Widget _buildEndHandle(BuildContext context) {
@@ -1654,7 +1655,7 @@ class SelectionOverlay {
         dragStartBehavior: dragStartBehavior,
       );
     }
-    return TextFieldTapRegion(child: ExcludeSemantics(child: handle));
+    return TextFieldTapRegion(child: RositaExcludeSemantics(child: handle));
   }
 
   // Build the toolbar via TextSelectionControls.

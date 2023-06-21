@@ -19,6 +19,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 
@@ -117,7 +118,9 @@ class PaintingContext extends ClipContext {
   ///  * [RenderObject.isRepaintBoundary], which determines if a [RenderObject]
   ///    has a composited layer.
   static void repaintCompositedChild(RenderObject child, {bool debugAlsoPaintedParent = false}) {
-    assert(child._needsPaint);
+    rositaSkipCallback(() {
+      assert(child._needsPaint);
+    });
     _repaintCompositedChild(child, debugAlsoPaintedParent: debugAlsoPaintedParent);
   }
 
@@ -243,6 +246,10 @@ class PaintingContext extends ClipContext {
   /// into the layer subtree associated with this painting context. Otherwise,
   /// the child will be painted into the current PictureLayer for this context.
   void paintChild(RenderObject child, Offset offset) {
+    if (child.hasHtmlElement) {
+      return;
+    }
+
     assert(() {
       debugOnProfilePaint?.call(child);
       return true;
@@ -1002,7 +1009,7 @@ class _LocalSemanticsHandle implements SemanticsHandle {
 /// without tying it to a specific binding implementation. All [PipelineOwner]s
 /// in a given tree must be attached to the same [PipelineManifold]. This
 /// happens automatically during [adoptChild].
-base class PipelineOwner with DiagnosticableTreeMixin {
+base class PipelineOwner with DiagnosticableTreeMixin, RositaPipelineOwnerMixin {
   /// Creates a pipeline owner.
   ///
   /// Typically created by the binding (e.g., [RendererBinding]), but can be
@@ -1536,6 +1543,9 @@ base class PipelineOwner with DiagnosticableTreeMixin {
   final Set<PipelineOwner> _children = <PipelineOwner>{};
   PipelineManifold? _manifold;
 
+  @override
+  Set<PipelineOwner> get rositaChildren => _children;
+
   PipelineOwner? _debugParent;
   bool _debugSetParent(PipelineOwner child, PipelineOwner? parent) {
     child._debugParent = parent;
@@ -1847,7 +1857,7 @@ abstract class PipelineManifold implements Listenable {
 /// [RenderObject.markNeedsLayout] so that if a parent has queried the intrinsic
 /// or baseline information, it gets marked dirty whenever the child's geometry
 /// changes.
-abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarget {
+abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin implements HitTestTarget {
   /// Initializes internal fields for subclasses.
   RenderObject() {
     assert(debugMaybeDispatchCreated('rendering', 'RenderObject', this));
@@ -1874,7 +1884,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     markNeedsLayout();
     markNeedsCompositingBitsUpdate();
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
     visitChildren((RenderObject child) {
       child.reassemble();
     });
@@ -2031,7 +2043,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     setupParentData(child);
     markNeedsLayout();
     markNeedsCompositingBitsUpdate();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
     child._parent = this;
     if (attached) {
       child.attach(_owner!);
@@ -2058,7 +2072,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     }
     markNeedsLayout();
     markNeedsCompositingBitsUpdate();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Calls visitor for each immediate child of this render object.
@@ -2350,12 +2366,19 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     if (_needsPaint && _layerHandle.layer != null) {
       // Don't enter this block if we've never painted at all;
       // scheduleInitialPaint() will handle it
-      _needsPaint = false;
-      markNeedsPaint();
+      if (rositaEnableLayoutMarkNeedsPaint) {
+        _needsPaint = false;
+        markNeedsPaint();
+      }
     }
-    if (_semantics.configProvider.effective.isSemanticBoundary &&
-        (_semantics.parentDataDirty || !_semantics.built)) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (_semantics.configProvider.effective.isSemanticBoundary &&
+          (_semantics.parentDataDirty || !_semantics.built)) {
+        markNeedsSemanticsUpdate();
+      }
+    }
+    if (kIsRosita) {
+      rositaAttachToRenderObject();
     }
   }
 
@@ -2369,6 +2392,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
   /// as in `super.detach()`.
   @mustCallSuper
   void detach() {
+    if (kIsRosita) {
+      rositaDetachFromRenderObject();
+    }
     assert(_owner != null);
     _owner = null;
     assert(parent == null || attached == parent!.attached);
@@ -2653,7 +2679,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     }());
     try {
       performLayout();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     } catch (e, stack) {
       _reportException('performLayout', e, stack);
     }
@@ -2664,7 +2692,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
       return true;
     }());
     _needsLayout = false;
-    markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      markNeedsPaint();
+    }
   }
 
   /// Compute the layout for this render object.
@@ -2766,6 +2796,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
         _setRelayoutBoundary(relayoutBoundary);
       }
 
+      if (kIsRosita) {
+        rositaMarkNeedsLayout();
+      }
       if (!kReleaseMode && debugProfileLayoutsEnabled) {
         FlutterTimeline.finishSync();
       }
@@ -2820,7 +2853,12 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     }());
     try {
       performLayout();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
+      if (kIsRosita) {
+        rositaMarkNeedsLayout();
+      }
       assert(() {
         debugAssertDoesMeetConstraints();
         return true;
@@ -2835,7 +2873,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
       return true;
     }());
     _needsLayout = false;
-    markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      markNeedsPaint();
+    }
 
     if (!kReleaseMode && debugProfileLayoutsEnabled) {
       FlutterTimeline.finishSync();
@@ -3107,6 +3147,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
   /// it cannot be the case that _only_ the compositing bits changed,
   /// something else will have scheduled a frame for us.
   void markNeedsCompositingBitsUpdate() {
+    if (rositaDisableUpdateCompositingBits) {
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     if (_needsCompositingBitsUpdate) {
       return;
@@ -3239,6 +3282,17 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
   ///    layer, thus limiting the number of nodes that [markNeedsPaint] must mark
   ///    dirty.
   void markNeedsPaint() {
+    if (kIsRosita) {
+      rositaMarkNeedsPaint();
+
+      if (isRepaintBoundary && _wasRepaintBoundary) {
+        if (owner != null) {
+          owner!.requestVisualUpdate();
+        }
+      }
+
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
     if (_needsPaint) {
@@ -3299,6 +3353,10 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
   ///  * [RenderOpacity], which uses this method when its opacity is updated to
   ///    update the layer opacity without repainting children.
   void markNeedsCompositedLayerUpdate() {
+    if (kIsRosita) {
+      rositaMarkNeedsPaint();
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
     if (_needsCompositedLayerUpdate || _needsPaint) {
@@ -3355,6 +3413,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
   ///
   /// See [RenderView] for an example of how this function is used.
   void scheduleInitialPaint(ContainerLayer rootLayer) {
+    if (kIsRosita) {
+      return; // [ROSITA] BREAK
+    }
     assert(rootLayer.attached);
     assert(attached);
     assert(parent == null);
@@ -3378,8 +3439,10 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     assert(parent == null);
     assert(!owner!._debugDoingPaint);
     assert(isRepaintBoundary);
-    assert(_layerHandle.layer != null); // use scheduleInitialPaint the first time
-    _layerHandle.layer!.detach();
+    if (!kIsRosita) {
+      assert(_layerHandle.layer != null); // use scheduleInitialPaint the first time
+      _layerHandle.layer!.detach();
+    }
     _layerHandle.layer = rootLayer;
     markNeedsPaint();
   }
@@ -3821,6 +3884,9 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
   /// [RenderObject] as annotated by [describeSemanticsConfiguration] changes in
   /// any way to update the semantics tree.
   void markNeedsSemanticsUpdate() {
+    if (rositaDisableSemantics) {
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     assert(!attached || !owner!._debugDoingSemantics);
     if (!attached || owner!._semanticsOwner == null) {
@@ -3994,20 +4060,23 @@ abstract class RenderObject with DiagnosticableTreeMixin implements HitTestTarge
     properties.add(
       DiagnosticsProperty<SemanticsNode>('semantics node', debugSemantics, defaultValue: null),
     );
-    properties.add(
-      FlagProperty(
-        'isBlockingSemanticsOfPreviouslyPaintedNodes',
-        value: _semantics.configProvider.effective.isBlockingSemanticsOfPreviouslyPaintedNodes,
-        ifTrue: 'blocks semantics of earlier render objects below the common boundary',
-      ),
-    );
-    properties.add(
-      FlagProperty(
-        'isSemanticBoundary',
-        value: _semantics.configProvider.effective.isSemanticBoundary,
-        ifTrue: 'semantic boundary',
-      ),
-    );
+
+    if (rositaEnableSemantics) {
+      properties.add(
+        FlagProperty(
+          'isBlockingSemanticsOfPreviouslyPaintedNodes',
+          value: _semantics.configProvider.effective.isBlockingSemanticsOfPreviouslyPaintedNodes,
+          ifTrue: 'blocks semantics of earlier render objects below the common boundary',
+        ),
+      );
+      properties.add(
+        FlagProperty(
+          'isSemanticBoundary',
+          value: _semantics.configProvider.effective.isSemanticBoundary,
+          ifTrue: 'semantic boundary',
+        ),
+      );
+    }
   }
 
   @override
