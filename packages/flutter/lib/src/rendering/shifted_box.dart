@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'box.dart';
 import 'debug.dart';
@@ -804,7 +805,9 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

@@ -7,6 +7,7 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -707,7 +708,7 @@ class _RenderDecorationLayout {
 }
 
 // The workhorse: layout and paint a _Decorator widget's _Decoration.
-class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin<_DecorationSlot, RenderBox> {
+class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin<_DecorationSlot, RenderBox>, RositaCanvasMixin, RositaPaintRenderObjectMixin {
   _RenderDecoration({
     required _Decoration decoration,
     required TextDirection textDirection,
@@ -822,7 +823,9 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
       return;
     }
     _isFocused = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   bool get expands => _expands;
@@ -1539,6 +1542,8 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
     size = constraints.constrain(Size(overallWidth, overallHeight));
     assert(size.width == constraints.constrainWidth(overallWidth));
     assert(size.height == constraints.constrainHeight(overallHeight));
+
+    rositaMarkNeedsPaint();
   }
 
   void _paintLabel(PaintingContext context, Offset offset) {
@@ -1594,13 +1599,31 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
       _labelTransform = Matrix4.identity()
         ..translate(dx, labelOffset.dy + dy)
         ..scale(scale);
-      layer = context.pushTransform(
-        needsCompositing,
-        offset,
-        _labelTransform!,
-        _paintLabel,
-        oldLayer: layer as TransformLayer?,
-      );
+
+      if (kIsRosita) {
+        final RenderBox labelElement = label!;
+        // ignore: always_specify_types
+        final labelHtmlElement = labelElement.hasHtmlElement
+            ? labelElement.htmlElement
+            : labelElement.findFirstChildWithHtmlElement()?.htmlElement;
+
+        if (labelHtmlElement != null) {
+          final double offsetDx = (labelWidth - lerpDouble(labelWidth, floatWidth, t)!) / 2;
+          // ignore: always_specify_types
+          final style = labelHtmlElement.style;
+          style.transform = 'scale($scale)';
+          style.marginTop = '${dy}px';
+          style.marginLeft = '${dx - offsetDx}px';
+        }
+      } else {
+        layer = context.pushTransform(
+          needsCompositing,
+          offset,
+          _labelTransform!,
+          _paintLabel,
+          oldLayer: layer as TransformLayer?,
+        );
+      }
     } else {
       layer = null;
     }
@@ -1641,11 +1664,15 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
 
   @override
   void applyPaintTransform(RenderObject child, Matrix4 transform) {
-    if (child == label && _labelTransform != null) {
+    final labelTransform = _labelTransform;
+    if (child == label && labelTransform != null) {
       final Offset labelOffset = _boxParentData(label!).offset;
-      transform
-        ..multiply(_labelTransform!)
-        ..translate(-labelOffset.dx, -labelOffset.dy);
+      if(!labelTransform.isIdentity()) {
+        transform.multiply(labelTransform);
+      }
+      if (labelOffset != Offset.zero) {
+        transform.translate(-labelOffset.dx, -labelOffset.dy);
+      }
     }
     super.applyPaintTransform(child, transform);
   }

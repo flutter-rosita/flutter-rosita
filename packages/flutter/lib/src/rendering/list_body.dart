@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'object.dart';

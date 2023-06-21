@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'adaptive_text_selection_toolbar.dart';
@@ -1454,7 +1455,7 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
         };
     }
 
-    Widget child = RepaintBoundary(
+    Widget child = RositaRepaintBoundary(
       child: UnmanagedRestorationScope(
         bucket: bucket,
         child: EditableText(

@@ -9,6 +9,7 @@ import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle, LineMetrics, Placehol
 import 'package:characters/characters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
@@ -263,7 +264,7 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
 /// Keyboard handling, IME handling, scrolling, toggling the [showCursor] value
 /// to actually blink the cursor, and other features not mentioned above are the
 /// responsibility of higher layers and not handled by this object.
-class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults implements TextLayoutMetrics {
+class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RositaCanvasMixin, RositaPaintRenderObjectMixin implements TextLayoutMetrics {
   /// Creates a render object that implements the visual aspects of a text field.
   ///
   /// The [textAlign] argument defaults to [TextAlign.start].
@@ -594,7 +595,14 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     }
     _obscureText = value;
     _cachedAttributedValue = null;
-    markNeedsSemanticsUpdate();
+
+    if (kIsRosita) {
+      rositaMarkNeedsPaint();
+    }
+
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Controls how tall the selection highlight boxes are computed to be.
@@ -807,7 +815,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _cachedCombinedSemanticsInfos = null;
     _canComputeIntrinsicsCached = null;
     markNeedsTextLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// How the text should be aligned horizontally.
@@ -841,7 +851,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     }
     _textPainter.textDirection = value;
     markNeedsTextLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Used by this renderer's internal [TextPainter] to select a locale-specific
@@ -926,7 +938,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
       return;
     }
     _hasFocus = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether this rendering object will take a full line regardless the text width.
@@ -948,7 +962,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
       return;
     }
     _readOnly = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The maximum number of lines for the text to span, wrapping if necessary.
@@ -1055,7 +1071,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _selection = value;
     _selectionPainter.highlightedRange = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The offset at which the text should be painted.
@@ -1207,7 +1225,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     }
     _enableInteractiveSelection = value;
     markNeedsTextLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether interactive selection are enabled based on the values of
@@ -1275,7 +1295,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -2631,7 +2653,7 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   }
 }
 
-class _RenderEditableCustomPaint extends RenderBox {
+class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, RositaPaintRenderObjectMixin {
   _RenderEditableCustomPaint({
     RenderEditablePainter? painter,
   }) : _painter = painter,

@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -326,7 +327,9 @@ class _RenderOverflowBar extends RenderBox
     }
     _clipBehavior = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

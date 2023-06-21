@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'theme.dart';
@@ -365,7 +366,9 @@ class _RenderCupertinoSlider extends RenderConstrainedBox implements MouseTracke
     } else {
       _position.value = newValue;
     }
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   int? get divisions => _divisions;
@@ -414,10 +417,12 @@ class _RenderCupertinoSlider extends RenderConstrainedBox implements MouseTracke
     if (value == _onChanged) {
       return;
     }
-    final bool wasInteractive = isInteractive;
     _onChanged = value;
-    if (wasInteractive != isInteractive) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      final bool wasInteractive = isInteractive;
+      if (wasInteractive != isInteractive) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

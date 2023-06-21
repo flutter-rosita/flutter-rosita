@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'box.dart';
@@ -143,8 +144,11 @@ class RenderRotatedBox extends RenderBox with RenderObjectWithChildMixin<RenderB
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    if (_paintTransform != null) {
-      transform.multiply(_paintTransform!);
+    final paintTransform = _paintTransform;
+    if (paintTransform != null) {
+      if(!paintTransform.isIdentity()) {
+        transform.multiply(paintTransform);
+      }
     }
     super.applyPaintTransform(child, transform);
   }

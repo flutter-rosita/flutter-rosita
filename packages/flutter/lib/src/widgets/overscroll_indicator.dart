@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/physics.dart' show Tolerance, nearEqual;
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'basic.dart';
@@ -278,7 +279,7 @@ class _GlowingOverscrollIndicatorState extends State<GlowingOverscrollIndicator>
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: RepaintBoundary(
+      child: RositaRepaintBoundary(
         child: CustomPaint(
           foregroundPainter: _GlowingOverscrollIndicatorPainter(
             leadingController: widget.showLeading ? _leadingController : null,
@@ -286,7 +287,7 @@ class _GlowingOverscrollIndicatorState extends State<GlowingOverscrollIndicator>
             axisDirection: widget.axisDirection,
             repaint: _leadingAndTrailingListener,
           ),
-          child: RepaintBoundary(
+          child: RositaRepaintBoundary(
             child: widget.child,
           ),
         ),

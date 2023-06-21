@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button.dart';
 import 'colors.dart';
@@ -976,7 +977,9 @@ class _RenderLargeTitle extends RenderShiftedBox {
 
     super.applyPaintTransform(child, transform);
 
-    transform.scale(_scale, _scale);
+    if (_scale != 1.0) {
+      transform.scale(_scale, _scale);
+    }
   }
 
   @override

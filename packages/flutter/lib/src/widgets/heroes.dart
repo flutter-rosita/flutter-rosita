@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'basic.dart';
 import 'binding.dart';
 import 'framework.dart';
@@ -321,7 +322,29 @@ class Hero extends StatefulWidget {
       element.visitChildren(visitor);
     }
 
-    context.visitChildElements(visitor);
+    if (rositaEnableVisitChildren) {
+      (context as Element).rositaVisitChildren(context, (Element element) {
+        final Widget widget = element.widget;
+        if (widget is Hero) {
+          final StatefulElement hero = element as StatefulElement;
+          final Object tag = widget.tag;
+          if (Navigator.of(hero) == navigator) {
+            inviteHero(hero, tag);
+          } else {
+            final ModalRoute<Object?>? heroRoute = ModalRoute.of(hero);
+            if (heroRoute != null && heroRoute is PageRoute && heroRoute.isCurrent) {
+              inviteHero(hero, tag);
+            }
+          }
+        } else if (widget is HeroMode && !widget.enabled) {
+          return false;
+        }
+
+        return true;
+      });
+    } else {
+      context.visitChildElements(visitor);
+    }
     return result;
   }
 
@@ -624,7 +647,17 @@ class _HeroFlight {
     }
   }
 
+  bool _rositaToHeroOriginInitialized = false;
+
   void onTick() {
+    if (rositaDisableHeroFlightAlwaysOnTickCheckUpdate) {
+      if (_rositaToHeroOriginInitialized) {
+        return;
+      } else {
+        _rositaToHeroOriginInitialized = true;
+      }
+    }
+
     final RenderBox? toHeroBox = (!_aborted && manifest.toHero.mounted)
       ? manifest.toHero.context.findRenderObject() as RenderBox?
       : null;
@@ -905,7 +938,9 @@ class HeroController extends NavigatorObserver {
       // Putting a route offstage changes its animation value to 1.0. Once this
       // frame completes, we'll know where the heroes in the `to` route are
       // going to end up, and the `to` route will go back onstage.
-      to.offstage = to.animation!.value == 0.0;
+      if (rositaEnableRoutesChanged) {
+        to.offstage = to.animation!.value == 0.0;
+      }
 
       WidgetsBinding.instance.addPostFrameCallback((Duration value) {
         if (from.navigator == null || to.navigator == null) {

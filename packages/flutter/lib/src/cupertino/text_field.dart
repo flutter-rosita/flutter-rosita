@@ -7,6 +7,7 @@ import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -1347,7 +1348,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField> with Restoratio
 
     final Widget paddedEditable = Padding(
       padding: widget.padding,
-      child: RepaintBoundary(
+      child: RositaRepaintBoundary(
         child: UnmanagedRestorationScope(
           bucket: bucket,
           child: EditableText(

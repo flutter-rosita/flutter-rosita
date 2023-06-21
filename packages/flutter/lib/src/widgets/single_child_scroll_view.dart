@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'focus_manager.dart';
@@ -369,13 +370,17 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
   void _hasScrolled() {
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -573,7 +578,10 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     final Offset paintOffset = _paintOffset;
-    transform.translate(paintOffset.dx, paintOffset.dy);
+
+    if (paintOffset != Offset.zero) {
+      transform.translate(paintOffset.dx, paintOffset.dy);
+    }
   }
 
   @override

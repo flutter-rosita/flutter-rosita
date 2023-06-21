@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart' show Matrix4;
 
 import 'box.dart';
@@ -277,7 +278,9 @@ class RenderListWheelViewport
     }
     _diameterRatio = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@template flutter.rendering.RenderListWheelViewport.perspective}
@@ -307,7 +310,9 @@ class RenderListWheelViewport
     }
     _perspective = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@template flutter.rendering.RenderListWheelViewport.offAxisFraction}
@@ -444,7 +449,9 @@ class RenderListWheelViewport
     }
     _squeeze = value;
     markNeedsLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@template flutter.rendering.RenderListWheelViewport.renderChildrenOutsideViewport}
@@ -469,7 +476,9 @@ class RenderListWheelViewport
     }
     _renderChildrenOutsideViewport = value;
     markNeedsLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@macro flutter.material.Material.clipBehavior}
@@ -481,13 +490,17 @@ class RenderListWheelViewport
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
   void _hasScrolled() {
     markNeedsLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -1080,7 +1093,9 @@ class RenderListWheelViewport
     final ListWheelParentData parentData = child.parentData! as ListWheelParentData;
     final Matrix4? paintTransform = parentData.transform;
     if (paintTransform != null) {
-      transform.multiply(paintTransform);
+      if(!paintTransform.isIdentity()) {
+        transform.multiply(paintTransform);
+      }
     }
   }
 

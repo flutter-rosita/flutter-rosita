@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -940,7 +941,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                       node: focusScopeNode, // immutable
                       // Only top most route can participate in focus traversal.
                       skipTraversal: !widget.route.isCurrent,
-                      child: RepaintBoundary(
+                      child: RositaRepaintBoundary(
                         child: AnimatedBuilder(
                           animation: _listenable, // immutable
                           builder: (BuildContext context, Widget? child) {
@@ -966,7 +967,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                               ),
                             );
                           },
-                          child: _page ??= RepaintBoundary(
+                          child: _page ??= RositaRepaintBoundary(
                             key: widget.route._subtreeKey, // immutable
                             child: Builder(
                               builder: (BuildContext context) {

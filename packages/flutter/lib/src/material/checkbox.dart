@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rosita.dart';
 
 import 'checkbox_theme.dart';
 import 'color_scheme.dart';

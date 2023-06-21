@@ -9,6 +9,7 @@ import 'dart:ui' show AccessibilityFeatures, AppExitResponse, AppLifecycleState,
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -1296,11 +1297,14 @@ class RootWidget extends Widget {
 /// [RootWidget.attach]. In this usage, it is normally instantiated by the
 /// bootstrapping logic in the [WidgetsFlutterBinding] singleton created by
 /// [runApp].
-class RootElement extends Element with RootElementMixin {
+class RootElement extends Element with RootElementMixin, RositaSingleChildElementMixin {
   /// Creates a [RootElement] for the provided [RootWidget].
   RootElement(RootWidget super.widget);
 
   Element? _child;
+
+  @override
+  Element? get rositaChild => _child;
 
   @override
   void visitChildren(ElementVisitor visitor) {

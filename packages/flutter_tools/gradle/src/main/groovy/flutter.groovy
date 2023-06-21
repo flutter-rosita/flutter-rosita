@@ -263,7 +263,7 @@ class FlutterPlugin implements Plugin<Project> {
             }
         }
 
-        String flutterExecutableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "flutter.bat" : "flutter"
+        String flutterExecutableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "flutter-rosita.bat" : "flutter-rosita"
         flutterExecutable = Paths.get(flutterRoot.absolutePath, "bin", flutterExecutableName).toFile();
 
         if (project.hasProperty("multidex-enabled") &&
