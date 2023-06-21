@@ -657,7 +657,7 @@ abstract class FlutterCommand extends Command<void> {
   void usesWebRendererOption() {
     argParser.addOption(
       FlutterOptions.kWebRendererFlag,
-      defaultsTo: WebRendererMode.auto.name,
+      defaultsTo: WebRendererMode.html.name,
       allowed: WebRendererMode.values.map((WebRendererMode e) => e.name),
       help: 'The renderer implementation to use when building for the web.',
       allowedHelp: CliEnum.allowedHelp(WebRendererMode.values)
@@ -1232,7 +1232,7 @@ abstract class FlutterCommand extends Command<void> {
     final Map<String, Object?> defineConfigJsonMap = extractDartDefineConfigJsonMap();
     List<String> dartDefines = extractDartDefines(defineConfigJsonMap: defineConfigJsonMap);
 
-    WebRendererMode webRenderer = WebRendererMode.auto;
+    WebRendererMode webRenderer = WebRendererMode.html; // Rosita default
     if (argParser.options.containsKey(FlutterOptions.kWebRendererFlag)) {
       webRenderer = WebRendererMode.values.byName(stringArg(FlutterOptions.kWebRendererFlag)!);
       dartDefines = updateDartDefines(dartDefines, webRenderer);

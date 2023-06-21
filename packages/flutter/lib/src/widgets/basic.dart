@@ -9,6 +9,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'binding.dart';
@@ -5923,7 +5924,7 @@ class RichText extends MultiChildRenderObjectWidget {
 /// longer buildable.
 ///
 /// This widget is rarely used directly. Instead, consider using [Image].
-class RawImage extends LeafRenderObjectWidget {
+class RawImage extends LeafRenderObjectWidget with RositaImageProviderProxyMixin {
   /// Creates a widget that displays an image.
   ///
   /// The [scale], [alignment], [repeat], [matchTextDirection] and [filterQuality] arguments must
@@ -5946,7 +5947,11 @@ class RawImage extends LeafRenderObjectWidget {
     this.invertColors = false,
     this.filterQuality = FilterQuality.low,
     this.isAntiAlias = false,
+    this.rositaImageProvider,
   });
+
+  @override
+  final ImageProvider? rositaImageProvider;
 
   /// The image to display.
   ///
@@ -6105,6 +6110,7 @@ class RawImage extends LeafRenderObjectWidget {
       invertColors: invertColors,
       isAntiAlias: isAntiAlias,
       filterQuality: filterQuality,
+      rositaImageProvider: rositaImageProvider,
     );
   }
 
@@ -6132,13 +6138,15 @@ class RawImage extends LeafRenderObjectWidget {
       ..textDirection = matchTextDirection || alignment is! Alignment ? Directionality.of(context) : null
       ..invertColors = invertColors
       ..isAntiAlias = isAntiAlias
-      ..filterQuality = filterQuality;
+      ..filterQuality = filterQuality
+      ..rositaImageProvider = rositaImageProvider;
   }
 
   @override
   void didUnmountRenderObject(RenderImage renderObject) {
     // Have the render object dispose its image handle.
     renderObject.image = null;
+    renderObject.rositaImageProvider = null;
   }
 
   @override
@@ -7336,13 +7344,15 @@ class Semantics extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderSemanticsAnnotations renderObject) {
-    renderObject
-      ..container = container
-      ..explicitChildNodes = explicitChildNodes
-      ..excludeSemantics = excludeSemantics
-      ..blockUserActions = blockUserActions
-      ..properties = properties
-      ..textDirection = _getTextDirection(context);
+    if (rositaEnableSemantics) {
+      renderObject
+        ..container = container
+        ..explicitChildNodes = explicitChildNodes
+        ..excludeSemantics = excludeSemantics
+        ..blockUserActions = blockUserActions
+        ..properties = properties
+        ..textDirection = _getTextDirection(context);
+    }
   }
 
   @override
@@ -7784,7 +7794,7 @@ class ColoredBox extends SingleChildRenderObjectWidget {
   }
 }
 
-class _RenderColoredBox extends RenderProxyBoxWithHitTestBehavior {
+class _RenderColoredBox extends RenderProxyBoxWithHitTestBehavior with RositaRenderColoredBoxMixin {
   _RenderColoredBox({ required Color color })
     : _color = color,
       super(behavior: HitTestBehavior.opaque);

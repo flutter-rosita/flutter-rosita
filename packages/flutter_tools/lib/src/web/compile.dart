@@ -184,6 +184,7 @@ enum WebRendererMode implements CliEnum {
         WebRendererMode.html => <String>[
             'FLUTTER_WEB_AUTO_DETECT=false',
             'FLUTTER_WEB_USE_SKIA=false',
+            'ROSITA=true',
           ],
         WebRendererMode.skwasm => <String>[
             'FLUTTER_WEB_AUTO_DETECT=false',

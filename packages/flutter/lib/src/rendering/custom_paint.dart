@@ -5,6 +5,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 
 import 'box.dart';
@@ -376,7 +377,7 @@ class CustomPainterSemantics {
 ///
 ///  * [CustomPainter], the class that custom painter delegates should extend.
 ///  * [Canvas], the API provided to custom painter delegates.
-class RenderCustomPaint extends RenderProxyBox {
+class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRenderCustomPaintMixin {
   /// Creates a render object that delegates its painting.
   RenderCustomPaint({
     CustomPainter? painter,
@@ -459,14 +460,18 @@ class RenderCustomPaint extends RenderProxyBox {
 
     // Check if we need to rebuild semantics.
     if (newPainter == null) {
-      assert(oldPainter != null); // We should be called only for changes.
-      if (attached) {
-        markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        assert(oldPainter != null); // We should be called only for changes.
+        if (attached) {
+          markNeedsSemanticsUpdate();
+        }
       }
     } else if (oldPainter == null ||
         newPainter.runtimeType != oldPainter.runtimeType ||
         newPainter.shouldRebuildSemantics(oldPainter)) {
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -567,7 +572,9 @@ class RenderCustomPaint extends RenderProxyBox {
   @override
   void performLayout() {
     super.performLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

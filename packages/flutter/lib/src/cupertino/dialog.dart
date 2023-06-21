@@ -8,6 +8,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'interface_level.dart';
@@ -851,7 +852,9 @@ class _CupertinoDialogRenderElement extends RenderObjectElement {
   Element? _actionsElement;
 
   @override
-  _RenderCupertinoDialog get renderObject => super.renderObject as _RenderCupertinoDialog;
+  _RenderCupertinoDialog get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as _RenderCupertinoDialog;
 
   @override
   void visitChildren(ElementVisitor visitor) {

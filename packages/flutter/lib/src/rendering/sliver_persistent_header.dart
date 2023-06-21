@@ -8,6 +8,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'object.dart';

@@ -7,6 +7,7 @@ import 'dart:ui' as ui show Color;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:flutter/semantics.dart';
 
 import 'layer.dart';
@@ -138,8 +139,10 @@ class RenderSliverOpacity extends RenderProxySliver {
       markNeedsCompositingBitsUpdate();
     }
     markNeedsPaint();
-    if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -155,7 +158,9 @@ class RenderSliverOpacity extends RenderProxySliver {
       return;
     }
     _alwaysIncludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -238,8 +243,10 @@ class RenderSliverIgnorePointer extends RenderProxySliver {
       return;
     }
     _ignoring = value;
-    if (ignoringSemantics == null) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (ignoringSemantics == null) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -258,7 +265,9 @@ class RenderSliverIgnorePointer extends RenderProxySliver {
       return;
     }
     _ignoringSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

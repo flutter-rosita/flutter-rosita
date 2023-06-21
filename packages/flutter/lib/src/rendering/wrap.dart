@@ -4,6 +4,8 @@
 
 import 'dart:math' as math;
 
+import 'package:rosita/rosita.dart';
+
 import 'box.dart';
 import 'layer.dart';
 import 'layout_helper.dart';
@@ -334,7 +336,9 @@ class RenderWrap extends RenderBox
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

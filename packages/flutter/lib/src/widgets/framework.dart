@@ -7,6 +7,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'binding.dart';
 import 'debug.dart';
@@ -2046,7 +2047,7 @@ enum _ElementLifecycle {
   defunct,
 }
 
-class _InactiveElements {
+class _InactiveElements with RositaElementMixin {
   bool _locked = false;
   final Set<Element> _elements = HashSet<Element>();
 
@@ -2096,7 +2097,14 @@ class _InactiveElements {
     assert(!_elements.contains(element));
     assert(element._parent == null);
     if (element._lifecycleState == _ElementLifecycle.active) {
-      _deactivateRecursively(element);
+      if (rositaEnableVisitChildren) {
+        rositaVisitChildren(element, (Element el) {
+          el.deactivate();
+          return true;
+        });
+      } else {
+        _deactivateRecursively(element);
+      }
     }
     _elements.add(element);
   }
@@ -3371,7 +3379,7 @@ bool _isProfileBuildsEnabledFor(Widget widget) {
 ///    element.
 ///  * At this point, the element is considered "defunct" and will not be
 ///    incorporated into the tree in the future.
-abstract class Element extends DiagnosticableTree implements BuildContext {
+abstract class Element extends DiagnosticableTree with RositaElementMixin implements BuildContext {
   /// Creates an element that uses the given widget as its configuration.
   ///
   /// Typically called by an override of [Widget.createElement].
@@ -4424,7 +4432,14 @@ abstract class Element extends DiagnosticableTree implements BuildContext {
       return true;
     }());
     _updateDepth(_parent!.depth);
-    _activateRecursively(this);
+    if (rositaEnableVisitChildren) {
+      rositaVisitChildren(this, (Element el) {
+        el.activate();
+        return true;
+      });
+    } else {
+      _activateRecursively(this);
+    }
     attachRenderObject(newSlot);
     assert(_lifecycleState == _ElementLifecycle.active);
   }
@@ -5426,11 +5441,14 @@ typedef TransitionBuilder = Widget Function(BuildContext context, Widget? child)
 /// [RenderObject]s indirectly by creating other [Element]s.
 ///
 /// Contrast with [RenderObjectElement].
-abstract class ComponentElement extends Element {
+abstract class ComponentElement extends Element with RositaSingleChildElementMixin {
   /// Creates an element that uses the given widget as its configuration.
   ComponentElement(super.widget);
 
   Element? _child;
+
+  @override
+  Element? get rositaChild => _child;
 
   bool _debugDoingBuild = false;
   @override
@@ -6263,6 +6281,9 @@ abstract class RenderObjectElement extends Element {
   @override
   Element? get renderObjectAttachingChild => null;
 
+  // ignore: public_member_api_docs
+  RenderObject? get rositaRenderObject => _renderObject;
+
   bool _debugDoingBuild = false;
   @override
   bool get debugDoingBuild => _debugDoingBuild;
@@ -6710,11 +6731,14 @@ class LeafRenderObjectElement extends RenderObjectElement {
 /// This element subclass can be used for [RenderObjectWidget]s whose
 /// [RenderObject]s use the [RenderObjectWithChildMixin] mixin. Such widgets are
 /// expected to inherit from [SingleChildRenderObjectWidget].
-class SingleChildRenderObjectElement extends RenderObjectElement {
+class SingleChildRenderObjectElement extends RenderObjectElement with RositaSingleChildElementMixin {
   /// Creates an element that uses the given widget as its configuration.
   SingleChildRenderObjectElement(SingleChildRenderObjectWidget super.widget);
 
   Element? _child;
+
+  @override
+  Element? get rositaChild =>_child;
 
   @override
   void visitChildren(ElementVisitor visitor) {

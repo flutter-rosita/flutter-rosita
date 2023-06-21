@@ -5,6 +5,7 @@
 import 'dart:ui' as ui show Color;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'box.dart';
@@ -234,7 +235,9 @@ class RenderFlow extends RenderBox
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -442,8 +445,11 @@ class RenderFlow extends RenderBox
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     final FlowParentData childParentData = child.parentData! as FlowParentData;
-    if (childParentData._transform != null) {
-      transform.multiply(childParentData._transform!);
+    final childParentTransform = childParentData._transform;
+    if (childParentTransform != null) {
+      if(!childParentTransform.isIdentity()) {
+        transform.multiply(childParentTransform);
+      }
     }
     super.applyPaintTransform(child, transform);
   }

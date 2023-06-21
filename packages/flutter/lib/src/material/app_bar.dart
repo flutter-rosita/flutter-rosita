@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -952,7 +953,7 @@ class _AppBarState extends State<AppBar> {
     Widget? title = widget.title;
     if (title != null) {
       title = _AppBarTitleBox(child: title);
-      if (!widget.excludeHeaderSemantics) {
+      if (rositaEnableSemantics && !widget.excludeHeaderSemantics) {
         title = Semantics(
           namesRoute: switch (theme.platform) {
             TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.linux || TargetPlatform.windows => true,

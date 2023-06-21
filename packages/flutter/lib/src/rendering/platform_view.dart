@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -114,8 +115,10 @@ class RenderAndroidView extends PlatformViewRenderBox {
     _viewController = controller;
     _viewController.pointTransformer = (Offset offset) => globalToLocal(offset);
     _sizePlatformView();
-    if (_viewController.isCreated) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (_viewController.isCreated) {
+        markNeedsSemanticsUpdate();
+      }
     }
     _viewController.addOnPlatformViewCreatedListener(_onPlatformViewCreated);
   }
@@ -129,13 +132,17 @@ class RenderAndroidView extends PlatformViewRenderBox {
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
   void _onPlatformViewCreated(int id) {
     assert(!_isDisposed);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -295,8 +302,10 @@ abstract class RenderDarwinPlatformView<T extends DarwinPlatformViewController> 
     final bool needsSemanticsUpdate = _viewController.id != value.id;
     _viewController = value;
     markNeedsPaint();
-    if (needsSemanticsUpdate) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (needsSemanticsUpdate) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -651,7 +660,7 @@ class _PlatformViewGestureRecognizer extends OneSequenceGestureRecognizer {
 ///
 /// [PlatformViewRenderBox] presents a platform view by adding a [PlatformViewLayer] layer,
 /// integrates it with the gesture arenas system and adds relevant semantic nodes to the semantics tree.
-class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
+class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin, RositaPlatformViewRenderBoxMixin {
   /// Creating a render object for a [PlatformViewSurface].
   PlatformViewRenderBox({
     required PlatformViewController controller,
@@ -676,8 +685,10 @@ class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
     final bool needsSemanticsUpdate = _controller.viewId != controller.viewId;
     _controller = controller;
     markNeedsPaint();
-    if (needsSemanticsUpdate) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (needsSemanticsUpdate) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
@@ -66,7 +67,9 @@ abstract class SwapperElement extends RenderObjectElement {
   Swapper get widget => super.widget as Swapper;
 
   @override
-  RenderSwapper get renderObject => super.renderObject as RenderSwapper;
+  RenderSwapper get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as RenderSwapper;
 
   @override
   void visitChildren(ElementVisitor visitor) {

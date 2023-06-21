@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:meta/meta_meta.dart';
+import 'package:rosita/rosita.dart';
 
 import 'app.dart';
 import 'basic.dart';
@@ -2052,7 +2053,11 @@ mixin WidgetInspectorService {
       owner
         ..flushLayout()
         ..flushCompositingBits()
-        ..flushPaint();
+        ..flushPaint()
+        ..rositaFlushDetach()
+        ..rositaFlushAttach()
+        ..rositaFlushLayout()
+        ..rositaFlushPaint();
 
       // If we still need layout, then that means that renderObject was skipped
       // in the layout phase and therefore can't be painted. It is clearer to

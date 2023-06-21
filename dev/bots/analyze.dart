@@ -21,7 +21,7 @@ import 'run_command.dart';
 import 'utils.dart';
 
 final String flutterRoot = path.dirname(path.dirname(path.dirname(path.fromUri(Platform.script))));
-final String flutter = path.join(flutterRoot, 'bin', Platform.isWindows ? 'flutter.bat' : 'flutter');
+final String flutter = path.join(flutterRoot, 'bin', Platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita');
 final String flutterPackages = path.join(flutterRoot, 'packages');
 final String flutterExamples = path.join(flutterRoot, 'examples');
 

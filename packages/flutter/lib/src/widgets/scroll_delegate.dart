@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'automatic_keep_alive.dart';
 import 'basic.dart';
@@ -496,7 +497,7 @@ class SliverChildBuilderDelegate extends SliverChildDelegate {
     }
     final Key? key = child.key != null ? _SaltedValueKey(child.key!) : null;
     if (addRepaintBoundaries) {
-      child = RepaintBoundary(child: child);
+      child = RositaRepaintBoundary(child: child);
     }
     if (addSemanticIndexes) {
       final int? semanticIndex = semanticIndexCallback(child, index);
@@ -710,7 +711,7 @@ class SliverChildListDelegate extends SliverChildDelegate {
     Widget child = children[index];
     final Key? key = child.key != null? _SaltedValueKey(child.key!) : null;
     if (addRepaintBoundaries) {
-      child = RepaintBoundary(child: child);
+      child = RositaRepaintBoundary(child: child);
     }
     if (addSemanticIndexes) {
       final int? semanticIndex = semanticIndexCallback(child, index);

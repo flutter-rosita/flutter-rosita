@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'debug.dart';
@@ -263,7 +264,27 @@ class Icon extends StatelessWidget {
       iconColor = iconColor.withOpacity(iconColor.opacity * iconOpacity);
     }
 
-    Widget iconWidget = RichText(
+    Widget iconWidget = kIsRosita
+        ? RositaRichText(
+      String.fromCharCode(icon!.codePoint),
+      overflow: TextOverflow.visible,
+      textDirection: textDirection,
+      style: TextStyle(
+        fontVariations: <FontVariation>[
+          if (iconFill != null) FontVariation('FILL', iconFill),
+          if (iconWeight != null) FontVariation('wght', iconWeight),
+          if (iconGrade != null) FontVariation('GRAD', iconGrade),
+          if (iconOpticalSize != null) FontVariation('opsz', iconOpticalSize),
+        ],
+        inherit: false,
+        color: iconColor,
+        fontSize: iconSize,
+        fontFamily: icon!.fontFamily,
+        package: icon!.fontPackage,
+        shadows: iconShadows,
+      ),
+    )
+  : RichText(
       overflow: TextOverflow.visible, // Never clip.
       textDirection: textDirection, // Since we already fetched it for the assert...
       text: TextSpan(
