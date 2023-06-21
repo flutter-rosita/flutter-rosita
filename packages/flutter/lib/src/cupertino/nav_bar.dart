@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button.dart';
 import 'colors.dart';
@@ -1440,7 +1441,7 @@ class _LargeTitleNavigationBarSliverDelegate extends SliverPersistentHeaderDeleg
                             // Fade the large title as the search field animates from its expanded to its collapsed state.
                             opacity: showLargeTitle && !controller.isForwardOrCompleted ? 1.0 : 0.0,
                             duration: _kNavBarTitleFadeDuration,
-                            child: Semantics(
+                            child: RositaSemantics(
                               header: true,
                               child: DefaultTextStyle(
                                 style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
@@ -1620,7 +1621,9 @@ class _RenderLargeTitle extends RenderShiftedBox {
 
     super.applyPaintTransform(child, transform);
 
-    transform.scale(_scale, _scale);
+    if (_scale != 1.0) {
+      transform.scale(_scale, _scale);
+    }
   }
 
   @override
@@ -1690,7 +1693,7 @@ class _PersistentNavigationBar extends StatelessWidget {
     if (middle != null) {
       middle = DefaultTextStyle(
         style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
-        child: Semantics(header: true, child: middle),
+        child: RositaSemantics(header: true, child: middle),
       );
       // When the middle's visibility can change on the fly like with large title
       // slivers, wrap with animated opacity.
@@ -2072,7 +2075,7 @@ class CupertinoNavigationBarBackButton extends StatelessWidget {
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
-      child: Semantics(
+      child: RositaSemantics(
         container: true,
         excludeSemantics: true,
         label: 'Back',

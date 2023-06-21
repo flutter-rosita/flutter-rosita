@@ -11,6 +11,7 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'debug.dart';
@@ -651,7 +652,7 @@ class _LocalizationsState extends State<Localizations> {
     if (_locale == null) {
       return const SizedBox.shrink();
     }
-    return Semantics(
+    return RositaSemantics(
       textDirection: _textDirection,
       child: _LocalizationsScope(
         key: _localizedResourcesScopeKey,

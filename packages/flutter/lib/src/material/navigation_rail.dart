@@ -10,6 +10,7 @@ library;
 
 import 'dart:ui';
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -455,7 +456,7 @@ class _NavigationRailState extends State<NavigationRail> with TickerProviderStat
 
     return _ExtendedNavigationRailAnimation(
       animation: _extendedAnimation,
-      child: Semantics(
+      child: RositaSemantics(
         explicitChildNodes: true,
         child: Material(
           elevation: elevation,
@@ -891,7 +892,7 @@ class _RailDestinationState extends State<_RailDestination> {
         primaryColorAlphaModified ? colors.primary : colors.primary.withOpacity(0.12);
     final Color effectiveHoverColor =
         primaryColorAlphaModified ? colors.primary : colors.primary.withOpacity(0.04);
-    return Semantics(
+    return RositaSemantics(
       container: true,
       selected: widget.selected,
       child: Stack(
@@ -911,7 +912,7 @@ class _RailDestinationState extends State<_RailDestination> {
               child: content,
             ),
           ),
-          Semantics(label: widget.indexLabel),
+          RositaSemantics(label: widget.indexLabel),
         ],
       ),
     );

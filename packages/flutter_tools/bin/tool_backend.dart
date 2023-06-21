@@ -75,7 +75,7 @@ or
   final String flutterExecutable = pathJoin(<String>[
     flutterRoot,
     'bin',
-    if (Platform.isWindows) 'flutter.bat' else 'flutter',
+    if (Platform.isWindows) 'flutter-rosita.bat' else 'flutter-rosita',
   ]);
   final String bundlePlatform = targetPlatform;
   final String target = '${buildMode}_bundle_${bundlePlatform}_assets';

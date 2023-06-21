@@ -14,6 +14,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'focus_manager.dart';
@@ -714,7 +715,7 @@ class _FocusState extends State<Focus> {
     _focusAttachment!.reparent(parent: widget.parentNode);
     Widget child = widget.child;
     if (widget.includeSemantics) {
-      child = Semantics(
+      child = RositaSemantics(
         // Automatically request the focus for a focusable widget when it
         // receives an input focus action from the semantics. Nothing is needed
         // for losing the focus because if focus is lost, that means another
@@ -892,7 +893,7 @@ class _FocusScopeState extends _FocusState {
     _focusAttachment!.reparent(parent: widget.parentNode);
     Widget result = _FocusInheritedScope(node: focusNode, child: widget.child);
     if (widget.includeSemantics) {
-      result = Semantics(explicitChildNodes: true, child: result);
+      result = RositaSemantics(explicitChildNodes: true, child: result);
     }
     return result;
   }
