@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 
@@ -22,6 +23,27 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
         htmlElement.style.left = '${offset.dx}px';
         htmlElement.style.top = '${offset.dy}px';
+      } else if (parentData is SliverMultiBoxAdaptorParentData) {
+        final offset = parentData.layoutOffset;
+
+        if (offset != null) {
+          AbstractNode? element = parent;
+
+          while (element != null && element is! RenderViewportBase) {
+            element = element.parent;
+          }
+
+          if (element is RenderViewportBase) {
+            final axis = element.axis;
+
+            switch (axis) {
+              case Axis.vertical:
+                htmlElement.style.top = '${offset}px';
+              case Axis.horizontal:
+                htmlElement.style.left = '${offset}px';
+            }
+          }
+        }
       } else if (parentData != null) {
         assert(() {
           // ignore: avoid_print

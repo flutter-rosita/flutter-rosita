@@ -3,6 +3,7 @@
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../widgets.dart';
 
@@ -73,4 +74,12 @@ mixin RositaRenderMixin on AbstractNode {
 
   @mustCallSuper
   void rositaLayout() {}
+
+  void callRositaLayout() {
+    RendererBinding.instance.addPostFrameCallback((_) {
+      if (hasHtmlElement) {
+        rositaLayout();
+      }
+    });
+  }
 }

@@ -2343,6 +2343,8 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     }());
     _needsLayout = false;
     markNeedsPaint();
+
+    callRositaLayout();
   }
 
   /// Compute the layout for this render object.
@@ -2513,11 +2515,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       FlutterTimeline.finishSync();
     }
 
-    RendererBinding.instance.addPostFrameCallback((_) {
-      if (hasHtmlElement) {
-        rositaLayout();
-      }
-    });
+    callRositaLayout();
   }
 
   /// If a subclass has a "size" (the state controlled by `parentUsesSize`,
