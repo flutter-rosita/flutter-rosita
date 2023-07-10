@@ -4,6 +4,7 @@
 
 import 'dart:math' as math;
 
+import 'package:flutter/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'debug.dart';
@@ -21,7 +22,7 @@ import 'sliver.dart';
 /// undesired effects. For example, For example, wrapping a [SliverPersistentHeader] with
 /// `pinned:true` will cause only the appbar to stay pinned while the padding will scroll away.
 /// {@endtemplate}
-abstract class RenderSliverEdgeInsetsPadding extends RenderSliver with RenderObjectWithChildMixin<RenderSliver> {
+abstract class RenderSliverEdgeInsetsPadding extends RenderSliver with RenderObjectWithChildMixin<RenderSliver>, RositaRenderSliverEdgeInsetsPaddingMixin {
   /// The amount to pad the child in each dimension.
   ///
   /// The offsets are specified in terms of visual edges, left, top, right, and

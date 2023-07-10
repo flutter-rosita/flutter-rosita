@@ -26,6 +26,8 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
       } else if (parentData is SliverMultiBoxAdaptorParentData) {
         final offset = parentData.layoutOffset;
 
+        final crossAxisOffset = parentData is SliverGridParentData ? parentData.crossAxisOffset : null;
+
         if (offset != null) {
           AbstractNode? element = parent;
 
@@ -39,15 +41,26 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
             switch (axis) {
               case Axis.vertical:
                 htmlElement.style.top = '${offset}px';
+
+                if (crossAxisOffset != null) {
+                  htmlElement.style.left = '${crossAxisOffset}px';
+                }
               case Axis.horizontal:
                 htmlElement.style.left = '${offset}px';
+
+                if (crossAxisOffset != null) {
+                  htmlElement.style.top = '${crossAxisOffset}px';
+                }
             }
           }
         }
       } else if (parentData != null) {
         assert(() {
-          // ignore: avoid_print
-          // print('RositaRenderBoxMixin not handled: ${toString()}, parentData: $parentData');
+          if (parentData.runtimeType != ParentData) {
+            // ignore: avoid_print
+            print('RositaRenderBoxMixin not handled: ${toString()}, parentData: $parentData, runType: ${parentData
+                .runtimeType}');
+          }
           return true;
         }());
       }
