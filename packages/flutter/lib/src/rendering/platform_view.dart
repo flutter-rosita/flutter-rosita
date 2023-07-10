@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -612,7 +613,7 @@ class _PlatformViewGestureRecognizer extends OneSequenceGestureRecognizer {
 ///
 /// [PlatformViewRenderBox] presents a platform view by adding a [PlatformViewLayer] layer,
 /// integrates it with the gesture arenas system and adds relevant semantic nodes to the semantics tree.
-class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
+class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin, RositaPlatformViewRenderBoxMixin {
   /// Creating a render object for a [PlatformViewSurface].
   ///
   /// The `controller` parameter must not be null.
