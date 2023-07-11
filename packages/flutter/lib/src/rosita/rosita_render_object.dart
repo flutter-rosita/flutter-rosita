@@ -77,9 +77,13 @@ mixin RositaRenderMixin on AbstractNode {
 
   void callRositaLayout() {
     RendererBinding.instance.addPostFrameCallback((_) {
-      if (hasHtmlElement) {
-        rositaLayout();
-      }
+      performRositaLayout();
     });
+  }
+
+  void performRositaLayout() {
+    if (hasHtmlElement) {
+      rositaLayout();
+    }
   }
 }

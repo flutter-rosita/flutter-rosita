@@ -852,7 +852,7 @@ class RenderIntrinsicHeight extends RenderProxyBox {
 /// expensive because it requires painting the child into an intermediate
 /// buffer. For the value 0.0, the child is not painted at all. For the
 /// value 1.0, the child is painted immediately without an intermediate buffer.
-class RenderOpacity extends RenderProxyBox {
+class RenderOpacity extends RenderProxyBox with RositaRenderOpacityMixin {
   /// Creates a partially transparent render object.
   ///
   /// The [opacity] argument must be between 0.0 and 1.0, inclusive.
@@ -1044,6 +1044,8 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
       if (oldAlpha == 0 || _alpha == 0) {
         markNeedsSemanticsUpdate();
       }
+
+      performRositaLayout();
     }
   }
 
@@ -1080,7 +1082,7 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
 ///
 /// This is a variant of [RenderOpacity] that uses an [Animation<double>] rather
 /// than a [double] to control the opacity.
-class RenderAnimatedOpacity extends RenderProxyBox with RenderAnimatedOpacityMixin<RenderBox> {
+class RenderAnimatedOpacity extends RenderProxyBox with RenderAnimatedOpacityMixin<RenderBox>, RositaRenderAnimatedOpacityMixin {
   /// Creates a partially transparent render object.
   ///
   /// The [opacity] argument must not be null.
@@ -2888,7 +2890,7 @@ class RenderFittedBox extends RenderProxyBox {
 /// Hit tests will only be detected inside the bounds of the
 /// [RenderFractionalTranslation], even if the contents are offset such that
 /// they overflow.
-class RenderFractionalTranslation extends RenderProxyBox {
+class RenderFractionalTranslation extends RenderProxyBox with RositaRenderFractionalTranslationMixin {
   /// Creates a render object that translates its child's painting.
   ///
   /// The [translation] argument must not be null.
@@ -2912,6 +2914,7 @@ class RenderFractionalTranslation extends RenderProxyBox {
     _translation = value;
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    performRositaLayout();
   }
 
   @override
