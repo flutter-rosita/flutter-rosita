@@ -13,8 +13,9 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
     super.rositaLayout();
 
     if (target.hasSize) {
-      htmlElement.style.width = '${target.size.width}px';
-      htmlElement.style.height = '${target.size.height}px';
+      final size = target.size;
+      htmlElement.style.width = '${size.width}px';
+      htmlElement.style.height = '${size.height}px';
 
       final parentData = target.parentData;
 
@@ -31,39 +32,61 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
         if (offset != null) {
           AbstractNode? element = parent;
 
-          while (element != null && element is! RenderViewportBase) {
+          while (element != null && (element is! RenderViewportBase && element is! RenderSliverList)) {
             element = element.parent;
           }
 
-          if (element is RenderViewportBase) {
-            final axis = element.axis;
-
-            switch (axis) {
-              case Axis.vertical:
-                htmlElement.style.top = '${offset}px';
-
-                if (crossAxisOffset != null) {
-                  htmlElement.style.left = '${crossAxisOffset}px';
-                }
-              case Axis.horizontal:
-                htmlElement.style.left = '${offset}px';
-
-                if (crossAxisOffset != null) {
-                  htmlElement.style.top = '${crossAxisOffset}px';
-                }
-            }
+          if (element is RenderSliverList) {
+            _mapScrollAxisStyle(
+              axis: element.constraints.axis,
+              forward: element.constraints.growthDirection == GrowthDirection.forward,
+              offset: offset,
+              crossAxisOffset: crossAxisOffset,
+              size: size,
+            );
+          } else if (element is RenderViewportBase) {
+            _mapScrollAxisStyle(
+              axis: element.axis,
+              forward: true,
+              offset: offset,
+              crossAxisOffset: crossAxisOffset,
+              size: size,
+            );
           }
         }
       } else if (parentData != null) {
         assert(() {
           if (parentData.runtimeType != ParentData) {
             // ignore: avoid_print
-            print('RositaRenderBoxMixin not handled: ${toString()}, parentData: $parentData, runType: ${parentData
-                .runtimeType}');
+            print(
+                'RositaRenderBoxMixin not handled: ${toString()}, parentData: $parentData, runType: ${parentData.runtimeType}');
           }
           return true;
         }());
       }
+    }
+  }
+
+  void _mapScrollAxisStyle({
+    required Axis axis,
+    required bool forward,
+    required double offset,
+    required double? crossAxisOffset,
+    required Size size,
+  }) {
+    switch (axis) {
+      case Axis.vertical:
+        htmlElement.style.top = forward ? '${offset}px' : '${0 - offset - size.height}px';
+
+        if (crossAxisOffset != null) {
+          htmlElement.style.left = '${crossAxisOffset}px';
+        }
+      case Axis.horizontal:
+        htmlElement.style.left = forward ? '${offset}px' : '${0 - offset - size.width}px';
+
+        if (crossAxisOffset != null) {
+          htmlElement.style.top = '${crossAxisOffset}px';
+        }
     }
   }
 }
