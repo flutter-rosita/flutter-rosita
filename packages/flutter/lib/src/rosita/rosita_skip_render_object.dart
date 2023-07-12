@@ -3,8 +3,8 @@
 import 'rosita_render_object.dart';
 
 mixin RositaSkipRenderObjectMixin on RositaRenderMixin {
-/*  @override
+  @override
   void createRositaElement() {
     // Skip create HTML element
-  }*/
+  }
 }

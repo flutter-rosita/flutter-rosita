@@ -24,30 +24,31 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
         htmlElement.style.left = '${offset.dx}px';
         htmlElement.style.top = '${offset.dy}px';
-      } else if (parentData is SliverMultiBoxAdaptorParentData) {
+      } else if (parentData is SliverLogicalParentData) {
         final offset = parentData.layoutOffset;
 
         final crossAxisOffset = parentData is SliverGridParentData ? parentData.crossAxisOffset : null;
 
         if (offset != null) {
+          final parent = this.parent;
           AbstractNode? element = parent;
 
-          while (element != null && (element is! RenderViewportBase && element is! RenderSliverList)) {
+          while (element != null && (element is! RenderViewportBase /*&& element is! RenderSliverList*/)) {
             element = element.parent;
           }
 
-          if (element is RenderSliverList) {
-            _mapScrollAxisStyle(
-              axis: element.constraints.axis,
-              forward: element.constraints.growthDirection == GrowthDirection.forward,
-              offset: offset,
-              crossAxisOffset: crossAxisOffset,
-              size: size,
-            );
-          } else if (element is RenderViewportBase) {
+          final bool forward;
+
+          if (parent is RenderSliver) {
+            forward = parent.constraints.growthDirection == GrowthDirection.forward;
+          } else {
+            forward = false;
+          }
+
+          if (element is RenderViewportBase) {
             _mapScrollAxisStyle(
               axis: element.axis,
-              forward: true,
+              forward: forward,
               offset: offset,
               crossAxisOffset: crossAxisOffset,
               size: size,

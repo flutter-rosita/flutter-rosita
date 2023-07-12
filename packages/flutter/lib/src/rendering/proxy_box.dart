@@ -4110,7 +4110,7 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
 }
 
 /// Add annotations to the [SemanticsNode] for this subtree.
-class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObjectMixin {
+class RenderSemanticsAnnotations extends RenderProxyBox {
   /// Creates a render object that attaches a semantic annotation.
   ///
   /// The [container] argument must not be null.

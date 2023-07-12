@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 
 import 'box.dart';
 import 'debug.dart';
@@ -1193,7 +1194,7 @@ List<DiagnosticsNode> _debugCompareFloats(String labelA, double valueA, String l
 /// If the subclass positions children in the cross-axis at a position other
 /// than zero, then it should override [childCrossAxisPosition]. For example
 /// [RenderSliverGrid] overrides this method.
-abstract class RenderSliver extends RenderObject {
+abstract class RenderSliver extends RenderObject with RositaRenderSliverMixin {
   // layout input
   @override
   SliverConstraints get constraints => super.constraints as SliverConstraints;
