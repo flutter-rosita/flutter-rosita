@@ -2201,7 +2201,7 @@ enum DecorationPosition {
 }
 
 /// Paints a [Decoration] either before or after its child paints.
-class RenderDecoratedBox extends RenderProxyBox {
+class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMixin {
   /// Creates a decorated box.
   ///
   /// The [decoration], [position], and [configuration] arguments must not be

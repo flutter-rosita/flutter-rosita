@@ -5,6 +5,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 
 import 'box.dart';
@@ -361,7 +362,7 @@ class CustomPainterSemantics {
 ///
 ///  * [CustomPainter], the class that custom painter delegates should extend.
 ///  * [Canvas], the API provided to custom painter delegates.
-class RenderCustomPaint extends RenderProxyBox {
+class RenderCustomPaint extends RenderProxyBox with RositaRenderCustomPaintMixin {
   /// Creates a render object that delegates its painting.
   RenderCustomPaint({
     CustomPainter? painter,

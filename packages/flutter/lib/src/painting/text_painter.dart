@@ -16,6 +16,7 @@ import 'dart:ui' as ui show
   TextStyle;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'basic_types.dart';
@@ -1142,8 +1143,13 @@ class TextPainter {
       paragraph.dispose();
       assert(debugSize == size);
     }
-    assert(!_rebuildParagraphForPaint);
-    canvas.drawParagraph(layoutCache.paragraph, offset + layoutCache.paintOffset);
+    rositaSkipCallback(() {
+      assert(!_rebuildParagraphForPaint);
+      canvas.drawParagraph(layoutCache.paragraph, offset + layoutCache.paintOffset);
+    });
+
+    canvas as RositaCanvas;
+    canvas.drawRositaParagraph(this, layoutCache.paragraph, offset + layoutCache.paintOffset);
   }
 
   // Returns true if value falls in the valid range of the UTF16 encoding.

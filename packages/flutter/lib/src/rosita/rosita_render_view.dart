@@ -38,7 +38,7 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
       '}',
     ]);
 
-    styleElement.innerText = buffer.toString();
+    styleElement.text = buffer.toString();
     return styleElement;
   }
 }
