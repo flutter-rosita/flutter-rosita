@@ -196,7 +196,7 @@ class RevealedOffset {
 ///  * [RenderSliverToBoxAdapter], which allows a [RenderBox] object to be
 ///    placed inside a [RenderSliver] (the opposite of this class).
 abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMixin<RenderSliver>>
-    extends RenderBox with ContainerRenderObjectMixin<RenderSliver, ParentDataClass>
+    extends RenderBox with ContainerRenderObjectMixin<RenderSliver, ParentDataClass>, RositaRenderViewportBaseMixin
     implements RenderAbstractViewport {
   /// Initializes fields for subclasses.
   ///

@@ -33,7 +33,7 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
           final parent = this.parent;
           AbstractNode? element = parent;
 
-          while (element != null && (element is! RenderViewportBase /*&& element is! RenderSliverList*/)) {
+          while (element != null && (element is! RenderViewportBase)) {
             element = element.parent;
           }
 
