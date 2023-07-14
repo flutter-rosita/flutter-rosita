@@ -8,11 +8,16 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rosita.dart';
 
-class RositaCanvas implements Canvas {
+part 'mixins/canvas.dart';
+
+part 'mixins/paragraph.dart';
+
+class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   RositaCanvas(this.canvas);
 
   final html.CanvasElement canvas;
 
+  @override
   html.CanvasRenderingContext2D get context => canvas.context2D;
 
   void clean(Size size) {
@@ -70,27 +75,6 @@ class RositaCanvas implements Canvas {
 
   @override
   void drawParagraph(Paragraph paragraph, Offset offset) {}
-
-  void drawRositaParagraph(TextPainter textPainter, Paragraph paragraph, Offset offset) {
-    final text = textPainter.text;
-
-    if (text is TextSpan) {
-      final string = text.text;
-
-      if (string == null) {
-        return;
-      }
-
-      final style = text.style;
-
-      if (style == null) {
-        return;
-      }
-
-      context.font = "${style.fontSize}px '${style.fontFamily}'";
-      context.fillText(string, offset.dx, offset.dy);
-    }
-  }
 
   @override
   void drawPath(Path path, Paint paint) {}
