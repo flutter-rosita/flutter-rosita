@@ -15,7 +15,9 @@ class RositaCanvas implements Canvas {
 
   html.CanvasRenderingContext2D get context => canvas.context2D;
 
-  void clean() {
+  void clean(Size size) {
+    canvas.width = size.width.toInt();
+    canvas.height = size.height.toInt();
     context.clearRect(0, 0, canvas.width!, canvas.height!);
   }
 
@@ -29,7 +31,11 @@ class RositaCanvas implements Canvas {
   void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {}
 
   @override
-  void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {}
+  void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
+    context.beginPath();
+    context.arc(rect.center.dx, rect.center.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
+    _fillPain(paint);
+  }
 
   @override
   void drawAtlas(Image atlas, List<RSTransform> transforms, List<Rect> rects, List<Color>? colors, BlendMode? blendMode,
@@ -98,11 +104,19 @@ class RositaCanvas implements Canvas {
   @override
   void drawRRect(RRect rrect, Paint paint) {
     context.beginPath();
+    _roundRect(rrect);
+    _fillPain(paint);
+  }
 
-    if (paint.style == PaintingStyle.fill) {
-      context.fillStyle = paint.color.toHexString();
-      _roundRect(rrect);
-      context.fill();
+  void _fillPain(Paint paint) {
+    switch (paint.style) {
+      case PaintingStyle.fill:
+        context.fillStyle = paint.color.toHexString();
+        context.fill();
+      case PaintingStyle.stroke:
+        context.strokeStyle = paint.color.toHexString();
+        context.lineWidth = paint.strokeWidth;
+        context.stroke();
     }
   }
 
@@ -135,12 +149,8 @@ class RositaCanvas implements Canvas {
   @override
   void drawRect(Rect rect, Paint paint) {
     context.beginPath();
-
-    if (paint.style == PaintingStyle.fill) {
-      context.fillStyle = paint.color.toHexString();
-      context.rect(rect.left, rect.top, rect.width, rect.height);
-      context.fill();
-    }
+    context.rect(rect.left, rect.top, rect.width, rect.height);
+    _fillPain(paint);
   }
 
   @override

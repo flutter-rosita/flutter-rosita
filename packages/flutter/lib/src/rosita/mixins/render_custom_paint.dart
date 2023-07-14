@@ -12,25 +12,27 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin {
   @override
   void rositaLayout() {
     super.rositaLayout();
+    rositaPaint(target.painter);
+    rositaPaint(target.foregroundPainter);
+  }
 
-    if (target.hasSize && hasHtmlElement) {
-      final size = target.size;
-
-      final painter = target.painter;
-      final foregroundPainter = target.foregroundPainter;
-
-      if (painter != null) {
-        final canvas = RositaCanvas(canvasElement);
-        canvas.clean();
-        painter.paint(canvas, size);
-      }
-
-      if (foregroundPainter != null) {
-        final canvas = RositaCanvas(foregroundCanvasElement);
-        canvas.clean();
-        foregroundPainter.paint(canvas, size);
-      }
+  void rositaPaint(CustomPainter? painter) {
+    if (!target.hasSize || !hasHtmlElement) {
+      return;
     }
+
+    final size = target.size;
+    final html.CanvasElement element;
+
+    if (identical(target.foregroundPainter, painter)) {
+      element = canvasElement;
+    } else {
+      element = foregroundCanvasElement;
+    }
+
+    final canvas = RositaCanvas(element);
+    canvas.clean(size);
+    painter?.paint(canvas, size);
   }
 
   html.CanvasElement? _canvasElement;
@@ -41,8 +43,8 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin {
     }
     final canvas = _canvasElement = html.CanvasElement();
 
-    canvas.style.width = '${target.size.width}px';
-    canvas.style.height = '${target.size.height}px';
+    canvas.style.overflow = 'visible';
+    canvas.style.position = 'absolute';
 
     final firstChild = htmlElement.firstChild;
 
@@ -59,8 +61,8 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin {
     }
     final canvas = _foregroundCanvasElement = html.CanvasElement();
 
-    canvas.style.width = '${target.size.width}px';
-    canvas.style.height = '${target.size.height}px';
+    canvas.style.overflow = 'visible';
+    canvas.style.position = 'absolute';
 
     htmlElement.append(canvas);
 
