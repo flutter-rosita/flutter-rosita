@@ -87,7 +87,7 @@ class RositaCanvas implements Canvas {
         return;
       }
 
-      context.font = '${style.fontSize}px ${style.fontFamily}';
+      context.font = "${style.fontSize}px '${style.fontFamily}'";
       context.fillText(string, offset.dx, offset.dy);
     }
   }

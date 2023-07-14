@@ -29,7 +29,7 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
       }
 
       htmlElement.style.color = style.color?.toHexString();
-      htmlElement.style.fontFamily = style.fontFamily;
+      htmlElement.style.fontFamily = "'${style.fontFamily}'";
 
       if (style.fontSize != null) {
         htmlElement.style.fontSize = '${style.fontSize!}px';
