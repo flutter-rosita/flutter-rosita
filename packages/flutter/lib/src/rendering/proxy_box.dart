@@ -3027,7 +3027,7 @@ typedef PointerSignalEventListener = void Function(PointerSignalEvent event);
 /// If it has a child, defers to the child for sizing behavior.
 ///
 /// If it does not have a child, grows to fit the parent-provided constraints.
-class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
+class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior with RositaSkipRenderObjectMixin {
   /// Creates a render object that forwards pointer events to callbacks.
   ///
   /// The [behavior] argument defaults to [HitTestBehavior.deferToChild].
@@ -3152,7 +3152,7 @@ class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
 ///
 ///  * [MouseRegion], a widget that listens to hover events using
 ///    [RenderMouseRegion].
-class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior implements MouseTrackerAnnotation {
+class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSkipRenderObjectMixin implements MouseTrackerAnnotation {
   /// Creates a render object that forwards pointer events to callbacks.
   ///
   /// All parameters are optional. By default this method creates an opaque
@@ -3313,7 +3313,7 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior implements Mou
 /// ratio of cases where the repaint boundary was useful vs the cases where it
 /// was not. These counts can also be inspected programmatically using
 /// [debugAsymmetricPaintCount] and [debugSymmetricPaintCount] respectively.
-class RenderRepaintBoundary extends RenderProxyBox {
+class RenderRepaintBoundary extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a repaint boundary around [child].
   RenderRepaintBoundary({ RenderBox? child }) : super(child);
 
@@ -3555,7 +3555,7 @@ class RenderRepaintBoundary extends RenderProxyBox {
 ///
 ///  * [RenderAbsorbPointer], which takes the pointer events but prevents any
 ///    nodes in the subtree from seeing them.
-class RenderIgnorePointer extends RenderProxyBox {
+class RenderIgnorePointer extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that is invisible to hit testing.
   ///
   /// The [ignoring] argument must not be null.
@@ -3798,7 +3798,7 @@ class RenderOffstage extends RenderProxyBox {
 ///
 ///  * [RenderIgnorePointer], which has the opposite effect: removing the
 ///    subtree from considering entirely for the purposes of hit testing.
-class RenderAbsorbPointer extends RenderProxyBox {
+class RenderAbsorbPointer extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that absorbs pointers during hit testing.
   ///
   /// The [absorbing] argument must not be null.
@@ -3918,7 +3918,7 @@ class RenderMetaData extends RenderProxyBoxWithHitTestBehavior {
 
 /// Listens for the specified gestures from the semantics server (e.g.
 /// an accessibility tool).
-class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
+class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior with RositaSkipRenderObjectMixin {
   /// Creates a render object that listens for specific semantic gestures.
   ///
   /// The [scrollFactor] and [behavior] arguments must not be null.
@@ -4110,7 +4110,7 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior {
 }
 
 /// Add annotations to the [SemanticsNode] for this subtree.
-class RenderSemanticsAnnotations extends RenderProxyBox {
+class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that attaches a semantic annotation.
   ///
   /// The [container] argument must not be null.
@@ -4559,7 +4559,7 @@ class RenderSemanticsAnnotations extends RenderProxyBox {
 ///
 /// This is useful in a stack where an opaque mask should prevent interactions
 /// with the render objects painted below the mask.
-class RenderBlockSemantics extends RenderProxyBox {
+class RenderBlockSemantics extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Create a render object that blocks semantics for nodes below it in paint
   /// order.
   RenderBlockSemantics({
@@ -4620,7 +4620,7 @@ class RenderMergeSemantics extends RenderProxyBox {
 ///
 /// Useful e.g. for hiding text that is redundant with other text next
 /// to it (e.g. text included only for the visual effect).
-class RenderExcludeSemantics extends RenderProxyBox {
+class RenderExcludeSemantics extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that ignores the semantics of its subtree.
   RenderExcludeSemantics({
     RenderBox? child,
@@ -4664,7 +4664,7 @@ class RenderExcludeSemantics extends RenderProxyBox {
 /// See also:
 ///
 ///  * [CustomScrollView], for an explanation of scroll semantics.
-class RenderIndexedSemantics extends RenderProxyBox {
+class RenderIndexedSemantics extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render object that annotates the child semantics with an index.
   RenderIndexedSemantics({
     RenderBox? child,

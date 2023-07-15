@@ -7,6 +7,7 @@ mixin _ParagraphMixin on _CanvasMixin {
     final text = textPainter.text;
 
     if (text is TextSpan) {
+      _setDirty();
       _drawTextSpan(text, '', offset);
     } else {
       assert(() {

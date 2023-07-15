@@ -15,16 +15,11 @@ part 'mixins/paragraph.dart';
 class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   RositaCanvas(this.canvas);
 
+  @override
   final html.CanvasElement canvas;
 
   @override
   html.CanvasRenderingContext2D get context => canvas.context2D;
-
-  void clean(Size size) {
-    canvas.width = size.width.toInt();
-    canvas.height = size.height.toInt();
-    context.clearRect(0, 0, canvas.width!, canvas.height!);
-  }
 
   @override
   void clipPath(Path path, {bool doAntiAlias = true}) {}
@@ -37,6 +32,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
+    _setDirty();
     context.beginPath();
     context.arc(rect.center.dx, rect.center.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
     _fillPain(paint);
@@ -87,6 +83,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawRRect(RRect rrect, Paint paint) {
+    _setDirty();
     context.beginPath();
     _roundRect(rrect);
     _fillPain(paint);
@@ -132,6 +129,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawRect(Rect rect, Paint paint) {
+    _setDirty();
     context.beginPath();
     context.rect(rect.left, rect.top, rect.width, rect.height);
     _fillPain(paint);

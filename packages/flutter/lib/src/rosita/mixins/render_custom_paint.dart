@@ -33,6 +33,7 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin {
     final canvas = RositaCanvas(element);
     canvas.clean(size);
     painter?.paint(canvas, size);
+    canvas.checkDirty();
   }
 
   html.CanvasElement? _canvasElement;
