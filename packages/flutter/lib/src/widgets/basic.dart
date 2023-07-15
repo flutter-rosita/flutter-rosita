@@ -5876,7 +5876,7 @@ class RichText extends MultiChildRenderObjectWidget {
 /// longer buildable.
 ///
 /// This widget is rarely used directly. Instead, consider using [Image].
-class RawImage extends LeafRenderObjectWidget {
+class RawImage extends LeafRenderObjectWidget with RositaImageProviderProxyMixin {
   /// Creates a widget that displays an image.
   ///
   /// The [scale], [alignment], [repeat], [matchTextDirection] and [filterQuality] arguments must
@@ -5899,7 +5899,11 @@ class RawImage extends LeafRenderObjectWidget {
     this.invertColors = false,
     this.filterQuality = FilterQuality.low,
     this.isAntiAlias = false,
+    this.rositaImageProvider,
   });
+
+  @override
+  final ImageProvider? rositaImageProvider;
 
   /// The image to display.
   ///
@@ -6058,6 +6062,7 @@ class RawImage extends LeafRenderObjectWidget {
       invertColors: invertColors,
       isAntiAlias: isAntiAlias,
       filterQuality: filterQuality,
+      rositaImageProvider: rositaImageProvider,
     );
   }
 
@@ -6085,13 +6090,15 @@ class RawImage extends LeafRenderObjectWidget {
       ..textDirection = matchTextDirection || alignment is! Alignment ? Directionality.of(context) : null
       ..invertColors = invertColors
       ..isAntiAlias = isAntiAlias
-      ..filterQuality = filterQuality;
+      ..filterQuality = filterQuality
+      ..rositaImageProvider = rositaImageProvider;
   }
 
   @override
   void didUnmountRenderObject(RenderImage renderObject) {
     // Have the render object dispose its image handle.
     renderObject.image = null;
+    renderObject.rositaImageProvider = null;
   }
 
   @override

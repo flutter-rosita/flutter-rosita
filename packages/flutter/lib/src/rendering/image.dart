@@ -5,6 +5,7 @@
 import 'dart:ui' as ui show Image;
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'box.dart';
 import 'object.dart';
@@ -20,7 +21,7 @@ export 'package:flutter/painting.dart' show
 ///
 /// The image is painted using [paintImage], which describes the meanings of the
 /// various fields on this class in more detail.
-class RenderImage extends RenderBox {
+class RenderImage extends RenderBox with RositaImageProviderProxyMixin, RositaRenderImageMixin {
   /// Creates a render box that displays an image.
   ///
   /// The [scale], [alignment], [repeat], [matchTextDirection] and [filterQuality] arguments
@@ -44,6 +45,7 @@ class RenderImage extends RenderBox {
     bool invertColors = false,
     bool isAntiAlias = false,
     FilterQuality filterQuality = FilterQuality.low,
+    ImageProvider? rositaImageProvider,
   }) : _image = image,
        _width = width,
        _height = height,
@@ -59,8 +61,17 @@ class RenderImage extends RenderBox {
        _invertColors = invertColors,
        _textDirection = textDirection,
        _isAntiAlias = isAntiAlias,
-       _filterQuality = filterQuality {
+       _filterQuality = filterQuality,
+       _rositaImageProvider = rositaImageProvider {
     _updateColorFilter();
+  }
+
+  @override
+  ImageProvider? get rositaImageProvider => _rositaImageProvider;
+  ImageProvider? _rositaImageProvider;
+
+  set rositaImageProvider(ImageProvider? imageProvider) {
+    _rositaImageProvider = imageProvider;
   }
 
   Alignment? _resolvedAlignment;
