@@ -15,19 +15,33 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
 
     final text = target.text;
 
-    if (target.hasSize && text is TextSpan) {
+    if (target.hasSize) {
+      htmlElement.style.textAlign = _mapTextAlign(target.textAlign);
+      htmlElement.style.textOverflow = _mapTextOverflow(target.overflow);
+      htmlElement.style.overflowX = _mapOverflow(target.overflow);
+      htmlElement.style.wordWrap = 'break-word';
+
+      if (target.maxLines == 1) {
+        htmlElement.style.whiteSpace = 'nowrap';
+      } else if (target.maxLines != null) {
+        htmlElement.style.overflowY = 'clip';
+      }
+
       htmlElement.innerHtml = '';
+
       _appendTextSpan(text, htmlElement);
     }
   }
 
-  void _appendTextSpan(TextSpan text, html.HtmlElement parent) {
+  void _appendTextSpan(InlineSpan text, html.HtmlElement parent) {
     final style = text.style;
 
     final element = html.SpanElement();
 
-    if (text.text != null) {
+    if (text is TextSpan && text.text != null) {
       element.text = text.text;
+    } else {
+      element.text = ' ';
     }
 
     if (style != null) {
@@ -50,11 +64,9 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
 
     parent.append(element);
 
-    if (text.children != null) {
+    if (text is TextSpan && text.children != null) {
       for (final child in text.children!) {
-        if (child is TextSpan) {
-          _appendTextSpan(child, element);
-        }
+        _appendTextSpan(child, element);
       }
     }
   }
@@ -69,6 +81,26 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
         FontWeight.w700 => '700',
         FontWeight.w800 => '800',
         FontWeight.w900 => '900',
+        _ => '',
+      };
+
+  String _mapTextAlign(TextAlign align) => switch (align) {
+        TextAlign.left => 'left',
+        TextAlign.right => 'right',
+        TextAlign.center => 'center',
+        TextAlign.justify => 'justify',
+        TextAlign.start => 'start',
+        TextAlign.end => 'end',
+      };
+
+  String _mapTextOverflow(TextOverflow overflow) => switch (overflow) {
+        TextOverflow.clip => 'clip',
+        TextOverflow.ellipsis => 'ellipsis',
+        _ => '',
+      };
+
+  String _mapOverflow(TextOverflow overflow) => switch (overflow) {
+        TextOverflow.clip || TextOverflow.ellipsis => 'clip',
         _ => '',
       };
 }
