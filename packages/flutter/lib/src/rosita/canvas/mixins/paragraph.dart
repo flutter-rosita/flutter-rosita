@@ -3,7 +3,7 @@
 part of '../rosita_canvas.dart';
 
 mixin _ParagraphMixin on _CanvasMixin {
-  void drawRositaParagraph(TextPainter textPainter, Paragraph paragraph, Offset offset) {
+  void drawRositaParagraph(TextPainter textPainter, Offset offset) {
     final text = textPainter.text;
 
     if (text is TextSpan) {
@@ -27,17 +27,26 @@ mixin _ParagraphMixin on _CanvasMixin {
       return;
     }
 
+    final fontSize = style.fontSize;
+    final height = style.height ?? 1;
+
+    if (fontSize == null) {
+      throw Exception('Invalid font size');
+    }
+
+    final lineHeight = fontSize * height;
+
     final newFont = [
-      if (style.fontSize != null) '${style.fontSize}px',
+      '${fontSize}px',
       if (style.fontFamily != null) "'${style.fontFamily}'"
     ].join(' ').trim();
 
-    if (newFont.isNotEmpty) {
-      context.font = newFont;
-    }
+    context.font = newFont;
 
-    if (string == null) {
-      context.fillText(string!, offset.dx, offset.dy);
+    context.fillStyle = '${style.color?.toHexString()}';
+
+    if (string != null) {
+      context.fillText(string, offset.dx, offset.dy + lineHeight);
     }
 
     if (text.children != null) {

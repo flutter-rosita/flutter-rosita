@@ -81,6 +81,8 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
           );
         }
       }
+    } else if (parentData is SliverPhysicalParentData) {
+      return parentData.paintOffset;
     } else if (parentData != null) {
       assert(() {
         if (parentData.runtimeType != ParentData) {

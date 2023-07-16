@@ -5,7 +5,7 @@ import 'dart:html' as html;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 
-mixin RositaRenderCustomPaintMixin on RositaRenderMixin {
+mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
   @override
   RenderCustomPaint get target => this as RenderCustomPaint;
 
@@ -34,39 +34,5 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin {
     canvas.clean(size);
     painter?.paint(canvas, size);
     canvas.checkDirty();
-  }
-
-  html.CanvasElement? _canvasElement;
-
-  html.CanvasElement get canvasElement {
-    if (_canvasElement != null) {
-      return _canvasElement!;
-    }
-    final canvas = _canvasElement = html.CanvasElement();
-
-    canvas.style.overflow = 'visible';
-    canvas.style.position = 'absolute';
-
-    final firstChild = htmlElement.firstChild;
-
-    htmlElement.insertBefore(canvas, firstChild);
-
-    return canvas;
-  }
-
-  html.CanvasElement? _foregroundCanvasElement;
-
-  html.CanvasElement get foregroundCanvasElement {
-    if (_foregroundCanvasElement != null) {
-      return _foregroundCanvasElement!;
-    }
-    final canvas = _foregroundCanvasElement = html.CanvasElement();
-
-    canvas.style.overflow = 'visible';
-    canvas.style.position = 'absolute';
-
-    htmlElement.append(canvas);
-
-    return canvas;
   }
 }

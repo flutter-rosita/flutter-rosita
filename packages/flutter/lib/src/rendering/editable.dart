@@ -9,6 +9,7 @@ import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle, LineMetrics, Placehol
 import 'package:characters/characters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
@@ -258,7 +259,7 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
 /// Keyboard handling, IME handling, scrolling, toggling the [showCursor] value
 /// to actually blink the cursor, and other features not mentioned above are the
 /// responsibility of higher layers and not handled by this object.
-class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults implements TextLayoutMetrics {
+class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RositaCanvasMixin, RositaRenderEditableMixin implements TextLayoutMetrics {
   /// Creates a render object that implements the visual aspects of a text field.
   ///
   /// The [textAlign] argument must not be null. It defaults to [TextAlign.start].
@@ -2476,6 +2477,13 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   }
 
   @override
+  void rositaLayout() {
+    super.rositaLayout();
+
+    rositaPaintTextPainter(_textPainter, _paintOffset);
+  }
+
+  @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     if (child == _foregroundRenderObject || child == _backgroundRenderObject) {
       return;
@@ -2546,7 +2554,7 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   }
 }
 
-class _RenderEditableCustomPaint extends RenderBox {
+class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, RositaRenderEditableCustomPaintMixin {
   _RenderEditableCustomPaint({
     RenderEditablePainter? painter,
   }) : _painter = painter,
@@ -2573,11 +2581,14 @@ class _RenderEditableCustomPaint extends RenderBox {
 
     if (newValue?.shouldRepaint(oldPainter) ?? true) {
       markNeedsPaint();
+      performRositaLayout();
     }
 
     if (attached) {
       oldPainter?.removeListener(markNeedsPaint);
       newValue?.addListener(markNeedsPaint);
+      oldPainter?.removeListener(performRositaLayout);
+      newValue?.addListener(performRositaLayout);
     }
   }
 
@@ -2596,11 +2607,13 @@ class _RenderEditableCustomPaint extends RenderBox {
   void attach(PipelineOwner owner) {
     super.attach(owner);
     _painter?.addListener(markNeedsPaint);
+    _painter?.addListener(performRositaLayout);
   }
 
   @override
   void detach() {
     _painter?.removeListener(markNeedsPaint);
+    _painter?.removeListener(performRositaLayout);
     super.detach();
   }
 

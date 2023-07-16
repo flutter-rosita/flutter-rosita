@@ -362,7 +362,7 @@ class CustomPainterSemantics {
 ///
 ///  * [CustomPainter], the class that custom painter delegates should extend.
 ///  * [Canvas], the API provided to custom painter delegates.
-class RenderCustomPaint extends RenderProxyBox with RositaRenderCustomPaintMixin {
+class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRenderCustomPaintMixin {
   /// Creates a render object that delegates its painting.
   RenderCustomPaint({
     CustomPainter? painter,
