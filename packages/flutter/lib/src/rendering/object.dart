@@ -2447,6 +2447,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       if (!kReleaseMode && debugProfileLayoutsEnabled) {
         FlutterTimeline.finishSync();
       }
+      callRositaLayout(); // TODO: [ROSITA] optimize call
       return;
     }
     _constraints = constraints;
