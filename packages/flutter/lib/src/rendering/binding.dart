@@ -340,7 +340,7 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   }
 
   void _handleSemanticsOwnerCreated() {
-    renderView.scheduleInitialSemantics();
+    rositaSkipCallback(renderView.scheduleInitialSemantics);
   }
 
   void _handleSemanticsUpdate(ui.SemanticsUpdate update) {
@@ -496,8 +496,8 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     pipelineOwner.flushCompositingBits();
     rositaSkipCallback(pipelineOwner.flushPaint, pipelineOwner.rositaFlushLayout);
     if (sendFramesToEngine) {
-      renderView.compositeFrame(); // this sends the bits to the GPU
-      pipelineOwner.flushSemantics(); // this also sends the semantics to the OS.
+      rositaSkipCallback(renderView.compositeFrame); // this sends the bits to the GPU
+      rositaSkipCallback(pipelineOwner.flushSemantics); // this also sends the semantics to the OS.
       _firstFrameSent = true;
     }
   }

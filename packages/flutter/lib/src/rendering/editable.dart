@@ -740,6 +740,7 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
 
   @override
   void markNeedsPaint() {
+    return; // [ROSITA] BREAK
     super.markNeedsPaint();
     // Tell the painters to repaint since text layout may have changed.
     _foregroundRenderObject?.markNeedsPaint();

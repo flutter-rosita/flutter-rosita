@@ -2907,6 +2907,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///    layer, thus limiting the number of nodes that [markNeedsPaint] must mark
   ///    dirty.
   void markNeedsPaint() {
+    return; // [ROSITA] BREAK
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
     if (_needsPaint) {
@@ -2969,6 +2970,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///  * [RenderOpacity], which uses this method when its opacity is updated to
   ///    update the layer opacity without repainting children.
   void markNeedsCompositedLayerUpdate() {
+    return; // [ROSITA] BREAK
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
     if (_needsCompositedLayerUpdate || _needsPaint) {
@@ -3025,6 +3027,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///
   /// See [RenderView] for an example of how this function is used.
   void scheduleInitialPaint(ContainerLayer rootLayer) {
+    return; // [ROSITA] BREAK
     assert(rootLayer.attached);
     assert(attached);
     assert(parent is! RenderObject);
@@ -3461,6 +3464,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   /// [RenderObject] as annotated by [describeSemanticsConfiguration] changes in
   /// any way to update the semantics tree.
   void markNeedsSemanticsUpdate() {
+    return; // [ROSITA] BREAK
     assert(!_debugDisposed);
     assert(!attached || !owner!._debugDoingSemantics);
     if (!attached || owner!._semanticsOwner == null) {
