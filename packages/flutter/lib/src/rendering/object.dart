@@ -873,7 +873,7 @@ class _LocalSemanticsHandle implements SemanticsHandle {
 /// without tying it to a specific binding implementation. All [PipelineOwner]s
 /// in a given tree must be attached to the same [PipelineManifold]. This
 /// happens automatically during [adoptChild].
-class PipelineOwner {
+class PipelineOwner with RositaPipelineOwnerMixin {
   /// Creates a pipeline owner.
   ///
   /// Typically created by the binding (e.g., [RendererBinding]), but can be
@@ -1286,6 +1286,9 @@ class PipelineOwner {
 
   final Set<PipelineOwner> _children = <PipelineOwner>{};
   PipelineManifold? _manifold;
+
+  @override
+  Set<PipelineOwner> get rositaChildren => _children;
 
   PipelineOwner? _debugParent;
   bool _debugSetParent(PipelineOwner child, PipelineOwner? parent) {
@@ -2344,7 +2347,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     _needsLayout = false;
     markNeedsPaint();
 
-    callRositaLayout();
+    rositaMarkNeedsLayout();
   }
 
   /// Compute the layout for this render object.
@@ -2447,7 +2450,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       if (!kReleaseMode && debugProfileLayoutsEnabled) {
         FlutterTimeline.finishSync();
       }
-      callRositaLayout(); // TODO: [ROSITA] optimize call
+      rositaMarkNeedsLayout();
       return;
     }
     _constraints = constraints;
@@ -2516,7 +2519,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       FlutterTimeline.finishSync();
     }
 
-    callRositaLayout();
+    rositaMarkNeedsLayout();
   }
 
   /// If a subclass has a "size" (the state controlled by `parentUsesSize`,

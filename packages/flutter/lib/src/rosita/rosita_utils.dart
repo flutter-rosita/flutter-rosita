@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
-void rositaSkipCallback(VoidCallback callback) {
+void rositaSkipCallback(VoidCallback skipCallback, [VoidCallback? callback]) {
   // Skip call function
+  callback?.call();
 }

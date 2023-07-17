@@ -494,7 +494,7 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   void drawFrame() {
     pipelineOwner.flushLayout();
     pipelineOwner.flushCompositingBits();
-    rositaSkipCallback(() => pipelineOwner.flushPaint());
+    rositaSkipCallback(pipelineOwner.flushPaint, pipelineOwner.rositaFlushLayout);
     if (sendFramesToEngine) {
       renderView.compositeFrame(); // this sends the bits to the GPU
       pipelineOwner.flushSemantics(); // this also sends the semantics to the OS.

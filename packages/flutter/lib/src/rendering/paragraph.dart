@@ -317,7 +317,7 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
         _cachedCombinedSemanticsInfos = null;
         markNeedsPaint();
         markNeedsSemanticsUpdate();
-        performRositaLayout();
+        rositaMarkNeedsLayout();
       case RenderComparison.layout:
         _textPainter.text = value;
         _overflowShader = null;
@@ -441,7 +441,7 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     }
     _textPainter.textAlign = value;
     markNeedsPaint();
-    performRositaLayout();
+    rositaMarkNeedsLayout();
   }
 
   /// The directionality of the text.
@@ -589,7 +589,7 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     _selectionColor = value;
     if (_lastSelectableFragments?.any((_SelectableFragment fragment) => fragment.value.hasSelection) ?? false) {
       markNeedsPaint();
-      performRositaLayout();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -1420,7 +1420,7 @@ class _SelectableFragment with Selectable, ChangeNotifier implements TextLayoutM
 
   void _didChangeSelection() {
     paragraph.markNeedsPaint();
-    paragraph.performRositaLayout();
+    paragraph.rositaMarkNeedsLayout();
     _updateSelectionGeometry();
   }
 
@@ -1737,12 +1737,12 @@ class _SelectableFragment with Selectable, ChangeNotifier implements TextLayoutM
     if (_startHandleLayerLink != startHandle) {
       _startHandleLayerLink = startHandle;
       paragraph.markNeedsPaint();
-      paragraph.performRositaLayout();
+      paragraph.rositaMarkNeedsLayout();
     }
     if (_endHandleLayerLink != endHandle) {
       _endHandleLayerLink = endHandle;
       paragraph.markNeedsPaint();
-      paragraph.performRositaLayout();
+      paragraph.rositaMarkNeedsLayout();
     }
   }
 

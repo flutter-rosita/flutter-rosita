@@ -1045,7 +1045,7 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
         markNeedsSemanticsUpdate();
       }
 
-      performRositaLayout();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -1137,6 +1137,7 @@ class RenderShaderMask extends RenderProxyBox {
     }
     _shaderCallback = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The [BlendMode] to use when applying the shader to the child.
@@ -1151,6 +1152,7 @@ class RenderShaderMask extends RenderProxyBox {
     }
     _blendMode = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -1207,6 +1209,7 @@ class RenderBackdropFilter extends RenderProxyBox {
     }
     _filter = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The blend mode to use to apply the filtered background content onto the background
@@ -1221,6 +1224,7 @@ class RenderBackdropFilter extends RenderProxyBox {
     }
     _blendMode = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -1414,6 +1418,7 @@ abstract class _RenderCustomClip<T> extends RenderProxyBox {
     _clip = null;
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   T get _defaultClip;
@@ -1424,6 +1429,7 @@ abstract class _RenderCustomClip<T> extends RenderProxyBox {
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
+      rositaMarkNeedsLayout();
     }
   }
   Clip _clipBehavior;
@@ -1872,6 +1878,7 @@ abstract class _RenderPhysicalModelBase<T> extends _RenderCustomClip<T> {
       markNeedsCompositingBitsUpdate();
     }
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The shadow color.
@@ -1883,6 +1890,7 @@ abstract class _RenderPhysicalModelBase<T> extends _RenderCustomClip<T> {
     }
     _shadowColor = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The background color.
@@ -1894,6 +1902,7 @@ abstract class _RenderPhysicalModelBase<T> extends _RenderCustomClip<T> {
     }
     _color = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -2234,6 +2243,7 @@ class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMix
     _painter = null;
     _decoration = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// Whether to paint the box decoration behind or in front of the child.
@@ -2245,6 +2255,7 @@ class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMix
     }
     _position = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The settings to pass to the decoration when painting, so that it can
@@ -2261,6 +2272,7 @@ class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMix
     }
     _configuration = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -2274,6 +2286,7 @@ class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMix
     // example, animated GIFs would stop animating when a DecoratedBox gets
     // moved around the tree due to GlobalKey reparenting.
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -2363,6 +2376,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _origin = value;
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// The alignment of the origin, relative to the size of the box.
@@ -2385,6 +2399,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _alignment = value;
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// The text direction with which to resolve [alignment].
@@ -2400,6 +2415,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _textDirection = value;
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -2427,6 +2443,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform = Matrix4.copy(value);
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// The filter quality with which to apply the transform as a bitmap operation.
@@ -2444,6 +2461,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
       markNeedsCompositingBitsUpdate();
     }
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// Sets the transform to the identity matrix.
@@ -2451,6 +2469,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform!.setIdentity();
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// Concatenates a rotation about the x axis into the transform.
@@ -2458,6 +2477,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform!.rotateX(radians);
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// Concatenates a rotation about the y axis into the transform.
@@ -2465,6 +2485,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform!.rotateY(radians);
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// Concatenates a rotation about the z axis into the transform.
@@ -2472,6 +2493,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform!.rotateZ(radians);
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// Concatenates a translation by (x, y, z) into the transform.
@@ -2479,6 +2501,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform!.translate(x, y, z);
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   /// Concatenates a scale into the transform.
@@ -2486,6 +2509,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     _transform!.scale(x, y, z);
     markNeedsPaint();
     markNeedsSemanticsUpdate();
+    rositaMarkNeedsLayout();
   }
 
   Matrix4? get _effectiveTransform {
@@ -2625,6 +2649,7 @@ class RenderFittedBox extends RenderProxyBox {
   void _markNeedResolution() {
     _resolvedAlignment = null;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   bool _fitAffectsLayout(BoxFit fit) {
@@ -2655,6 +2680,7 @@ class RenderFittedBox extends RenderProxyBox {
     } else {
       _clearPaintData();
       markNeedsPaint();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -2771,6 +2797,7 @@ class RenderFittedBox extends RenderProxyBox {
       _clipBehavior = value;
       markNeedsPaint();
       markNeedsSemanticsUpdate();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -2914,7 +2941,7 @@ class RenderFractionalTranslation extends RenderProxyBox with RositaRenderFracti
     _translation = value;
     markNeedsPaint();
     markNeedsSemanticsUpdate();
-    performRositaLayout();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -3206,6 +3233,7 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSki
       _opaque = value;
       // Trigger [MouseTracker]'s device update to recalculate mouse states.
       markNeedsPaint();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -3219,6 +3247,7 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSki
       behavior = newValue;
       // Trigger [MouseTracker]'s device update to recalculate mouse states.
       markNeedsPaint();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -3243,6 +3272,7 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSki
       // A repaint is needed in order to trigger a device update of
       // [MouseTracker] so that this new value can be found.
       markNeedsPaint();
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -3646,7 +3676,7 @@ class RenderIgnorePointer extends RenderProxyBox with RositaSkipRenderObjectMixi
 /// Lays the child out as if it was in the tree, but without painting anything,
 /// without making the child available for hit testing, and without taking any
 /// room in the parent.
-class RenderOffstage extends RenderProxyBox {
+class RenderOffstage extends RenderProxyBox with RositaRenderOffstageMixin {
   /// Creates an offstage render object.
   RenderOffstage({
     bool offstage = true,
@@ -4729,6 +4759,7 @@ class RenderLeaderLayer extends RenderProxyBox {
       _link.leaderSize = _previousLayoutSize;
     }
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -4811,6 +4842,7 @@ class RenderFollowerLayer extends RenderProxyBox {
     }
     _link = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// Whether to show the render object's contents when there is no
@@ -4830,6 +4862,7 @@ class RenderFollowerLayer extends RenderProxyBox {
     }
     _showWhenUnlinked = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The offset to apply to the origin of the linked [RenderLeaderLayer] to
@@ -4842,6 +4875,7 @@ class RenderFollowerLayer extends RenderProxyBox {
     }
     _offset = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The anchor point on the linked [RenderLeaderLayer] that [followerAnchor]
@@ -4866,6 +4900,7 @@ class RenderFollowerLayer extends RenderProxyBox {
     }
     _leaderAnchor = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// The anchor point on this [RenderFollowerLayer] that will line up with
@@ -4882,6 +4917,7 @@ class RenderFollowerLayer extends RenderProxyBox {
     }
     _followerAnchor = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override
@@ -5022,6 +5058,7 @@ class RenderAnnotatedRegion<T extends Object> extends RenderProxyBox {
     }
     _value = newValue;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   /// Whether the render object will pass its [size] to the [AnnotatedRegionLayer].
@@ -5033,6 +5070,7 @@ class RenderAnnotatedRegion<T extends Object> extends RenderProxyBox {
     }
     _sized = value;
     markNeedsPaint();
+    rositaMarkNeedsLayout();
   }
 
   @override

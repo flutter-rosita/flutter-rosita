@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, avoid_print
+// ignore_for_file: public_member_api_docs, avoid_print, always_specify_types
 
 import 'dart:html' as html;
 
@@ -33,6 +33,9 @@ mixin RositaRenderMixin on AbstractNode {
       } else {
         throw Exception('Parent HtmlElement not found for: $this');
       }
+
+      _rositaNeedsLayout = false;
+      rositaMarkNeedsLayout();
     }
   }
 
@@ -72,18 +75,58 @@ mixin RositaRenderMixin on AbstractNode {
 
   RenderObject get target => this as RenderObject;
 
-  @mustCallSuper
-  void rositaLayout() {}
+  bool _rositaNeedsLayout = true;
 
-  void callRositaLayout() {
-    RendererBinding.instance.addPostFrameCallback((_) {
-      performRositaLayout();
-    });
+  void rositaMarkNeedsLayout() {
+    if (_rositaNeedsLayout) {
+      return;
+    }
+
+    final owner = this.owner;
+
+    if (owner is RositaPipelineOwnerMixin) {
+      if (hasHtmlElement) {
+        _rositaNeedsLayout = true;
+        owner._rositaNodesNeedingLayout.add(target);
+      } else {
+        late RenderObjectVisitor visitor;
+        visitor = (RenderObject child) {
+          if (child.hasHtmlElement) {
+            child.rositaMarkNeedsLayout();
+          } else {
+            child.visitChildren(visitor);
+          }
+        };
+        target.visitChildren(visitor);
+      }
+    }
   }
 
-  void performRositaLayout() {
-    if (hasHtmlElement) {
-      rositaLayout();
-    }
+  @mustCallSuper
+  void rositaLayout() {}
+}
+
+mixin RositaPipelineOwnerMixin {
+  Set<PipelineOwner> get rositaChildren;
+
+  List<RenderObject> _rositaNodesNeedingLayout = <RenderObject>[];
+
+  void rositaFlushLayout() {
+    try {
+      final List<RenderObject> dirtyNodes = _rositaNodesNeedingLayout;
+      _rositaNodesNeedingLayout = <RenderObject>[];
+
+      for (final RenderObject node in dirtyNodes..sort((RenderObject a, RenderObject b) => b.depth - a.depth)) {
+        if (node.owner == this) {
+          node._rositaNeedsLayout = false;
+          if (node.hasHtmlElement) {
+            node.rositaLayout();
+          }
+        }
+      }
+      for (final child in rositaChildren) {
+        child.rositaFlushLayout();
+      }
+    } finally {}
   }
 }
