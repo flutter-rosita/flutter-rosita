@@ -10,9 +10,7 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
   RenderParagraph get target => this as RenderParagraph;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     final text = target.text;
 
     if (target.hasSize) {

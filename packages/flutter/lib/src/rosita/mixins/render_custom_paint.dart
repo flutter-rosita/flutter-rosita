@@ -10,26 +10,13 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
   RenderCustomPaint get target => this as RenderCustomPaint;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-    rositaPaint(target.painter);
-    rositaPaint(target.foregroundPainter);
+  void rositaPaint() {
+    rositaPainterPaint(canvasElement, target.painter);
+    rositaPainterPaint(foregroundCanvasElement, target.foregroundPainter);
   }
 
-  void rositaPaint(CustomPainter? painter) {
-    if (!target.hasSize || !hasHtmlElement) {
-      return;
-    }
-
+  void rositaPainterPaint(html.CanvasElement element, CustomPainter? painter) {
     final size = target.size;
-    final html.CanvasElement element;
-
-    if (identical(target.foregroundPainter, painter)) {
-      element = canvasElement;
-    } else {
-      element = foregroundCanvasElement;
-    }
-
     final canvas = RositaCanvas(element);
     canvas.clean(size);
     painter?.paint(canvas, size);

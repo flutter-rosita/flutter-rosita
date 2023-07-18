@@ -433,12 +433,10 @@ class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRen
     if (newPainter == null) {
       assert(oldPainter != null); // We should be called only for changes.
       markNeedsPaint();
-      rositaPaint(newPainter);
     } else if (oldPainter == null ||
         newPainter.runtimeType != oldPainter.runtimeType ||
         newPainter.shouldRepaint(oldPainter)) {
       markNeedsPaint();
-      rositaPaint(newPainter);
     }
     if (attached) {
       oldPainter?.removeListener(markNeedsPaint);

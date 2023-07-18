@@ -8,9 +8,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
   RenderDecoratedBox get target => this as RenderDecoratedBox;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     final decoration = target.decoration;
 
     if (decoration is BoxDecoration) {

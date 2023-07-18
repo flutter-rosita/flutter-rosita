@@ -24,7 +24,7 @@ typedef BoxConstraintsTransform = BoxConstraints Function(BoxConstraints);
 
 /// Abstract class for one-child-layout render boxes that provide control over
 /// the child's position.
-abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixin<RenderBox>, RositaRenderShiftedBox {
+abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
   /// Initializes the [child] property for subclasses.
   RenderShiftedBox(RenderBox? child) {
     this.child = child;

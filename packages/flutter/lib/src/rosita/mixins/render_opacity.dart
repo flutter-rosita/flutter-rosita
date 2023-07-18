@@ -8,9 +8,7 @@ mixin RositaRenderOpacityMixin on RositaRenderMixin {
   RenderOpacity get target => this as RenderOpacity;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     htmlElement.style.opacity = '${target.opacity}';
   }
 }
@@ -20,9 +18,7 @@ mixin RositaRenderAnimatedOpacityMixin on RositaRenderMixin {
   RenderAnimatedOpacity get target => this as RenderAnimatedOpacity;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     htmlElement.style.opacity = '${target.opacity.value}';
   }
 }

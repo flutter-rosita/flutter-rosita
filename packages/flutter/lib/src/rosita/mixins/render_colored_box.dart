@@ -7,9 +7,7 @@ mixin RositaRenderColoredBoxMixin on RositaRenderMixin {
   Color get color;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     htmlElement.style.backgroundColor = color.toHexString();
   }
 }

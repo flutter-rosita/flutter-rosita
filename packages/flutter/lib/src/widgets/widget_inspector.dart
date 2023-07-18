@@ -2011,7 +2011,8 @@ mixin WidgetInspectorService {
         ..flushLayout()
         ..flushCompositingBits()
         ..flushPaint()
-        ..rositaFlushLayout();
+        ..rositaFlushLayout()
+        ..rositaFlushPaint();
 
       // If we still need layout, then that means that renderObject was skipped
       // in the layout phase and therefore can't be painted. It is clearer to

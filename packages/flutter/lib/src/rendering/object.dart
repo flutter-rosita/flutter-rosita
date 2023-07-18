@@ -2335,6 +2335,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     try {
       performLayout();
       markNeedsSemanticsUpdate();
+      rositaMarkNeedsLayout();
     } catch (e, stack) {
       _reportException('performLayout', e, stack);
     }
@@ -2346,8 +2347,6 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     }());
     _needsLayout = false;
     markNeedsPaint();
-
-    rositaMarkNeedsLayout();
   }
 
   /// Compute the layout for this render object.
@@ -2447,10 +2446,11 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
         visitChildren(_propagateRelayoutBoundaryToChild);
       }
 
+      rositaMarkNeedsLayout();
+
       if (!kReleaseMode && debugProfileLayoutsEnabled) {
         FlutterTimeline.finishSync();
       }
-      rositaMarkNeedsLayout();
       return;
     }
     _constraints = constraints;
@@ -2499,6 +2499,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     try {
       performLayout();
       markNeedsSemanticsUpdate();
+      rositaMarkNeedsLayout();
       assert(() {
         debugAssertDoesMeetConstraints();
         return true;
@@ -2518,8 +2519,6 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     if (!kReleaseMode && debugProfileLayoutsEnabled) {
       FlutterTimeline.finishSync();
     }
-
-    rositaMarkNeedsLayout();
   }
 
   /// If a subclass has a "size" (the state controlled by `parentUsesSize`,
@@ -2907,6 +2906,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///    layer, thus limiting the number of nodes that [markNeedsPaint] must mark
   ///    dirty.
   void markNeedsPaint() {
+    rositaMarkNeedsPaint();
     return; // [ROSITA] BREAK
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);

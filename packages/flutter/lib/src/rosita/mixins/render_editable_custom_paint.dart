@@ -13,9 +13,7 @@ mixin RositaRenderEditableCustomPaintMixin on RositaRenderMixin, RositaCanvasMix
   RenderEditablePainter? get painter;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     if (target.hasSize) {
       _paint();
     }

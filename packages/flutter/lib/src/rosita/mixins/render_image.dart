@@ -25,9 +25,7 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
   }
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     final image = target.rositaImageProvider;
 
     if (image is NetworkImage) {

@@ -10,15 +10,20 @@ mixin RositaPlatformViewRenderBoxMixin on RositaRenderMixin {
   @override
   PlatformViewRenderBox get target => this as PlatformViewRenderBox;
 
+  html.HtmlElement? _childHtmlElement;
+
   @override
   void rositaLayout() {
     super.rositaLayout();
 
-    final controller = target.controller;
-    final el = RositaPlatformViewRegister._viewMap[controller.viewId];
+    if (_childHtmlElement == null) {
+      final controller = target.controller;
+      final el = RositaPlatformViewRegister._viewMap[controller.viewId];
 
-    if (el != null) {
-      htmlElement.append(el);
+      if (el != null) {
+        _childHtmlElement = el;
+        htmlElement.append(el);
+      }
     }
   }
 }

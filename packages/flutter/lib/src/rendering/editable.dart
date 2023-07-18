@@ -2582,14 +2582,11 @@ class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, Rosit
 
     if (newValue?.shouldRepaint(oldPainter) ?? true) {
       markNeedsPaint();
-      rositaMarkNeedsLayout();
     }
 
     if (attached) {
       oldPainter?.removeListener(markNeedsPaint);
       newValue?.addListener(markNeedsPaint);
-      oldPainter?.removeListener(rositaMarkNeedsLayout);
-      newValue?.addListener(rositaMarkNeedsLayout);
     }
   }
 
@@ -2608,13 +2605,11 @@ class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, Rosit
   void attach(PipelineOwner owner) {
     super.attach(owner);
     _painter?.addListener(markNeedsPaint);
-    _painter?.addListener(rositaMarkNeedsLayout);
   }
 
   @override
   void detach() {
     _painter?.removeListener(markNeedsPaint);
-    _painter?.removeListener(rositaMarkNeedsLayout);
     super.detach();
   }
 

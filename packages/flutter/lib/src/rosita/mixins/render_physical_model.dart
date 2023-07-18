@@ -8,9 +8,7 @@ mixin RositaRenderPhysicalModelMixin on RositaRenderMixin {
   RenderPhysicalModel get target => this as RenderPhysicalModel;
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
+  void rositaPaint() {
     htmlElement.style.backgroundColor = target.color.toHexString();
   }
 }
