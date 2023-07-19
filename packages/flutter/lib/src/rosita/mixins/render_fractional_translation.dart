@@ -13,7 +13,10 @@ mixin RositaRenderFractionalTranslationMixin on RositaRenderMixin {
 
   @override
   // ignore: must_call_super
-  void rositaLayout() {
+  void rositaLayout() {}
+
+  @override
+  void rositaPaint() {
     if (target.hasSize) {
       final Size(:width, :height) = target.size;
 

@@ -8,9 +8,9 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
   html.HtmlElement? _rositaRootElement;
 
   @override
-  html.HtmlElement findParentHtmlElement() {
+  void rositaAttach() {
     if (_rositaRootElement != null) {
-      return _rositaRootElement!;
+      return;
     }
 
     final shadowRoot = (html.document.getElementsByTagName('flt-glass-pane').first as html.HtmlElement).shadowRoot!;
@@ -22,7 +22,7 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
 
     _rositaRootElement = rositaRootElement;
 
-    return rositaRootElement;
+    rositaRootElement.append(htmlElement);
   }
 
   html.StyleElement createStyleElement() {

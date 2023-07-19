@@ -496,6 +496,8 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     pipelineOwner.flushCompositingBits();
     rositaSkipCallback(pipelineOwner.flushPaint);
     RositaPipelineOwnerMixin.rositaDrawFrame(() {
+      pipelineOwner.rositaFlushDetach();
+      pipelineOwner.rositaFlushAttach();
       pipelineOwner.rositaFlushLayout();
       pipelineOwner.rositaFlushPaint();
     });

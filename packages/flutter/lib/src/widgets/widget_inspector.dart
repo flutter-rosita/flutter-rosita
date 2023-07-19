@@ -2011,6 +2011,8 @@ mixin WidgetInspectorService {
         ..flushLayout()
         ..flushCompositingBits()
         ..flushPaint()
+        ..rositaFlushDetach()
+        ..rositaFlushAttach()
         ..rositaFlushLayout()
         ..rositaFlushPaint();
 

@@ -21,21 +21,10 @@ mixin RositaRenderMixin on AbstractNode {
     createRositaElement();
 
     if (hasHtmlElement) {
-      final parentHtmlElement = findParentHtmlElement();
-
-      assert(() {
-        htmlElement.setAttribute('rosita-debug-object', describeIdentity(this));
-        return true;
-      }());
-
-      if (parentHtmlElement != null) {
-        parentHtmlElement.append(htmlElement);
-      } else {
-        throw Exception('Parent HtmlElement not found for: $this');
-      }
-
+      _rositaNeedsAttach = false;
       _rositaNeedsLayout = false;
       _rositaNeedsPaint = false;
+      rositaMarkNeedsAttach();
       rositaMarkNeedsLayout();
       rositaMarkNeedsPaint();
     }
@@ -43,43 +32,53 @@ mixin RositaRenderMixin on AbstractNode {
 
   @override
   void detach() {
+    rositaMarkNeedsDetach();
     super.detach();
-    _htmlElement?.remove();
-    _htmlElement = null;
-  }
-
-  @override
-  void adoptChild(covariant AbstractNode child) {
-    super.adoptChild(child);
-  }
-
-  @override
-  void dropChild(covariant AbstractNode child) {
-    super.dropChild(child);
   }
 
   void createRositaElement() {
     _htmlElement = html.DivElement();
   }
 
-  html.HtmlElement? findParentHtmlElement() {
-    AbstractNode? element = parent;
-
-    while (element != null) {
-      if (element is RositaRenderMixin && element.hasHtmlElement) {
-        return element.htmlElement;
-      }
-      element = element.parent;
-    }
-
-    return null;
-  }
-
   RenderObject get target => this as RenderObject;
+
+  bool _rositaNeedsAttach = true;
+
+  bool _rositaNeedsDetach = false;
 
   bool _rositaNeedsLayout = true;
 
   bool _rositaNeedsPaint = true;
+
+  void rositaMarkNeedsAttach() {
+    if (_rositaNeedsAttach) {
+      return;
+    }
+
+    final owner = this.owner;
+
+    if (owner is RositaPipelineOwnerMixin) {
+      if (hasHtmlElement) {
+        _rositaNeedsAttach = true;
+        owner._rositaNodesNeedingAttach.add(target);
+      }
+    }
+  }
+
+  void rositaMarkNeedsDetach() {
+    if (_rositaNeedsDetach) {
+      return;
+    }
+
+    final owner = this.owner;
+
+    if (owner is RositaPipelineOwnerMixin) {
+      if (hasHtmlElement) {
+        _rositaNeedsDetach = true;
+        owner._rositaNodesNeedingDetach.add(target);
+      }
+    }
+  }
 
   void rositaMarkNeedsLayout() {
     if (_rositaNeedsLayout) {
@@ -121,6 +120,62 @@ mixin RositaRenderMixin on AbstractNode {
     }
   }
 
+  void rositaAttach() {
+    AbstractNode? parentElement = parent;
+
+    int elementIndex = 0;
+
+    ContainerParentDataMixin? containerParentDataMixin;
+
+    if (target.parentData is ContainerParentDataMixin) {
+      containerParentDataMixin = target.parentData! as ContainerParentDataMixin;
+    }
+
+    while (parentElement != null) {
+      if (containerParentDataMixin == null && parentElement is RenderObject && parentElement.parentData is ContainerParentDataMixin) {
+        containerParentDataMixin = parentElement.parentData! as ContainerParentDataMixin;
+      }
+
+      if (parentElement is RositaRenderMixin && parentElement.hasHtmlElement) {
+        break;
+      }
+      parentElement = parentElement.parent;
+    }
+
+    if (containerParentDataMixin != null) {
+      while(containerParentDataMixin?.previousSibling != null) {
+        elementIndex++;
+        containerParentDataMixin = containerParentDataMixin?.previousSibling?.parentData as ContainerParentDataMixin?;
+      }
+    }
+
+    final parentHtmlElement =
+        parentElement is RositaRenderMixin && parentElement.hasHtmlElement ? parentElement.htmlElement : null;
+
+    assert(() {
+      htmlElement.setAttribute('rosita-debug-object', '${describeIdentity(this)}/$elementIndex');
+      return true;
+    }());
+
+    if (parentHtmlElement != null) {
+      final children = parentHtmlElement.children;
+
+      if (children.length - 1 < elementIndex) {
+        parentHtmlElement.append(htmlElement);
+      } else {
+        final beforeElement = parentHtmlElement.children[elementIndex];
+        parentHtmlElement.insertBefore(htmlElement, beforeElement);
+      }
+    } else {
+      throw Exception('Parent HtmlElement not found for: $this');
+    }
+  }
+
+  void rositaDetach() {
+    _htmlElement?.remove();
+    _htmlElement = null;
+  }
+
   @mustCallSuper
   void rositaLayout() {}
 
@@ -130,9 +185,49 @@ mixin RositaRenderMixin on AbstractNode {
 mixin RositaPipelineOwnerMixin {
   Set<PipelineOwner> get rositaChildren;
 
+  List<RenderObject> _rositaNodesNeedingAttach = <RenderObject>[];
+
+  List<RenderObject> _rositaNodesNeedingDetach = <RenderObject>[];
+
   List<RenderObject> _rositaNodesNeedingLayout = <RenderObject>[];
 
   List<RenderObject> _rositaNodesNeedingPaint = <RenderObject>[];
+
+  void rositaFlushAttach() {
+    try {
+      final List<RenderObject> dirtyNodes = _rositaNodesNeedingAttach;
+      _rositaNodesNeedingAttach = <RenderObject>[];
+
+      for (final RenderObject node in dirtyNodes) {
+        if (node.owner == this) {
+          node._rositaNeedsAttach = false;
+          if (node.hasHtmlElement) {
+            node.rositaAttach();
+          }
+        }
+      }
+      for (final child in rositaChildren) {
+        child.rositaFlushAttach();
+      }
+    } finally {}
+  }
+
+  void rositaFlushDetach() {
+    try {
+      final List<RenderObject> dirtyNodes = _rositaNodesNeedingDetach;
+      _rositaNodesNeedingDetach = <RenderObject>[];
+
+      for (final RenderObject node in dirtyNodes) {
+        node._rositaNeedsDetach = false;
+        if (node.hasHtmlElement) {
+          node.rositaDetach();
+        }
+      }
+      for (final child in rositaChildren) {
+        child.rositaFlushDetach();
+      }
+    } finally {}
+  }
 
   void rositaFlushLayout() {
     try {
