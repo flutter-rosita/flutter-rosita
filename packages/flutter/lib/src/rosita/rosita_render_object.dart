@@ -171,6 +171,7 @@ mixin RositaRenderMixin on AbstractNode {
     }
   }
 
+  @mustCallSuper
   void rositaDetach() {
     _htmlElement?.remove();
     _htmlElement = null;

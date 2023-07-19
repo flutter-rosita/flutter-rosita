@@ -18,6 +18,7 @@ export 'src/rosita/mixins/render_sliver.dart';
 export 'src/rosita/mixins/render_transform.dart';
 export 'src/rosita/mixins/render_viewport_base.dart';
 export 'src/rosita/mixins/rosita_canvas_mixin.dart';
+export 'src/rosita/rosita_image.dart';
 export 'src/rosita/rosita_render_object.dart';
 export 'src/rosita/rosita_render_view.dart';
 export 'src/rosita/rosita_skip_render_object.dart';

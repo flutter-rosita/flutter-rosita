@@ -8,49 +8,20 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
   @override
   RenderBox get target => this as RenderBox;
 
-  Size? _size;
-
-  Size? get rositaSize => _size;
-
-  Offset? _offset;
-
-  Offset? get rositaOffset => _offset;
-
   @override
   void rositaLayout() {
     super.rositaLayout();
 
     if (target.hasSize) {
       final size = target.size;
-      final parent = findParentRenderBoxWithHtmlElement();
 
-      if ((parent == null || parent.rositaSize != size) && _size != size) {
-        if (_size?.width != size.width) {
-          htmlElement.style.width = '${size.width}px';
-        }
-
-        if (_size?.height != size.height) {
-          htmlElement.style.height = '${size.height}px';
-        }
-
-        _size = size;
-      }
+      htmlElement.style.width = '${size.width}px';
+      htmlElement.style.height = '${size.height}px';
 
       final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
 
-      if (_offset != offset &&
-          (_offset != null || offset != Offset.zero) &&
-          (parent == null || parent.rositaOffset != offset)) {
-        if (_offset?.dx != offset.dx) {
-          htmlElement.style.left = '${offset.dx}px';
-        }
-
-        if (_offset?.dy != offset.dy) {
-          htmlElement.style.top = '${offset.dy}px';
-        }
-
-        _offset = offset;
-      }
+      htmlElement.style.left = '${offset.dx}px';
+      htmlElement.style.top = '${offset.dy}px';
     }
   }
 
