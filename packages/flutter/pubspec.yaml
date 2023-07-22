@@ -15,6 +15,8 @@ dependencies:
   web: 0.1.4-beta
   sky_engine:
     sdk: flutter
+  rosita:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
