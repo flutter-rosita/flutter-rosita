@@ -2970,6 +2970,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///  * [RenderOpacity], which uses this method when its opacity is updated to
   ///    update the layer opacity without repainting children.
   void markNeedsCompositedLayerUpdate() {
+    rositaMarkNeedsPaint();
     return; // [ROSITA] BREAK
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);

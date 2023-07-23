@@ -897,12 +897,10 @@ class RenderOpacity extends RenderProxyBox with RositaRenderOpacityMixin {
     _alpha = ui.Color.getAlphaFromOpacity(_opacity);
     if (didNeedCompositing != alwaysNeedsCompositing) {
       markNeedsCompositingBitsUpdate();
-      rositaMarkNeedsPaint();
     }
     markNeedsCompositedLayerUpdate();
     if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
       markNeedsSemanticsUpdate();
-      rositaMarkNeedsPaint();
     }
   }
 
@@ -1046,8 +1044,6 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
       if (oldAlpha == 0 || _alpha == 0) {
         markNeedsSemanticsUpdate();
       }
-
-      rositaMarkNeedsPaint();
     }
   }
 
