@@ -5,7 +5,6 @@ import 'dart:html' as html;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../widgets.dart';
 
 mixin RositaRenderMixin on AbstractNode {
   html.HtmlElement? _htmlElement;
@@ -94,8 +93,8 @@ mixin RositaRenderMixin on AbstractNode {
       } else {
         late RenderObjectVisitor visitor;
         visitor = (RenderObject child) {
-          if (child.hasHtmlElement) {
-            child.rositaMarkNeedsLayout();
+          if ((child as RositaRenderMixin).hasHtmlElement) {
+            (child as RositaRenderMixin).rositaMarkNeedsLayout();
           } else {
             child.visitChildren(visitor);
           }
@@ -201,14 +200,14 @@ mixin RositaPipelineOwnerMixin {
 
       for (final RenderObject node in dirtyNodes) {
         if (node.owner == this) {
-          node._rositaNeedsAttach = false;
-          if (node.hasHtmlElement) {
-            node.rositaAttach();
+          (node as RositaRenderMixin)._rositaNeedsAttach = false;
+          if ((node as RositaRenderMixin).hasHtmlElement) {
+            (node as RositaRenderMixin).rositaAttach();
           }
         }
       }
       for (final child in rositaChildren) {
-        child.rositaFlushAttach();
+        (child as RositaPipelineOwnerMixin).rositaFlushAttach();
       }
     } finally {}
   }
@@ -219,13 +218,13 @@ mixin RositaPipelineOwnerMixin {
       _rositaNodesNeedingDetach = <RenderObject>[];
 
       for (final RenderObject node in dirtyNodes) {
-        node._rositaNeedsDetach = false;
-        if (node.hasHtmlElement) {
-          node.rositaDetach();
+        (node as RositaRenderMixin)._rositaNeedsDetach = false;
+        if ((node as RositaRenderMixin).hasHtmlElement) {
+          (node as RositaRenderMixin).rositaDetach();
         }
       }
       for (final child in rositaChildren) {
-        child.rositaFlushDetach();
+        (child as RositaPipelineOwnerMixin).rositaFlushDetach();
       }
     } finally {}
   }
@@ -237,14 +236,14 @@ mixin RositaPipelineOwnerMixin {
 
       for (final RenderObject node in dirtyNodes..sort((RenderObject a, RenderObject b) => b.depth - a.depth)) {
         if (node.owner == this) {
-          node._rositaNeedsLayout = false;
-          if (node.hasHtmlElement) {
-            node.rositaLayout();
+          (node as RositaRenderMixin)._rositaNeedsLayout = false;
+          if ((node as RositaRenderMixin).hasHtmlElement) {
+            (node as RositaRenderMixin).rositaLayout();
           }
         }
       }
       for (final child in rositaChildren) {
-        child.rositaFlushLayout();
+        (child as RositaPipelineOwnerMixin).rositaFlushLayout();
       }
     } finally {}
   }
@@ -256,14 +255,14 @@ mixin RositaPipelineOwnerMixin {
 
       for (final RenderObject node in dirtyNodes) {
         if (node.owner == this) {
-          node._rositaNeedsPaint = false;
-          if (node.hasHtmlElement) {
-            node.rositaPaint();
+          (node as RositaRenderMixin)._rositaNeedsPaint = false;
+          if ((node as RositaRenderMixin).hasHtmlElement) {
+            (node as RositaRenderMixin).rositaPaint();
           }
         }
       }
       for (final child in rositaChildren) {
-        child.rositaFlushPaint();
+        (child as RositaPipelineOwnerMixin).rositaFlushPaint();
       }
     } finally {}
   }

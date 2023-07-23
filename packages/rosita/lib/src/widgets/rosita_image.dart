@@ -2,7 +2,9 @@
 
 import 'dart:html' as html;
 
-import '../../widgets.dart';
+import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
+
 
 class RositaImage extends LeafRenderObjectWidget {
   const RositaImage({super.key, required this.src});
@@ -20,7 +22,7 @@ class RositaImage extends LeafRenderObjectWidget {
   }
 }
 
-class RenderRositaImage extends RenderBox {
+class RenderRositaImage extends RositaRenderBox {
   RenderRositaImage({String? src}) : _src = src;
 
   String? get src => _src;

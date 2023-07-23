@@ -1,7 +1,6 @@
 library rosita;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:rosita_interface/rosita_interface.dart';
+
+export 'src/rendering/rosita_render_object.dart';
+export 'src/widgets/rosita_image.dart';

@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
-import 'rosita_render_object.dart';
+import 'package:rosita/rosita.dart';
 
 mixin RositaSkipRenderObjectMixin on RositaRenderMixin {
   @override

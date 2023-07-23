@@ -2,7 +2,7 @@
 
 import 'dart:html' as html;
 
-import 'rosita_render_object.dart';
+import 'package:rosita/rosita.dart';
 
 mixin RositaRenderViewMixin on RositaRenderMixin {
   html.HtmlElement? _rositaRootElement;
