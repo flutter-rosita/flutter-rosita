@@ -17,7 +17,7 @@ mixin RositaRenderMixin on AbstractNode {
   void attach(covariant Object owner) {
     super.attach(owner);
 
-    createRositaElement();
+    _htmlElement = createRositaElement();
 
     if (hasHtmlElement) {
       _rositaNeedsAttach = false;
@@ -35,9 +35,7 @@ mixin RositaRenderMixin on AbstractNode {
     super.detach();
   }
 
-  void createRositaElement() {
-    _htmlElement = html.DivElement();
-  }
+  html.HtmlElement? createRositaElement() => html.DivElement();
 
   RenderObject get target => this as RenderObject;
 
