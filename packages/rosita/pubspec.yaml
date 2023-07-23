@@ -1,6 +1,6 @@
 name: rosita
 description: Flutter Rosita package
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/flutter-rosita/flutter-rosita/tree/rosita-dev/packages/rosita
 
 environment:
@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  universal_html: ^2.2.2
 
 dev_dependencies:
   flutter_test:

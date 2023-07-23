@@ -1,10 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
-import 'dart:html' as html;
-
 import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
-
+import 'package:universal_html/html.dart' as html;
 
 class RositaImage extends LeafRenderObjectWidget {
   const RositaImage({super.key, required this.src});

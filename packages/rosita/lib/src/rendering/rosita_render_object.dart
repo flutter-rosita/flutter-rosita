@@ -1,10 +1,8 @@
 // ignore_for_file: public_member_api_docs, avoid_print, always_specify_types
 
-import 'dart:html' as html;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:universal_html/html.dart' as html;
 
 mixin RositaRenderMixin on AbstractNode {
   html.HtmlElement? _htmlElement;
@@ -129,7 +127,9 @@ mixin RositaRenderMixin on AbstractNode {
     }
 
     while (parentElement != null) {
-      if (containerParentDataMixin == null && parentElement is RenderObject && parentElement.parentData is ContainerParentDataMixin) {
+      if (containerParentDataMixin == null &&
+          parentElement is RenderObject &&
+          parentElement.parentData is ContainerParentDataMixin) {
         containerParentDataMixin = parentElement.parentData! as ContainerParentDataMixin;
       }
 
@@ -140,7 +140,7 @@ mixin RositaRenderMixin on AbstractNode {
     }
 
     if (containerParentDataMixin != null) {
-      while(containerParentDataMixin?.previousSibling != null) {
+      while (containerParentDataMixin?.previousSibling != null) {
         elementIndex++;
         containerParentDataMixin = containerParentDataMixin?.previousSibling?.parentData as ContainerParentDataMixin?;
       }

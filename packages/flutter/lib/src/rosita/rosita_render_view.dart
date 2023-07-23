@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
-import 'dart:html' as html;
-
 import 'package:rosita/rosita.dart';
+import 'package:universal_html/html.dart' as html;
 
 mixin RositaRenderViewMixin on RositaRenderMixin {
   html.HtmlElement? _rositaRootElement;

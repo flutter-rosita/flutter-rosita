@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
-import 'dart:html' as html;
-
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 import 'package:flutter/rosita.dart';
+import 'package:universal_html/html.dart' as html;
 
 part 'mixins/canvas.dart';
 
