@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -42,7 +43,9 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
       Rect? cullRect, Paint paint) {}
 
   @override
-  void drawCircle(Offset c, double radius, Paint paint) {}
+  void drawCircle(Offset center, double radius, Paint paint) {
+    drawArc(Rect.fromCircle(center: center, radius: radius), 0, math.pi * 2, false, paint);
+  }
 
   @override
   void drawColor(Color color, BlendMode blendMode) {}
@@ -82,10 +85,16 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawRRect(RRect rrect, Paint paint) {
-    _setDirty();
-    context.beginPath();
-    _roundRect(rrect);
-    _fillPain(paint);
+    final sRect = rrect.scaleRadii();
+
+    if (sRect.isEllipse) {
+      drawArc(sRect.outerRect, 0, math.pi * 2, false, paint);
+    } else {
+      _setDirty();
+      context.beginPath();
+      _roundRect(sRect);
+      _fillPain(paint);
+    }
   }
 
   void _fillPain(Paint paint) {
@@ -101,21 +110,57 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   }
 
   void _roundRect(RRect rrect) {
-    final x = rrect.left;
-    final y = rrect.top;
-    final width = rrect.width;
-    final height = rrect.height;
+    // ------------------------
+    // | x0 y0 | .... | x1 y0 |
+    // | ..... | .... | ..... |
+    // | x0 y1 | .... | x1 y1 |
+    // ------------------------
+
+    final coords = (
+      x0: rrect.left,
+      y0: rrect.top,
+      x1: rrect.left + rrect.width,
+      y1: rrect.top + rrect.height,
+    );
+
+    final radius = (
+      tlX: rrect.tlRadiusX,
+      tlY: rrect.tlRadiusY,
+      trX: rrect.trRadiusX,
+      trY: rrect.trRadiusY,
+      brX: rrect.brRadiusX,
+      brY: rrect.brRadiusY,
+      blX: rrect.blRadiusX,
+      blY: rrect.blRadiusY,
+    );
+
+    final points = (
+      tl: (x0: coords.x0, y0: coords.y0 + radius.tlY, x1: coords.x0 + radius.tlX, y1: coords.y0),
+      tr: (x0: coords.x1 - radius.trX, y0: coords.y0, x1: coords.x1, y1: coords.y0 + radius.trY),
+      br: (x0: coords.x1, y0: coords.y1 - radius.brY, x1: coords.x1 - radius.brX, y1: coords.y1),
+      bl: (x0: coords.x0 + radius.blX, y0: coords.y1, x1: coords.x0, y1: coords.y1 - radius.blY),
+    );
 
     context.beginPath();
-    context.moveTo(x + rrect.tlRadiusX, y);
-    context.lineTo(x + width - rrect.trRadiusX, y);
-    context.quadraticCurveTo(x + width, y, x + width, y + rrect.trRadiusX);
-    context.lineTo(x + width, y + height - rrect.brRadiusX);
-    context.quadraticCurveTo(x + width, y + height, x + width - rrect.brRadiusX, y + height);
-    context.lineTo(x + rrect.blRadiusX, y + height);
-    context.quadraticCurveTo(x, y + height, x, y + height - rrect.blRadiusX);
-    context.lineTo(x, y + rrect.tlRadiusX);
-    context.quadraticCurveTo(x, y, x + rrect.tlRadiusX, y);
+
+    context.moveTo(points.tl.x1, points.tl.y1);
+
+    // TR
+    context.lineTo(points.tr.x0, points.tr.y0);
+    context.quadraticCurveTo(coords.x1, coords.y0, points.tr.x1, points.tr.y1);
+
+    // BR
+    context.lineTo(points.br.x0, points.br.y0);
+    context.quadraticCurveTo(coords.x1, coords.y1, points.br.x1, points.br.y1);
+
+    // BL
+    context.lineTo(points.bl.x0, points.bl.y0);
+    context.quadraticCurveTo(coords.x0, coords.y1, points.bl.x1, points.bl.y1);
+
+    // TL
+    context.lineTo(points.tl.x0, points.tl.y0);
+    context.quadraticCurveTo(coords.x0, coords.y0, points.tl.x1, points.tl.y1);
+
     context.closePath();
   }
 
