@@ -1,7 +1,6 @@
 export 'package:rosita/rosita.dart';
 
 export 'src/rosita/canvas/rosita_canvas.dart';
-export 'src/rosita/extension.dart';
 export 'src/rosita/mixins/platform_view_render_box.dart';
 export 'src/rosita/mixins/render_box.dart';
 export 'src/rosita/mixins/render_colored_box.dart';
