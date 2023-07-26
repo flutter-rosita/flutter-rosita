@@ -12,10 +12,16 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
   void rositaPaint() {
     final text = target.text;
 
-    if (target.hasSize) {
-      htmlElement.innerHtml = '';
-      _appendTextSpan(text, htmlElement);
-    }
+    htmlElement.innerHtml = '';
+
+    RositaTextUtils.applyTextStyle(
+      htmlElement,
+      textAlign: target.textAlign,
+      overflow: target.overflow,
+      maxLines: target.maxLines,
+    );
+
+    _appendTextSpan(text, htmlElement);
   }
 
   void _appendTextSpan(InlineSpan text, html.HtmlElement parent) {
@@ -32,9 +38,6 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
     RositaTextUtils.applyTextStyle(
       element,
       style: style,
-      textAlign: target.textAlign,
-      overflow: target.overflow,
-      maxLines: target.maxLines,
     );
 
     parent.append(element);

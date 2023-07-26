@@ -12,17 +12,15 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
   void rositaLayout() {
     super.rositaLayout();
 
-    if (target.hasSize) {
-      final size = target.size;
+    final size = target.size;
 
-      htmlElement.style.width = '${size.width}px';
-      htmlElement.style.height = '${size.height}px';
+    htmlElement.style.width = '${size.width}px';
+    htmlElement.style.height = '${size.height}px';
 
-      final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
+    final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
 
-      htmlElement.style.left = '${offset.dx}px';
-      htmlElement.style.top = '${offset.dy}px';
-    }
+    htmlElement.style.left = '${offset.dx}px';
+    htmlElement.style.top = '${offset.dy}px';
   }
 
   RenderBox? findParentRenderBoxWithHtmlElement() {

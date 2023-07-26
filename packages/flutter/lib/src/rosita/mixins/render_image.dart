@@ -15,9 +15,6 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
 
     final imageElement = _imageElement!;
 
-    imageElement.style.width = '100%';
-    imageElement.style.height = '100%';
-
     htmlElement.append(imageElement);
 
     return imageElement;

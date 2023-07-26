@@ -234,9 +234,12 @@ mixin RositaPipelineOwnerMixin {
 
       for (final RenderObject node in dirtyNodes..sort((RenderObject a, RenderObject b) => b.depth - a.depth)) {
         if (node.owner == this) {
-          (node as RositaRenderMixin)._rositaNeedsLayout = false;
-          if ((node as RositaRenderMixin).hasHtmlElement) {
-            (node as RositaRenderMixin).rositaLayout();
+          final el = node as RositaRenderMixin;
+
+          el._rositaNeedsLayout = false;
+
+          if (el.hasHtmlElement && (el is! RenderBox || (el as RenderBox).hasSize)) {
+            el.rositaLayout();
           }
         }
       }
@@ -253,9 +256,12 @@ mixin RositaPipelineOwnerMixin {
 
       for (final RenderObject node in dirtyNodes) {
         if (node.owner == this) {
-          (node as RositaRenderMixin)._rositaNeedsPaint = false;
-          if ((node as RositaRenderMixin).hasHtmlElement) {
-            (node as RositaRenderMixin).rositaPaint();
+          final el = node as RositaRenderMixin;
+
+          el._rositaNeedsPaint = false;
+
+          if (el.hasHtmlElement && (el is! RenderBox || (el as RenderBox).hasSize)) {
+            el.rositaPaint();
           }
         }
       }

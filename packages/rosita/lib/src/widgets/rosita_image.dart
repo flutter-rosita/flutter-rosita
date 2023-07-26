@@ -5,23 +5,32 @@ import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RositaImage extends LeafRenderObjectWidget {
-  const RositaImage({super.key, required this.src});
+  const RositaImage({
+    super.key,
+    required this.src,
+    this.borderRadius,
+  });
 
   final String src;
+  final BorderRadiusGeometry? borderRadius;
 
   @override
   RenderRositaImage createRenderObject(BuildContext context) {
-    return RenderRositaImage(src: src);
+    return RenderRositaImage(src: src, borderRadius: borderRadius);
   }
 
   @override
   void updateRenderObject(BuildContext context, RenderRositaImage renderObject) {
     renderObject.src = src;
+    renderObject.borderRadius = borderRadius;
   }
 }
 
 class RenderRositaImage extends RositaRenderBox {
-  RenderRositaImage({String? src}) : _src = src;
+  RenderRositaImage({
+    String? src,
+    BorderRadiusGeometry? borderRadius,
+  }) : _src = src, _borderRadius = borderRadius;
 
   String? get src => _src;
   String? _src;
@@ -31,6 +40,17 @@ class RenderRositaImage extends RositaRenderBox {
       return;
     }
     _src = value;
+    markNeedsPaint();
+  }
+
+  BorderRadiusGeometry? get borderRadius => _borderRadius;
+  BorderRadiusGeometry? _borderRadius;
+
+  set borderRadius(BorderRadiusGeometry? value) {
+    if (value == _borderRadius) {
+      return;
+    }
+    _borderRadius = value;
     markNeedsPaint();
   }
 
@@ -46,9 +66,6 @@ class RenderRositaImage extends RositaRenderBox {
 
     final imageElement = _imageElement!;
 
-    imageElement.style.width = '100%';
-    imageElement.style.height = '100%';
-
     htmlElement.append(imageElement);
 
     return imageElement;
@@ -58,6 +75,8 @@ class RenderRositaImage extends RositaRenderBox {
   void rositaPaint() {
     if (src != null) {
       imageElement.src = src;
+
+      RositaRadiusUtils.applyBorderRadius(imageElement, borderRadius);
     }
   }
 }

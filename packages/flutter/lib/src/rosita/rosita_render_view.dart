@@ -33,6 +33,13 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
       'position: absolute;',
       'box-sizing: border-box;',
       '}',
+      '.rosita-root-element canvas {',
+      'position: absolute;',
+      '}',
+      '.rosita-root-element img {',
+      'width: 100%;',
+      'height: 100%;',
+      '}',
     ]);
 
     styleElement.text = buffer.toString();

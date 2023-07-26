@@ -13,16 +13,14 @@ mixin RositaRenderFractionalTranslationMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
-    if (target.hasSize) {
-      final Size(:width, :height) = target.size;
+    final Size(:width, :height) = target.size;
 
-      htmlElement.style.width = '${width}px';
-      htmlElement.style.height = '${height}px';
+    htmlElement.style.width = '${width}px';
+    htmlElement.style.height = '${height}px';
 
-      final Offset(:dx, :dy) = target.translation;
+    final Offset(:dx, :dy) = target.translation;
 
-      htmlElement.style.left = '${width * dx}px';
-      htmlElement.style.top = '${height * dy}px';
-    }
+    htmlElement.style.left = '${width * dx}px';
+    htmlElement.style.top = '${height * dy}px';
   }
 }

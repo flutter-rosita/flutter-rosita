@@ -13,10 +13,13 @@ part 'mixins/canvas.dart';
 part 'mixins/paragraph.dart';
 
 class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
-  RositaCanvas(this.canvas);
+  RositaCanvas(this.canvas, {this.overscan = 20});
 
   @override
   final html.CanvasElement canvas;
+
+  @override
+  final int overscan;
 
   @override
   html.CanvasRenderingContext2D get context => canvas.context2D;

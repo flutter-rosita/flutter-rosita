@@ -13,7 +13,7 @@ mixin RositaRenderTransform on RositaRenderMixin {
 
     final origin = target.origin;
 
-    if (target.hasSize && origin != null) {
+    if (origin != null) {
       htmlElement.style.left = '${origin.dx}px';
       htmlElement.style.top = '${origin.dy}px';
     }

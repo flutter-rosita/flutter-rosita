@@ -14,12 +14,6 @@ mixin RositaRenderEditableCustomPaintMixin on RositaRenderMixin, RositaCanvasMix
 
   @override
   void rositaPaint() {
-    if (target.hasSize) {
-      _paint();
-    }
-  }
-
-  void _paint() {
     final RenderEditable? parent = this.parent;
     final RenderEditablePainter? painter = this.painter;
     if (painter != null && parent != null) {

@@ -13,10 +13,6 @@ mixin RositaCanvasMixin on RositaRenderMixin {
       return _canvasElement!;
     }
     final canvas = _canvasElement = html.CanvasElement();
-
-    canvas.style.overflow = 'visible';
-    canvas.style.position = 'absolute';
-
     final firstChild = htmlElement.firstChild;
 
     htmlElement.insertBefore(canvas, firstChild);
@@ -29,9 +25,6 @@ mixin RositaCanvasMixin on RositaRenderMixin {
       return _foregroundCanvasElement!;
     }
     final canvas = _foregroundCanvasElement = html.CanvasElement();
-
-    canvas.style.overflow = 'visible';
-    canvas.style.position = 'absolute';
 
     htmlElement.append(canvas);
 

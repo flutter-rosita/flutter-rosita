@@ -13,6 +13,8 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
 
     if (decoration is BoxDecoration) {
       htmlElement.style.background = '${decoration.color?.toHexString()}';
+
+      RositaRadiusUtils.applyBorderRadius(htmlElement, decoration.borderRadius);
     }
   }
 }
