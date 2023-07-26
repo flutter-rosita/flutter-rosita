@@ -31,6 +31,7 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
     buffer.writeAll([
       '.rosita-root-element, .rosita-root-element div {',
       'position: absolute;',
+      'box-sizing: border-box;',
       '}',
     ]);
 
