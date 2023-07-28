@@ -8,7 +8,7 @@ mixin _ParagraphMixin on _CanvasMixin {
 
     if (text is TextSpan) {
       _setDirty();
-      _drawTextSpan(text, '', offset);
+      _drawTextSpan(text, null, offset);
     } else {
       assert(() {
         // ignore: avoid_print
@@ -18,7 +18,7 @@ mixin _ParagraphMixin on _CanvasMixin {
     }
   }
 
-  void _drawTextSpan(TextSpan text, String font, Offset offset) {
+  void _drawTextSpan(TextSpan text, RositaCanvasFontData? parentData, Offset offset) {
     final string = text.text;
 
     final style = text.style;
@@ -27,36 +27,26 @@ mixin _ParagraphMixin on _CanvasMixin {
       return;
     }
 
-    final fontSize = style.fontSize;
-    final height = style.height ?? 1;
+    final data = RositaParagraphUtils.buildFontData(style: style);
 
-    if (fontSize == null) {
-      throw Exception('Invalid font size');
-    }
-
-    final lineHeight = fontSize * height;
-
-    final newFont = [
-      '${fontSize}px',
-      if (style.fontFamily != null) "'${style.fontFamily}'"
-    ].join(' ').trim();
-
-    context.font = newFont;
+    context.font = data.font;
 
     context.fillStyle = '${style.color?.toHexString()}';
 
     if (string != null) {
-      context.fillText(string, offset.dx, offset.dy + lineHeight);
+      context.fillText(string, offset.dx, offset.dy + data.lineHeight);
     }
 
     if (text.children != null) {
       for (final child in text.children!) {
         if (child is TextSpan) {
-          _drawTextSpan(child, newFont, offset);
+          _drawTextSpan(child, data, offset);
         }
       }
     }
 
-    context.font = font;
+    if (parentData != null) {
+      context.font = parentData.font;
+    }
   }
 }

@@ -17,8 +17,6 @@ class RositaTextUtils {
       element.style.textOverflow = _mapTextOverflow(overflow);
       element.style.overflowX = _mapOverflow(overflow);
     }
-    element.style.wordWrap = 'break-word';
-
     if (maxLines == 1) {
       element.style.whiteSpace = 'nowrap';
     } else if (maxLines != null) {
@@ -33,18 +31,21 @@ class RositaTextUtils {
         element.style.fontFamily = "'${style.fontFamily}'";
       }
       if (style.fontSize != null) {
-        element.style.fontSize = '${style.fontSize}px';
+        element.style.fontSize = '${style.fontSize!.floor()}px';
       }
       if (style.fontSize != null && style.height != null) {
         element.style.lineHeight = '${(style.fontSize! * style.height!).round()}px';
       }
       if (style.fontWeight != null) {
-        element.style.fontWeight = _mapFontWeight(style.fontWeight!);
+        element.style.fontWeight = mapFontWeight(style.fontWeight!);
+      }
+      if (style.fontStyle != null) {
+        element.style.fontStyle = maFontStyle(style.fontStyle!);
       }
     }
   }
 
-  static String _mapFontWeight(FontWeight weight) => switch (weight) {
+  static String mapFontWeight(FontWeight weight) => switch (weight) {
         FontWeight.w100 => '100',
         FontWeight.w200 => '200',
         FontWeight.w300 => '300',
@@ -55,6 +56,11 @@ class RositaTextUtils {
         FontWeight.w800 => '800',
         FontWeight.w900 => '900',
         _ => '',
+      };
+
+  static String maFontStyle(FontStyle value) => switch (value) {
+        FontStyle.normal => 'normal',
+        FontStyle.italic => 'italic',
       };
 
   static String _mapTextAlign(TextAlign align) => switch (align) {
