@@ -9,7 +9,7 @@ mixin RositaRenderOpacityMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
-    htmlElement.style.opacity = '${target.opacity}';
+    RositaOpacityUtils.applyOpacity(htmlElement, target.opacity);
   }
 }
 
@@ -19,6 +19,6 @@ mixin RositaRenderAnimatedOpacityMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
-    htmlElement.style.opacity = '${target.opacity.value}';
+    RositaOpacityUtils.applyOpacity(htmlElement, target.opacity.value);
   }
 }

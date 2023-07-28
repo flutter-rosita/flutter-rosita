@@ -25,8 +25,9 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
     final image = target.rositaImageProvider;
 
     if (image is NetworkImage) {
-      imageElement.style.opacity = '${target.opacity}';
       imageElement.src = image.url;
+
+      RositaOpacityUtils.applyOpacity(imageElement, target.opacity?.value);
     }
   }
 }
