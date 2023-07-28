@@ -21,8 +21,9 @@ class RositaImage extends LeafRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderRositaImage renderObject) {
-    renderObject.src = src;
-    renderObject.borderRadius = borderRadius;
+    renderObject
+      ..src = src
+      ..borderRadius = borderRadius;
   }
 }
 
@@ -30,7 +31,8 @@ class RenderRositaImage extends RositaRenderBox {
   RenderRositaImage({
     String? src,
     BorderRadiusGeometry? borderRadius,
-  }) : _src = src, _borderRadius = borderRadius;
+  })  : _src = src,
+        _borderRadius = borderRadius;
 
   String? get src => _src;
   String? _src;
