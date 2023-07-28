@@ -7,8 +7,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -885,7 +885,7 @@ class _TheaterParentData extends StackParentData {
   void visitChildrenOfOverlayEntry(RenderObjectVisitor visitor) => overlayEntry?._overlayEntryStateNotifier.value!._paintOrderIterable.forEach(visitor);
 }
 
-class _RenderTheater extends RenderBox with ContainerRenderObjectMixin<RenderBox, StackParentData>, _RenderTheaterMixin {
+class _RenderTheater extends RenderBox with ContainerRenderObjectMixin<RenderBox, StackParentData>, _RenderTheaterMixin, RositaRenderTheaterMixin {
   _RenderTheater({
     List<RenderBox>? children,
     required TextDirection textDirection,
