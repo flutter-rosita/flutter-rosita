@@ -8,6 +8,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/semantics.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'object.dart';
@@ -297,6 +298,9 @@ abstract class RenderSliverPersistentHeader extends RenderSliver with RenderObje
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (child != null && geometry!.visible) {
       switch (applyGrowthDirectionToAxisDirection(constraints.axisDirection, constraints.growthDirection)) {
         case AxisDirection.up:

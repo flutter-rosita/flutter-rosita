@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -861,6 +862,9 @@ mixin _RenderTheaterMixin on RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     for (final RenderBox child in _childrenInPaintOrder()) {
       final StackParentData childParentData = child.parentData! as StackParentData;
       context.paintChild(child, childParentData.offset + offset);
@@ -1112,6 +1116,9 @@ class _RenderTheater extends RenderBox with ContainerRenderObjectMixin<RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (clipBehavior != Clip.none) {
       _clipRectLayer.layer = context.pushClipRect(
         needsCompositing,

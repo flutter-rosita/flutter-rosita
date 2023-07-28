@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:meta/meta_meta.dart';
+import 'package:rosita/rosita.dart';
 
 import 'app.dart';
 import 'basic.dart';
@@ -2975,6 +2976,9 @@ class _RenderInspectorOverlay extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     assert(needsCompositing);
     context.addLayer(_InspectorOverlayLayer(
       overlayRect: Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height),

@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 import 'button_style.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -621,6 +622,9 @@ class _RenderSegmentedButton<T> extends RenderBox with
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final Canvas canvas = context.canvas;
     final Rect borderRect = offset & size;
     final Path borderClipPath = enabledBorder.getInnerPath(borderRect, textDirection: textDirection);

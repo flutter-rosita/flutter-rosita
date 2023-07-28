@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:rosita/rosita.dart';
+
 import 'box.dart';
 import 'layer.dart';
 import 'object.dart';
@@ -166,6 +168,9 @@ class RenderPerformanceOverlay extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     assert(needsCompositing);
     context.addLayer(PerformanceOverlayLayer(
       overlayRect: Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height),

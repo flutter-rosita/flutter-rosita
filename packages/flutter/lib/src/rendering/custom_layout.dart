@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'object.dart';
@@ -407,6 +408,9 @@ class RenderCustomMultiChildLayoutBox extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     defaultPaint(context, offset);
   }
 

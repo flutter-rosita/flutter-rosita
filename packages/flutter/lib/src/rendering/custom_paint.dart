@@ -612,6 +612,9 @@ class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRen
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (_painter != null) {
       _paintWithPainter(context.canvas, offset, _painter!);
       _setRasterCacheHints(context);

@@ -4,6 +4,8 @@
 
 import 'dart:ui' as ui show Paragraph, ParagraphBuilder, ParagraphConstraints, ParagraphStyle, TextStyle;
 
+import 'package:rosita/rosita.dart';
+
 import 'box.dart';
 import 'object.dart';
 
@@ -147,6 +149,9 @@ class RenderErrorBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     try {
       context.canvas.drawRect(offset & size, Paint() .. color = backgroundColor);
       if (_paragraph != null) {

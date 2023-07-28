@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:rosita/rosita.dart';
 
 import 'actions.dart';
 import 'autofill.dart';
@@ -137,6 +138,9 @@ class _RenderCompositionCallback extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, ui.Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (enabled) {
       _cancelCallback ??= context.addCompositionCallback(compositeCallback);
     }

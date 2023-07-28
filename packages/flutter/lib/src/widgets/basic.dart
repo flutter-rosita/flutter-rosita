@@ -7753,6 +7753,9 @@ class _RenderColoredBox extends RenderProxyBoxWithHitTestBehavior with RositaRen
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     // It's tempting to want to optimize out this `drawRect()` call if the
     // color is transparent (alpha==0), but doing so would be incorrect. See
     // https://github.com/flutter/flutter/pull/72526#issuecomment-749185938 for

@@ -2493,6 +2493,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     _computeTextMetricsIfNeeded();
     if (_hasVisualOverflow && clipBehavior != Clip.none) {
       _clipRectLayer.layer = context.pushClipRect(
@@ -2591,6 +2594,9 @@ class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, Rosit
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final RenderEditable? parent = this.parent;
     assert(parent != null);
     final RenderEditablePainter? painter = this.painter;

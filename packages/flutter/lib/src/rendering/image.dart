@@ -436,6 +436,9 @@ class RenderImage extends RenderBox with RositaImageProviderProxyMixin, RositaRe
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (_image == null) {
       return;
     }

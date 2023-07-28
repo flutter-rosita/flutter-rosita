@@ -5,6 +5,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'debug.dart';
@@ -322,6 +323,9 @@ class _RenderSnapshotWidget extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (size.isEmpty) {
       _childRaster?.dispose();
       _childRaster = null;

@@ -4,6 +4,8 @@
 
 import 'dart:math' as math;
 
+import 'package:rosita/rosita.dart';
+
 import 'box.dart';
 import 'layer.dart';
 import 'layout_helper.dart';
@@ -734,6 +736,9 @@ class RenderWrap extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     // TODO(ianh): move the debug flex overflow paint logic somewhere common so
     // it can be reused here
     if (_hasVisualOverflow && clipBehavior != Clip.none) {

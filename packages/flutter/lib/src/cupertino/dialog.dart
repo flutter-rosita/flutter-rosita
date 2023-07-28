@@ -8,6 +8,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'interface_level.dart';
@@ -1233,6 +1234,9 @@ class _RenderCupertinoDialog extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (isActionSheet) {
       final MultiChildLayoutParentData contentParentData = contentSection!.parentData! as MultiChildLayoutParentData;
       contentSection!.paint(context, offset + contentParentData.offset);
@@ -2229,6 +2233,9 @@ class _RenderCupertinoDialogActions extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final Canvas canvas = context.canvas;
 
     if (!isActionSheet && _isSingleButtonRow(size.width)) {

@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button_style.dart';
 import 'color_scheme.dart';
@@ -1282,6 +1283,9 @@ class _SelectToggleButtonRenderObject extends RenderShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     super.paint(context, offset);
     final Offset bottomRight = size.bottomRight(offset);
     final Rect outer = Rect.fromLTRB(offset.dx, offset.dy, bottomRight.dx, bottomRight.dy);

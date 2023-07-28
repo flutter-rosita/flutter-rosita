@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button_style.dart';
 import 'dropdown_menu_theme.dart';
@@ -741,6 +742,9 @@ class _RenderDropdownMenuBody extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final RenderBox? child = firstChild;
     if (child != null) {
       final _DropdownMenuBodyParentData childParentData = child.parentData! as _DropdownMenuBodyParentData;

@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'focus_manager.dart';
@@ -528,6 +529,9 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (child != null) {
       final Offset paintOffset = _paintOffset;
 

@@ -4,6 +4,8 @@
 
 import 'dart:math' as math;
 
+import 'package:rosita/rosita.dart';
+
 import 'box.dart';
 import 'object.dart';
 
@@ -294,6 +296,9 @@ class RenderListBody extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     defaultPaint(context, offset);
   }
 

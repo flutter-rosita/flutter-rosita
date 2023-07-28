@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'theme.dart';
@@ -612,6 +613,9 @@ class _RenderCupertinoSwitch extends RenderConstrainedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final Canvas canvas = context.canvas;
 
     final double currentValue = _state.position.value;

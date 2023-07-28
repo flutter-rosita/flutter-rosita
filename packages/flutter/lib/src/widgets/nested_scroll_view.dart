@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:rosita/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -1823,6 +1824,9 @@ class RenderSliverOverlapAbsorber extends RenderSliver with RenderObjectWithChil
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (child != null) {
       context.paintChild(child!, offset);
     }

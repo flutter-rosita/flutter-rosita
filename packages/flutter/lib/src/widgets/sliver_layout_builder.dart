@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'framework.dart';
 import 'layout_builder.dart';
@@ -58,6 +59,9 @@ class _RenderSliverLayoutBuilder extends RenderSliver with RenderObjectWithChild
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     // This renderObject does not introduce additional offset to child's position.
     if (child?.geometry?.visible ?? false) {
       context.paintChild(child!, offset);

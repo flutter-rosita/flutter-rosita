@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'button.dart';
 import 'colors.dart';
@@ -993,6 +994,9 @@ class _RenderLargeTitle extends RenderShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final RenderBox? child = this.child;
 
     if (child == null) {

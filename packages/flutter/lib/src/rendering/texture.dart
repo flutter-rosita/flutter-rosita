@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:rosita/rosita.dart';
+
 import 'box.dart';
 import 'layer.dart';
 import 'object.dart';
@@ -93,6 +95,9 @@ class TextureBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     context.addLayer(TextureLayer(
       rect: Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height),
       textureId: _textureId,

@@ -8,6 +8,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show Brightness, clampDouble;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'text_selection_toolbar_button.dart';
@@ -349,6 +350,9 @@ class _RenderCupertinoTextSelectionToolbarShape extends RenderShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (child == null) {
       return;
     }
@@ -1016,6 +1020,9 @@ class _RenderCupertinoTextSelectionToolbarItems extends RenderBox with Container
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     visitChildren((RenderObject renderObjectChild) {
       final RenderBox child = renderObjectChild as RenderBox;
       final ToolbarItemsParentData childParentData = child.parentData! as ToolbarItemsParentData;

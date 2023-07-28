@@ -11,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/services.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -1633,6 +1634,9 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final double value = _state.positionController.value;
     final double? secondaryValue = _secondaryTrackValue;
 
@@ -1901,6 +1905,9 @@ class _RenderValueIndicator extends RenderBox with RelayoutWhenSystemFontsChange
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     _state.paintValueIndicator?.call(context, offset);
   }
 

@@ -5,6 +5,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'constants.dart';
 import 'elevation_overlay.dart';
@@ -649,6 +650,9 @@ class _RenderInkFeatures extends RenderProxyBox implements MaterialInkController
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final List<InkFeature>? inkFeatures = _inkFeatures;
     if (inkFeatures != null && inkFeatures.isNotEmpty) {
       final Canvas canvas = context.canvas;

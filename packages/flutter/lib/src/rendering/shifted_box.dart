@@ -69,6 +69,9 @@ abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixi
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final RenderBox? child = this.child;
     if (child != null) {
       final BoxParentData childParentData = child.parentData! as BoxParentData;
@@ -794,6 +797,9 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     // There's no point in drawing the child if we're empty, or there is no
     // child.
     if (child == null || size.isEmpty) {

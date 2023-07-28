@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'activity_indicator.dart';
 
@@ -163,6 +164,9 @@ class _RenderCupertinoSliverRefresh extends RenderSliver
 
   @override
   void paint(PaintingContext paintContext, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (constraints.overlap < 0.0 ||
         constraints.scrollOffset + child!.size.height > 0) {
       paintContext.paintChild(child!, offset);

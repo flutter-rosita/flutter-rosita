@@ -8,6 +8,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -1540,6 +1541,9 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     void doPaint(RenderBox? child) {
       if (child != null) {
         context.paintChild(child, _boxParentData(child).offset + offset);

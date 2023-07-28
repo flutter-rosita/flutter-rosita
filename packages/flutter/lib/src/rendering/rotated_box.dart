@@ -4,6 +4,7 @@
 
 import 'dart:math' as math;
 
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'box.dart';
@@ -120,6 +121,9 @@ class RenderRotatedBox extends RenderBox with RenderObjectWithChildMixin<RenderB
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (child != null) {
       _transformLayer.layer = context.pushTransform(
         needsCompositing,

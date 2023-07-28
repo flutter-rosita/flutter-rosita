@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/animation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart' show Matrix4;
 
 import 'box.dart';
@@ -802,6 +803,9 @@ class RenderListWheelViewport
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (childCount > 0) {
       if (_shouldClipAtCurrentOffset() && clipBehavior != Clip.none) {
         _clipRectLayer.layer = context.pushClipRect(

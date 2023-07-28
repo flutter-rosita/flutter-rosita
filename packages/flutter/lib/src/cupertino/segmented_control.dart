@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'theme.dart';
 
@@ -670,6 +671,9 @@ class _RenderSegmentedControl<T> extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     RenderBox? child = firstChild;
     int index = 0;
     while (child != null) {

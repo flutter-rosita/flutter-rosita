@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'layer.dart';
@@ -641,6 +642,9 @@ class RenderStack extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (clipBehavior != Clip.none && _hasVisualOverflow) {
       _clipRectLayer.layer = context.pushClipRect(
         needsCompositing,

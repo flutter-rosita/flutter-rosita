@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 
 import 'debug.dart';
 import 'icon_button.dart';
@@ -328,6 +329,9 @@ class _TextSelectionToolbarTrailingEdgeAlignRenderBox extends RenderProxyBox {
   // Paint at the offset set in the parent data.
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final ToolbarItemsParentData childParentData = child!.parentData! as ToolbarItemsParentData;
     context.paintChild(child!, childParentData.offset + offset);
   }
@@ -581,6 +585,9 @@ class _RenderTextSelectionToolbarItemsLayout extends RenderBox with ContainerRen
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     visitChildren((RenderObject renderObjectChild) {
       final RenderBox child = renderObjectChild as RenderBox;
       final ToolbarItemsParentData childParentData = child.parentData! as ToolbarItemsParentData;

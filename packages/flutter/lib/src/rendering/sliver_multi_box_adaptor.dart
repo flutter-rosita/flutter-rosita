@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'box.dart';
@@ -602,6 +603,9 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     if (firstChild == null) {
       return;
     }

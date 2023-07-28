@@ -834,6 +834,9 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     // Ideally we could compute the min/max intrinsic width/height with a
     // non-destructive operation. However, currently, computing these values
     // will destroy state inside the painter. If that happens, we need to get

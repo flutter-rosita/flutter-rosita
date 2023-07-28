@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -1470,6 +1471,9 @@ class _RenderListTile extends RenderBox with SlottedContainerRenderObjectMixin<_
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     void doPaint(RenderBox? child) {
       if (child != null) {
         final BoxParentData parentData = child.parentData! as BoxParentData;

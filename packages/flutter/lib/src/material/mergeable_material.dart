@@ -6,6 +6,7 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 import 'divider.dart';
@@ -721,6 +722,9 @@ class _RenderMergeableMaterialListBody extends RenderListBody {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     RenderBox? child = firstChild;
     int index = 0;
     while (child != null) {

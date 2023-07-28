@@ -6,6 +6,7 @@ import 'dart:collection';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:rosita/rosita.dart';
 
 import 'box.dart';
 import 'object.dart';
@@ -1200,6 +1201,9 @@ class RenderTable extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     assert(_children.length == rows * columns);
     if (rows * columns == 0) {
       if (border != null) {

@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rosita/rosita.dart';
 
 import 'colors.dart';
 
@@ -1013,6 +1014,9 @@ class _RenderSegmentedControl<T> extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    if (kIsRosita) {
+      return;
+    }
     final List<RenderBox> children = getChildrenAsList();
 
     for (int index = 1; index < childCount; index += 2) {
