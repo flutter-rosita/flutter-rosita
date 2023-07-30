@@ -8,6 +8,20 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
   @override
   RenderBox get target => this as RenderBox;
 
+  Offset? _localOffset;
+
+  @override
+  Rect buildHtmlRect() {
+    final parentRect = parentHtmlRect;
+
+    return Rect.fromLTWH(
+      (_localOffset?.dx ?? 0) + parentRect.left,
+      (_localOffset?.dy ?? 0) + parentRect.top,
+      target.size.width,
+      target.size.height,
+    );
+  }
+
   @override
   void rositaLayout() {
     super.rositaLayout();
@@ -21,22 +35,8 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
     htmlElement.style.left = '${offset.dx}px';
     htmlElement.style.top = '${offset.dy}px';
-  }
 
-  RenderBox? findParentRenderBoxWithHtmlElement() {
-    AbstractNode? element = parent;
-
-    while (element != null) {
-      if (element is RenderBox) {
-        if (element.hasHtmlElement) {
-          return element;
-        }
-      }
-
-      element = element.parent;
-    }
-
-    return null;
+    _localOffset = offset;
   }
 
   Offset _calculateParenOffset(RenderObject object) {

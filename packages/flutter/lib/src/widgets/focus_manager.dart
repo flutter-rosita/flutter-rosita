@@ -8,6 +8,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 
 import 'binding.dart';
@@ -803,6 +804,29 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
   ///
   /// Rect is the rectangle of the transformed widget in global coordinates.
   Rect get rect {
+    if (kIsRosita) {
+      RenderBox? rositaObject;
+
+      late ElementVisitor visitor;
+
+      visitor = (Element element) {
+        if (rositaObject != null) {
+          // End visitChildren
+        } else if (element.renderObject is RenderBox && (element.renderObject?.hasHtmlElement ?? false)) {
+          rositaObject = element.renderObject! as RenderBox;
+        } else {
+          element.visitChildren(visitor);
+        }
+      };
+
+      (context! as Element).visitChildren(visitor);
+
+      if (rositaObject != null) {
+        return rositaObject!.htmlRect;
+      } else {
+        throw Exception('Rosita not found htmlRect to FocusNode');
+      }
+    }
     assert(
       context != null,
       "Tried to get the bounds of a focus node that didn't have its context set yet.\n"

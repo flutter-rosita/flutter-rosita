@@ -1,10 +1,17 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
 mixin RositaRenderViewMixin on RositaRenderMixin {
   html.HtmlElement? _rositaRootElement;
+
+  @override
+  RenderView get target => this as RenderView;
+
+  @override
+  Rect buildHtmlRect() => Offset.zero & target.size;
 
   @override
   void rositaAttach() {

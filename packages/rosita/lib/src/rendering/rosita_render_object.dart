@@ -4,12 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:universal_html/html.dart' as html;
 
-mixin RositaRenderMixin on AbstractNode {
+import 'rosita_rect.dart';
+
+mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   html.HtmlElement? _htmlElement;
 
   html.HtmlElement get htmlElement => _htmlElement!;
 
   bool get hasHtmlElement => _htmlElement != null;
+
+  @override
+  Rect buildHtmlRect() => parentHtmlRect;
 
   @override
   void attach(covariant Object owner) {
@@ -232,7 +237,7 @@ mixin RositaPipelineOwnerMixin {
       final List<RenderObject> dirtyNodes = _rositaNodesNeedingLayout;
       _rositaNodesNeedingLayout = <RenderObject>[];
 
-      for (final RenderObject node in dirtyNodes..sort((RenderObject a, RenderObject b) => b.depth - a.depth)) {
+      for (final RenderObject node in dirtyNodes..sort((RenderObject a, RenderObject b) => a.depth - b.depth)) {
         if (node.owner == this) {
           final el = node as RositaRenderMixin;
 

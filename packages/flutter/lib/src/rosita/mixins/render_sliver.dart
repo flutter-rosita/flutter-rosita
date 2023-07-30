@@ -7,6 +7,20 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
   @override
   RenderSliver get target => this as RenderSliver;
 
+  Offset? _localOffset;
+
+  @override
+  Rect buildHtmlRect() {
+    final parentRect = parentHtmlRect;
+
+    return Rect.fromLTWH(
+      (_localOffset?.dx ?? 0) + parentRect.left,
+      (_localOffset?.dy ?? 0) + parentRect.top,
+      parentRect.width,
+      parentRect.height,
+    );
+  }
+
   @override
   void rositaLayout() {
     super.rositaLayout();
@@ -33,32 +47,53 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
         }
       }
 
+      final double top;
+      final double left;
+
       switch (axis) {
         case Axis.vertical:
-          final double delta;
           final offset = parentData.paintOffset.dy - target.constraints.scrollOffset + parentOffset.dy;
 
-
           if (forward) {
-            delta = offset;
+            top = offset;
           } else {
-            delta = target.constraints.remainingPaintExtent - offset;
+            top = target.constraints.remainingPaintExtent - offset;
           }
 
-          htmlElement.style.top = '${delta}px';
-          htmlElement.style.left = '${parentData.paintOffset.dx + parentOffset.dx}px';
+          left = parentData.paintOffset.dx + parentOffset.dx;
+
         case Axis.horizontal:
-          final double delta;
           final offset = parentData.paintOffset.dx - target.constraints.scrollOffset + parentOffset.dx;
 
           if (forward) {
-            delta = offset;
+            left = offset;
           } else {
-            delta = target.constraints.remainingPaintExtent - offset;
+            left = target.constraints.remainingPaintExtent - offset;
           }
 
-          htmlElement.style.top = '${parentData.paintOffset.dy + parentOffset.dy}px';
-          htmlElement.style.left = '${delta}px';
+          top = parentData.paintOffset.dy + parentOffset.dy;
+      }
+
+      final offset = Offset(left, top);
+
+      if (_localOffset != offset) {
+        _localOffset = offset;
+
+        htmlElement.style.left = '${offset.dx}px';
+        htmlElement.style.top = '${offset.dy}px';
+
+        markDirtyHtmlRect();
+
+        late RenderObjectVisitor visitor;
+
+        visitor = (RenderObject child) {
+          if (child.hasHtmlRect) {
+            child.markDirtyHtmlRect();
+            child.visitChildren(visitor);
+          }
+        };
+
+        target.visitChildren(visitor);
       }
     } else if (parentData != null) {
       assert(() {
