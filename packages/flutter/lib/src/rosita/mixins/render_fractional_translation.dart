@@ -3,24 +3,20 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 
-mixin RositaRenderFractionalTranslationMixin on RositaRenderMixin {
+mixin RositaRenderFractionalTranslationMixin on RositaRenderBoxMixin {
   @override
   RenderFractionalTranslation get target => this as RenderFractionalTranslation;
 
   @override
-  // ignore: must_call_super
-  void rositaLayout() {}
-
-  @override
   void rositaPaint() {
-    final Size(:width, :height) = target.size;
+    final childRenderObject = findFirstChildWithHtmlElement();
 
-    htmlElement.style.width = '${width}px';
-    htmlElement.style.height = '${height}px';
+    if (childRenderObject != null) {
+      final Size(:width, :height) = childRenderObject.size;
+      final Offset(:dx, :dy) = target.translation;
 
-    final Offset(:dx, :dy) = target.translation;
-
-    htmlElement.style.left = '${width * dx}px';
-    htmlElement.style.top = '${height * dy}px';
+      htmlElement.style.left = '${width * dx}px';
+      htmlElement.style.top = '${height * dy}px';
+    }
   }
 }

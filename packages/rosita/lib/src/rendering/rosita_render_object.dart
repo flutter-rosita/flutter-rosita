@@ -183,6 +183,26 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   void rositaLayout() {}
 
   void rositaPaint() {}
+
+  RenderBox? findFirstChildWithHtmlElement() {
+    late RenderObjectVisitor visitor;
+
+    RenderBox? rositaObject;
+
+    visitor = (RenderObject element) {
+      if (rositaObject != null) {
+        // End visitChildren
+      } else if (element is RenderBox && (element as RositaRenderMixin).hasHtmlElement) {
+        rositaObject = element;
+      } else {
+        element.visitChildren(visitor);
+      }
+    };
+
+    target.visitChildren(visitor);
+
+    return rositaObject;
+  }
 }
 
 mixin RositaPipelineOwnerMixin {

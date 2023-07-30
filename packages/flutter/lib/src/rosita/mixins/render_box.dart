@@ -10,6 +10,8 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
   Offset? _localOffset;
 
+  Offset? get localOffset => _localOffset;
+
   @override
   Rect buildHtmlRect() {
     final parentRect = parentHtmlRect;
