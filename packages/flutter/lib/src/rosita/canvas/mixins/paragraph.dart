@@ -31,7 +31,7 @@ mixin _ParagraphMixin on _CanvasMixin {
 
     context.font = data.font;
 
-    context.fillStyle = '${style.color?.toHexString()}';
+    context.fillStyle = style.color.toHexString();
 
     if (string != null) {
       context.fillText(string, offset.dx, offset.dy + data.lineHeight);

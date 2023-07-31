@@ -12,7 +12,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     final decoration = target.decoration;
 
     if (decoration is BoxDecoration) {
-      htmlElement.style.background = '${decoration.color?.toHexString()}';
+      htmlElement.style.background = decoration.color.toHexString();
 
       RositaRadiusUtils.applyBorderRadius(htmlElement, decoration.borderRadius);
     }
