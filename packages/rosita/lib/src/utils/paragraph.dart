@@ -1,12 +1,16 @@
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
-
 import 'package:universal_html/html.dart' as html;
 
 class RositaParagraphUtils {
   static html.CanvasElement? _canvas;
 
-  static html.CanvasRenderingContext2D get canvasContext => (_canvas ??= html.CanvasElement()).context2D;
+  static html.CanvasRenderingContext2D? _canvasContext;
+
+  static html.CanvasRenderingContext2D get canvasContext =>
+      _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
+
+  static String? _lastContextFont;
 
   static RositaCanvasFontData buildFontData({required TextStyle style}) {
     final fontSize = style.fontSize ?? 10;
@@ -38,7 +42,10 @@ class RositaParagraphUtils {
     final font = fontData.font;
     final lineHeight = fontData.lineHeight;
 
-    canvasContext.font = font;
+    if (_lastContextFont != font) {
+      _lastContextFont = font;
+      canvasContext.font = font;
+    }
 
     final lineWidth = _measureText(text);
     final biggestSize = constraints.biggest;

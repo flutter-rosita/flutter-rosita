@@ -16,12 +16,15 @@ mixin RositaRenderEditableCustomPaintMixin on RositaRenderMixin, RositaCanvasMix
   void rositaPaint() {
     final RenderEditable? parent = this.parent;
     final RenderEditablePainter? painter = this.painter;
+    final size = target.size;
+
     if (painter != null && parent != null) {
-      final size = target.size;
-      final canvas = RositaCanvas(canvasElement);
+      final canvas = rositaCanvas;
       canvas.clean(size);
       painter.paint(canvas, size, parent);
       canvas.checkDirty();
+    } else {
+      cleanAndHideRositaCanvas(size);
     }
   }
 }

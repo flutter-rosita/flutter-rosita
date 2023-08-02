@@ -11,17 +11,30 @@ mixin _CanvasMixin {
 
   void _setDirty() => _isDirty = true;
 
+  Size? _size;
+
+  late ({int width, int height}) _sizeWithOverscan;
+
   void clean(Size size) {
-    canvas.style.left = '-${overscan}px';
-    canvas.style.top = '-${overscan}px';
+    if (_size != size) {
+      _size = size;
 
-    canvas.width = size.width.toInt() + overscan * 2;
-    canvas.height = size.height.toInt() + overscan * 2;
+      canvas.style.left = '-${overscan}px';
+      canvas.style.top = '-${overscan}px';
 
-    context.translate(overscan, overscan);
+      _sizeWithOverscan = (
+        width: size.width.toInt() + overscan * 2,
+        height: size.height.toInt() + overscan * 2,
+      );
+
+      canvas.width = _sizeWithOverscan.width;
+      canvas.height = _sizeWithOverscan.height;
+
+      context.translate(overscan, overscan);
+    }
 
     if (_isDirty) {
-      context.clearRect(0, 0, canvas.width!, canvas.height!);
+      context.clearRect(0, 0, _sizeWithOverscan.width, _sizeWithOverscan.height);
       _isDirty = false;
     }
   }

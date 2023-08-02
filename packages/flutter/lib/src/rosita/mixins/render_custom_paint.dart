@@ -2,7 +2,6 @@
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
 
 mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
   @override
@@ -10,15 +9,24 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
 
   @override
   void rositaPaint() {
-    rositaPainterPaint(canvasElement, target.painter);
-    rositaPainterPaint(foregroundCanvasElement, target.foregroundPainter);
+    final size = target.size;
+
+    if (target.painter != null) {
+      rositaPainterPaint(rositaCanvas, target.painter!, size);
+    } else {
+      cleanAndHideRositaCanvas(size);
+    }
+
+    if (target.foregroundPainter != null) {
+      rositaPainterPaint(foregroundCanvas, target.foregroundPainter!, size);
+    } else {
+      cleanAndHideForegroundRositaCanvas(size);
+    }
   }
 
-  void rositaPainterPaint(html.CanvasElement element, CustomPainter? painter) {
-    final size = target.size;
-    final canvas = RositaCanvas(element);
+  void rositaPainterPaint(RositaCanvas canvas, CustomPainter painter, Size size) {
     canvas.clean(size);
-    painter?.paint(canvas, size);
+    painter.paint(canvas, size);
     canvas.checkDirty();
   }
 }

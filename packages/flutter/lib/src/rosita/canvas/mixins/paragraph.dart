@@ -3,6 +3,8 @@
 part of '../rosita_canvas.dart';
 
 mixin _ParagraphMixin on _CanvasMixin {
+  String? _lastContextFont;
+
   void drawRositaParagraph(TextPainter textPainter, Offset offset) {
     final text = textPainter.text;
 
@@ -29,7 +31,10 @@ mixin _ParagraphMixin on _CanvasMixin {
 
     final data = RositaParagraphUtils.buildFontData(style: style);
 
-    context.font = data.font;
+    if (_lastContextFont != data.font) {
+      _lastContextFont = data.font;
+      context.font = data.font;
+    }
 
     context.fillStyle = style.color.toHexString();
 
@@ -45,7 +50,8 @@ mixin _ParagraphMixin on _CanvasMixin {
       }
     }
 
-    if (parentData != null) {
+    if (parentData != null && _lastContextFont != parentData.font) {
+      _lastContextFont = parentData.font;
       context.font = parentData.font;
     }
   }

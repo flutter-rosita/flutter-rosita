@@ -21,8 +21,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   @override
   final int overscan;
 
+  html.CanvasRenderingContext2D? _context;
+
   @override
-  html.CanvasRenderingContext2D get context => canvas.context2D;
+  html.CanvasRenderingContext2D get context => _context ??= canvas.context2D;
 
   @override
   void clipPath(Path path, {bool doAntiAlias = true}) {}
