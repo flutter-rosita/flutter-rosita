@@ -359,7 +359,7 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
 
   void _handlePersistentFrameCallback(Duration timeStamp) {
     drawFrame();
-    _scheduleMouseTrackerUpdate();
+    rositaSkipCallback(_scheduleMouseTrackerUpdate);
   }
 
   bool _debugMouseTrackerUpdateScheduled = false;
