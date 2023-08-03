@@ -84,6 +84,8 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
 
         markDirtyHtmlRect();
 
+        RositaScrollUtils.onScroll();
+
         late RenderObjectVisitor visitor;
 
         visitor = (RenderObject child) {
