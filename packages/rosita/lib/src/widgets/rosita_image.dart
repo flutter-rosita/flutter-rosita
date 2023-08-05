@@ -5,25 +5,44 @@ import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RositaImage extends LeafRenderObjectWidget {
-  const RositaImage({
+  const RositaImage.asset(
+    String assetsName, {
     super.key,
-    required this.src,
     this.borderRadius,
-  });
+    this.fit,
+    this.alignment = Alignment.center,
+  }) : src = 'assets/$assetsName';
+
+  const RositaImage.network(
+    String url, {
+    super.key,
+    this.borderRadius,
+    this.fit,
+    this.alignment = Alignment.center,
+  }) : src = url;
 
   final String src;
+  final AlignmentGeometry alignment;
   final BorderRadiusGeometry? borderRadius;
+  final BoxFit? fit;
 
   @override
   RenderRositaImage createRenderObject(BuildContext context) {
-    return RenderRositaImage(src: src, borderRadius: borderRadius);
+    return RenderRositaImage(
+      src: src,
+      borderRadius: borderRadius,
+      fit: fit,
+      alignment: alignment,
+    );
   }
 
   @override
   void updateRenderObject(BuildContext context, RenderRositaImage renderObject) {
     renderObject
       ..src = src
-      ..borderRadius = borderRadius;
+      ..borderRadius = borderRadius
+      ..fit = fit
+      ..alignment = alignment;
   }
 }
 
@@ -31,8 +50,12 @@ class RenderRositaImage extends RositaRenderBox {
   RenderRositaImage({
     String? src,
     BorderRadiusGeometry? borderRadius,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
   })  : _src = src,
-        _borderRadius = borderRadius;
+        _borderRadius = borderRadius,
+        _fit = fit,
+        _alignment = alignment;
 
   String? get src => _src;
   String? _src;
@@ -56,9 +79,38 @@ class RenderRositaImage extends RositaRenderBox {
     markNeedsPaint();
   }
 
+  BoxFit? get fit => _fit;
+  BoxFit? _fit;
+
+  set fit(BoxFit? value) {
+    if (value == _fit) {
+      return;
+    }
+    _fit = value;
+    markNeedsPaint();
+  }
+
+  AlignmentGeometry? get alignment => _alignment;
+  AlignmentGeometry? _alignment;
+
+  set alignment(AlignmentGeometry? value) {
+    if (value == _alignment) {
+      return;
+    }
+    _alignment = value;
+    markNeedsPaint();
+  }
+
   @override
   void performLayout() {
-    size = constraints.biggest;
+    final biggestSize = constraints.biggest;
+
+    size = biggestSize.isFinite
+        ? biggestSize
+        : Size(
+      biggestSize.width == double.infinity ? biggestSize.height : biggestSize.width,
+      biggestSize.height == double.infinity ? biggestSize.width : biggestSize.height,
+    );
   }
 
   html.ImageElement? _imageElement;
@@ -79,6 +131,8 @@ class RenderRositaImage extends RositaRenderBox {
       imageElement.src = src;
 
       RositaRadiusUtils.applyBorderRadius(imageElement, borderRadius);
+      RositaBoxFitUtils.applyBoxFit(imageElement, fit);
+      RositaBoxFitUtils.applyAlignment(imageElement, alignment);
     }
   }
 }
