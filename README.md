@@ -1,4 +1,4 @@
-<img alt="Flutter Rosita" src="packages/rosita/docs/assets/rosita_full_logo.png" width="185" height="185">
+<img alt="Flutter Rosita" src="docs/assets/rosita_full_logo.png" width="185" height="185">
 
 # Flutter Rosita
 
@@ -8,9 +8,9 @@ _Flutter and the related logo are trademarks of Google LLC._
 
 ## Installation
 
-- [Linux](doc/linux-install.md)
-- [Windows](doc/windows-install.md)
-- [macOS](doc/macos-install.md)
+- [Linux](docs/linux-install.md)
+- [Windows](docs/windows-install.md)
+- [macOS](docs/macos-install.md)
 
 ## Usage
 
