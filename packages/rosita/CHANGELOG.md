@@ -1,3 +1,30 @@
+## 0.0.5
+
+Refactor widget RositaImage
+
+- add constructors: RositaImage.asset(), const RositaImage.network()
+- delete constructor RositaImage()
+- add support: alignment, fit
+
+Add widget RositaSvgPicture
+
+Optimize find focus with focus traversal group
+
+- add RositaRectMixin
+
+Optimize render with hidden skip count RenderTheater children
+
+- Add RositaRenderTheaterMixin
+
+Optimize usage html canvas 2d
+
+Optimize call _scheduleMouseTrackerUpdate
+
+- call after scroll
+- call on mouse event
+
+Fix decoration when color is null
+
 ## 0.0.4
 
 Canvas paint features
