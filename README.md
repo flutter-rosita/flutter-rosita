@@ -1,3 +1,5 @@
+<img alt="Flutter Rosita" src="packages/rosita/docs/assets/rosita_full_logo.png" width="185" height="185">
+
 # Flutter Rosita
 
 An extension to the [Flutter SDK](https://github.com/flutter/flutter) for building Flutter applications for WEB.

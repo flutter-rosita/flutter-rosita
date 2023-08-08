@@ -1,4 +1,4 @@
-<img alt="Flutter Rosita" src="docs/assets/rosita_full_logo.png" width="185" height="185">
+<img alt="Flutter Rosita" src="assets/rosita_full_logo.png" width="185" height="185">
 
 # Flutter Rosita
 
