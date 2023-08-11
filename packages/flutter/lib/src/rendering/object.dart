@@ -2063,7 +2063,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
       _needsPaint = false;
       markNeedsPaint();
     }
-    if (!rositaDisableSemantics && _needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
+    if (rositaEnableSemantics && _needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
       // Don't enter this block if we've never updated semantics at all;
       // scheduleInitialSemantics() will handle it
       _needsSemanticsUpdate = false;
@@ -3869,7 +3869,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     properties.add(DiagnosticsProperty<ContainerLayer>('layer', _layerHandle.layer, defaultValue: null));
     properties.add(DiagnosticsProperty<SemanticsNode>('semantics node', _semantics, defaultValue: null));
 
-    if (!rositaDisableSemantics) {
+    if (rositaEnableSemantics) {
       properties.add(FlagProperty(
         'isBlockingSemanticsOfPreviouslyPaintedNodes',
         value: _semanticsConfiguration.isBlockingSemanticsOfPreviouslyPaintedNodes,

@@ -19,3 +19,5 @@ export 'src/widgets/rosita_text.dart';
 const kIsRosita = bool.fromEnvironment('ROSITA');
 
 const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', defaultValue: true);
+
+const rositaEnableSemantics = !rositaDisableSemantics;

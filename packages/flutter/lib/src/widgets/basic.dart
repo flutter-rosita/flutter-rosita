@@ -7277,13 +7277,15 @@ class Semantics extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderSemanticsAnnotations renderObject) {
-    renderObject
-      ..container = container
-      ..explicitChildNodes = explicitChildNodes
-      ..excludeSemantics = excludeSemantics
-      ..blockUserActions = blockUserActions
-      ..properties = properties
-      ..textDirection = _getTextDirection(context);
+    if (rositaEnableSemantics) {
+      renderObject
+        ..container = container
+        ..explicitChildNodes = explicitChildNodes
+        ..excludeSemantics = excludeSemantics
+        ..blockUserActions = blockUserActions
+        ..properties = properties
+        ..textDirection = _getTextDirection(context);
+    }
   }
 
   @override
