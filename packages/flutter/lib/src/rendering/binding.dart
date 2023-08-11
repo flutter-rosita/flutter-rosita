@@ -505,7 +505,9 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     pipelineOwner.rositaFlushPaint();
     if (sendFramesToEngine) {
       rositaSkipCallback(renderView.compositeFrame); // this sends the bits to the GPU
-      rositaSkipCallback(pipelineOwner.flushSemantics); // this also sends the semantics to the OS.
+      if (!rositaDisableSemantics) {
+        pipelineOwner.flushSemantics(); // this also sends the semantics to the OS.
+      }
       _firstFrameSent = true;
     }
   }

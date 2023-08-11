@@ -2063,7 +2063,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
       _needsPaint = false;
       markNeedsPaint();
     }
-    if (_needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
+    if (!rositaDisableSemantics && _needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
       // Don't enter this block if we've never updated semantics at all;
       // scheduleInitialSemantics() will handle it
       _needsSemanticsUpdate = false;
@@ -3465,7 +3465,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
   /// [RenderObject] as annotated by [describeSemanticsConfiguration] changes in
   /// any way to update the semantics tree.
   void markNeedsSemanticsUpdate() {
-    return; // [ROSITA] BREAK
+    if (rositaDisableSemantics) {
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     assert(!attached || !owner!._debugDoingSemantics);
     if (!attached || owner!._semanticsOwner == null) {
@@ -3866,12 +3868,16 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     // don't access it via the "layer" getter since that's only valid when we don't need paint
     properties.add(DiagnosticsProperty<ContainerLayer>('layer', _layerHandle.layer, defaultValue: null));
     properties.add(DiagnosticsProperty<SemanticsNode>('semantics node', _semantics, defaultValue: null));
-    properties.add(FlagProperty(
-      'isBlockingSemanticsOfPreviouslyPaintedNodes',
-      value: _semanticsConfiguration.isBlockingSemanticsOfPreviouslyPaintedNodes,
-      ifTrue: 'blocks semantics of earlier render objects below the common boundary',
-    ));
-    properties.add(FlagProperty('isSemanticBoundary', value: _semanticsConfiguration.isSemanticBoundary, ifTrue: 'semantic boundary'));
+
+    if (!rositaDisableSemantics) {
+      properties.add(FlagProperty(
+        'isBlockingSemanticsOfPreviouslyPaintedNodes',
+        value: _semanticsConfiguration.isBlockingSemanticsOfPreviouslyPaintedNodes,
+        ifTrue: 'blocks semantics of earlier render objects below the common boundary',
+      ));
+      properties.add(FlagProperty(
+          'isSemanticBoundary', value: _semanticsConfiguration.isSemanticBoundary, ifTrue: 'semantic boundary'));
+    }
   }
 
   @override
