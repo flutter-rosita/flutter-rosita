@@ -2,7 +2,7 @@
 
 import 'dart:ui';
 
-extension RositaColor on Color? {
+extension RositaColorExtension on Color? {
   String toHexString() => this == null
       ? ''
       : '#'

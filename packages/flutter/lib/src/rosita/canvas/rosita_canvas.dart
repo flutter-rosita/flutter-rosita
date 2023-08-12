@@ -92,7 +92,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawRRect(RRect rrect, Paint paint) {
     final sRect = rrect.scaleRadii();
 
-    if (sRect.isEllipse) {
+    if (sRect.rositaIsEllipse) {
       drawArc(sRect.outerRect, 0, math.pi * 2, false, paint);
     } else {
       _setDirty();

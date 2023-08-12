@@ -1,11 +1,12 @@
 library rosita;
 
+export 'src/extensions/color.dart';
+export 'src/extensions/rrect.dart';
 export 'src/rendering/rosita_paragraph.dart';
 export 'src/rendering/rosita_rect.dart';
 export 'src/rendering/rosita_render_box.dart';
 export 'src/rendering/rosita_render_object.dart';
 export 'src/utils/box_fit.dart';
-export 'src/utils/extension.dart';
 export 'src/utils/opacity.dart';
 export 'src/utils/paragraph.dart';
 export 'src/utils/radius.dart';
