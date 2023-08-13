@@ -22,3 +22,5 @@ const kIsRosita = bool.fromEnvironment('ROSITA');
 const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', defaultValue: true);
 
 const rositaEnableSemantics = !rositaDisableSemantics;
+
+const rositaSkipSlowFrames = bool.fromEnvironment('ROSITA_SKIP_SLOW_FRAMES', defaultValue: true);

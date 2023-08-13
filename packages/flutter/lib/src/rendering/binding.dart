@@ -358,7 +358,12 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   }
 
   void _handlePersistentFrameCallback(Duration timeStamp) {
+    if (rositaSkipSlowFrames) {
+      _rositaFrameStart = DateTime.now();
+    }
+
     drawFrame();
+    rositaDrawFrame();
 
     if (RositaScrollUtils.scrolled) {
       RositaScrollUtils.callAfterDrawFrame();
@@ -499,10 +504,6 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     pipelineOwner.flushLayout();
     pipelineOwner.flushCompositingBits();
     rositaSkipCallback(pipelineOwner.flushPaint);
-    pipelineOwner.rositaFlushDetach();
-    pipelineOwner.rositaFlushAttach();
-    pipelineOwner.rositaFlushLayout();
-    pipelineOwner.rositaFlushPaint();
     if (sendFramesToEngine) {
       rositaSkipCallback(renderView.compositeFrame); // this sends the bits to the GPU
       if (rositaEnableSemantics) {
@@ -510,6 +511,26 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
       }
       _firstFrameSent = true;
     }
+  }
+
+  DateTime _rositaFrameStart = DateTime.now();
+  int _rositaSkipFrame = 0;
+
+  @protected
+  // ignore: public_member_api_docs
+  void rositaDrawFrame() {
+    if (rositaSkipSlowFrames) {
+      if (_rositaSkipFrame < 5 && DateTime.now().difference(_rositaFrameStart).inMilliseconds > 16) {
+        _rositaSkipFrame++;
+        return;
+      }
+      _rositaSkipFrame = 0;
+    }
+
+    pipelineOwner.rositaFlushDetach();
+    pipelineOwner.rositaFlushAttach();
+    pipelineOwner.rositaFlushLayout();
+    pipelineOwner.rositaFlushPaint();
   }
 
   @override
