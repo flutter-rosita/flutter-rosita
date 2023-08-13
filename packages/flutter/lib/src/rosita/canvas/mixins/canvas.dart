@@ -34,7 +34,7 @@ mixin _CanvasMixin {
     }
 
     if (_isDirty) {
-      context.clearRect(0, 0, _sizeWithOverscan.width, _sizeWithOverscan.height);
+      context.clearRect(-overscan, -overscan, _sizeWithOverscan.width, _sizeWithOverscan.height);
       _isDirty = false;
     }
   }
