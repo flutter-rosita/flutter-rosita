@@ -14,7 +14,19 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     if (decoration is BoxDecoration) {
       htmlElement.style.background = decoration.color.toHexString();
 
-      RositaRadiusUtils.applyBorderRadius(htmlElement, decoration.borderRadius);
+      if (decoration.borderRadius != null) {
+        RositaRadiusUtils.applyBorderRadius(htmlElement, decoration.borderRadius);
+      } else {
+        htmlElement.style.borderRadius = decoration.shape == BoxShape.circle ? '100%' : '';
+      }
+
+      final image = decoration.image;
+
+      if (image != null) {
+        htmlElement.style.backgroundImage = 'url(${RositaImageUtils.buildImageProviderPath(image.image)})';
+        RositaBoxFitUtils.applyBoxFitToBackgroundSize(htmlElement, image.fit);
+        RositaBoxFitUtils.applyAlignmentToBackgroundPosition(htmlElement, image.alignment);
+      }
     }
   }
 }

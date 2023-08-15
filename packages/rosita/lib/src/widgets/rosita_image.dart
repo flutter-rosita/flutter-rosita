@@ -6,12 +6,13 @@ import 'package:universal_html/html.dart' as html;
 
 class RositaImage extends LeafRenderObjectWidget {
   const RositaImage.asset(
-    String assetsName, {
+    String name, {
     super.key,
     this.borderRadius,
     this.fit,
     this.alignment = Alignment.center,
-  }) : src = 'assets/$assetsName';
+    String? package,
+  }) : src = package == null ? 'assets/$name' : 'assets/packages/$package/$name';
 
   const RositaImage.network(
     String url, {
@@ -131,8 +132,8 @@ class RenderRositaImage extends RositaRenderBox {
       imageElement.src = src;
 
       RositaRadiusUtils.applyBorderRadius(imageElement, borderRadius);
-      RositaBoxFitUtils.applyBoxFit(imageElement, fit);
-      RositaBoxFitUtils.applyAlignment(imageElement, alignment);
+      RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement, fit);
+      RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement, alignment);
     }
   }
 }

@@ -24,11 +24,8 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
   void rositaPaint() {
     final image = target.rositaImageProvider;
 
-    if (image is NetworkImage) {
-      imageElement.src = image.url;
-
-      RositaOpacityUtils.applyOpacity(imageElement, target.opacity?.value);
-    }
+    imageElement.src = RositaImageUtils.buildImageProviderPath(image);
+    RositaOpacityUtils.applyOpacity(imageElement, target.opacity?.value);
   }
 }
 

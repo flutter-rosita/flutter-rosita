@@ -4,13 +4,14 @@ import 'package:universal_html/html.dart' as html;
 
 class RositaSvgPicture extends LeafRenderObjectWidget {
   const RositaSvgPicture.asset(
-    String assetsName, {
+    String name, {
     super.key,
     this.fit = BoxFit.contain,
     this.alignment = Alignment.center,
     this.width,
     this.height,
-  }) : src = 'assets/$assetsName';
+    String? package,
+  }) : src = package == null ? 'assets/$name' : 'assets/packages/$package/$name';
 
   const RositaSvgPicture.network(
     String url, {
@@ -154,8 +155,8 @@ class RenderRositaSvgPicture extends RositaRenderBox {
         imageElement.height = height!.toInt();
       }
 
-      RositaBoxFitUtils.applyBoxFit(imageElement, fit);
-      RositaBoxFitUtils.applyAlignment(imageElement, alignment);
+      RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement, fit);
+      RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement, alignment);
     }
   }
 }

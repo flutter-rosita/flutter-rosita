@@ -2,18 +2,18 @@ import 'package:flutter/rendering.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RositaBoxFitUtils {
-  static void applyBoxFit(html.HtmlElement element, BoxFit? fit) {
+  static void applyBoxFitToObjectFit(html.HtmlElement element, BoxFit? fit) {
     switch (fit) {
       case BoxFit.fitWidth:
         element.style.width = '100%';
       case BoxFit.fitHeight:
         element.style.height = '100%';
       default:
-        element.style.objectFit = _mapperBoxFit(fit);
+        element.style.objectFit = _mapperBoxFitToObjectFit(fit);
     }
   }
 
-  static String _mapperBoxFit(BoxFit? fit) {
+  static String _mapperBoxFitToObjectFit(BoxFit? fit) {
     return switch (fit) {
       BoxFit.fill => 'fill',
       BoxFit.contain => 'contain',
@@ -24,10 +24,33 @@ class RositaBoxFitUtils {
     };
   }
 
-  static void applyAlignment(html.HtmlElement element, AlignmentGeometry? alignment) {
+  static void applyBoxFitToBackgroundSize(html.HtmlElement element, BoxFit? fit) {
+    element.style.backgroundSize = _mapperBoxFitToBackgroundSize(fit);
+  }
+
+  static String _mapperBoxFitToBackgroundSize(BoxFit? fit) {
+    return switch (fit) {
+      BoxFit.fitWidth => '100% auto',
+      BoxFit.fitHeight => 'auto 100%',
+      BoxFit.fill => '100% 100%',
+      BoxFit.contain => 'contain',
+      BoxFit.cover => 'cover',
+      _ => '',
+    };
+  }
+
+  static void applyAlignmentToObjectPosition(html.HtmlElement element, AlignmentGeometry? alignment) {
+    element.style.objectPosition = _mapperAlignmentGeometry(alignment);
+  }
+
+  static void applyAlignmentToBackgroundPosition(html.HtmlElement element, AlignmentGeometry? alignment) {
+    element.style.backgroundPosition = _mapperAlignmentGeometry(alignment);
+  }
+
+  static String _mapperAlignmentGeometry(AlignmentGeometry? alignment) {
     final align = alignment?.resolve(TextDirection.ltr); // TODO
 
-    element.style.objectPosition = switch (align) {
+    return switch (align) {
       null => '',
       Alignment.topLeft => 'top left',
       Alignment.topCenter => 'top',
