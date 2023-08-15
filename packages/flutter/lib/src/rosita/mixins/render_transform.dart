@@ -10,12 +10,21 @@ mixin RositaRenderTransform on RositaRenderBoxMixin {
   @override
   void rositaPaint() {
     final origin = target.origin;
+    final transform = target.rositaTransform;
 
     if (origin != null) {
       final offset = origin + (localOffset ?? Offset.zero);
 
       htmlElement.style.left = '${offset.dx}px';
       htmlElement.style.top = '${offset.dy}px';
+    }
+
+    if (transform != null) {
+      if (transform.isIdentity()) {
+        htmlElement.style.transform = '';
+      } else {
+        htmlElement.style.transform = 'matrix3d(${transform.storage.join(',')})';
+      }
     }
   }
 }

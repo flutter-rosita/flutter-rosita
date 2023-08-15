@@ -2523,6 +2523,9 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     markNeedsSemanticsUpdate();
   }
 
+  // ignore: public_member_api_docs
+  Matrix4? get rositaTransform => _transform;
+
   Matrix4? get _effectiveTransform {
     final Alignment? resolvedAlignment = alignment?.resolve(textDirection);
     if (_origin == null && resolvedAlignment == null) {
