@@ -1,3 +1,13 @@
+## 0.0.6
+
+- Refactor docs
+- Add optimize to disable semantics call
+- Optimize call RRect.isEllipse for JS
+- Optimize time call draw frame with skip slow frame
+- Fix canvas clear rect
+- Initial support render clip
+- Add support image asset
+
 ## 0.0.5
 
 Refactor widget RositaImage
