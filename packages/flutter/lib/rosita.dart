@@ -3,6 +3,7 @@ export 'package:rosita/rosita.dart';
 export 'src/rosita/canvas/rosita_canvas.dart';
 export 'src/rosita/mixins/platform_view_render_box.dart';
 export 'src/rosita/mixins/render_box.dart';
+export 'src/rosita/mixins/render_clip.dart';
 export 'src/rosita/mixins/render_colored_box.dart';
 export 'src/rosita/mixins/render_custom_paint.dart';
 export 'src/rosita/mixins/render_decorated_box.dart';

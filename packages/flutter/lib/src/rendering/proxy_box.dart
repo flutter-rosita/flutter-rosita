@@ -1510,7 +1510,7 @@ abstract class _RenderCustomClip<T> extends RenderProxyBox {
 /// By default, [RenderClipRect] prevents its child from painting outside its
 /// bounds, but the size and location of the clip rect can be customized using a
 /// custom [clipper].
-class RenderClipRect extends _RenderCustomClip<Rect> {
+class RenderClipRect extends _RenderCustomClip<Rect> with RositaRenderClipRectMixin {
   /// Creates a rectangular clip.
   ///
   /// If [clipper] is null, the clip will match the layout size and position of
@@ -1584,7 +1584,7 @@ class RenderClipRect extends _RenderCustomClip<Rect> {
 /// By default, [RenderClipRRect] uses its own bounds as the base rectangle for
 /// the clip, but the size and location of the clip can be customized using a
 /// custom [clipper].
-class RenderClipRRect extends _RenderCustomClip<RRect> {
+class RenderClipRRect extends _RenderCustomClip<RRect> with RositaRenderClipRRectMixin {
   /// Creates a rounded-rectangular clip.
   ///
   /// The [borderRadius] defaults to [BorderRadius.zero], i.e. a rectangle with
@@ -1691,7 +1691,7 @@ class RenderClipRRect extends _RenderCustomClip<RRect> {
 /// By default, inscribes an axis-aligned oval into its layout dimensions and
 /// prevents its child from painting outside that oval, but the size and
 /// location of the clip oval can be customized using a custom [clipper].
-class RenderClipOval extends _RenderCustomClip<Rect> {
+class RenderClipOval extends _RenderCustomClip<Rect> with RositaRenderClipOvalMixin {
   /// Creates an oval-shaped clip.
   ///
   /// If [clipper] is null, the oval will be inscribed into the layout size and
@@ -1788,7 +1788,7 @@ class RenderClipOval extends _RenderCustomClip<Rect> {
 ///  * To clip to a rectangle, consider [RenderClipRect].
 ///  * To clip to an oval or circle, consider [RenderClipOval].
 ///  * To clip to a rounded rectangle, consider [RenderClipRRect].
-class RenderClipPath extends _RenderCustomClip<Path> {
+class RenderClipPath extends _RenderCustomClip<Path> with RositaRenderClipPathMixin {
   /// Creates a path clip.
   ///
   /// If [clipper] is null, the clip will be a rectangle that matches the layout
