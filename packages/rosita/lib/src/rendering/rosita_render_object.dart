@@ -301,4 +301,10 @@ mixin RositaPipelineOwnerMixin {
       callback();
     });
   }
+
+  bool get rositaFlushNeeded =>
+      _rositaNodesNeedingAttach.isNotEmpty ||
+      _rositaNodesNeedingDetach.isNotEmpty ||
+      _rositaNodesNeedingLayout.isNotEmpty ||
+      _rositaNodesNeedingPaint.isNotEmpty;
 }

@@ -522,8 +522,11 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     if (rositaSkipSlowFrames) {
       if (_rositaSkipFrame < 5 && DateTime.now().difference(_rositaFrameStart).inMilliseconds > 16) {
         _rositaSkipFrame++;
+        addPostFrameCallback(rositaPostFrameCallback);
         return;
       }
+      _rositaTimer?.cancel();
+      _rositaTimer = null;
       _rositaSkipFrame = 0;
     }
 
@@ -531,6 +534,20 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     pipelineOwner.rositaFlushAttach();
     pipelineOwner.rositaFlushLayout();
     pipelineOwner.rositaFlushPaint();
+  }
+
+  Timer? _rositaTimer;
+
+  // ignore: public_member_api_docs
+  void rositaPostFrameCallback(Duration timeStamp) {
+    if (pipelineOwner.rositaFlushNeeded) {
+      _rositaTimer?.cancel();
+      _rositaTimer = null;
+      _rositaTimer = Timer(const Duration(milliseconds: 50), () {
+        _rositaFrameStart = DateTime.now();
+        RositaPipelineOwnerMixin.rositaDrawFrame(rositaDrawFrame);
+      });
+    }
   }
 
   @override
