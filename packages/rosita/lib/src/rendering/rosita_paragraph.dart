@@ -23,6 +23,7 @@ class RositaRenderParagraph extends RositaRenderBox {
     }
     _text = value;
     markNeedsLayout();
+    markNeedsPaint();
   }
 
   TextStyle? get style => _style;
@@ -34,6 +35,7 @@ class RositaRenderParagraph extends RositaRenderBox {
     }
     _style = value;
     markNeedsLayout();
+    markNeedsPaint();
   }
 
   TextAlign? get textAlign => _textAlign;
@@ -45,6 +47,7 @@ class RositaRenderParagraph extends RositaRenderBox {
     }
     _textAlign = textAlign;
     markNeedsLayout();
+    markNeedsPaint();
   }
 
   TextOverflow? get overflow => _overflow;
@@ -56,6 +59,7 @@ class RositaRenderParagraph extends RositaRenderBox {
     }
     _overflow = overflow;
     markNeedsLayout();
+    markNeedsPaint();
   }
 
   int? get maxLines => _maxLines;
@@ -67,6 +71,7 @@ class RositaRenderParagraph extends RositaRenderBox {
     }
     _maxLines = maxLines;
     markNeedsLayout();
+    markNeedsPaint();
   }
 
   @override
