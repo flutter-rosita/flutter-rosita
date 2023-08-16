@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'rosita_rect.dart';
@@ -20,15 +21,21 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   void attach(covariant Object owner) {
     super.attach(owner);
 
-    _htmlElement = createRositaElement();
-
     if (hasHtmlElement) {
       _rositaNeedsAttach = false;
-      _rositaNeedsLayout = false;
-      _rositaNeedsPaint = false;
       rositaMarkNeedsAttach();
-      rositaMarkNeedsLayout();
-      rositaMarkNeedsPaint();
+    } else {
+      final htmlElement = createRositaElement();
+
+      if (htmlElement != null) {
+        _htmlElement = htmlElement;
+        _rositaNeedsAttach = false;
+        _rositaNeedsLayout = false;
+        _rositaNeedsPaint = false;
+        rositaMarkNeedsAttach();
+        rositaMarkNeedsLayout();
+        rositaMarkNeedsPaint();
+      }
     }
   }
 
@@ -175,8 +182,10 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
   @mustCallSuper
   void rositaDetach() {
-    _htmlElement?.remove();
-    _htmlElement = null;
+    if (!attached) {
+      _htmlElement?.remove();
+      _htmlElement = null;
+    }
   }
 
   @mustCallSuper
