@@ -62,13 +62,9 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
       return;
     }
 
-    final owner = this.owner;
-
-    if (owner is RositaPipelineOwnerMixin) {
-      if (hasHtmlElement) {
-        _rositaNeedsAttach = true;
-        owner._rositaNodesNeedingAttach.add(target);
-      }
+    if (hasHtmlElement && attached) {
+      _rositaNeedsAttach = true;
+      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingAttach.add(this as RenderObject);
     }
   }
 
@@ -77,13 +73,9 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
       return;
     }
 
-    final owner = this.owner;
-
-    if (owner is RositaPipelineOwnerMixin) {
-      if (hasHtmlElement) {
-        _rositaNeedsDetach = true;
-        owner._rositaNodesNeedingDetach.add(target);
-      }
+    if (hasHtmlElement && attached) {
+      _rositaNeedsDetach = true;
+      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingDetach.add(this as RenderObject);
     }
   }
 
@@ -92,23 +84,9 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
       return;
     }
 
-    final owner = this.owner;
-
-    if (owner is RositaPipelineOwnerMixin) {
-      if (hasHtmlElement) {
-        _rositaNeedsLayout = true;
-        owner._rositaNodesNeedingLayout.add(target);
-      } else {
-        late RenderObjectVisitor visitor;
-        visitor = (RenderObject child) {
-          if ((child as RositaRenderMixin).hasHtmlElement) {
-            (child as RositaRenderMixin).rositaMarkNeedsLayout();
-          } else {
-            child.visitChildren(visitor);
-          }
-        };
-        target.visitChildren(visitor);
-      }
+    if (hasHtmlElement && attached) {
+      _rositaNeedsLayout = true;
+      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingLayout.add(this as RenderObject);
     }
   }
 
@@ -117,13 +95,9 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
       return;
     }
 
-    final owner = this.owner;
-
-    if (owner is RositaPipelineOwnerMixin) {
-      if (hasHtmlElement) {
-        _rositaNeedsPaint = true;
-        owner._rositaNodesNeedingPaint.add(target);
-      }
+    if (hasHtmlElement && attached) {
+      _rositaNeedsPaint = true;
+      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingPaint.add(this as RenderObject);
     }
   }
 
