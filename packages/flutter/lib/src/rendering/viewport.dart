@@ -394,7 +394,9 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

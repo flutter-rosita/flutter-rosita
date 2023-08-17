@@ -332,7 +332,9 @@ class _RenderOverflowBar extends RenderBox
     }
     _clipBehavior = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

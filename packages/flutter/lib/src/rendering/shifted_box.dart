@@ -729,7 +729,9 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

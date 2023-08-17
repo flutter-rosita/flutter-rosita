@@ -309,14 +309,18 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
       case RenderComparison.metadata:
         _textPainter.text = value;
         _cachedCombinedSemanticsInfos = null;
-        markNeedsSemanticsUpdate();
+        if (rositaEnableSemantics) {
+          markNeedsSemanticsUpdate();
+        }
       case RenderComparison.paint:
         _textPainter.text = value;
         _cachedAttributedLabels = null;
         _canComputeIntrinsicsCached = null;
         _cachedCombinedSemanticsInfos = null;
         markNeedsPaint();
-        markNeedsSemanticsUpdate();
+        if (rositaEnableSemantics) {
+          markNeedsSemanticsUpdate();
+        }
       case RenderComparison.layout:
         _textPainter.text = value;
         _overflowShader = null;

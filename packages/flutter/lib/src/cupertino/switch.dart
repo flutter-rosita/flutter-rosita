@@ -508,7 +508,9 @@ class _RenderCupertinoSwitch extends RenderConstrainedBox {
       return;
     }
     _value = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   Color get activeColor => _activeColor;
@@ -561,7 +563,9 @@ class _RenderCupertinoSwitch extends RenderConstrainedBox {
     _onChanged = value;
     if (wasInteractive != isInteractive) {
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

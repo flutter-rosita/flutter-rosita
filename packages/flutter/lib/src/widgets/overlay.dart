@@ -976,7 +976,9 @@ class _RenderTheater extends RenderBox with ContainerRenderObjectMixin<RenderBox
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -1656,7 +1658,9 @@ final class _OverlayEntryLocation extends LinkedListEntry<_OverlayEntryLocation>
     _childModel._add(this);
     _theater.markNeedsPaint();
     _theater.markNeedsCompositingBitsUpdate();
-    _theater.markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      _theater.markNeedsSemanticsUpdate();
+    }
   }
   void _removeFromChildModel(_RenderDeferredLayoutBox child) {
     assert(child == _overlayChildRenderBox);
@@ -1665,7 +1669,9 @@ final class _OverlayEntryLocation extends LinkedListEntry<_OverlayEntryLocation>
     _childModel._remove(this);
     _theater.markNeedsPaint();
     _theater.markNeedsCompositingBitsUpdate();
-    _theater.markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      _theater.markNeedsSemanticsUpdate();
+    }
   }
 
   void _addChild(_RenderDeferredLayoutBox child) {

@@ -587,7 +587,9 @@ class _RenderVisibility extends RenderProxyBox {
       return;
     }
     _maintainSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -655,7 +657,9 @@ class _RenderSliverVisibility extends RenderProxySliver {
       return;
     }
     _maintainSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

@@ -115,8 +115,10 @@ class RenderAndroidView extends PlatformViewRenderBox {
     _viewController = controller;
     _viewController.pointTransformer = (Offset offset) => globalToLocal(offset);
     _sizePlatformView();
-    if (_viewController.isCreated) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (_viewController.isCreated) {
+        markNeedsSemanticsUpdate();
+      }
     }
     _viewController.addOnPlatformViewCreatedListener(_onPlatformViewCreated);
   }
@@ -130,13 +132,17 @@ class RenderAndroidView extends PlatformViewRenderBox {
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
   void _onPlatformViewCreated(int id) {
     assert(!_isDisposed);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -314,8 +320,10 @@ class RenderUiKitView extends RenderBox {
     final bool needsSemanticsUpdate = _viewController.id != value.id;
     _viewController = value;
     markNeedsPaint();
-    if (needsSemanticsUpdate) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (needsSemanticsUpdate) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -646,8 +654,10 @@ class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin, Ro
     final bool needsSemanticsUpdate = _controller.viewId != controller.viewId;
     _controller = controller;
     markNeedsPaint();
-    if (needsSemanticsUpdate) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (needsSemanticsUpdate) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 

@@ -903,8 +903,10 @@ class RenderOpacity extends RenderProxyBox with RositaRenderOpacityMixin {
       markNeedsCompositingBitsUpdate();
     }
     markNeedsCompositedLayerUpdate();
-    if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (wasVisible != (_alpha != 0) && !alwaysIncludeSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -920,7 +922,9 @@ class RenderOpacity extends RenderProxyBox with RositaRenderOpacityMixin {
       return;
     }
     _alwaysIncludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -1022,7 +1026,9 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
       return;
     }
     _alwaysIncludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -1048,8 +1054,10 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
         markNeedsCompositingBitsUpdate();
       }
       markNeedsCompositedLayerUpdate();
-      if (oldAlpha == 0 || _alpha == 0) {
-        markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        if (oldAlpha == 0 || _alpha == 0) {
+          markNeedsSemanticsUpdate();
+        }
       }
     }
   }
@@ -1427,7 +1435,9 @@ abstract class _RenderCustomClip<T> extends RenderProxyBox {
   void _markNeedsClip() {
     _clip = null;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   T get _defaultClip;
@@ -2397,7 +2407,9 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     }
     _origin = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The alignment of the origin, relative to the size of the box.
@@ -2419,7 +2431,9 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     }
     _alignment = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The text direction with which to resolve [alignment].
@@ -2434,7 +2448,9 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     }
     _textDirection = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -2461,7 +2477,9 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
     }
     _transform = Matrix4.copy(value);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// The filter quality with which to apply the transform as a bitmap operation.
@@ -2485,42 +2503,54 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
   void setIdentity() {
     _transform!.setIdentity();
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a rotation about the x axis into the transform.
   void rotateX(double radians) {
     _transform!.rotateX(radians);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a rotation about the y axis into the transform.
   void rotateY(double radians) {
     _transform!.rotateY(radians);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a rotation about the z axis into the transform.
   void rotateZ(double radians) {
     _transform!.rotateZ(radians);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a translation by (x, y, z) into the transform.
   void translate(double x, [ double y = 0.0, double z = 0.0 ]) {
     _transform!.translate(x, y, z);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Concatenates a scale into the transform.
   void scale(double x, [ double? y, double? z ]) {
     _transform!.scale(x, y, z);
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   // ignore: public_member_api_docs
@@ -2811,7 +2841,9 @@ class RenderFittedBox extends RenderProxyBox {
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -2957,7 +2989,9 @@ class RenderFractionalTranslation extends RenderProxyBox with RositaRenderFracti
     }
     _translation = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -3630,8 +3664,10 @@ class RenderIgnorePointer extends RenderProxyBox with RositaSkipRenderObjectMixi
       return;
     }
     _ignoring = value;
-    if (ignoringSemantics == null) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (ignoringSemantics == null) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3651,7 +3687,9 @@ class RenderIgnorePointer extends RenderProxyBox with RositaSkipRenderObjectMixi
       return;
     }
     _ignoringSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -3877,8 +3915,10 @@ class RenderAbsorbPointer extends RenderProxyBox with RositaSkipRenderObjectMixi
       return;
     }
     _absorbing = value;
-    if (ignoringSemantics == null) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (ignoringSemantics == null) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -3899,7 +3939,9 @@ class RenderAbsorbPointer extends RenderProxyBox with RositaSkipRenderObjectMixi
       return;
     }
     _ignoringSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4004,7 +4046,9 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior wi
       return;
     }
     _validActions = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Called when the user taps on the render object.
@@ -4016,8 +4060,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior wi
     }
     final bool hadHandler = _onTap != null;
     _onTap = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -4030,8 +4076,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior wi
     }
     final bool hadHandler = _onLongPress != null;
     _onLongPress = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -4044,8 +4092,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior wi
     }
     final bool hadHandler = _onHorizontalDragUpdate != null;
     _onHorizontalDragUpdate = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -4058,8 +4108,10 @@ class RenderSemanticsGestureHandler extends RenderProxyBoxWithHitTestBehavior wi
     }
     final bool hadHandler = _onVerticalDragUpdate != null;
     _onVerticalDragUpdate = value;
-    if ((value != null) != hadHandler) {
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if ((value != null) != hadHandler) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -4192,7 +4244,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObj
     }
     _properties = value;
     _updateAttributedFields(_properties);
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// If 'container' is true, this [RenderObject] will introduce a new
@@ -4209,7 +4263,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObj
       return;
     }
     _container = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether descendants of this [RenderObject] are allowed to add semantic
@@ -4232,7 +4288,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObj
       return;
     }
     _explicitChildNodes = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether descendants of this [RenderObject] should have their semantic
@@ -4248,7 +4306,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObj
       return;
     }
     _excludeSemantics = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Whether to block user interactions for the semantics subtree.
@@ -4326,7 +4386,9 @@ class RenderSemanticsAnnotations extends RenderProxyBox with RositaSkipRenderObj
       return;
     }
     _textDirection = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4626,7 +4688,9 @@ class RenderBlockSemantics extends RenderProxyBox with RositaSkipRenderObjectMix
       return;
     }
     _blocking = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4685,7 +4749,9 @@ class RenderExcludeSemantics extends RenderProxyBox with RositaSkipRenderObjectM
       return;
     }
     _excluding = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
@@ -4729,7 +4795,9 @@ class RenderIndexedSemantics extends RenderProxyBox with RositaSkipRenderObjectM
       return;
     }
     _index = value;
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

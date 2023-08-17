@@ -445,14 +445,18 @@ class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRen
 
     // Check if we need to rebuild semantics.
     if (newPainter == null) {
-      assert(oldPainter != null); // We should be called only for changes.
-      if (attached) {
-        markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        assert(oldPainter != null); // We should be called only for changes.
+        if (attached) {
+          markNeedsSemanticsUpdate();
+        }
       }
     } else if (oldPainter == null ||
         newPainter.runtimeType != oldPainter.runtimeType ||
         newPainter.shouldRebuildSemantics(oldPainter)) {
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -553,7 +557,9 @@ class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRen
   @override
   void performLayout() {
     super.performLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override

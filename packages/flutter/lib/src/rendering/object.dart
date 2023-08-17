@@ -1606,7 +1606,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     markNeedsLayout();
     markNeedsCompositingBitsUpdate();
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
     visitChildren((RenderObject child) {
       child.reassemble();
     });
@@ -1753,7 +1755,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     setupParentData(child);
     markNeedsLayout();
     markNeedsCompositingBitsUpdate();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
     child._parent = this;
     if (attached) {
       child.attach(_owner!);
@@ -1780,7 +1784,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     }
     markNeedsLayout();
     markNeedsCompositingBitsUpdate();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// Calls visitor for each immediate child of this render object.
@@ -2063,11 +2069,13 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
       _needsPaint = false;
       markNeedsPaint();
     }
-    if (rositaEnableSemantics && _needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
-      // Don't enter this block if we've never updated semantics at all;
-      // scheduleInitialSemantics() will handle it
-      _needsSemanticsUpdate = false;
-      markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      if (_needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
+        // Don't enter this block if we've never updated semantics at all;
+        // scheduleInitialSemantics() will handle it
+        _needsSemanticsUpdate = false;
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
@@ -2334,7 +2342,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     }());
     try {
       performLayout();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
       rositaMarkNeedsLayout();
     } catch (e, stack) {
       _reportException('performLayout', e, stack);
@@ -2498,7 +2508,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, Rosit
     }());
     try {
       performLayout();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
       rositaMarkNeedsLayout();
       assert(() {
         debugAssertDoesMeetConstraints();

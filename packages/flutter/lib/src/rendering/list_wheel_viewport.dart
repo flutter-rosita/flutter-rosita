@@ -279,7 +279,9 @@ class RenderListWheelViewport
     }
     _diameterRatio = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@template flutter.rendering.RenderListWheelViewport.perspective}
@@ -309,7 +311,9 @@ class RenderListWheelViewport
     }
     _perspective = value;
     markNeedsPaint();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@template flutter.rendering.RenderListWheelViewport.offAxisFraction}
@@ -446,7 +450,9 @@ class RenderListWheelViewport
     }
     _squeeze = value;
     markNeedsLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@template flutter.rendering.RenderListWheelViewport.renderChildrenOutsideViewport}
@@ -471,7 +477,9 @@ class RenderListWheelViewport
     }
     _renderChildrenOutsideViewport = value;
     markNeedsLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   /// {@macro flutter.material.Material.clipBehavior}
@@ -483,13 +491,17 @@ class RenderListWheelViewport
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
-      markNeedsSemanticsUpdate();
+      if (rositaEnableSemantics) {
+        markNeedsSemanticsUpdate();
+      }
     }
   }
 
   void _hasScrolled() {
     markNeedsLayout();
-    markNeedsSemanticsUpdate();
+    if (rositaEnableSemantics) {
+      markNeedsSemanticsUpdate();
+    }
   }
 
   @override
