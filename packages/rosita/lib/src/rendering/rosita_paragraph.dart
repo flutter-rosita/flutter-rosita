@@ -22,20 +22,27 @@ class RositaRenderParagraph extends RositaRenderBox {
       return;
     }
     _text = value;
-    markNeedsLayout();
-    markNeedsPaint();
+    _isInitialSetText = true;
+    setLayout();
   }
 
   TextStyle? get style => _style;
   TextStyle? _style;
 
   set style(TextStyle? value) {
-    if (value == style) {
+    if (identical(_style, value)) {
       return;
+    } else if (_style?.fontFamily != value?.fontFamily ||
+        _style?.fontSize != value?.fontSize ||
+        _style?.height != value?.height ||
+        _style?.fontWeight != value?.fontWeight ||
+        _style?.fontStyle != value?.fontStyle) {
+      _style = value;
+      setLayout();
+    } else if (_style?.color != value?.color) {
+      _style = value;
+      markNeedsPaint();
     }
-    _style = value;
-    markNeedsLayout();
-    markNeedsPaint();
   }
 
   TextAlign? get textAlign => _textAlign;
@@ -46,7 +53,6 @@ class RositaRenderParagraph extends RositaRenderBox {
       return;
     }
     _textAlign = textAlign;
-    markNeedsLayout();
     markNeedsPaint();
   }
 
@@ -58,8 +64,7 @@ class RositaRenderParagraph extends RositaRenderBox {
       return;
     }
     _overflow = overflow;
-    markNeedsLayout();
-    markNeedsPaint();
+    setLayout();
   }
 
   int? get maxLines => _maxLines;
@@ -70,9 +75,16 @@ class RositaRenderParagraph extends RositaRenderBox {
       return;
     }
     _maxLines = maxLines;
+    setLayout();
+  }
+
+  void setLayout() {
+    _paragraphData = null;
     markNeedsLayout();
     markNeedsPaint();
   }
+
+  RositaCanvasParagraphData? _paragraphData;
 
   @override
   void performLayout() {
@@ -84,14 +96,15 @@ class RositaRenderParagraph extends RositaRenderBox {
       return;
     }
 
-    final data = RositaParagraphUtils.buildParagraphData(
+    final data = _paragraphData ??= RositaParagraphUtils.buildParagraphData(
       text: text,
       style: style,
-      constraints: constraints,
     );
 
-    size = constraints.constrain(data.size);
+    size = constraints.constrain(data.buildSize(constraints));
   }
+
+  bool _isInitialSetText = true;
 
   @override
   void rositaPaint() {
@@ -104,7 +117,10 @@ class RositaRenderParagraph extends RositaRenderBox {
 
     htmlElement.style.display = '';
 
-    htmlElement.innerText = text;
+    if (_isInitialSetText) {
+      htmlElement.innerText = text;
+      _isInitialSetText = false;
+    }
 
     RositaTextUtils.applyTextStyle(
       htmlElement,

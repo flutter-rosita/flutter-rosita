@@ -9,6 +9,7 @@ class RositaRichText extends LeafRenderObjectWidget {
     super.key,
     this.style,
     this.textAlign,
+    this.textDirection,
     this.overflow,
     this.maxLines,
   });
@@ -18,6 +19,8 @@ class RositaRichText extends LeafRenderObjectWidget {
   final TextStyle? style;
 
   final TextAlign? textAlign;
+
+  final TextDirection? textDirection; // TODO: implement
 
   final TextOverflow? overflow;
 

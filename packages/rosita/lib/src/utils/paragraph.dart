@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -36,7 +37,6 @@ class RositaParagraphUtils {
   static RositaCanvasParagraphData buildParagraphData({
     required String text,
     required TextStyle style,
-    required BoxConstraints constraints,
   }) {
     final fontData = buildFontData(style: style);
     final font = fontData.font;
@@ -47,49 +47,24 @@ class RositaParagraphUtils {
       canvasContext.font = font;
     }
 
-    final lineWidth = _measureText(text);
-    final biggestSize = constraints.biggest;
-    final Size lineSize;
+    final list = text.split(' ');
+    final spacerWidth = _measureText(' ');
+    final wordList = <double>[];
 
-    if (lineWidth <= biggestSize.width) {
-      lineSize = Size(lineWidth, lineHeight);
-    } else {
-      final list = text.split(' ');
-      final spacerWidth = _measureText(' ');
-
-      int lines = 1;
-      double maxLineWidth = 0;
-      double lineWidth = 0;
-
-      for (int i = 0; i < list.length; i++) {
-        if (i > 0) {
-          lineWidth += spacerWidth;
-        }
-
-        final width = _measureText(list[i]);
-
-        if (lineWidth + width >= biggestSize.width) {
-          lines++;
-          lineWidth = 0;
-        }
-
-        lineWidth += width;
-
-        if (lineWidth > maxLineWidth) {
-          maxLineWidth = lineWidth;
-        }
+    for (int i = 0; i < list.length; i++) {
+      if (i > 0) {
+        wordList.add(spacerWidth);
       }
 
-      lineSize = Size(
-        maxLineWidth,
-        lines * lineHeight,
-      );
+      final width = _measureText(list[i]);
+
+      wordList.add(width);
     }
 
     return RositaCanvasParagraphData(
       font: font,
       lineHeight: lineHeight,
-      size: lineSize,
+      wordList: wordList,
     );
   }
 
@@ -107,11 +82,39 @@ class RositaCanvasFontData {
 }
 
 class RositaCanvasParagraphData extends RositaCanvasFontData {
-  final Size size;
+  final List<double> wordList;
 
   const RositaCanvasParagraphData({
     required super.font,
     required super.lineHeight,
-    required this.size,
+    required this.wordList,
   });
+
+  Size buildSize(BoxConstraints constraints) {
+    final biggestSize = constraints.biggest;
+
+    int lines = 1;
+    double maxLineWidth = 0;
+    double lineWidth = 0;
+
+    for (int i = 0; i < wordList.length; i++) {
+      final width = wordList[i];
+
+      if (lineWidth + width >= biggestSize.width) {
+        lines++;
+        lineWidth = 0;
+      }
+
+      lineWidth += width;
+
+      if (lineWidth > maxLineWidth) {
+        maxLineWidth = lineWidth;
+      }
+    }
+
+    return Size(
+      maxLineWidth,
+      lines * lineHeight,
+    );
+  }
 }
