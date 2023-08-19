@@ -202,7 +202,7 @@ abstract class RenderProxyBoxWithHitTestBehavior extends RenderProxyBox {
 /// For example, if you wanted [child] to have a minimum height of 50.0 logical
 /// pixels, you could use `const BoxConstraints(minHeight: 50.0)` as the
 /// [additionalConstraints].
-class RenderConstrainedBox extends RenderProxyBox {
+class RenderConstrainedBox extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates a render box that constrains its child.
   ///
   /// The [additionalConstraints] argument must not be null and must be valid.
@@ -437,7 +437,7 @@ class RenderLimitedBox extends RenderProxyBox {
 /// find a feasible size after consulting each constraint, the render object
 /// will eventually select a size for the child that meets the layout
 /// constraints but fails to meet the aspect ratio constraints.
-class RenderAspectRatio extends RenderProxyBox {
+class RenderAspectRatio extends RenderProxyBox with RositaSkipRenderObjectMixin {
   /// Creates as render object with a specific aspect ratio.
   ///
   /// The [aspectRatio] argument must be a finite, positive value.
