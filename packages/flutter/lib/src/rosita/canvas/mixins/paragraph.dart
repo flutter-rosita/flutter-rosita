@@ -39,7 +39,7 @@ mixin _ParagraphMixin on _CanvasMixin {
     context.fillStyle = style.color.toHexString();
 
     if (string != null) {
-      context.fillText(string, offset.dx, offset.dy + data.lineHeight);
+      context.fillText(string, offset.dx + this.offset, offset.dy + this.offset + data.lineHeight);
     }
 
     if (text.children != null) {

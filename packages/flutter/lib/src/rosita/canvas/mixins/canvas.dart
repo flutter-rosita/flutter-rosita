@@ -1,7 +1,7 @@
 part of '../rosita_canvas.dart';
 
 mixin _CanvasMixin {
-  int get overscan;
+  int offset = 0;
 
   html.CanvasElement get canvas;
 
@@ -13,28 +13,31 @@ mixin _CanvasMixin {
 
   Size? _size;
 
-  late ({int width, int height}) _sizeWithOverscan;
+  late ({int width, int height}) _sizeWithOffset;
 
   void clean(Size size) {
     if (_size != size) {
       _size = size;
 
-      canvas.style.left = '-${overscan}px';
-      canvas.style.top = '-${overscan}px';
+      canvas.style.left = '-${offset}px';
+      canvas.style.top = '-${offset}px';
 
-      _sizeWithOverscan = (
-        width: size.width.toInt() + overscan * 2,
-        height: size.height.toInt() + overscan * 2,
+      _sizeWithOffset = (
+        width: size.width.toInt() + offset * 2,
+        height: size.height.toInt() + offset * 2,
       );
 
-      canvas.width = _sizeWithOverscan.width;
-      canvas.height = _sizeWithOverscan.height;
-
-      context.translate(overscan, overscan);
+      canvas.width = _sizeWithOffset.width;
+      canvas.height = _sizeWithOffset.height;
     }
 
     if (_isDirty) {
-      context.clearRect(-overscan, -overscan, _sizeWithOverscan.width, _sizeWithOverscan.height);
+      context.clearRect(
+        -offset,
+        -offset,
+        _sizeWithOffset.width + offset,
+        _sizeWithOffset.height + offset,
+      );
       _isDirty = false;
     }
   }

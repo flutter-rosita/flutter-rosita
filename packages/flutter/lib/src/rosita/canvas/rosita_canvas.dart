@@ -13,13 +13,12 @@ part 'mixins/canvas.dart';
 part 'mixins/paragraph.dart';
 
 class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
-  RositaCanvas(this.canvas, {this.overscan = 20});
+  RositaCanvas(this.canvas, {int offset = 20}) {
+    this.offset = offset;
+  }
 
   @override
   final html.CanvasElement canvas;
-
-  @override
-  final int overscan;
 
   html.CanvasRenderingContext2D? _context;
 
@@ -39,7 +38,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
     _setDirty();
     context.beginPath();
-    context.arc(rect.center.dx, rect.center.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
+    context.arc(rect.center.dx + offset, rect.center.dy + offset, rect.width / 2, startAngle, startAngle + sweepAngle);
     _fillPain(paint);
   }
 
@@ -122,10 +121,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     // ------------------------
 
     final coords = (
-      x0: rrect.left,
-      y0: rrect.top,
-      x1: rrect.left + rrect.width,
-      y1: rrect.top + rrect.height,
+      x0: rrect.left + offset,
+      y0: rrect.top + offset,
+      x1: rrect.left + rrect.width + offset,
+      y1: rrect.top + rrect.height + offset,
     );
 
     final radius = (
@@ -180,7 +179,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawRect(Rect rect, Paint paint) {
     _setDirty();
     context.beginPath();
-    context.rect(rect.left, rect.top, rect.width, rect.height);
+    context.rect(rect.left + offset, rect.top + offset, rect.width, rect.height);
     _fillPain(paint);
   }
 
