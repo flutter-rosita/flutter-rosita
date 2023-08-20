@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -40,7 +39,6 @@ class RositaParagraphUtils {
   }) {
     final fontData = buildFontData(style: style);
     final font = fontData.font;
-    final lineHeight = fontData.lineHeight;
 
     if (_lastContextFont != font) {
       _lastContextFont = font;
@@ -48,7 +46,9 @@ class RositaParagraphUtils {
     }
 
     final list = text.split(' ');
-    final spacerWidth = _measureText(' ');
+    final spacerMeasure= _measureText(' ');
+    final spacerWidth = spacerMeasure.width?.toDouble() ?? 0;
+    final lineHeight = (spacerMeasure.fontBoundingBoxAscent?.toDouble() ?? 0) * (style.height ?? 1);
     final wordList = <double>[];
 
     for (int i = 0; i < list.length; i++) {
@@ -56,7 +56,8 @@ class RositaParagraphUtils {
         wordList.add(spacerWidth);
       }
 
-      final width = _measureText(list[i]);
+      final measure = _measureText(list[i]);
+      final width = measure.width?.toDouble() ?? 0;
 
       wordList.add(width);
     }
@@ -68,7 +69,7 @@ class RositaParagraphUtils {
     );
   }
 
-  static double _measureText(String string) => canvasContext.measureText(string).width?.toDouble() ?? 0;
+  static html.TextMetrics _measureText(String string) => canvasContext.measureText(string);
 }
 
 class RositaCanvasFontData {

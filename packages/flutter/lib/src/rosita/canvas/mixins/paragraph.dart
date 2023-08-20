@@ -10,7 +10,7 @@ mixin _ParagraphMixin on _CanvasMixin {
 
     if (text is TextSpan) {
       _setDirty();
-      _drawTextSpan(text, null, offset);
+      _drawTextSpan(text, null, offset, textPainter.textAlign);
     } else {
       assert(() {
         // ignore: avoid_print
@@ -20,7 +20,7 @@ mixin _ParagraphMixin on _CanvasMixin {
     }
   }
 
-  void _drawTextSpan(TextSpan text, RositaCanvasFontData? parentData, Offset offset) {
+  void _drawTextSpan(TextSpan text, RositaCanvasFontData? parentData, Offset offset, TextAlign textAlign) {
     final string = text.text;
 
     final style = text.style;
@@ -39,13 +39,22 @@ mixin _ParagraphMixin on _CanvasMixin {
     context.fillStyle = style.color.toHexString();
 
     if (string != null) {
-      context.fillText(string, offset.dx + this.offset, offset.dy + this.offset + data.lineHeight);
+      final measure = context.measureText(string);
+
+      double alignX = 0;
+      final double alignY = measure.fontBoundingBoxAscent?.toDouble() ?? 0;
+
+      if (offset == Offset.zero && textAlign == TextAlign.center) {
+        alignX = (_size?.width ?? 0) / 2 - (measure.width ?? 0) / 2;
+      }
+
+      context.fillText(string, offset.dx + this.offset + alignX, offset.dy + this.offset + alignY);
     }
 
     if (text.children != null) {
       for (final child in text.children!) {
         if (child is TextSpan) {
-          _drawTextSpan(child, data, offset);
+          _drawTextSpan(child, data, offset, textAlign);
         }
       }
     }
