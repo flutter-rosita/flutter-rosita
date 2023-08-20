@@ -1,3 +1,16 @@
+## 0.0.7
+
+- Fix never call rosita flush callbacks after skip low frames
+- Fix show render object when it detach and attache after
+- Fix scroll sliver offset
+- Optimize text
+- Optimize DOM tree
+- Add support render transform
+- Add support BoxDecoration.border
+- Add support BoxDecoration.position
+- Add support RenderPhysicalShape.clipper
+- Fix input text field with text align is center
+
 ## 0.0.6
 
 - Refactor docs
