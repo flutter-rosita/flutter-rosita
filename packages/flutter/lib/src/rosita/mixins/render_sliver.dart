@@ -52,7 +52,7 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
 
       switch (axis) {
         case Axis.vertical:
-          final offset = parentData.paintOffset.dy - target.constraints.scrollOffset + parentOffset.dy;
+          final offset = (forward ? parentData.paintOffset.dy : 0) - target.constraints.scrollOffset + parentOffset.dy;
 
           if (forward) {
             top = offset;
@@ -63,7 +63,7 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
           left = parentData.paintOffset.dx + parentOffset.dx;
 
         case Axis.horizontal:
-          final offset = parentData.paintOffset.dx - target.constraints.scrollOffset + parentOffset.dx;
+          final offset = (forward ? parentData.paintOffset.dx : 0) - target.constraints.scrollOffset + parentOffset.dx;
 
           if (forward) {
             left = offset;
