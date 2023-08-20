@@ -10,5 +10,9 @@ mixin RositaRenderPhysicalShapeMixin on RositaRenderMixin {
   @override
   void rositaPaint() {
     htmlElement.style.backgroundColor = target.color.toHexString();
+
+    final clipper = target.clipper;
+
+    RositaRadiusUtils.applyCustomClipper(htmlElement, clipper, target.size);
   }
 }

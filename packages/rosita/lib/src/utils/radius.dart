@@ -35,4 +35,22 @@ class RositaRadiusUtils {
           'inset(0px round ${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}px)';
     }
   }
+
+  static void applyCustomClipper(html.HtmlElement element, CustomClipper? clipper, Size size) {
+    if (clipper is ShapeBorderClipper) {
+      final shape = clipper.shape;
+
+      switch (shape) {
+        case RoundedRectangleBorder():
+          RositaRadiusUtils.applyClipBorderRadius(element, shape.borderRadius);
+        case StadiumBorder():
+          RositaRadiusUtils.applyClipBorderRadius(
+            element,
+            BorderRadius.all(
+              Radius.circular(size.shortestSide / 2),
+            ),
+          );
+      }
+    }
+  }
 }

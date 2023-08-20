@@ -48,13 +48,7 @@ mixin RositaRenderClipPathMixin on RositaRenderMixin {
     if (target.clipBehavior != Clip.none) {
       final clipper = target.clipper;
 
-      if (clipper is ShapeBorderClipper) {
-        final shape = clipper.shape;
-
-        if (shape is RoundedRectangleBorder) {
-          RositaRadiusUtils.applyClipBorderRadius(htmlElement, shape.borderRadius);
-        }
-      }
+      RositaRadiusUtils.applyCustomClipper(htmlElement, clipper, target.size);
     }
   }
 }
