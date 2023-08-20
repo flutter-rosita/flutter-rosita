@@ -156,10 +156,8 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
   @mustCallSuper
   void rositaDetach() {
-    if (!attached) {
-      _htmlElement?.remove();
-      _htmlElement = null;
-    }
+    _htmlElement?.remove();
+    _htmlElement = null;
   }
 
   @mustCallSuper
@@ -225,7 +223,7 @@ mixin RositaPipelineOwnerMixin {
 
       for (final RenderObject node in dirtyNodes) {
         (node as RositaRenderMixin)._rositaNeedsDetach = false;
-        if ((node as RositaRenderMixin).hasHtmlElement) {
+        if ((node as RositaRenderMixin).hasHtmlElement && !node.attached) {
           (node as RositaRenderMixin).rositaDetach();
         }
       }
