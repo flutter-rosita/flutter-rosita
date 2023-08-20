@@ -27,6 +27,12 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
         RositaBoxFitUtils.applyBoxFitToBackgroundSize(htmlElement, image.fit);
         RositaBoxFitUtils.applyAlignmentToBackgroundPosition(htmlElement, image.alignment);
       }
+
+      final border = decoration.border;
+
+      if (border != null) {
+        RositaBorderUtils.applyBorderStyle(htmlElement, border);
+      }
     }
   }
 }
