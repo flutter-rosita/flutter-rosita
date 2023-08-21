@@ -42,7 +42,7 @@ mixin _ParagraphMixin on _CanvasMixin {
       final measure = context.measureText(string);
 
       double alignX = 0;
-      final double alignY = measure.fontBoundingBoxAscent?.toDouble() ?? 0;
+      final double alignY = measure.fontBoundingBoxAscent?.toDouble() ?? data.lineHeight;
 
       if (offset == Offset.zero && textAlign == TextAlign.center) {
         alignX = (_size?.width ?? 0) / 2 - (measure.width ?? 0) / 2;

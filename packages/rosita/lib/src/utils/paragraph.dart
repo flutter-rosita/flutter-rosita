@@ -48,7 +48,8 @@ class RositaParagraphUtils {
     final list = text.split(' ');
     final spacerMeasure= _measureText(' ');
     final spacerWidth = spacerMeasure.width?.toDouble() ?? 0;
-    final lineHeight = (spacerMeasure.fontBoundingBoxAscent?.toDouble() ?? 0) * (style.height ?? 1);
+    final fontBoundingBoxAscent = spacerMeasure.fontBoundingBoxAscent?.toDouble();
+    final lineHeight = fontBoundingBoxAscent != null ? fontBoundingBoxAscent * (style.height ?? 1) : fontData.lineHeight;
     final wordList = <double>[];
 
     for (int i = 0; i < list.length; i++) {
