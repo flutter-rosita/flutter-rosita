@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs
+// ignore_for_file: public_member_api_docs, always_specify_types
 
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
@@ -19,12 +19,12 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
       return;
     }
 
-    final shadowRoot = (html.document.getElementsByTagName('flt-glass-pane').first as html.HtmlElement).shadowRoot!;
-
+    final fltGlassPane = html.document.getElementsByTagName('flt-glass-pane').first as html.HtmlElement;
+    final root = fltGlassPane.shadowRoot ?? fltGlassPane;
     final rositaRootElement = html.DivElement()..className = 'rosita-root-element';
 
-    shadowRoot.append(rositaRootElement);
-    shadowRoot.append(createStyleElement());
+    root.append(rositaRootElement);
+    root.append(createStyleElement());
 
     _rositaRootElement = rositaRootElement;
 
