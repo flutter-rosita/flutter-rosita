@@ -1,3 +1,10 @@
+## 0.1.0
+
+- Fix text lineHeight when fontBoundingBoxAscent is nul
+- Fix for browsers (Chrome 53) where shadowRoot not supported
+- Fix for browsers where hex color with alpha not supported
+- Rename color extension method toHexString() to toStyleString()
+
 ## 0.0.7
 
 - Fix never call rosita flush callbacks after skip low frames
