@@ -36,7 +36,7 @@ mixin _ParagraphMixin on _CanvasMixin {
       context.font = data.font;
     }
 
-    context.fillStyle = style.color.toHexString();
+    context.fillStyle = style.color.toStyleString();
 
     if (string != null) {
       final measure = context.measureText(string);

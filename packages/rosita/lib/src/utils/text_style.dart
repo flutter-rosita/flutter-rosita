@@ -25,7 +25,7 @@ class RositaTextUtils {
 
     if (style != null) {
       if (style.color != null) {
-        element.style.color = style.color.toHexString();
+        element.style.color = style.color.toStyleString();
       }
       if (style.fontFamily != null) {
         element.style.fontFamily = "'${style.fontFamily}'";

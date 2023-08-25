@@ -8,6 +8,6 @@ mixin RositaRenderColoredBoxMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
-    htmlElement.style.backgroundColor = color.toHexString();
+    htmlElement.style.backgroundColor = color.toStyleString();
   }
 }

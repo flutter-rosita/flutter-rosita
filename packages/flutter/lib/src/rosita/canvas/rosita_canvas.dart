@@ -104,10 +104,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void _fillPain(Paint paint) {
     switch (paint.style) {
       case PaintingStyle.fill:
-        context.fillStyle = paint.color.toHexString();
+        context.fillStyle = paint.color.toStyleString();
         context.fill();
       case PaintingStyle.stroke:
-        context.strokeStyle = paint.color.toHexString();
+        context.strokeStyle = paint.color.toStyleString();
         context.lineWidth = paint.strokeWidth;
         context.stroke();
     }

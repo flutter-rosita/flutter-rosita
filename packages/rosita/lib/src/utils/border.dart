@@ -23,7 +23,7 @@ class RositaBorderUtils {
   }
 
   static String _mapBorderSide(BorderSide side) {
-    return '${side.width}px ${_mapBorderStyle(side.style)} ${side.color.toHexString()}';
+    return '${side.width}px ${_mapBorderStyle(side.style)} ${side.color.toStyleString()}';
   }
 
   static String _mapBorderStyle(BorderStyle style) => switch (style) {

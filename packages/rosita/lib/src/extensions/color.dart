@@ -3,11 +3,13 @@
 import 'dart:ui';
 
 extension RositaColorExtension on Color? {
-  String toHexString() => this == null
-      ? ''
-      : '#'
-          '${this!.red.toRadixString(16).padLeft(2, '0')}'
-          '${this!.green.toRadixString(16).padLeft(2, '0')}'
-          '${this!.blue.toRadixString(16).padLeft(2, '0')}'
-          '${this!.alpha.toRadixString(16).padLeft(2, '0')}';
+  String toStyleString() {
+    final color = this;
+
+    if (color == null) {
+      return '';
+    }
+
+    return 'rgba(${color.red},${color.green},${color.blue},${color.alpha / 255})';
+  }
 }

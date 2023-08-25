@@ -9,7 +9,7 @@ mixin RositaRenderPhysicalModelMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
-    htmlElement.style.backgroundColor = target.color.toHexString();
+    htmlElement.style.backgroundColor = target.color.toStyleString();
 
     RositaRadiusUtils.applyBorderRadius(htmlElement, target.borderRadius);
   }

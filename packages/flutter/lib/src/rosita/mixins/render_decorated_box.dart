@@ -46,7 +46,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     };
 
     if (decoration is BoxDecoration) {
-      targetHtmlElement.style.background = decoration.color.toHexString();
+      targetHtmlElement.style.background = decoration.color.toStyleString();
 
       if (decoration.borderRadius != null) {
         RositaRadiusUtils.applyBorderRadius(targetHtmlElement, decoration.borderRadius);
