@@ -6,41 +6,41 @@ import 'package:universal_html/html.dart' as html;
 
 class RositaTextUtils {
   static void applyTextStyle(
-    html.HtmlElement element, {
-    TextStyle? style,
+    html.CssStyleDeclaration style, {
+    TextStyle? textStyle,
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
   }) {
-    if (textAlign != null) element.style.textAlign = _mapTextAlign(textAlign);
+    if (textAlign != null) style.textAlign = _mapTextAlign(textAlign);
     if (overflow != null) {
-      element.style.textOverflow = _mapTextOverflow(overflow);
-      element.style.overflowX = _mapOverflow(overflow);
+      style.textOverflow = _mapTextOverflow(overflow);
+      style.overflowX = _mapOverflow(overflow);
     }
     if (maxLines == 1) {
-      element.style.whiteSpace = 'nowrap';
+      style.whiteSpace = 'nowrap';
     } else if (maxLines != null) {
-      element.style.overflowY = 'clip';
+      style.overflowY = 'clip';
     }
 
-    if (style != null) {
-      if (style.color != null) {
-        element.style.color = style.color.toStyleString();
+    if (textStyle != null) {
+      if (textStyle.color != null) {
+        style.color = textStyle.color.toStyleString();
       }
-      if (style.fontFamily != null) {
-        element.style.fontFamily = "'${style.fontFamily}'";
+      if (textStyle.fontFamily != null) {
+        style.fontFamily = "'${textStyle.fontFamily}'";
       }
-      if (style.fontSize != null) {
-        element.style.fontSize = '${style.fontSize!.floor()}px';
+      if (textStyle.fontSize != null) {
+        style.fontSize = '${textStyle.fontSize!.floor()}px';
       }
-      if (style.fontSize != null && style.height != null) {
-        element.style.lineHeight = '${(style.fontSize! * style.height!).round()}px';
+      if (textStyle.fontSize != null && textStyle.height != null) {
+        style.lineHeight = '${(textStyle.fontSize! * textStyle.height!).round()}px';
       }
-      if (style.fontWeight != null) {
-        element.style.fontWeight = mapFontWeight(style.fontWeight!);
+      if (textStyle.fontWeight != null) {
+        style.fontWeight = mapFontWeight(textStyle.fontWeight!);
       }
-      if (style.fontStyle != null) {
-        element.style.fontStyle = maFontStyle(style.fontStyle!);
+      if (textStyle.fontStyle != null) {
+        style.fontStyle = maFontStyle(textStyle.fontStyle!);
       }
     }
   }

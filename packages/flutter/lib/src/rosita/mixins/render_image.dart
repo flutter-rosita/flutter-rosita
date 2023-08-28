@@ -22,10 +22,12 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
 
   @override
   void rositaPaint() {
+    final style = htmlElement.style;
+    final target = this.target;
     final image = target.rositaImageProvider;
 
     imageElement.src = RositaImageUtils.buildImageProviderPath(image);
-    RositaOpacityUtils.applyOpacity(imageElement, target.opacity?.value);
+    RositaOpacityUtils.applyOpacity(style, target.opacity?.value);
   }
 }
 

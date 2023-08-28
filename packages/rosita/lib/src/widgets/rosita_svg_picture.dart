@@ -135,7 +135,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
   html.ImageElement get imageElement {
     _imageElement ??= html.ImageElement();
 
-    final imageElement = _imageElement!;
+    final imageElement = rositaCastNullableToNonNullable ? _imageElement as html.ImageElement : _imageElement!;
 
     htmlElement.append(imageElement);
 
@@ -145,6 +145,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
   @override
   void rositaPaint() {
     if (src != null) {
+      final style = imageElement.style;
       imageElement.src = src;
 
       if (width != null) {
@@ -155,8 +156,8 @@ class RenderRositaSvgPicture extends RositaRenderBox {
         imageElement.height = height!.toInt();
       }
 
-      RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement, fit);
-      RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement, alignment);
+      RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
+      RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
     }
   }
 }

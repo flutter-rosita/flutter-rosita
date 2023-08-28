@@ -39,6 +39,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
+    final target = this.target;
     final decoration = target.decoration;
     final html.HtmlElement targetHtmlElement = switch (target.position) {
       DecorationPosition.background => htmlElement,
@@ -46,26 +47,27 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     };
 
     if (decoration is BoxDecoration) {
-      targetHtmlElement.style.background = decoration.color.toStyleString();
+      final style = targetHtmlElement.style;
+      style.background = decoration.color.toStyleString();
 
       if (decoration.borderRadius != null) {
-        RositaRadiusUtils.applyBorderRadius(targetHtmlElement, decoration.borderRadius);
+        RositaRadiusUtils.applyBorderRadius(style, decoration.borderRadius);
       } else {
-        targetHtmlElement.style.borderRadius = decoration.shape == BoxShape.circle ? '100%' : '';
+        style.borderRadius = decoration.shape == BoxShape.circle ? '100%' : '';
       }
 
       final image = decoration.image;
 
       if (image != null) {
-        targetHtmlElement.style.backgroundImage = 'url(${RositaImageUtils.buildImageProviderPath(image.image)})';
-        RositaBoxFitUtils.applyBoxFitToBackgroundSize(targetHtmlElement, image.fit);
-        RositaBoxFitUtils.applyAlignmentToBackgroundPosition(targetHtmlElement, image.alignment);
+        style.backgroundImage = 'url(${RositaImageUtils.buildImageProviderPath(image.image)})';
+        RositaBoxFitUtils.applyBoxFitToBackgroundSize(style, image.fit);
+        RositaBoxFitUtils.applyAlignmentToBackgroundPosition(style, image.alignment);
       }
 
       final border = decoration.border;
 
       if (border != null) {
-        RositaBorderUtils.applyBorderStyle(targetHtmlElement, border);
+        RositaBorderUtils.applyBorderStyle(style, border);
       }
     }
   }

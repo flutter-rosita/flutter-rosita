@@ -12,11 +12,12 @@ mixin RositaRenderFractionalTranslationMixin on RositaRenderBoxMixin {
     final childRenderObject = findFirstChildWithHtmlElement();
 
     if (childRenderObject != null) {
+      final style = htmlElement.style;
       final Size(:width, :height) = childRenderObject.size;
       final Offset(:dx, :dy) = target.translation;
 
-      htmlElement.style.left = '${width * dx}px';
-      htmlElement.style.top = '${height * dy}px';
+      style.left = '${width * dx}px';
+      style.top = '${height * dy}px';
     }
   }
 }

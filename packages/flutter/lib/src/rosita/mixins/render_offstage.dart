@@ -11,10 +11,12 @@ mixin RositaRenderOffstageMixin on RositaRenderMixin {
   void rositaLayout() {
     super.rositaLayout();
 
+    final style = htmlElement.style;
+
     if (target.offstage) {
-      htmlElement.style.display = 'none';
+      style.display = 'none';
     } else {
-      htmlElement.style.display = '';
+      style.display = '';
     }
   }
 }

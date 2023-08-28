@@ -12,7 +12,8 @@ mixin RositaCanvasMixin on RositaRenderMixin {
 
   html.CanvasElement get canvasElement {
     if (_canvasElement != null) {
-      return _canvasElement!;
+      // ignore: cast_nullable_to_non_nullable
+      return rositaCastNullableToNonNullable ? _canvasElement as html.CanvasElement : _canvasElement!;
     }
     final canvas = _canvasElement = html.CanvasElement();
     final firstChild = htmlElement.firstChild;
@@ -24,7 +25,10 @@ mixin RositaCanvasMixin on RositaRenderMixin {
 
   html.CanvasElement get foregroundCanvasElement {
     if (_foregroundCanvasElement != null) {
-      return _foregroundCanvasElement!;
+      return rositaCastNullableToNonNullable
+          // ignore: cast_nullable_to_non_nullable
+          ? _foregroundCanvasElement as html.CanvasElement
+          : _foregroundCanvasElement!;
     }
     final canvas = _foregroundCanvasElement = html.CanvasElement();
 
@@ -42,18 +46,20 @@ mixin RositaCanvasMixin on RositaRenderMixin {
   RositaCanvas get foregroundCanvas => _foregroundCanvas ??= RositaCanvas(foregroundCanvasElement);
 
   void cleanAndHideRositaCanvas(Size size) {
-    if (_rositaCanvas != null) {
-      _rositaCanvas!.clean(size);
-      _rositaCanvas!.checkDirty();
-      _rositaCanvas = null;
+    final rositaCanvas = _rositaCanvas;
+
+    if (rositaCanvas != null) {
+      rositaCanvas.clean(size);
+      rositaCanvas.checkDirty();
     }
   }
 
   void cleanAndHideForegroundRositaCanvas(Size size) {
-    if (_foregroundCanvas != null) {
-      _foregroundCanvas!.clean(size);
-      _foregroundCanvas!.checkDirty();
-      _foregroundCanvas = null;
+    final foregroundCanvas = _foregroundCanvas;
+
+    if (foregroundCanvas != null) {
+      foregroundCanvas.clean(size);
+      foregroundCanvas.checkDirty();
     }
   }
 }

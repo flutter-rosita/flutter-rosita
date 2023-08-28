@@ -14,8 +14,10 @@ mixin RositaRenderClipRRectMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
+    final target = this.target;
+
     if (target.clipBehavior != Clip.none) {
-      RositaRadiusUtils.applyClipBorderRadius(htmlElement, target.borderRadius);
+      RositaRadiusUtils.applyClipBorderRadius(htmlElement.style, target.borderRadius);
     }
   }
 }
@@ -26,13 +28,16 @@ mixin RositaRenderClipOvalMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
+    final target = this.target;
+
     if (target.clipBehavior != Clip.none) {
-      final x = target.size.width / 2;
-      final y = target.size.height / 2;
+      final size = target.size;
+      final x = size.width / 2;
+      final y = size.height / 2;
       final ellipticalRadius = Radius.elliptical(x, y);
 
       RositaRadiusUtils.applyClipBorderRadius(
-        htmlElement,
+        htmlElement.style,
         BorderRadius.all(ellipticalRadius),
       );
     }
@@ -45,10 +50,12 @@ mixin RositaRenderClipPathMixin on RositaRenderMixin {
 
   @override
   void rositaPaint() {
+    final target = this.target;
+
     if (target.clipBehavior != Clip.none) {
       final clipper = target.clipper;
 
-      RositaRadiusUtils.applyCustomClipper(htmlElement, clipper, target.size);
+      RositaRadiusUtils.applyCustomClipper(htmlElement.style, clipper, target.size);
     }
   }
 }

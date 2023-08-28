@@ -15,7 +15,7 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
     htmlElement.innerHtml = '';
 
     RositaTextUtils.applyTextStyle(
-      htmlElement,
+      htmlElement.style,
       textAlign: target.textAlign,
       overflow: target.overflow,
       maxLines: target.maxLines,
@@ -36,8 +36,8 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
     }
 
     RositaTextUtils.applyTextStyle(
-      element,
-      style: style,
+      element.style,
+      textStyle: style,
     );
 
     parent.append(element);

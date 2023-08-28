@@ -9,8 +9,8 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
 
   @override
   void rositaPaint() {
+    final target = this.target;
     final size = target.size;
-
     final painter = target.painter;
 
     if (painter != null) {

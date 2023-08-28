@@ -8,44 +8,44 @@ class RositaRadiusUtils {
         borderRadius.bottomRight.x == borderRadius.bottomLeft.x;
   }
 
-  static void applyBorderRadius(html.HtmlElement element, BorderRadiusGeometry? borderRadius) {
+  static void applyBorderRadius(html.CssStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
     if (borderRadius != null) {
       final radius = borderRadius.resolve(null);
 
       if (_isAllEquals(radius)) {
-        element.style.borderRadius = radius.topLeft.x == 0 ? '' : '${radius.topLeft.x}px';
+        style.borderRadius = radius.topLeft.x == 0 ? '' : '${radius.topLeft.x}px';
         return;
       }
 
-      element.style.borderRadius =
+      style.borderRadius =
           '${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}px';
     }
   }
 
-  static void applyClipBorderRadius(html.HtmlElement element, BorderRadiusGeometry? borderRadius) {
+  static void applyClipBorderRadius(html.CssStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
     if (borderRadius != null) {
       final radius = borderRadius.resolve(null);
 
       if (_isAllEquals(radius)) {
-        element.style.clipPath = radius.topLeft.x == 0 ? '' : 'inset(0px round ${radius.topLeft.x}px)';
+        style.clipPath = radius.topLeft.x == 0 ? '' : 'inset(0px round ${radius.topLeft.x}px)';
         return;
       }
 
-      element.style.clipPath =
+      style.clipPath =
           'inset(0px round ${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}px)';
     }
   }
 
-  static void applyCustomClipper(html.HtmlElement element, CustomClipper? clipper, Size size) {
+  static void applyCustomClipper(html.CssStyleDeclaration style, CustomClipper? clipper, Size size) {
     if (clipper is ShapeBorderClipper) {
       final shape = clipper.shape;
 
       switch (shape) {
         case RoundedRectangleBorder():
-          RositaRadiusUtils.applyClipBorderRadius(element, shape.borderRadius);
+          RositaRadiusUtils.applyClipBorderRadius(style, shape.borderRadius);
         case StadiumBorder():
           RositaRadiusUtils.applyClipBorderRadius(
-            element,
+            style,
             BorderRadius.all(
               Radius.circular(size.shortestSide / 2),
             ),

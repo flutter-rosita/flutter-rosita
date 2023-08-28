@@ -25,12 +25,15 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
   void rositaLayout() {
     super.rositaLayout();
 
+    final target = this.target;
     final parentData = target.parentData;
+    final style = htmlElement.style;
+
     if (parentData is SliverPhysicalParentData) {
       if (target.constraints.remainingPaintExtent == 0) {
-        htmlElement.style.display = 'none';
+        style.display = 'none';
       } else {
-        htmlElement.style.display = '';
+        style.display = '';
       }
 
       final forward = target.constraints.growthDirection == GrowthDirection.forward;
@@ -79,8 +82,8 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
       if (_localOffset != offset) {
         _localOffset = offset;
 
-        htmlElement.style.left = '${offset.dx}px';
-        htmlElement.style.top = '${offset.dy}px';
+        style.left = '${offset.dx}px';
+        style.top = '${offset.dy}px';
 
         markDirtyHtmlRect();
 

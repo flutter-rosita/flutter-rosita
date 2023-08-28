@@ -109,9 +109,9 @@ class RenderRositaImage extends RositaRenderBox {
     size = biggestSize.isFinite
         ? biggestSize
         : Size(
-      biggestSize.width == double.infinity ? biggestSize.height : biggestSize.width,
-      biggestSize.height == double.infinity ? biggestSize.width : biggestSize.height,
-    );
+            biggestSize.width == double.infinity ? biggestSize.height : biggestSize.width,
+            biggestSize.height == double.infinity ? biggestSize.width : biggestSize.height,
+          );
   }
 
   html.ImageElement? _imageElement;
@@ -129,11 +129,12 @@ class RenderRositaImage extends RositaRenderBox {
   @override
   void rositaPaint() {
     if (src != null) {
+      final style = imageElement.style;
       imageElement.src = src;
 
-      RositaRadiusUtils.applyBorderRadius(imageElement, borderRadius);
-      RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement, fit);
-      RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement, alignment);
+      RositaRadiusUtils.applyBorderRadius(style, borderRadius);
+      RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
+      RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
     }
   }
 }

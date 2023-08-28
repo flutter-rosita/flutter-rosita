@@ -2,14 +2,14 @@ import 'package:flutter/rendering.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RositaBoxFitUtils {
-  static void applyBoxFitToObjectFit(html.HtmlElement element, BoxFit? fit) {
+  static void applyBoxFitToObjectFit(html.CssStyleDeclaration style, BoxFit? fit) {
     switch (fit) {
       case BoxFit.fitWidth:
-        element.style.width = '100%';
+        style.width = '100%';
       case BoxFit.fitHeight:
-        element.style.height = '100%';
+        style.height = '100%';
       default:
-        element.style.objectFit = _mapperBoxFitToObjectFit(fit);
+        style.objectFit = _mapperBoxFitToObjectFit(fit);
     }
   }
 
@@ -24,8 +24,8 @@ class RositaBoxFitUtils {
     };
   }
 
-  static void applyBoxFitToBackgroundSize(html.HtmlElement element, BoxFit? fit) {
-    element.style.backgroundSize = _mapperBoxFitToBackgroundSize(fit);
+  static void applyBoxFitToBackgroundSize(html.CssStyleDeclaration style, BoxFit? fit) {
+    style.backgroundSize = _mapperBoxFitToBackgroundSize(fit);
   }
 
   static String _mapperBoxFitToBackgroundSize(BoxFit? fit) {
@@ -39,12 +39,12 @@ class RositaBoxFitUtils {
     };
   }
 
-  static void applyAlignmentToObjectPosition(html.HtmlElement element, AlignmentGeometry? alignment) {
-    element.style.objectPosition = _mapperAlignmentGeometry(alignment);
+  static void applyAlignmentToObjectPosition(html.CssStyleDeclaration style, AlignmentGeometry? alignment) {
+    style.objectPosition = _mapperAlignmentGeometry(alignment);
   }
 
-  static void applyAlignmentToBackgroundPosition(html.HtmlElement element, AlignmentGeometry? alignment) {
-    element.style.backgroundPosition = _mapperAlignmentGeometry(alignment);
+  static void applyAlignmentToBackgroundPosition(html.CssStyleDeclaration style, AlignmentGeometry? alignment) {
+    style.backgroundPosition = _mapperAlignmentGeometry(alignment);
   }
 
   static String _mapperAlignmentGeometry(AlignmentGeometry? alignment) {

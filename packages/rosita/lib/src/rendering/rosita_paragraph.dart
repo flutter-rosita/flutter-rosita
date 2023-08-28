@@ -108,14 +108,16 @@ class RositaRenderParagraph extends RositaRenderBox {
 
   @override
   void rositaPaint() {
+    final style = htmlElement.style;
+    final textStyle = this.style;
     final text = this.text;
 
     if (text == null) {
-      htmlElement.style.display = 'none';
+      style.display = 'none';
       return;
     }
 
-    htmlElement.style.display = '';
+    style.display = '';
 
     if (_isInitialSetText) {
       htmlElement.innerText = text;
@@ -123,8 +125,8 @@ class RositaRenderParagraph extends RositaRenderBox {
     }
 
     RositaTextUtils.applyTextStyle(
-      htmlElement,
-      style: style,
+      style,
+      textStyle: textStyle,
       textAlign: textAlign,
       overflow: overflow,
       maxLines: maxLines,

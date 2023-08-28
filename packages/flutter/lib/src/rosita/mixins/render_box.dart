@@ -28,15 +28,17 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
   void rositaLayout() {
     super.rositaLayout();
 
+    final target = this.target;
     final size = target.size;
+    final style = htmlElement.style;
 
-    htmlElement.style.width = '${size.width}px';
-    htmlElement.style.height = '${size.height}px';
+    style.width = '${size.width}px';
+    style.height = '${size.height}px';
 
     final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
 
-    htmlElement.style.left = '${offset.dx}px';
-    htmlElement.style.top = '${offset.dy}px';
+    style.left = '${offset.dx}px';
+    style.top = '${offset.dy}px';
 
     _localOffset = offset;
   }
