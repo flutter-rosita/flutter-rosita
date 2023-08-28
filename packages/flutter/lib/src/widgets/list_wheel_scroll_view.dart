@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'basic.dart';
@@ -786,7 +787,9 @@ class ListWheelElement extends RenderObjectElement implements ListWheelChildMana
   ListWheelElement(ListWheelViewport super.widget);
 
   @override
-  RenderListWheelViewport get renderObject => super.renderObject as RenderListWheelViewport;
+  RenderListWheelViewport get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as RenderListWheelViewport;
 
   // We inflate widgets at two different times:
   //  1. When we ourselves are told to rebuild (see performRebuild).

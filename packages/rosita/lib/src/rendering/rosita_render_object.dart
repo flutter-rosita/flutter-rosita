@@ -10,7 +10,8 @@ import 'rosita_rect.dart';
 mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   html.HtmlElement? _htmlElement;
 
-  html.HtmlElement get htmlElement => _htmlElement as html.HtmlElement;
+  html.HtmlElement get htmlElement =>
+      rositaCastNullableToNonNullable ? _htmlElement as html.HtmlElement : _htmlElement!;
 
   bool get hasHtmlElement => _htmlElement != null;
 

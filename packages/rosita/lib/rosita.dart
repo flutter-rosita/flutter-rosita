@@ -26,3 +26,6 @@ const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', 
 const rositaEnableSemantics = !rositaDisableSemantics;
 
 const rositaSkipSlowFrames = bool.fromEnvironment('ROSITA_SKIP_SLOW_FRAMES', defaultValue: true);
+
+const rositaCastNullableToNonNullable =
+    bool.fromEnvironment('ROSITA_CAST_NULLABLE_TO_NON_NULLABLE', defaultValue: true);

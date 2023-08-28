@@ -780,7 +780,9 @@ class _TheaterElement extends MultiChildRenderObjectElement {
   _TheaterElement(_Theater super.widget);
 
   @override
-  _RenderTheater get renderObject => super.renderObject as _RenderTheater;
+  _RenderTheater get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as _RenderTheater;
 
   @override
   void insertRenderObjectChild(RenderBox child, IndexedSlot<Element?> slot) {
@@ -1844,7 +1846,9 @@ class _OverlayPortalElement extends RenderObjectElement {
   _OverlayPortalElement(_OverlayPortal super.widget);
 
   @override
-  _RenderLayoutSurrogateProxyBox get renderObject => super.renderObject as _RenderLayoutSurrogateProxyBox;
+  _RenderLayoutSurrogateProxyBox get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as _RenderLayoutSurrogateProxyBox;
 
   Element? _overlayChild;
   Element? _child;

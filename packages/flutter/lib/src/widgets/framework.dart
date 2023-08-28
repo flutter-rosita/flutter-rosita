@@ -7,6 +7,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'binding.dart';
 import 'debug.dart';
@@ -3357,7 +3358,8 @@ abstract class Element extends DiagnosticableTree implements BuildContext {
   /// throughout the framework internals during the build phase - and for which
   /// the more specific type information is not used.
   @override
-  Widget get widget => _widget!;
+  // ignore: cast_nullable_to_non_nullable
+  Widget get widget => rositaCastNullableToNonNullable ? _widget as Widget : _widget!;
   Widget? _widget;
 
   @override
@@ -6068,9 +6070,13 @@ abstract class RenderObjectElement extends Element {
   @override
   RenderObject get renderObject {
     assert(_renderObject != null, '$runtimeType unmounted');
-    return _renderObject!;
+    // ignore: cast_nullable_to_non_nullable
+    return rositaCastNullableToNonNullable ? _renderObject as RenderObject : _renderObject!;
   }
   RenderObject? _renderObject;
+
+  // ignore: public_member_api_docs
+  RenderObject? get rositaRenderObject => _renderObject;
 
   bool _debugDoingBuild = false;
   @override
@@ -6485,7 +6491,9 @@ class MultiChildRenderObjectElement extends RenderObjectElement {
 
   @override
   ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> get renderObject {
-    return super.renderObject as ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>;
+    // ignore: cast_nullable_to_non_nullable
+    return (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject)
+        as ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>;
   }
 
   /// The current list of children of this element.

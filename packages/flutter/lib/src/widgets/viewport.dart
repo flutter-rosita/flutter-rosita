@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'debug.dart';
@@ -218,7 +219,9 @@ class _ViewportElement extends MultiChildRenderObjectElement with NotifiableElem
   int? _centerSlotIndex;
 
   @override
-  RenderViewport get renderObject => super.renderObject as RenderViewport;
+  RenderViewport get renderObject =>
+      // ignore: cast_nullable_to_non_nullable
+      (rositaCastNullableToNonNullable ? rositaRenderObject : super.renderObject) as RenderViewport;
 
   @override
   void mount(Element? parent, Object? newSlot) {

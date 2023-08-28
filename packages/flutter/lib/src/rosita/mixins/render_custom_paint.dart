@@ -11,14 +11,18 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
   void rositaPaint() {
     final size = target.size;
 
-    if (target.painter != null) {
-      rositaPainterPaint(rositaCanvas, target.painter!, size);
+    final painter = target.painter;
+
+    if (painter != null) {
+      rositaPainterPaint(rositaCanvas, painter, size);
     } else {
       cleanAndHideRositaCanvas(size);
     }
 
-    if (target.foregroundPainter != null) {
-      rositaPainterPaint(foregroundCanvas, target.foregroundPainter!, size);
+    final foregroundPainter = target.foregroundPainter;
+
+    if (foregroundPainter != null) {
+      rositaPainterPaint(foregroundCanvas, foregroundPainter, size);
     } else {
       cleanAndHideForegroundRositaCanvas(size);
     }
