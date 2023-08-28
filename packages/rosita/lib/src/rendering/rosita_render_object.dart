@@ -10,7 +10,7 @@ import 'rosita_rect.dart';
 mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   html.HtmlElement? _htmlElement;
 
-  html.HtmlElement get htmlElement => _htmlElement!;
+  html.HtmlElement get htmlElement => _htmlElement as html.HtmlElement;
 
   bool get hasHtmlElement => _htmlElement != null;
 
@@ -104,8 +104,6 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   void rositaAttach() {
     AbstractNode? parentElement = parent;
 
-    int elementIndex = 0;
-
     ContainerParentDataMixin? containerParentDataMixin;
 
     if (target.parentData is ContainerParentDataMixin) {
@@ -125,30 +123,29 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
       parentElement = parentElement.parent;
     }
 
-    if (containerParentDataMixin != null) {
-      while (containerParentDataMixin?.previousSibling != null) {
-        elementIndex++;
-        containerParentDataMixin = containerParentDataMixin?.previousSibling?.parentData as ContainerParentDataMixin?;
-      }
-    }
-
     final parentHtmlElement =
         parentElement is RositaRenderMixin && parentElement.hasHtmlElement ? parentElement.htmlElement : null;
 
     assert(() {
-      htmlElement.setAttribute('rosita-debug-object', '${describeIdentity(this)}/$elementIndex');
+      htmlElement.setAttribute('rosita-debug-object', describeIdentity(this));
       return true;
     }());
 
     if (parentHtmlElement != null) {
-      final children = parentHtmlElement.children;
+      if (containerParentDataMixin != null && containerParentDataMixin.nextSibling != null) {
+        final afterElement = containerParentDataMixin.nextSibling as RositaRenderMixin;
+        final afterHtmlElement = (afterElement.hasHtmlElement
+                ? afterElement
+                : (afterElement.findFirstChildWithHtmlElement() as RositaRenderMixin?))
+            ?.htmlElement;
 
-      if (children.length - 1 < elementIndex) {
-        parentHtmlElement.append(htmlElement);
-      } else {
-        final beforeElement = parentHtmlElement.children[elementIndex];
-        parentHtmlElement.insertBefore(htmlElement, beforeElement);
+        if (afterHtmlElement != null && identical(parentHtmlElement, afterHtmlElement.parent)) {
+          parentHtmlElement.insertBefore(htmlElement, afterHtmlElement);
+          return;
+        }
       }
+
+      parentHtmlElement.append(htmlElement);
     } else {
       throw Exception('Parent HtmlElement not found for: $this');
     }
