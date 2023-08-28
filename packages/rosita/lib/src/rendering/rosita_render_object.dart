@@ -5,8 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
-import 'rosita_rect.dart';
-
 mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
   html.HtmlElement? _htmlElement;
 
@@ -58,6 +56,8 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
   bool _rositaNeedsPaint = true;
 
+  RositaPipelineOwnerMixin get rositaOwner => owner as RositaPipelineOwnerMixin;
+
   void rositaMarkNeedsAttach() {
     if (_rositaNeedsAttach) {
       return;
@@ -65,7 +65,7 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
     if (hasHtmlElement && attached) {
       _rositaNeedsAttach = true;
-      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingAttach.add(this as RenderObject);
+      rositaOwner._rositaNodesNeedingAttach.add(this);
     }
   }
 
@@ -76,7 +76,7 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
     if (hasHtmlElement && attached) {
       _rositaNeedsDetach = true;
-      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingDetach.add(this as RenderObject);
+      rositaOwner._rositaNodesNeedingDetach.add(this);
     }
   }
 
@@ -87,7 +87,7 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
     if (hasHtmlElement && attached) {
       _rositaNeedsLayout = true;
-      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingLayout.add(this as RenderObject);
+      rositaOwner._rositaNodesNeedingLayout.add(this);
     }
   }
 
@@ -98,7 +98,7 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 
     if (hasHtmlElement && attached) {
       _rositaNeedsPaint = true;
-      (owner as RositaPipelineOwnerMixin)._rositaNodesNeedingPaint.add(this as RenderObject);
+      rositaOwner._rositaNodesNeedingPaint.add(this);
     }
   }
 
@@ -185,92 +185,88 @@ mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
 }
 
 mixin RositaPipelineOwnerMixin {
-  Set<PipelineOwner> get rositaChildren;
+  Set<RositaPipelineOwnerMixin> get rositaChildren;
 
-  List<RenderObject> _rositaNodesNeedingAttach = <RenderObject>[];
+  List<RositaRenderMixin> _rositaNodesNeedingAttach = <RositaRenderMixin>[];
 
-  List<RenderObject> _rositaNodesNeedingDetach = <RenderObject>[];
+  List<RositaRenderMixin> _rositaNodesNeedingDetach = <RositaRenderMixin>[];
 
-  List<RenderObject> _rositaNodesNeedingLayout = <RenderObject>[];
+  List<RositaRenderMixin> _rositaNodesNeedingLayout = <RositaRenderMixin>[];
 
-  List<RenderObject> _rositaNodesNeedingPaint = <RenderObject>[];
+  List<RositaRenderMixin> _rositaNodesNeedingPaint = <RositaRenderMixin>[];
 
   void rositaFlushAttach() {
     try {
-      final List<RenderObject> dirtyNodes = _rositaNodesNeedingAttach;
-      _rositaNodesNeedingAttach = <RenderObject>[];
+      final List<RositaRenderMixin> dirtyNodes = _rositaNodesNeedingAttach;
+      _rositaNodesNeedingAttach = <RositaRenderMixin>[];
 
-      for (final RenderObject node in dirtyNodes) {
-        if (node.owner == this) {
-          (node as RositaRenderMixin)._rositaNeedsAttach = false;
-          if ((node as RositaRenderMixin).hasHtmlElement) {
-            (node as RositaRenderMixin).rositaAttach();
-          }
+      for (final node in dirtyNodes) {
+        node._rositaNeedsAttach = false;
+
+        if (node.hasHtmlElement) {
+          node.rositaAttach();
         }
       }
+
       for (final child in rositaChildren) {
-        (child as RositaPipelineOwnerMixin).rositaFlushAttach();
+        child.rositaFlushAttach();
       }
     } finally {}
   }
 
   void rositaFlushDetach() {
     try {
-      final List<RenderObject> dirtyNodes = _rositaNodesNeedingDetach;
-      _rositaNodesNeedingDetach = <RenderObject>[];
+      final List<RositaRenderMixin> dirtyNodes = _rositaNodesNeedingDetach;
+      _rositaNodesNeedingDetach = <RositaRenderMixin>[];
 
-      for (final RenderObject node in dirtyNodes) {
-        (node as RositaRenderMixin)._rositaNeedsDetach = false;
-        if ((node as RositaRenderMixin).hasHtmlElement && !node.attached) {
-          (node as RositaRenderMixin).rositaDetach();
+      for (final node in dirtyNodes) {
+        node._rositaNeedsDetach = false;
+
+        if (node.hasHtmlElement && !node.attached) {
+          node.rositaDetach();
         }
       }
+
       for (final child in rositaChildren) {
-        (child as RositaPipelineOwnerMixin).rositaFlushDetach();
+        child.rositaFlushDetach();
       }
     } finally {}
   }
 
   void rositaFlushLayout() {
     try {
-      final List<RenderObject> dirtyNodes = _rositaNodesNeedingLayout;
-      _rositaNodesNeedingLayout = <RenderObject>[];
+      final List<RositaRenderMixin> dirtyNodes = _rositaNodesNeedingLayout;
+      _rositaNodesNeedingLayout = <RositaRenderMixin>[];
 
-      for (final RenderObject node in dirtyNodes..sort((RenderObject a, RenderObject b) => a.depth - b.depth)) {
-        if (node.owner == this) {
-          final el = node as RositaRenderMixin;
+      for (final node in dirtyNodes..sort((RositaRenderMixin a, RositaRenderMixin b) => a.depth - b.depth)) {
+        node._rositaNeedsLayout = false;
 
-          el._rositaNeedsLayout = false;
-
-          if (el.hasHtmlElement && (el is! RenderBox || (el as RenderBox).hasSize)) {
-            el.rositaLayout();
-          }
+        if (node.hasHtmlElement && (node is! RenderBox || (node as RenderBox).hasSize)) {
+          node.rositaLayout();
         }
       }
+
       for (final child in rositaChildren) {
-        (child as RositaPipelineOwnerMixin).rositaFlushLayout();
+        child.rositaFlushLayout();
       }
     } finally {}
   }
 
   void rositaFlushPaint() {
     try {
-      final List<RenderObject> dirtyNodes = _rositaNodesNeedingPaint;
-      _rositaNodesNeedingPaint = <RenderObject>[];
+      final List<RositaRenderMixin> dirtyNodes = _rositaNodesNeedingPaint;
+      _rositaNodesNeedingPaint = <RositaRenderMixin>[];
 
-      for (final RenderObject node in dirtyNodes) {
-        if (node.owner == this) {
-          final el = node as RositaRenderMixin;
+      for (final node in dirtyNodes) {
+        node._rositaNeedsPaint = false;
 
-          el._rositaNeedsPaint = false;
-
-          if (el.hasHtmlElement && (el is! RenderBox || (el as RenderBox).hasSize)) {
-            el.rositaPaint();
-          }
+        if (node.hasHtmlElement && (node is! RenderBox || (node as RenderBox).hasSize)) {
+          node.rositaPaint();
         }
       }
+
       for (final child in rositaChildren) {
-        (child as RositaPipelineOwnerMixin).rositaFlushPaint();
+        child.rositaFlushPaint();
       }
     } finally {}
   }
