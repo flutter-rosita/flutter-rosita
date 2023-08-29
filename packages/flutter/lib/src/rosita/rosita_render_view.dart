@@ -11,9 +11,6 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
   RenderView get target => this as RenderView;
 
   @override
-  Rect buildHtmlRect() => Offset.zero & target.size;
-
-  @override
   void rositaAttach() {
     if (_rositaRootElement != null) {
       return;

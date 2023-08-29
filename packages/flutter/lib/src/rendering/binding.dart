@@ -358,6 +358,8 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   }
 
   void _handlePersistentFrameCallback(Duration timeStamp) {
+    rositaTimeStamp = timeStamp;
+
     if (rositaSkipSlowFrames) {
       _rositaFrameStart = DateTime.now();
     }

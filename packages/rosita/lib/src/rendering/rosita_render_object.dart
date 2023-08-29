@@ -5,16 +5,13 @@ import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
-mixin RositaRenderMixin on AbstractNode, RositaRectMixin {
+mixin RositaRenderMixin on AbstractNode {
   html.HtmlElement? _htmlElement;
 
   html.HtmlElement get htmlElement =>
       rositaCastNullableToNonNullable ? _htmlElement as html.HtmlElement : _htmlElement!;
 
   bool get hasHtmlElement => _htmlElement != null;
-
-  @override
-  Rect buildHtmlRect() => parentHtmlRect;
 
   @override
   void attach(covariant Object owner) {

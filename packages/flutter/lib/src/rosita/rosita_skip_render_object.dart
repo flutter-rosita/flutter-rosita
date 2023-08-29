@@ -7,9 +7,6 @@ import 'package:universal_html/html.dart' as html;
 
 mixin RositaSkipRenderObjectMixin on RositaRenderMixin {
   @override
-  Rect buildHtmlRect() => parentHtmlRect;
-
-  @override
   html.HtmlElement? createRositaElement() {
     // Skip create HTML element
     return null;

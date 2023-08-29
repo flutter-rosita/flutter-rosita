@@ -1029,7 +1029,9 @@ class SliverPhysicalParentData extends ParentData {
   /// [SliverPhysicalParentData].
   void applyPaintTransform(Matrix4 transform) {
     // Hit test logic relies on this always providing an invertible matrix.
-    transform.translate(paintOffset.dx, paintOffset.dy);
+    if (paintOffset != Offset.zero) {
+      transform.translate(paintOffset.dx, paintOffset.dy);
+    }
   }
 
   @override
@@ -1745,12 +1747,16 @@ mixin RenderSliverHelpers implements RenderSliver {
         if (!rightWayUp) {
           delta = geometry!.paintExtent - child.size.width - delta;
         }
-        transform.translate(delta, crossAxisDelta);
+        if (delta != 0 || crossAxisDelta != 0) {
+          transform.translate(delta, crossAxisDelta);
+        }
       case Axis.vertical:
         if (!rightWayUp) {
           delta = geometry!.paintExtent - child.size.height - delta;
         }
-        transform.translate(crossAxisDelta, delta);
+        if (crossAxisDelta != 0 || delta != 0) {
+          transform.translate(crossAxisDelta, delta);
+        }
     }
   }
 }

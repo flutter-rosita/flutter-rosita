@@ -1573,7 +1573,7 @@ const String _flutterRenderingLibrary = 'package:flutter/rendering.dart';
 /// [RenderObject.markNeedsLayout] so that if a parent has queried the intrinsic
 /// or baseline information, it gets marked dirty whenever the child's geometry
 /// changes.
-abstract class RenderObject with DiagnosticableTreeMixin, RositaRectMixin, RositaRenderMixin implements HitTestTarget {
+abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin implements HitTestTarget {
   /// Initializes internal fields for subclasses.
   RenderObject() {
     if (kFlutterMemoryAllocationsEnabled) {

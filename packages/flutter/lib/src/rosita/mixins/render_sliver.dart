@@ -10,18 +10,6 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
   Offset? _localOffset;
 
   @override
-  Rect buildHtmlRect() {
-    final parentRect = parentHtmlRect;
-
-    return Rect.fromLTWH(
-      (_localOffset?.dx ?? 0) + parentRect.left,
-      (_localOffset?.dy ?? 0) + parentRect.top,
-      parentRect.width,
-      parentRect.height,
-    );
-  }
-
-  @override
   void rositaLayout() {
     super.rositaLayout();
 
@@ -85,20 +73,7 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
         style.left = '${offset.dx}px';
         style.top = '${offset.dy}px';
 
-        markDirtyHtmlRect();
-
         RositaScrollUtils.onScroll();
-
-        late RenderObjectVisitor visitor;
-
-        visitor = (RenderObject child) {
-          if (child.hasHtmlRect) {
-            child.markDirtyHtmlRect();
-            child.visitChildren(visitor);
-          }
-        };
-
-        target.visitChildren(visitor);
       }
     } else if (parentData != null) {
       assert(() {

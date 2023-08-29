@@ -799,33 +799,17 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
     return MatrixUtils.transformPoint(object.getTransformTo(null), object.semanticBounds.topLeft);
   }
 
+  Rect? _rositaRect;
+
+  Duration _rositaTimeStamp = Duration.zero;
+
   /// Returns the global rectangle of the attached widget's [RenderObject], in
   /// logical units.
   ///
   /// Rect is the rectangle of the transformed widget in global coordinates.
   Rect get rect {
-    if (kIsRosita) {
-      RenderBox? rositaObject;
-
-      late ElementVisitor visitor;
-
-      visitor = (Element element) {
-        if (rositaObject != null) {
-          // End visitChildren
-        } else if (element.renderObject is RenderBox && (element.renderObject?.hasHtmlElement ?? false)) {
-          rositaObject = element.renderObject! as RenderBox;
-        } else {
-          element.visitChildren(visitor);
-        }
-      };
-
-      (context! as Element).visitChildren(visitor);
-
-      if (rositaObject != null) {
-        return rositaObject!.htmlRect;
-      } else {
-        throw Exception('Rosita not found htmlRect to FocusNode');
-      }
+    if (_rositaTimeStamp == rositaTimeStamp && _rositaRect != null) {
+      return _rositaRect!;
     }
     assert(
       context != null,
@@ -836,7 +820,11 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
     final RenderObject object = context!.findRenderObject()!;
     final Offset topLeft = MatrixUtils.transformPoint(object.getTransformTo(null), object.semanticBounds.topLeft);
     final Offset bottomRight = MatrixUtils.transformPoint(object.getTransformTo(null), object.semanticBounds.bottomRight);
-    return Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
+    final Rect rect = Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
+
+    _rositaTimeStamp = rositaTimeStamp;
+
+    return _rositaRect = rect;
   }
 
   /// Removes the focus on this node by moving the primary focus to another node.

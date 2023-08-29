@@ -2556,7 +2556,10 @@ abstract class RenderBox extends RenderObject with RositaRenderBoxMixin {
     }());
     final BoxParentData childParentData = child.parentData! as BoxParentData;
     final Offset offset = childParentData.offset;
-    transform.translate(offset.dx, offset.dy);
+
+    if (offset != Offset.zero) {
+      transform.translate(offset.dx, offset.dy);
+    }
   }
 
   /// Convert the given point from the global coordinate system in logical pixels

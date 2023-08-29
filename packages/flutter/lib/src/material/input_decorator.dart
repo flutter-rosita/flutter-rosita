@@ -1642,9 +1642,10 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
   void applyPaintTransform(RenderObject child, Matrix4 transform) {
     if (child == label && _labelTransform != null) {
       final Offset labelOffset = _boxParentData(label!).offset;
-      transform
-        ..multiply(_labelTransform!)
-        ..translate(-labelOffset.dx, -labelOffset.dy);
+      transform.multiply(_labelTransform!);
+      if (labelOffset != Offset.zero) {
+        transform.translate(-labelOffset.dx, -labelOffset.dy);
+      }
     }
     super.applyPaintTransform(child, transform);
   }

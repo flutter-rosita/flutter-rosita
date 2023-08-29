@@ -13,18 +13,6 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
   Offset? get localOffset => _localOffset;
 
   @override
-  Rect buildHtmlRect() {
-    final parentRect = parentHtmlRect;
-
-    return Rect.fromLTWH(
-      (_localOffset?.dx ?? 0) + parentRect.left,
-      (_localOffset?.dy ?? 0) + parentRect.top,
-      target.size.width,
-      target.size.height,
-    );
-  }
-
-  @override
   void rositaLayout() {
     super.rositaLayout();
 

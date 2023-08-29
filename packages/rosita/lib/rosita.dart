@@ -3,7 +3,6 @@ library rosita;
 export 'src/extensions/color.dart';
 export 'src/extensions/rrect.dart';
 export 'src/rendering/rosita_paragraph.dart';
-export 'src/rendering/rosita_rect.dart';
 export 'src/rendering/rosita_render_box.dart';
 export 'src/rendering/rosita_render_object.dart';
 export 'src/utils/border.dart';
@@ -19,6 +18,8 @@ export 'src/widgets/rosita_image.dart';
 export 'src/widgets/rosita_rich_text.dart';
 export 'src/widgets/rosita_svg_picture.dart';
 export 'src/widgets/rosita_text.dart';
+
+Duration rositaTimeStamp = Duration.zero;
 
 const kIsRosita = bool.fromEnvironment('ROSITA');
 
