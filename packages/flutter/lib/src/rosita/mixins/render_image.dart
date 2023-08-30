@@ -25,8 +25,18 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
     final style = htmlElement.style;
     final target = this.target;
     final image = target.rositaImageProvider;
+    final imageData = target.image;
 
-    imageElement.src = RositaImageUtils.buildImageProviderPath(image);
+    if (image != null) {
+      imageElement.src = RositaImageUtils.buildImageProviderPath(image);
+    } else if (imageData != null) {
+      RositaImageUtils.buildImageBlobPath(imageData).then((value) {
+        if (value != null) {
+          imageElement.src = value;
+        }
+      });
+    }
+
     RositaOpacityUtils.applyOpacity(style, target.opacity?.value);
   }
 }
