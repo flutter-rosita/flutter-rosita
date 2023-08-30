@@ -1,3 +1,12 @@
+## 0.2.0
+
+- Add widget RositaColorRBox
+- Fixed the order of rendering HTML elements
+- Optimize RenderObject.getTransformTo
+    - skip transform when non changed
+    - remove RositaRectMixin
+- Optimize html style getter call
+
 ## 0.1.0
 
 - Fix text lineHeight when fontBoundingBoxAscent is nul
