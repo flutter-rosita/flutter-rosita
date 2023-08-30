@@ -2653,7 +2653,11 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    transform.multiply(_effectiveTransform!);
+    final effectiveTransform = _effectiveTransform!;
+
+    if(!effectiveTransform.isIdentity()) {
+      transform.multiply(effectiveTransform);
+    }
   }
 
   @override
@@ -2944,7 +2948,10 @@ class RenderFittedBox extends RenderProxyBox {
       transform.setZero();
     } else {
       _updatePaintData();
-      transform.multiply(_transform!);
+      final paintTransform = _transform!;
+      if(!paintTransform.isIdentity()) {
+        transform.multiply(paintTransform);
+      }
     }
   }
 
@@ -3041,10 +3048,12 @@ class RenderFractionalTranslation extends RenderProxyBox with RositaRenderFracti
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    transform.translate(
-      translation.dx * size.width,
-      translation.dy * size.height,
-    );
+    if (translation.dx != 0 || translation.dy != 0) {
+      transform.translate(
+        translation.dx * size.width,
+        translation.dy * size.height,
+      );
+    }
   }
 
   @override
@@ -5100,7 +5109,11 @@ class RenderFollowerLayer extends RenderProxyBox {
 
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    transform.multiply(getCurrentTransform());
+    final currentTransform = getCurrentTransform();
+
+    if(!currentTransform.isIdentity()) {
+      transform.multiply(currentTransform);
+    }
   }
 
   @override

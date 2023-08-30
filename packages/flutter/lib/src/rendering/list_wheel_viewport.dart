@@ -1095,7 +1095,9 @@ class RenderListWheelViewport
     final ListWheelParentData parentData = child.parentData! as ListWheelParentData;
     final Matrix4? paintTransform = parentData.transform;
     if (paintTransform != null) {
-      transform.multiply(paintTransform);
+      if(!paintTransform.isIdentity()) {
+        transform.multiply(paintTransform);
+      }
     }
   }
 

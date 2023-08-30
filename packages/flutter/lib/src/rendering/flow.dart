@@ -448,8 +448,11 @@ class RenderFlow extends RenderBox
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     final FlowParentData childParentData = child.parentData! as FlowParentData;
-    if (childParentData._transform != null) {
-      transform.multiply(childParentData._transform!);
+    final childParentTransform = childParentData._transform;
+    if (childParentTransform != null) {
+      if(!childParentTransform.isIdentity()) {
+        transform.multiply(childParentTransform);
+      }
     }
     super.applyPaintTransform(child, transform);
   }
