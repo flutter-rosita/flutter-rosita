@@ -31,3 +31,7 @@ const rositaSkipSlowFrames = bool.fromEnvironment('ROSITA_SKIP_SLOW_FRAMES', def
 
 const rositaCastNullableToNonNullable =
     bool.fromEnvironment('ROSITA_CAST_NULLABLE_TO_NON_NULLABLE', defaultValue: true);
+
+const rositaDisableRoutesChanged = bool.fromEnvironment('ROSITA_DISABLE_ROUTES_CHANGED', defaultValue: true);
+
+const rositaEnableRoutesChanged = !rositaDisableRoutesChanged;

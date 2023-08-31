@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -1638,7 +1639,9 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
   @override
   void changedInternalState() {
     super.changedInternalState();
-    setState(() { /* internal state already changed */ });
+    if (rositaEnableRoutesChanged) {
+      setState(() { /* internal state already changed */ });
+    }
     _modalBarrier.markNeedsBuild();
     _modalScope.maintainState = maintainState;
   }

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'basic.dart';
 import 'binding.dart';
 import 'framework.dart';
@@ -882,7 +883,9 @@ class HeroController extends NavigatorObserver {
       // Putting a route offstage changes its animation value to 1.0. Once this
       // frame completes, we'll know where the heroes in the `to` route are
       // going to end up, and the `to` route will go back onstage.
-      to.offstage = to.animation!.value == 0.0;
+      if (rositaEnableRoutesChanged) {
+        to.offstage = to.animation!.value == 0.0;
+      }
 
       WidgetsBinding.instance.addPostFrameCallback((Duration value) {
         if (from.navigator == null || to.navigator == null) {
