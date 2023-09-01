@@ -16,6 +16,7 @@ export 'src/utils/text_style.dart';
 export 'src/widgets/rosita_color_r_box.dart';
 export 'src/widgets/rosita_element.dart';
 export 'src/widgets/rosita_image.dart';
+export 'src/widgets/rosita_repaint_boundary.dart';
 export 'src/widgets/rosita_rich_text.dart';
 export 'src/widgets/rosita_semantics.dart';
 export 'src/widgets/rosita_svg_picture.dart';
@@ -39,3 +40,7 @@ const rositaDisableRoutesChanged = bool.fromEnvironment('ROSITA_DISABLE_ROUTES_C
 const rositaEnableRoutesChanged = !rositaDisableRoutesChanged;
 
 const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHILDREN', defaultValue: true);
+
+const rositaDisableUpdateCompositingBits = bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: true);
+
+const rositaEnableUpdateCompositingBits = !rositaDisableUpdateCompositingBits;

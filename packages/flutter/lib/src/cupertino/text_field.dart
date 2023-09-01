@@ -1326,7 +1326,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField> with Restoratio
 
     final Widget paddedEditable = Padding(
       padding: widget.padding,
-      child: RepaintBoundary(
+      child: RositaRepaintBoundary(
         child: UnmanagedRestorationScope(
           bucket: bucket,
           child: EditableText(

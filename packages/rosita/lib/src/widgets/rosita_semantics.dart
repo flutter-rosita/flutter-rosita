@@ -69,7 +69,7 @@ Widget RositaSemantics({
   VoidCallback? onDidLoseAccessibilityFocus,
   Map<CustomSemanticsAction, VoidCallback>? customSemanticsActions,
 }) {
-  if (rositaEnableSemantics) {
+  if (rositaEnableSemantics || key != null) {
     return Semantics(
       key: key,
       container: container,

@@ -924,7 +924,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                     controller: primaryScrollController,
                     child: FocusScope(
                       node: focusScopeNode, // immutable
-                      child: RepaintBoundary(
+                      child: RositaRepaintBoundary(
                         child: AnimatedBuilder(
                           animation: _listenable, // immutable
                           builder: (BuildContext context, Widget? child) {
@@ -950,7 +950,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                               ),
                             );
                           },
-                          child: _page ??= RepaintBoundary(
+                          child: _page ??= RositaRepaintBoundary(
                             key: widget.route._subtreeKey, // immutable
                             child: Builder(
                               builder: (BuildContext context) {

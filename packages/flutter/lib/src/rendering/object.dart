@@ -2786,6 +2786,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   /// it cannot be the case that _only_ the compositing bits changed,
   /// something else will have scheduled a frame for us.
   void markNeedsCompositingBitsUpdate() {
+    if (rositaDisableUpdateCompositingBits) {
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     if (_needsCompositingBitsUpdate) {
       return;

@@ -672,7 +672,7 @@ class _SelectableTextState extends State<SelectableText> implements TextSelectio
     if (effectiveTextStyle == null || effectiveTextStyle.inherit) {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style ?? _controller._textSpan.style);
     }
-    final Widget child = RepaintBoundary(
+    final Widget child = RositaRepaintBoundary(
       child: EditableText(
         key: editableTextKey,
         style: effectiveTextStyle,

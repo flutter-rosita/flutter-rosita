@@ -1347,7 +1347,7 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
         };
     }
 
-    Widget child = RepaintBoundary(
+    Widget child = RositaRepaintBoundary(
       child: UnmanagedRestorationScope(
         bucket: bucket,
         child: EditableText(
