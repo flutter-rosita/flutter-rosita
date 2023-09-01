@@ -252,7 +252,7 @@ class _FloatingHeaderState extends State<_FloatingHeader> {
   Widget build(BuildContext context) => widget.child;
 }
 
-class _SliverPersistentHeaderElement extends RenderObjectElement {
+class _SliverPersistentHeaderElement extends RenderObjectElement with RositaSingleChildElementMixin {
   _SliverPersistentHeaderElement(
     _SliverPersistentHeaderRenderObjectWidget super.widget, {
     this.floating = false,
@@ -297,6 +297,9 @@ class _SliverPersistentHeaderElement extends RenderObjectElement {
   }
 
   Element? child;
+
+  @override
+  Element? get rositaChild => child;
 
   void _build(double shrinkOffset, bool overlapsContent) {
     owner!.buildScope(this, () {

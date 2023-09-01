@@ -115,6 +115,15 @@ class _UbiquitousInheritedElement extends InheritedElement {
 
   @override
   void notifyClients(InheritedWidget oldWidget) {
+    if (rositaEnableRoutesChanged) {
+      rositaVisitChildrenFromLeaf(this, (Element element) {
+        if (element.doesDependOnInheritedElement(this)) {
+          notifyDependent(oldWidget, element);
+        }
+      });
+      return;
+    }
+
     _recurseChildren(this, (Element element) {
       if (element.doesDependOnInheritedElement(this)) {
         notifyDependent(oldWidget, element);

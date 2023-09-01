@@ -18,6 +18,7 @@ export 'src/widgets/rosita_image.dart';
 export 'src/widgets/rosita_rich_text.dart';
 export 'src/widgets/rosita_svg_picture.dart';
 export 'src/widgets/rosita_text.dart';
+export 'src/widgets/rosita_element.dart';
 
 Duration rositaTimeStamp = Duration.zero;
 
@@ -35,3 +36,5 @@ const rositaCastNullableToNonNullable =
 const rositaDisableRoutesChanged = bool.fromEnvironment('ROSITA_DISABLE_ROUTES_CHANGED', defaultValue: true);
 
 const rositaEnableRoutesChanged = !rositaDisableRoutesChanged;
+
+const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHILDREN', defaultValue: true);

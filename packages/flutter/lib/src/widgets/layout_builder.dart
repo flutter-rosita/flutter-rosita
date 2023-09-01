@@ -54,7 +54,7 @@ abstract class ConstrainedLayoutBuilder<ConstraintType extends Constraints> exte
   // updateRenderObject is redundant with the logic in the LayoutBuilderElement below.
 }
 
-class _LayoutBuilderElement<ConstraintType extends Constraints> extends RenderObjectElement {
+class _LayoutBuilderElement<ConstraintType extends Constraints> extends RenderObjectElement with RositaSingleChildElementMixin {
   _LayoutBuilderElement(ConstrainedLayoutBuilder<ConstraintType> super.widget);
 
   @override
@@ -64,6 +64,9 @@ class _LayoutBuilderElement<ConstraintType extends Constraints> extends RenderOb
           as RenderConstrainedLayoutBuilder<ConstraintType, RenderObject>;
 
   Element? _child;
+
+  @override
+  Element? get rositaChild => _child;
 
   @override
   void visitChildren(ElementVisitor visitor) {
