@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'button_style.dart';
@@ -759,7 +760,7 @@ class _SnackBarState extends State<SnackBar> {
       );
     }
 
-    snackBar = Semantics(
+    snackBar = RositaSemantics(
       container: true,
       liveRegion: true,
       onDismiss: () {

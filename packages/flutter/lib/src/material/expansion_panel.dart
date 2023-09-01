@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'constants.dart';
@@ -378,7 +379,7 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
       );
       if (!child.canTapOnHeader) {
         final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-        expandIconContainer = Semantics(
+        expandIconContainer = RositaSemantics(
           label: _isChildExpanded(index)? localizations.expandedIconTapHint : localizations.collapsedIconTapHint,
           container: true,
           child: expandIconContainer,

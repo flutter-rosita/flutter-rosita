@@ -805,7 +805,7 @@ class ToggleButtons extends StatelessWidget {
       }
 
       return MergeSemantics(
-        child: Semantics(
+        child: RositaSemantics(
           container: true,
           checked: isSelected[index],
           enabled: onPressed != null,

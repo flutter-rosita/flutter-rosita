@@ -109,7 +109,7 @@ class AnimatedIcon extends StatelessWidget {
     if (iconOpacity != 1.0) {
       iconColor = iconColor.withOpacity(iconColor.opacity * iconOpacity);
     }
-    return Semantics(
+    return RositaSemantics(
       label: semanticLabel,
       child: CustomPaint(
         size: Size(iconSize, iconSize),

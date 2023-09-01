@@ -391,7 +391,7 @@ class _HelperErrorState extends State<_HelperError> with SingleTickerProviderSta
 
   Widget _buildHelper() {
     assert(widget.helperText != null);
-    return Semantics(
+    return RositaSemantics(
       container: true,
       child: FadeTransition(
         opacity: Tween<double>(begin: 1.0, end: 0.0).animate(_controller),
@@ -408,7 +408,7 @@ class _HelperErrorState extends State<_HelperError> with SingleTickerProviderSta
 
   Widget _buildError() {
     assert(widget.error != null || widget.errorText != null);
-    return Semantics(
+    return RositaSemantics(
       container: true,
       child: FadeTransition(
         opacity: _controller,
@@ -1752,7 +1752,7 @@ class _AffixText extends StatelessWidget {
         duration: _kTransitionDuration,
         curve: _kTransitionCurve,
         opacity: labelIsFloating ? 1.0 : 0.0,
-        child: Semantics(
+        child: RositaSemantics(
           sortKey: semanticsSortKey,
           tagForChildren: semanticsTag,
           child: child ?? (text == null ? null : Text(text!, style: style)),
@@ -2283,7 +2283,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
       : null;
 
     if (input != null && needsSemanticsSortOrder) {
-      input = Semantics(
+      input = RositaSemantics(
         sortKey: _kInputSemanticsSortOrder,
         child: input,
       );
@@ -2333,7 +2333,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
                   iconSize: iconSize,
                   ),
                 ),
-                child: Semantics(
+                child: RositaSemantics(
                   child: decoration.prefixIcon,
                 ),
               ),
@@ -2368,7 +2368,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
                     iconSize: iconSize,
                     ),
                   ),
-                  child: Semantics(
+                  child: RositaSemantics(
                     child: decoration.suffixIcon,
                   ),
                 ),
@@ -2392,7 +2392,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
     if (decoration.counter != null) {
       counter = decoration.counter;
     } else if (decoration.counterText != null && decoration.counterText != '') {
-      counter = Semantics(
+      counter = RositaSemantics(
         container: true,
         liveRegion: isFocused,
         child: Text(

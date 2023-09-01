@@ -14,11 +14,12 @@ export 'src/utils/radius.dart';
 export 'src/utils/scroll.dart';
 export 'src/utils/text_style.dart';
 export 'src/widgets/rosita_color_r_box.dart';
+export 'src/widgets/rosita_element.dart';
 export 'src/widgets/rosita_image.dart';
 export 'src/widgets/rosita_rich_text.dart';
+export 'src/widgets/rosita_semantics.dart';
 export 'src/widgets/rosita_svg_picture.dart';
 export 'src/widgets/rosita_text.dart';
-export 'src/widgets/rosita_element.dart';
 
 Duration rositaTimeStamp = Duration.zero;
 

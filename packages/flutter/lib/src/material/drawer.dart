@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -289,7 +290,7 @@ class Drawer extends StatelessWidget {
     final ShapeBorder? effectiveShape = shape ?? (isDrawerStart
       ? (drawerTheme.shape ?? defaults.shape)
       : (drawerTheme.endShape ?? defaults.endShape));
-    return Semantics(
+    return RositaSemantics(
       scopesRoute: true,
       namesRoute: true,
       explicitChildNodes: true,
@@ -766,7 +767,7 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
                   excluding: platformHasBackButton,
                   child: GestureDetector(
                     onTap: close,
-                    child: Semantics(
+                    child: RositaSemantics(
                       label: MaterialLocalizations.of(context).modalBarrierDismissLabel,
                       child: Container( // The drawer's "scrim"
                         color: _scrimColorTween.evaluate(_controller),

@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'checkbox.dart';
@@ -780,7 +781,7 @@ class DataTable extends StatelessWidget {
     final double effectiveCheckboxHorizontalMarginEnd = checkboxHorizontalMargin
       ?? themeData.dataTableTheme.checkboxHorizontalMargin
       ?? effectiveHorizontalMargin / 2.0;
-    Widget contents = Semantics(
+    Widget contents = RositaSemantics(
       container: true,
       child: Padding(
         padding: EdgeInsetsDirectional.only(

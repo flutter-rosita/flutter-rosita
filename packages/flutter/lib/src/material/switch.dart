@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -924,7 +925,7 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
       ? switchConfig.inactiveThumbRadius : switchConfig.thumbRadiusWithIcon;
     final double effectiveSplashRadius = widget.splashRadius ?? switchTheme.splashRadius ?? defaults.splashRadius!;
 
-    return Semantics(
+    return RositaSemantics(
       toggled: widget.value,
       child: GestureDetector(
         excludeFromSemantics: true,

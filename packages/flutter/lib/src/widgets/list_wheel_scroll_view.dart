@@ -95,7 +95,7 @@ class ListWheelChildListDelegate extends ListWheelChildDelegate {
     if (index < 0 || index >= children.length) {
       return null;
     }
-    return IndexedSemantics(index: index, child: children[index]);
+    return RositaIndexedSemantics(index: index, child: children[index]);
   }
 
   @override
@@ -142,7 +142,7 @@ class ListWheelChildLoopingListDelegate extends ListWheelChildDelegate {
     if (children.isEmpty) {
       return null;
     }
-    return IndexedSemantics(index: index, child: children[index % children.length]);
+    return RositaIndexedSemantics(index: index, child: children[index % children.length]);
   }
 
   @override
@@ -185,12 +185,12 @@ class ListWheelChildBuilderDelegate extends ListWheelChildDelegate {
   Widget? build(BuildContext context, int index) {
     if (childCount == null) {
       final Widget? child = builder(context, index);
-      return child == null ? null : IndexedSemantics(index: index, child: child);
+      return child == null ? null : RositaIndexedSemantics(index: index, child: child);
     }
     if (index < 0 || index >= childCount!) {
       return null;
     }
-    return IndexedSemantics(index: index, child: builder(context, index));
+    return RositaIndexedSemantics(index: index, child: builder(context, index));
   }
 
   @override

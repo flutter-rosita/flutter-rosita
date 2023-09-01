@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -70,7 +71,7 @@ class ImageIcon extends StatelessWidget {
     final double? iconSize = size ?? iconTheme.size;
 
     if (image == null) {
-      return Semantics(
+      return RositaSemantics(
         label: semanticLabel,
         child: SizedBox(width: iconSize, height: iconSize),
       );
@@ -83,7 +84,7 @@ class ImageIcon extends StatelessWidget {
       iconColor = iconColor.withOpacity(iconColor.opacity * iconOpacity);
     }
 
-    return Semantics(
+    return RositaSemantics(
       label: semanticLabel,
       child: Image(
         image: image!,

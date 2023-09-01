@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -403,7 +404,7 @@ class _HourControl extends StatelessWidget {
       alwaysUse24HourFormat: alwaysUse24HourFormat,
     );
 
-    return Semantics(
+    return RositaSemantics(
       value: '${localizations.timePickerHourModeAnnouncement} $formattedHour',
       excludeSemantics: true,
       increasedValue: formattedNextHour,
@@ -507,7 +508,7 @@ class _MinuteControl extends StatelessWidget {
     );
     final String formattedPreviousMinute = localizations.formatMinute(previousMinute);
 
-    return Semantics(
+    return RositaSemantics(
       excludeSemantics: true,
       value: '${localizations.timePickerMinuteModeAnnouncement} $formattedMinute',
       increasedValue: formattedNextMinute,
@@ -702,7 +703,7 @@ class _AmPmButton extends StatelessWidget {
       color: resolvedBackgroundColor,
       child: InkWell(
         onTap: Feedback.wrapForTap(onPressed, context),
-        child: Semantics(
+        child: RositaSemantics(
           checked: selected,
           inMutuallyExclusiveGroup: true,
           button: true,
@@ -2067,7 +2068,7 @@ class _HourMinuteTextFieldState extends State<_HourMinuteTextField> with Restora
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
         child: UnmanagedRestorationScope(
           bucket: bucket,
-          child: Semantics(
+          child: RositaSemantics(
             label: widget.semanticHintText,
             child: TextFormField(
               restorationId: 'hour_minute_text_form_field',

@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'card.dart';
@@ -503,7 +504,7 @@ class PaginatedDataTableState extends State<PaginatedDataTable> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               if (headerWidgets.isNotEmpty)
-                Semantics(
+                RositaSemantics(
                   container: true,
                   child: DefaultTextStyle(
                     // These typographic styles aren't quite the regular ones. We pick the closest ones from the regular

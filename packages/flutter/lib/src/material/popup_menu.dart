@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -386,7 +387,7 @@ class PopupMenuItemState<T, W extends PopupMenuItem<T>> extends State<W> {
     }
 
     return MergeSemantics(
-      child: Semantics(
+      child: RositaSemantics(
         enabled: widget.enabled,
         button: true,
         child: InkWell(
@@ -602,7 +603,7 @@ class _PopupMenu<T> extends StatelessWidget {
       ),
       child: IntrinsicWidth(
         stepWidth: _kMenuWidthStep,
-        child: Semantics(
+        child: RositaSemantics(
           scopesRoute: true,
           namesRoute: true,
           explicitChildNodes: true,

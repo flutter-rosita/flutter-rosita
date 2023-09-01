@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -423,7 +424,7 @@ class _FadeInImageState extends State<FadeInImage> {
     );
 
     if (!widget.excludeFromSemantics) {
-      result = Semantics(
+      result = RositaSemantics(
         container: widget.imageSemanticLabel != null,
         image: true,
         label: widget.imageSemanticLabel ?? '',

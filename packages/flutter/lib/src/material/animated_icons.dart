@@ -10,6 +10,7 @@ import 'dart:ui' as ui show Canvas, Paint, Path;
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart' show clampDouble;
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 // This package is split into multiple parts to enable a private API that is

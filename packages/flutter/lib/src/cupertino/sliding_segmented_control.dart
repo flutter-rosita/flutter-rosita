@@ -650,7 +650,7 @@ class _SegmentedControlState<T> extends State<CupertinoSlidingSegmentedControl<T
       }
 
       children.add(
-        Semantics(
+        RositaSemantics(
           button: true,
           onTap: () { widget.onValueChanged(entry.key); },
           inMutuallyExclusiveGroup: true,

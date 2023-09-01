@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -228,7 +229,7 @@ class _CupertinoCheckboxState extends State<CupertinoCheckbox> with TickerProvid
     final Color effectiveCheckColor = widget.checkColor
       ?? CupertinoColors.white;
 
-    return Semantics(
+    return RositaSemantics(
       checked: widget.value ?? false,
       mixed: widget.tristate ? widget.value == null : null,
       child: buildToggleable(

@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -279,7 +280,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
           // be retrieved at paint time (after layout), not at build time.
           getSelectedItemOffset: () => route.getItemOffset(route.selectedIndex),
         ),
-        child: Semantics(
+        child: RositaSemantics(
           scopesRoute: true,
           namesRoute: true,
           explicitChildNodes: true,
@@ -1526,7 +1527,7 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
       );
     }
 
-    return Semantics(
+    return RositaSemantics(
       button: true,
       child: Actions(
         actions: _actionMap,

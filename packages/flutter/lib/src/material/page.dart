@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rosita.dart';
 
 import 'page_transitions_theme.dart';
 import 'theme.dart';
@@ -107,7 +108,7 @@ mixin MaterialRouteTransitionMixin<T> on PageRoute<T> {
     Animation<double> secondaryAnimation,
   ) {
     final Widget result = buildContent(context);
-    return Semantics(
+    return RositaSemantics(
       scopesRoute: true,
       explicitChildNodes: true,
       child: result,

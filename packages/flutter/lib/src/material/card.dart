@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'card_theme.dart';
@@ -164,7 +165,7 @@ class Card extends StatelessWidget {
     final CardTheme cardTheme = CardTheme.of(context);
     final CardTheme defaults = Theme.of(context).useMaterial3 ? _CardDefaultsM3(context) : _CardDefaultsM2(context);
 
-    return Semantics(
+    return RositaSemantics(
       container: semanticContainer,
       child: Container(
         margin: margin ?? cardTheme.margin ?? defaults.margin!,
@@ -177,7 +178,7 @@ class Card extends StatelessWidget {
           shape: shape ?? cardTheme.shape ?? defaults.shape,
           borderOnForeground: borderOnForeground,
           clipBehavior: clipBehavior ?? cardTheme.clipBehavior ?? defaults.clipBehavior!,
-          child: Semantics(
+          child: RositaSemantics(
             explicitChildNodes: !semanticContainer,
             child: child,
           ),

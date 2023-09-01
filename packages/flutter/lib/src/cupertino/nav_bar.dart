@@ -845,7 +845,7 @@ class _LargeTitleNavigationBarSliverDelegate
                     child: AnimatedOpacity(
                       opacity: showLargeTitle ? 1.0 : 0.0,
                       duration: _kNavBarTitleFadeDuration,
-                      child: Semantics(
+                      child: RositaSemantics(
                         header: true,
                         child: DefaultTextStyle(
                           style: CupertinoTheme.of(context)
@@ -1066,7 +1066,7 @@ class _PersistentNavigationBar extends StatelessWidget {
     if (middle != null) {
       middle = DefaultTextStyle(
         style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
-        child: Semantics(header: true, child: middle),
+        child: RositaSemantics(header: true, child: middle),
       );
       // When the middle's visibility can change on the fly like with large title
       // slivers, wrap with animated opacity.
@@ -1477,7 +1477,7 @@ class CupertinoNavigationBarBackButton extends StatelessWidget {
 
     return CupertinoButton(
       padding: EdgeInsets.zero,
-      child: Semantics(
+      child: RositaSemantics(
         container: true,
         excludeSemantics: true,
         label: 'Back',

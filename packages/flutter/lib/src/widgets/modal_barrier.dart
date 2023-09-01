@@ -235,7 +235,7 @@ class ModalBarrier extends StatelessWidget {
       }
     }
 
-    Widget barrier = Semantics(
+    Widget barrier = RositaSemantics(
       onTapHint: semanticsOnTapHint,
       onTap: semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
       onDismiss: semanticsDismissible && semanticsLabel != null ? handleDismiss : null,

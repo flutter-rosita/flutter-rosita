@@ -4,6 +4,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 
 import 'color_scheme.dart';
 import 'colors.dart';
@@ -527,7 +528,7 @@ class _RadioState<T> extends State<Radio<T>> with TickerProviderStateMixin, Togg
         accessibilitySelected = widget._selected;
     }
 
-    return Semantics(
+    return RositaSemantics(
       inMutuallyExclusiveGroup: true,
       checked: widget._selected,
       selected: accessibilitySelected,

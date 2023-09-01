@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'button_theme.dart';
@@ -419,7 +420,7 @@ class _RawMaterialButtonState extends State<RawMaterialButton> with MaterialStat
         minSize = Size.zero;
     }
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       button: true,
       enabled: widget.enabled,

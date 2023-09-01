@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -1635,7 +1636,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
             child: Row(children: <Widget>[
               SizedBox(width: MediaQuery.sizeOf(context).width < 360 ? 42 : 72),
               Expanded(
-                child: Semantics(
+                child: RositaSemantics(
                   label: '$helpText $startDateText to $endDateText',
                   excludeSemantics: true,
                   child: Column(
@@ -2451,7 +2452,7 @@ class _MonthItemState extends State<_MonthItem> {
     Widget dayWidget = Container(
       decoration: decoration,
       child: Center(
-        child: Semantics(
+        child: RositaSemantics(
           label: semanticLabel,
           selected: isSelectedDayStart || isSelectedDayEnd,
           child: ExcludeSemantics(

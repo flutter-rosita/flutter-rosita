@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'banner_theme.dart';
@@ -404,7 +405,7 @@ class _MaterialBannerState extends State<MaterialBanner> {
       curve: const Threshold(0.0),
     ));
 
-    materialBanner = Semantics(
+    materialBanner = RositaSemantics(
       container: true,
       liveRegion: true,
       onDismiss: () {

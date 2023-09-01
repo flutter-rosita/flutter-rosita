@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'adaptive_text_selection_toolbar.dart';
 import 'desktop_text_selection.dart';
@@ -715,7 +716,7 @@ class _SelectableTextState extends State<SelectableText> implements TextSelectio
       ),
     );
 
-    return Semantics(
+    return RositaSemantics(
       label: widget.semanticsLabel,
       excludeSemantics: widget.semanticsLabel != null,
       onLongPress: () {

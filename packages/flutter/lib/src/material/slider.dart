@@ -893,7 +893,7 @@ class _SliderState extends State<Slider> with TickerProviderStateMixin {
       ? math.min(MediaQuery.textScaleFactorOf(context), 1.3)
       : MediaQuery.textScaleFactorOf(context);
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       slider: true,
       onDidGainAccessibilityFocus: handleDidGainAccessibilityFocus,

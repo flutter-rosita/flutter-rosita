@@ -371,7 +371,7 @@ class _SegmentedControlState<T extends Object> extends State<CupertinoSegmentedC
             data: iconTheme,
             child: DefaultTextStyle(
               style: textStyle,
-              child: Semantics(
+              child: RositaSemantics(
                 button: true,
                 inMutuallyExclusiveGroup: true,
                 selected: widget.groupValue == currentKey,

@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -292,7 +293,7 @@ class _FlexibleSpaceBarState extends State<FlexibleSpaceBar> {
             case TargetPlatform.fuchsia:
             case TargetPlatform.linux:
             case TargetPlatform.windows:
-              title = Semantics(
+              title = RositaSemantics(
                 namesRoute: true,
                 child: widget.title,
               );
