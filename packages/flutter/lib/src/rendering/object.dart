@@ -2066,8 +2066,10 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     if (_needsPaint && _layerHandle.layer != null) {
       // Don't enter this block if we've never painted at all;
       // scheduleInitialPaint() will handle it
-      _needsPaint = false;
-      markNeedsPaint();
+      if (rositaEnableLayoutMarkNeedsPaint) {
+        _needsPaint = false;
+        markNeedsPaint();
+      }
     }
     if (rositaEnableSemantics) {
       if (_needsSemanticsUpdate && _semanticsConfiguration.isSemanticBoundary) {
@@ -2356,7 +2358,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       return true;
     }());
     _needsLayout = false;
-    markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      markNeedsPaint();
+    }
   }
 
   /// Compute the layout for this render object.
@@ -2526,7 +2530,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       return true;
     }());
     _needsLayout = false;
-    markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      markNeedsPaint();
+    }
 
     if (!kReleaseMode && debugProfileLayoutsEnabled) {
       FlutterTimeline.finishSync();

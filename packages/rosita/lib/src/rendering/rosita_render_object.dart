@@ -53,6 +53,8 @@ mixin RositaRenderMixin on AbstractNode {
 
   bool _rositaNeedsPaint = true;
 
+  bool _rositaFirstLayout = true;
+
   RositaPipelineOwnerMixin get rositaOwner => owner as RositaPipelineOwnerMixin;
 
   void rositaMarkNeedsAttach() {
@@ -85,6 +87,11 @@ mixin RositaRenderMixin on AbstractNode {
     if (hasHtmlElement && attached) {
       _rositaNeedsLayout = true;
       rositaOwner._rositaNodesNeedingLayout.add(this);
+
+      if (_rositaFirstLayout && (this is! RenderBox || (this as RenderBox).hasSize)) {
+        _rositaFirstLayout = false;
+        rositaMarkNeedsPaint();
+      }
     }
   }
 

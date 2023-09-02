@@ -44,3 +44,7 @@ const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHIL
 const rositaDisableUpdateCompositingBits = bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: true);
 
 const rositaEnableUpdateCompositingBits = !rositaDisableUpdateCompositingBits;
+
+const rositaDisableLayoutMarkNeedsPaint = bool.fromEnvironment('ROSITA_DISABLE_LAYOUT_MARK_NEEDS_PAINT', defaultValue: true);
+
+const rositaEnableLayoutMarkNeedsPaint = !rositaDisableLayoutMarkNeedsPaint;

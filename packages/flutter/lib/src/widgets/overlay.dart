@@ -1658,7 +1658,9 @@ final class _OverlayEntryLocation extends LinkedListEntry<_OverlayEntryLocation>
     assert(_overlayChildRenderBox == null, 'Failed to add $child. This location ($this) is already occupied by $_overlayChildRenderBox.');
     _overlayChildRenderBox = child;
     _childModel._add(this);
-    _theater.markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      _theater.markNeedsPaint();
+    }
     _theater.markNeedsCompositingBitsUpdate();
     if (rositaEnableSemantics) {
       _theater.markNeedsSemanticsUpdate();
@@ -1669,7 +1671,9 @@ final class _OverlayEntryLocation extends LinkedListEntry<_OverlayEntryLocation>
     _overlayChildRenderBox = null;
     assert(_childModel._sortedTheaterSiblings?.contains(this) ?? false);
     _childModel._remove(this);
-    _theater.markNeedsPaint();
+    if (rositaEnableLayoutMarkNeedsPaint) {
+      _theater.markNeedsPaint();
+    }
     _theater.markNeedsCompositingBitsUpdate();
     if (rositaEnableSemantics) {
       _theater.markNeedsSemanticsUpdate();
