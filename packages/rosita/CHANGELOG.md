@@ -1,3 +1,15 @@
+## 0.3.0
+
+- Add support RawImage
+- Add optimization constant rositaDisableRoutesChanged (ROSITA_DISABLE_ROUTES_CHANGED)
+- Add optimization constant rositaEnableVisitChildren (ROSITA_ENABLE_VISIT_CHILDREN)
+- Add method RositaSemantics as constructor to disable Semantics widget
+- Disable calls updateCompositingBits, add constant rositaDisableUpdateCompositingBits (ROSITA_DISABLE_UPDATE_COMPOSITING_BITS)
+  - skip call flushCompositingBits and markNeedsCompositingBitsUpdate
+  - skip build RepaintBoundary widget
+- Disable markNeedsPaint calls on layout
+- Remove rositaSkipSlowFrames constant
+
 ## 0.2.0
 
 - Add widget RositaColorRBox
