@@ -30,8 +30,6 @@ const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', 
 
 const rositaEnableSemantics = !rositaDisableSemantics;
 
-const rositaSkipSlowFrames = bool.fromEnvironment('ROSITA_SKIP_SLOW_FRAMES', defaultValue: true);
-
 const rositaCastNullableToNonNullable =
     bool.fromEnvironment('ROSITA_CAST_NULLABLE_TO_NON_NULLABLE', defaultValue: true);
 
@@ -41,10 +39,12 @@ const rositaEnableRoutesChanged = !rositaDisableRoutesChanged;
 
 const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHILDREN', defaultValue: true);
 
-const rositaDisableUpdateCompositingBits = bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: true);
+const rositaDisableUpdateCompositingBits =
+    bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: true);
 
 const rositaEnableUpdateCompositingBits = !rositaDisableUpdateCompositingBits;
 
-const rositaDisableLayoutMarkNeedsPaint = bool.fromEnvironment('ROSITA_DISABLE_LAYOUT_MARK_NEEDS_PAINT', defaultValue: true);
+const rositaDisableLayoutMarkNeedsPaint =
+    bool.fromEnvironment('ROSITA_DISABLE_LAYOUT_MARK_NEEDS_PAINT', defaultValue: true);
 
 const rositaEnableLayoutMarkNeedsPaint = !rositaDisableLayoutMarkNeedsPaint;

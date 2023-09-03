@@ -360,10 +360,6 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   void _handlePersistentFrameCallback(Duration timeStamp) {
     rositaTimeStamp = timeStamp;
 
-    if (rositaSkipSlowFrames) {
-      _rositaFrameStart = DateTime.now();
-    }
-
     drawFrame();
     rositaDrawFrame();
 
@@ -517,41 +513,13 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     }
   }
 
-  DateTime _rositaFrameStart = DateTime.now();
-  int _rositaSkipFrame = 0;
-
   @protected
   // ignore: public_member_api_docs
   void rositaDrawFrame() {
-    if (rositaSkipSlowFrames) {
-      if (_rositaSkipFrame < 5 && DateTime.now().difference(_rositaFrameStart).inMilliseconds > 16) {
-        _rositaSkipFrame++;
-        addPostFrameCallback(rositaPostFrameCallback);
-        return;
-      }
-      _rositaTimer?.cancel();
-      _rositaTimer = null;
-      _rositaSkipFrame = 0;
-    }
-
     pipelineOwner.rositaFlushDetach();
     pipelineOwner.rositaFlushAttach();
     pipelineOwner.rositaFlushLayout();
     pipelineOwner.rositaFlushPaint();
-  }
-
-  Timer? _rositaTimer;
-
-  // ignore: public_member_api_docs
-  void rositaPostFrameCallback(Duration timeStamp) {
-    if (pipelineOwner.rositaFlushNeeded) {
-      _rositaTimer?.cancel();
-      _rositaTimer = null;
-      _rositaTimer = Timer(const Duration(milliseconds: 50), () {
-        _rositaFrameStart = DateTime.now();
-        RositaPipelineOwnerMixin.rositaDrawFrame(rositaDrawFrame);
-      });
-    }
   }
 
   @override
