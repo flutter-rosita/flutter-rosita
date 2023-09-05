@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -12,11 +13,22 @@ class RositaParagraphUtils {
 
   static String? _lastContextFont;
 
+  static String? _defaultFontFamily;
+
+  static String get defaultFontFamily {
+    return _defaultFontFamily ??= switch (defaultTargetPlatform) {
+      TargetPlatform.iOS => '.SF UI Display',
+      TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.linux => 'Roboto',
+      TargetPlatform.windows => 'Segoe UI',
+      TargetPlatform.macOS => '.AppleSystemUIFont',
+    };
+  }
+
   static RositaCanvasFontData buildFontData({required TextStyle style}) {
     final fontSize = style.fontSize ?? 10;
     final height = style.height ?? 1;
     final lineHeight = fontSize * height;
-    final fontFamily = style.fontFamily;
+    final fontFamily = style.fontFamily ?? defaultFontFamily;
     final fontStyle = style.fontStyle;
     final fontWeight = style.fontWeight;
 
@@ -24,7 +36,7 @@ class RositaParagraphUtils {
       if (fontStyle != null) RositaTextUtils.maFontStyle(fontStyle),
       if (fontWeight != null) RositaTextUtils.mapFontWeight(fontWeight),
       '${fontSize}px',
-      if (fontFamily != null) "'$fontFamily'",
+      '"$fontFamily"',
     ].join(' ');
 
     return RositaCanvasFontData(
@@ -46,10 +58,11 @@ class RositaParagraphUtils {
     }
 
     final list = text.split(' ');
-    final spacerMeasure= _measureText(' ');
+    final spacerMeasure = _measureText(' ');
     final spacerWidth = spacerMeasure.width?.toDouble() ?? 0;
     final fontBoundingBoxAscent = spacerMeasure.fontBoundingBoxAscent?.toDouble();
-    final lineHeight = fontBoundingBoxAscent != null ? fontBoundingBoxAscent * (style.height ?? 1) : fontData.lineHeight;
+    final lineHeight =
+        fontBoundingBoxAscent != null ? fontBoundingBoxAscent * (style.height ?? 1) : fontData.lineHeight;
     final wordList = <double>[];
 
     for (int i = 0; i < list.length; i++) {

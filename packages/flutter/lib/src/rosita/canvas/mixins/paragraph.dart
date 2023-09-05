@@ -30,10 +30,11 @@ mixin _ParagraphMixin on _CanvasMixin {
     }
 
     final data = RositaParagraphUtils.buildFontData(style: style);
+    final font = data.font;
 
-    if (_lastContextFont != data.font) {
-      _lastContextFont = data.font;
-      context.font = data.font;
+    if (_lastContextFont != font) {
+      _lastContextFont = font;
+      context.font = font;
     }
 
     context.fillStyle = style.color.toStyleString();
@@ -57,11 +58,6 @@ mixin _ParagraphMixin on _CanvasMixin {
           _drawTextSpan(child, data, offset, textAlign);
         }
       }
-    }
-
-    if (parentData != null && _lastContextFont != parentData.font) {
-      _lastContextFont = parentData.font;
-      context.font = parentData.font;
     }
   }
 }

@@ -206,7 +206,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   Float64List getTransform() => throw UnimplementedError();
 
   @override
-  void restore() {}
+  void restore() {
+    context.restore();
+    _lastContextFont = null;
+  }
 
   @override
   void restoreToCount(int count) {}
@@ -218,7 +221,15 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void save() {}
 
   @override
-  void saveLayer(Rect? bounds, Paint paint) {}
+  void saveLayer(Rect? bounds, Paint paint) {
+    context.save();
+
+    if (bounds != null) {
+      final region = html.Path2D();
+      region.rect(bounds.left + offset, bounds.top + offset, bounds.width, bounds.height);
+      context.clip(region);
+    }
+  }
 
   @override
   void scale(double sx, [double? sy]) {}
