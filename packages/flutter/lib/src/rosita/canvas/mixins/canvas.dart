@@ -15,6 +15,10 @@ mixin _CanvasMixin {
 
   late ({int width, int height}) _sizeWithOffset;
 
+  BlendMode? _blendMode;
+
+  bool get isModulate => _blendMode == BlendMode.modulate;
+
   void clean(Size size) {
     if (_size != size) {
       _size = size;

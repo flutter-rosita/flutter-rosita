@@ -102,16 +102,82 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   }
 
   void _fillPain(Paint paint) {
+    final style = _buildFillStyle(paint);
+
     switch (paint.style) {
       case PaintingStyle.fill:
-        context.fillStyle = paint.color.toStyleString();
+        context.fillStyle = style;
         context.fill();
       case PaintingStyle.stroke:
-        context.strokeStyle = paint.color.toStyleString();
+        context.strokeStyle = style;
         context.lineWidth = paint.strokeWidth;
         context.stroke();
     }
+
+    if (isModulate) {
+      _blendMode = null;
+      context.globalCompositeOperation = 'source-over';
+    }
   }
+
+  Object _buildFillStyle(Paint paint) {
+    final shader = paint.shader;
+
+    _blendMode = paint.blendMode;
+
+    final isModulate = this.isModulate;
+
+    switch (paint.blendMode) {
+      case BlendMode.modulate:
+        context.globalCompositeOperation = 'destination-out';
+      case BlendMode.srcOver:
+        context.globalCompositeOperation = 'source-over';
+      default:
+    }
+
+    if (shader is RositaShader) {
+      switch (shader) {
+        case RositaGradientLinearShader():
+          final gradient = context.createLinearGradient(
+            shader.from.dx + offset,
+            shader.from.dy + offset,
+            shader.to.dx + offset,
+            shader.to.dy + offset,
+          );
+
+          final colors = shader.colors;
+          final length = colors.length;
+          final colorStops = shader.colorStops ?? [for (int i = 0; i < length; i++) i / length];
+
+          for (int i = 0; i < length; i++) {
+            Color color = colors[i];
+
+            if (isModulate) {
+              color = _modulateInvertColor(color);
+            }
+
+            gradient.addColorStop(colorStops[i], color.toStyleString());
+          }
+
+          return gradient;
+        case RositaGradientRadialShader():
+          break;
+        case RositaGradientSweepShader():
+          break;
+      }
+    }
+
+    Color color = paint.color;
+
+    if (isModulate) {
+      color = _modulateInvertColor(color);
+    }
+
+    return color.toStyleString();
+  }
+
+  Color _modulateInvertColor(Color color) =>
+      Color.fromARGB(255 - color.alpha, 255 - color.red, 255 - color.green, 255 - color.blue);
 
   void _roundRect(RRect rrect) {
     // ------------------------
