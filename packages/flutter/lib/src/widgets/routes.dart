@@ -1639,9 +1639,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
   @override
   void changedInternalState() {
     super.changedInternalState();
-    if (rositaEnableRoutesChanged) {
-      setState(() { /* internal state already changed */ });
-    }
+    setState(() { /* internal state already changed */ });
     _modalBarrier.markNeedsBuild();
     _modalScope.maintainState = maintainState;
   }
