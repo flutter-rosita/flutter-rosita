@@ -1,3 +1,10 @@
+## 0.3.1
+
+- Fix paint paragraph font style
+- Initial support shader gradient
+- Fix focus loosed on routes
+- Fix used constant rositaEnableRoutesChanged where needed
+
 ## 0.3.0
 
 - Add support RawImage
