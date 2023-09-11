@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/services.dart';
 import 'package:rosita/rosita.dart';
@@ -1058,7 +1059,7 @@ class _SliderRenderObjectWidget extends LeafRenderObjectWidget {
   }
 }
 
-class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
+class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin, RositaCanvasMixin, RositaPaintRenderObjectMixin {
   _RenderSlider({
     required double value,
     required double? secondaryTrackValue,
@@ -1646,9 +1647,6 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final double value = _state.positionController.value;
     final double? secondaryValue = _secondaryTrackValue;
 

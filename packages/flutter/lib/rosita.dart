@@ -1,6 +1,7 @@
 export 'package:rosita/rosita.dart';
 
 export 'src/rosita/canvas/rosita_canvas.dart';
+export 'src/rosita/mixins/paint_render_object.dart';
 export 'src/rosita/mixins/platform_view_render_box.dart';
 export 'src/rosita/mixins/render_box.dart';
 export 'src/rosita/mixins/render_clip.dart';
@@ -21,6 +22,7 @@ export 'src/rosita/mixins/render_theater.dart';
 export 'src/rosita/mixins/render_transform.dart';
 export 'src/rosita/mixins/render_viewport_base.dart';
 export 'src/rosita/mixins/rosita_canvas_mixin.dart';
+export 'src/rosita/rosita_painting_context.dart';
 export 'src/rosita/rosita_render_view.dart';
 export 'src/rosita/rosita_skip_render_object.dart';
 export 'src/rosita/rosita_utils.dart';
