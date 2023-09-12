@@ -6,6 +6,17 @@ import 'package:flutter/rosita.dart';
 mixin RositaRenderClipRectMixin on RositaRenderMixin {
   @override
   RenderClipRect get target => this as RenderClipRect;
+
+  @override
+  void rositaPaint() {
+    final target = this.target;
+
+    if (target.clipBehavior != Clip.none) {
+      htmlElement.style.overflow = 'hidden';
+    } else {
+      htmlElement.style.overflow = '';
+    }
+  }
 }
 
 mixin RositaRenderClipRRectMixin on RositaRenderMixin {
@@ -40,6 +51,8 @@ mixin RositaRenderClipOvalMixin on RositaRenderMixin {
         htmlElement.style,
         BorderRadius.all(ellipticalRadius),
       );
+    } else {
+      htmlElement.style.clipPath = '';
     }
   }
 }
@@ -56,6 +69,8 @@ mixin RositaRenderClipPathMixin on RositaRenderMixin {
       final clipper = target.clipper;
 
       RositaRadiusUtils.applyCustomClipper(htmlElement.style, clipper, target.size);
+    } else {
+      htmlElement.style.clipPath = '';
     }
   }
 }
