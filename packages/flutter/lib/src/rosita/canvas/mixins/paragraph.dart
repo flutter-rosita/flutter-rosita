@@ -32,14 +32,14 @@ mixin _ParagraphMixin on _CanvasMixin {
     final data = RositaParagraphUtils.buildFontData(style: style);
     final font = data.font;
 
-    if (_lastContextFont != font) {
-      _lastContextFont = font;
-      context.font = font;
-    }
-
-    context.fillStyle = style.color.toStyleString();
-
     if (string != null) {
+      if (parentData == null || _lastContextFont != font) {
+        _lastContextFont = font;
+        context.font = font;
+      }
+
+      context.fillStyle = style.color.toStyleString();
+
       final measure = context.measureText(string);
 
       double alignX = 0;
