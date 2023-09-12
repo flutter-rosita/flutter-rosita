@@ -67,7 +67,13 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawImageRect(Image image, Rect src, Rect dst, Paint paint) {}
 
   @override
-  void drawLine(Offset p1, Offset p2, Paint paint) {}
+  void drawLine(Offset p1, Offset p2, Paint paint) {
+    _setDirty();
+    context.beginPath();
+    context.moveTo(p1.dx + offset, p1.dy + offset);
+    context.lineTo(p2.dx + offset, p2.dy + offset);
+    _fillPain(paint);
+  }
 
   @override
   void drawOval(Rect rect, Paint paint) {}
