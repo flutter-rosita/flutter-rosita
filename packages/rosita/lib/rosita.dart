@@ -22,8 +22,6 @@ export 'src/widgets/rosita_semantics.dart';
 export 'src/widgets/rosita_svg_picture.dart';
 export 'src/widgets/rosita_text.dart';
 
-Duration rositaTimeStamp = Duration.zero;
-
 const kIsRosita = bool.fromEnvironment('ROSITA');
 
 const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', defaultValue: true);

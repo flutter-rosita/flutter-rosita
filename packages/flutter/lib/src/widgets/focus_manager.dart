@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rosita.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import 'binding.dart';
@@ -801,15 +802,18 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
 
   Rect? _rositaRect;
 
-  Duration _rositaTimeStamp = Duration.zero;
+  Duration _rositaFrameTimeStamp = Duration.zero;
 
   /// Returns the global rectangle of the attached widget's [RenderObject], in
   /// logical units.
   ///
   /// Rect is the rectangle of the transformed widget in global coordinates.
   Rect get rect {
-    if (_rositaTimeStamp == rositaTimeStamp && _rositaRect != null) {
-      return _rositaRect!;
+    final Duration currentFrameTimeStamp = SchedulerBinding.instance.currentSystemFrameTimeStamp;
+    final Rect? rositaRect = _rositaRect;
+
+    if (_rositaFrameTimeStamp == currentFrameTimeStamp && rositaRect != null) {
+      return rositaRect;
     }
     assert(
       context != null,
@@ -822,7 +826,7 @@ class FocusNode with DiagnosticableTreeMixin, ChangeNotifier {
     final Offset bottomRight = MatrixUtils.transformPoint(object.getTransformTo(null), object.semanticBounds.bottomRight);
     final Rect rect = Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
 
-    _rositaTimeStamp = rositaTimeStamp;
+    _rositaFrameTimeStamp = currentFrameTimeStamp;
 
     return _rositaRect = rect;
   }

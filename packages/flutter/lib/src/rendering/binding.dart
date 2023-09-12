@@ -358,8 +358,6 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
   }
 
   void _handlePersistentFrameCallback(Duration timeStamp) {
-    rositaTimeStamp = timeStamp;
-
     drawFrame();
     rositaDrawFrame();
 
