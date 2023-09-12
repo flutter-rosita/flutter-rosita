@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -120,14 +122,10 @@ class RenderRositaSvgPicture extends RositaRenderBox {
 
   @override
   void performLayout() {
-    final biggestSize = constraints.biggest;
-
-    size = biggestSize.isFinite
-        ? biggestSize
-        : Size(
-            biggestSize.width == double.infinity ? biggestSize.height : biggestSize.width,
-            biggestSize.height == double.infinity ? biggestSize.width : biggestSize.height,
-          );
+    size = Size(
+      clampDouble(width ?? double.infinity, constraints.minWidth, constraints.maxWidth),
+      clampDouble(height ?? double.infinity, constraints.minHeight, constraints.maxHeight),
+    );
   }
 
   html.ImageElement? _imageElement;
