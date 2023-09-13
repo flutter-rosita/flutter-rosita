@@ -1,3 +1,13 @@
+## 0.3.2
+
+- Add support rendering Slider widget
+- Add RositaImageFilter.blur()
+- Implement method drawLine to RositaCanvas
+- Implement clip rect
+- Fix drawRositaParagraph font style for EditableText
+- Fix RositaSvgPicture layout size
+- Remove variable rositaTimeStamp
+
 ## 0.3.1
 
 - Fix paint paragraph font style
