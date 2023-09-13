@@ -12,6 +12,7 @@ export 'src/rosita/mixins/render_editable.dart';
 export 'src/rosita/mixins/render_editable_custom_paint.dart';
 export 'src/rosita/mixins/render_fractional_translation.dart';
 export 'src/rosita/mixins/render_image.dart';
+export 'src/rosita/mixins/render_image_filter.dart';
 export 'src/rosita/mixins/render_offstage.dart';
 export 'src/rosita/mixins/render_opacity.dart';
 export 'src/rosita/mixins/render_paragraph.dart';
