@@ -1,3 +1,8 @@
+## 0.4.0
+
+- Add rosita_engine
+- Version up Flutter to 3.13.4
+
 ## 0.3.2
 
 - Add support rendering Slider widget
