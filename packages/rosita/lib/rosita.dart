@@ -5,7 +5,6 @@ export 'src/extensions/rrect.dart';
 export 'src/rendering/rosita_paragraph.dart';
 export 'src/rendering/rosita_render_box.dart';
 export 'src/rendering/rosita_render_object.dart';
-export 'src/ui/image_filter.dart';
 export 'src/utils/border.dart';
 export 'src/utils/box_fit.dart';
 export 'src/utils/image.dart';

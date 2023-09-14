@@ -173,15 +173,18 @@ class FlutterWebSdk extends CachedArtifact {
   @override
   String? get version => cache.getVersionFor('engine');
 
+  String? get rositaVersion => cache.getVersionFor('rosita_engine');
+
   @override
   Future<void> updateInner(
     ArtifactUpdater artifactUpdater,
     FileSystem fileSystem,
     OperatingSystemUtils operatingSystemUtils,
   ) async {
-    final Uri url = Uri.parse('${cache.storageBaseUrl}/flutter_infra_release/flutter/$version/flutter-web-sdk.zip');
+    // final Uri url = Uri.parse('${cache.storageBaseUrl}/flutter_infra_release/flutter/$version/flutter-web-sdk.zip');
+    final Uri url = Uri.parse('https://storage.flutter-rosita.dev/rosita-engine/$rositaVersion/flutter-web-sdk.zip');
     ErrorHandlingFileSystem.deleteIfExists(location, recursive: true);
-    await artifactUpdater.downloadZipArchive('Downloading Web SDK...', url, location);
+    await artifactUpdater.downloadZipArchive('Downloading Rosita Web SDK...', url, location);
   }
 }
 
