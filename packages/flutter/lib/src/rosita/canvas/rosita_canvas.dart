@@ -141,7 +141,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
       default:
     }
 
-    if (shader is RositaShader) {
+    if (shader is RositaGradient) {
       switch (shader) {
         case RositaGradientLinearShader():
           final gradient = context.createLinearGradient(

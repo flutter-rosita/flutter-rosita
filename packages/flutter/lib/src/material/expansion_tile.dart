@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 
 import 'color_scheme.dart';
@@ -638,7 +639,7 @@ class _ExpansionTileState extends State<ExpansionTile> with SingleTickerProvider
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Semantics(
+          RositaSemantics(
             hint: semanticsHint,
             onTapHint: onTapHint,
             child: ListTileTheme.merge(

@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
-mixin RositaRenderMixin on AbstractNode {
+mixin RositaRenderMixin {
   html.HtmlElement? _htmlElement;
 
   html.HtmlElement get htmlElement =>
@@ -13,10 +13,21 @@ mixin RositaRenderMixin on AbstractNode {
 
   bool get hasHtmlElement => _htmlElement != null;
 
-  @override
-  void attach(covariant Object owner) {
-    super.attach(owner);
+  // RenderObject getters
 
+  bool get attached;
+
+  ParentData? get parentData;
+
+  int get depth;
+
+  RenderObject? get parent;
+
+  PipelineOwner? get owner;
+
+  // Call from RenderObject methods
+
+  void rositaAttachToRenderObject() {
     if (hasHtmlElement) {
       _rositaNeedsAttach = false;
       rositaMarkNeedsAttach();
@@ -35,11 +46,11 @@ mixin RositaRenderMixin on AbstractNode {
     }
   }
 
-  @override
-  void detach() {
+  void rositaDetachFromRenderObject() {
     rositaMarkNeedsDetach();
-    super.detach();
   }
+
+  // Rosita
 
   html.HtmlElement? createRositaElement() => html.DivElement();
 
@@ -107,7 +118,7 @@ mixin RositaRenderMixin on AbstractNode {
   }
 
   void rositaAttach() {
-    AbstractNode? parentElement = parent;
+    RenderObject? parentElement = parent;
 
     ContainerParentDataMixin? containerParentDataMixin;
 
@@ -116,20 +127,19 @@ mixin RositaRenderMixin on AbstractNode {
     }
 
     while (parentElement != null) {
-      if (containerParentDataMixin == null &&
-          parentElement is RenderObject &&
-          parentElement.parentData is ContainerParentDataMixin) {
+      if (containerParentDataMixin == null && parentElement.parentData is ContainerParentDataMixin) {
         containerParentDataMixin = parentElement.parentData! as ContainerParentDataMixin;
       }
 
-      if (parentElement is RositaRenderMixin && parentElement.hasHtmlElement) {
+      if (parentElement is RositaRenderMixin && (parentElement as RositaRenderMixin).hasHtmlElement) {
         break;
       }
       parentElement = parentElement.parent;
     }
 
-    final parentHtmlElement =
-        parentElement is RositaRenderMixin && parentElement.hasHtmlElement ? parentElement.htmlElement : null;
+    final parentHtmlElement = parentElement is RositaRenderMixin && (parentElement as RositaRenderMixin).hasHtmlElement
+        ? (parentElement as RositaRenderMixin).htmlElement
+        : null;
 
     assert(() {
       htmlElement.setAttribute('rosita-debug-object', describeIdentity(this));

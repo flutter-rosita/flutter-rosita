@@ -1149,7 +1149,7 @@ class TextPainter {
     });
 
     canvas as RositaCanvas;
-    canvas.drawRositaParagraph(this, layoutCache.paragraph, offset + layoutCache.paintOffset);
+    canvas.drawRositaParagraph(this, offset + layoutCache.paintOffset);
   }
 
   // Returns true if value falls in the valid range of the UTF16 encoding.

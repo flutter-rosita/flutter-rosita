@@ -6,6 +6,7 @@ import 'dart:ui' as ui show ParagraphBuilder, PlaceholderAlignment;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 
 import 'basic.dart';
 import 'framework.dart';
@@ -104,7 +105,7 @@ class WidgetSpan extends PlaceholderSpan {
         widgets.add(
           _WidgetSpanParentData(
             span: span,
-            child: Semantics(
+            child: RositaSemantics(
               tagForChildren: PlaceholderSpanIndexSemanticsTag(index++),
               child: _AutoScaleInlineWidget(span: span, textScaleFactor: textScaleFactor, child: span.child),
             ),

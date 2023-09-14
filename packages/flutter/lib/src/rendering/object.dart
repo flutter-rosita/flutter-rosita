@@ -2079,6 +2079,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
         markNeedsSemanticsUpdate();
       }
     }
+    rositaAttachToRenderObject();
   }
 
   /// Mark this node as detached.
@@ -2093,6 +2094,7 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   /// method, as in `super.detach()`.
   @mustCallSuper
   void detach() {
+    rositaDetachFromRenderObject();
     assert(_owner != null);
     _owner = null;
     assert(parent == null || attached == parent!.attached);

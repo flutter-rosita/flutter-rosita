@@ -429,14 +429,6 @@ class LinearGradient extends Gradient {
 
   @override
   Shader createShader(Rect rect, { TextDirection? textDirection }) {
-    if (kIsRosita) {
-      return RositaGradientLinearShader(
-        begin.resolve(textDirection).withinRect(rect),
-        end.resolve(textDirection).withinRect(rect),
-        colors, _impliedStops(), tileMode, _resolveTransform(rect, textDirection),
-      );
-    }
-
     return ui.Gradient.linear(
       begin.resolve(textDirection).withinRect(rect),
       end.resolve(textDirection).withinRect(rect),
@@ -711,17 +703,6 @@ class RadialGradient extends Gradient {
 
   @override
   Shader createShader(Rect rect, { TextDirection? textDirection }) {
-    if (kIsRosita) {
-      return RositaGradientRadialShader(
-        center.resolve(textDirection).withinRect(rect),
-        radius * rect.shortestSide,
-        colors, _impliedStops(), tileMode,
-        _resolveTransform(rect, textDirection),
-        focal == null  ? null : focal!.resolve(textDirection).withinRect(rect),
-        focalRadius * rect.shortestSide,
-      );
-    }
-
     return ui.Gradient.radial(
       center.resolve(textDirection).withinRect(rect),
       radius * rect.shortestSide,
@@ -992,16 +973,6 @@ class SweepGradient extends Gradient {
 
   @override
   Shader createShader(Rect rect, { TextDirection? textDirection }) {
-    if (kIsRosita) {
-      return RositaGradientSweepShader(
-        center.resolve(textDirection).withinRect(rect),
-        colors, _impliedStops(), tileMode,
-        startAngle,
-        endAngle,
-        _resolveTransform(rect, textDirection),
-      );
-    }
-
     return ui.Gradient.sweep(
       center.resolve(textDirection).withinRect(rect),
       colors, _impliedStops(), tileMode,

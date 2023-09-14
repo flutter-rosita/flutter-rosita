@@ -27,4 +27,3 @@ export 'src/rosita/rosita_painting_context.dart';
 export 'src/rosita/rosita_render_view.dart';
 export 'src/rosita/rosita_skip_render_object.dart';
 export 'src/rosita/rosita_utils.dart';
-export 'src/rosita/ui/rosita_shader.dart';

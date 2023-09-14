@@ -34,18 +34,14 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
   Offset _calculateParenOffset(RenderObject object) {
     Offset parentOffset = Offset.zero;
 
-    AbstractNode? element = object.parent;
+    RenderObject? element = object.parent;
 
     while (element != null) {
-      if (element is RositaRenderMixin) {
-        if (element.hasHtmlElement) {
-          break;
-        }
-
-        if (element is RenderObject) {
-          parentOffset += _getRenderObjectOffset(element, element is RenderBox ? element.size : Size.zero);
-        }
+      if (element.hasHtmlElement) {
+        break;
       }
+
+      parentOffset += _getRenderObjectOffset(element, element is RenderBox ? element.size : Size.zero);
 
       element = element.parent;
     }
@@ -64,7 +60,7 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
       if (offset != null) {
         final parent = object.parent;
-        AbstractNode? element = parent;
+        RenderObject? element = parent;
 
         while (element != null && (element is! RenderViewportBase)) {
           element = element.parent;

@@ -1193,7 +1193,7 @@ abstract class FlutterCommand extends Command<void> {
     final Map<String, Object?> defineConfigJsonMap = extractDartDefineConfigJsonMap();
     List<String> dartDefines = extractDartDefines(defineConfigJsonMap: defineConfigJsonMap);
 
-    WebRendererMode webRenderer = WebRendererMode.auto;
+    WebRendererMode webRenderer = WebRendererMode.html; // Rosita default
     if (argParser.options.containsKey(FlutterOptions.kWebRendererFlag)) {
       webRenderer = WebRendererMode.values.byName(stringArg(FlutterOptions.kWebRendererFlag)!);
       dartDefines = updateDartDefines(dartDefines, webRenderer);
