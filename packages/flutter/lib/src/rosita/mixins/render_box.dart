@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 
@@ -55,35 +54,41 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
     if (parentData is BoxParentData) {
       return parentData.offset;
     } else if (parentData is SliverLogicalParentData) {
-      final offset = parentData.layoutOffset;
+      double offset = parentData.layoutOffset ?? 0.0;
+
       final crossAxisOffset = parentData is SliverGridParentData ? parentData.crossAxisOffset : null;
 
-      if (offset != null) {
-        final parent = object.parent;
-        RenderObject? element = parent;
+      final parent = object.parent;
+      RenderObject? element = parent;
 
-        while (element != null && (element is! RenderViewportBase)) {
-          element = element.parent;
-        }
+      while (element != null && (element is! RenderViewportBase)) {
+        element = element.parent;
+        final parentData = element?.parentData;
 
-        final bool forward;
-
-        if (parent is RenderSliver) {
-          forward = parent.constraints.growthDirection == GrowthDirection.forward;
-        } else {
-          forward = false;
-        }
-
-        if (element is RenderViewportBase) {
-          return _mapScrollAxisStyle(
-            axis: element.axis,
-            forward: forward,
-            offset: offset,
-            crossAxisOffset: crossAxisOffset ?? 0,
-            size: size,
-          );
+        if (parentData is SliverLogicalContainerParentData) {
+          offset += parentData.layoutOffset ?? 0;
         }
       }
+
+      final bool forward;
+
+      if (parent is RenderSliver) {
+        forward = parent.constraints.growthDirection == GrowthDirection.forward;
+      } else {
+        forward = false;
+      }
+
+      if (element is RenderViewportBase) {
+        return _mapScrollAxisStyle(
+          axis: element.axis,
+          forward: forward,
+          offset: offset,
+          crossAxisOffset: crossAxisOffset ?? 0,
+          size: size,
+        );
+      }
+    } else if (parentData is TextParentData) {
+      return parentData.offset ?? Offset.zero;
     } else if (parentData is SliverPhysicalParentData) {
       return Offset.zero;
     } else if (parentData != null) {

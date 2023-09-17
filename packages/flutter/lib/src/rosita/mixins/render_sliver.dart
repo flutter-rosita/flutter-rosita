@@ -75,6 +75,7 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
 
         RositaScrollUtils.onScroll();
       }
+    } else if (parentData is SliverLogicalContainerParentData) {
     } else if (parentData != null) {
       assert(() {
         if (parentData.runtimeType != ParentData) {
