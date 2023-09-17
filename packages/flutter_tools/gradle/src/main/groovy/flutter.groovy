@@ -254,7 +254,7 @@ class FlutterPlugin implements Plugin<Project> {
             ? "+" // Match any version since there's only one.
             : "1.0.0-" + Paths.get(flutterRoot.absolutePath, "bin", "internal", "engine.version").toFile().text.trim()
 
-        String flutterExecutableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "flutter.bat" : "flutter"
+        String flutterExecutableName = Os.isFamily(Os.FAMILY_WINDOWS) ? "flutter-rosita.bat" : "flutter-rosita"
         flutterExecutable = Paths.get(flutterRoot.absolutePath, "bin", flutterExecutableName).toFile();
 
         if (project.hasProperty("multidex-enabled") &&

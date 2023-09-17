@@ -279,7 +279,7 @@ class FlutterDebugAdapter extends FlutterBaseDebugAdapter with VmServiceInfoFile
     List<String>? userArgs,
   }) async {
     // Handle customTool and deletion of any arguments for it.
-    final String executable = customTool ?? fileSystem.path.join(Cache.flutterRoot!, 'bin', platform.isWindows ? 'flutter.bat' : 'flutter');
+    final String executable = customTool ?? fileSystem.path.join(Cache.flutterRoot!, 'bin', platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita');
     final int? removeArgs = customToolReplacesArgs;
     if (customTool != null && removeArgs != null) {
       toolArgs.removeRange(0, math.min(removeArgs, toolArgs.length));

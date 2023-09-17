@@ -63,7 +63,7 @@ Future<void> runSmokeTests({
   required Directory apiDir,
 }) async {
   final File flutterExe =
-      flutterDir.childDirectory('bin').childFile(platform.isWindows ? 'flutter.bat' : 'flutter');
+      flutterDir.childDirectory('bin').childFile(platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita');
   final List<String> cmd = <String>[
     // If we're in a container with no X display, then use the virtual framebuffer.
     if (platform.isLinux &&

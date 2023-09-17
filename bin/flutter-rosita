@@ -54,7 +54,7 @@ OS="$(uname -s)"
 
 # If we're on Windows, invoke the batch script instead to get proper locking.
 if [[ $OS =~ MINGW.* || $OS =~ CYGWIN.* || $OS =~ MSYS.* ]]; then
-  exec "${BIN_DIR}/flutter.bat" "$@"
+  exec "${BIN_DIR}/flutter-rosita.bat" "$@"
 fi
 
 # To define `shared::execute()` function

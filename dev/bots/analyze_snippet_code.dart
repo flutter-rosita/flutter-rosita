@@ -72,7 +72,7 @@ import 'package:watcher/watcher.dart';
 final String _flutterRoot = path.dirname(path.dirname(path.dirname(path.fromUri(Platform.script))));
 final String _defaultFlutterPackage = path.join(_flutterRoot, 'packages', 'flutter', 'lib');
 final String _defaultDartUiLocation = path.join(_flutterRoot, 'bin', 'cache', 'pkg', 'sky_engine', 'lib', 'ui');
-final String _flutter = path.join(_flutterRoot, 'bin', Platform.isWindows ? 'flutter.bat' : 'flutter');
+final String _flutter = path.join(_flutterRoot, 'bin', Platform.isWindows ? 'flutter-rosita.bat' : 'flutter-rosita');
 
 Future<void> main(List<String> arguments) async {
   bool asserts = false;
