@@ -639,7 +639,7 @@ class VersionUpstreamValidator {
   ///
   /// Returns [VersionCheckError] if the tracking remote is not standard.
   VersionCheckError? run(){
-    final String? flutterGit = platform.environment['FLUTTER_GIT_URL'];
+    final String? flutterGit = platform.environment['FLUTTER_ROSITA_GIT_URL'];
     final String? repositoryUrl = version.repositoryUrl;
 
     if (repositoryUrl == null) {
@@ -651,7 +651,7 @@ class VersionUpstreamValidator {
 
     // Strip `.git` suffix before comparing the remotes
     final List<String> sanitizedStandardRemotes = <String>[
-      // If `FLUTTER_GIT_URL` is set, use that as standard remote.
+      // If `FLUTTER_ROSITA_GIT_URL` is set, use that as standard remote.
       if (flutterGit != null) flutterGit
       // Else use the predefined standard remotes.
       else ..._standardRemotes,
@@ -661,22 +661,22 @@ class VersionUpstreamValidator {
 
     if (!sanitizedStandardRemotes.contains(sanitizedRepositoryUrl)) {
       if (flutterGit != null) {
-        // If `FLUTTER_GIT_URL` is set, inform to either remove the
-        // `FLUTTER_GIT_URL` environment variable or set it to the current
+        // If `FLUTTER_ROSITA_GIT_URL` is set, inform to either remove the
+        // `FLUTTER_ROSITA_GIT_URL` environment variable or set it to the current
         // tracking remote.
         return VersionCheckError(
-          'The Flutter SDK is tracking "$repositoryUrl" but "FLUTTER_GIT_URL" '
+          'The Flutter Rosita SDK is tracking "$repositoryUrl" but "FLUTTER_ROSITA_GIT_URL" '
           'is set to "$flutterGit".\n'
-          'Either remove "FLUTTER_GIT_URL" from the environment or set it to '
+          'Either remove "FLUTTER_ROSITA_GIT_URL" from the environment or set it to '
           '"$repositoryUrl". '
           'If this is intentional, it is recommended to use "git" directly to '
           'manage the SDK.'
         );
       }
-      // If `FLUTTER_GIT_URL` is unset, inform to set the environment variable.
+      // If `FLUTTER_ROSITA_GIT_URL` is unset, inform to set the environment variable.
       return VersionCheckError(
-        'The Flutter SDK is tracking a non-standard remote "$repositoryUrl".\n'
-        'Set the environment variable "FLUTTER_GIT_URL" to '
+        'The Flutter Rosita SDK is tracking a non-standard remote "$repositoryUrl".\n'
+        'Set the environment variable "FLUTTER_ROSITA_GIT_URL" to '
         '"$repositoryUrl". '
         'If this is intentional, it is recommended to use "git" directly to '
         'manage the SDK.'
@@ -687,8 +687,8 @@ class VersionUpstreamValidator {
 
   // The predefined list of remotes that are considered to be standard.
   static final List<String> _standardRemotes = <String>[
-    'https://github.com/flutter/flutter.git',
-    'git@github.com:flutter/flutter.git',
+    'https://github.com/flutter-rosita/flutter-rosita.git',
+    'git@github.com:flutter-rosita/flutter-rosita.git',
   ];
 
   // Strips ".git" suffix from a given string, preferably an url.
@@ -946,7 +946,7 @@ class GitTagVersion {
       if (!kDevelopmentChannels.contains(channel) && kOfficialChannels.contains(channel)) {
         globals.printTrace('Skipping request to fetchTags - on well known channel $channel.');
       } else {
-        final String flutterGit = platform.environment['FLUTTER_GIT_URL'] ?? 'https://github.com/flutter/flutter.git';
+        final String flutterGit = platform.environment['FLUTTER_ROSITA_GIT_URL'] ?? 'https://github.com/flutter-rosita/flutter-rosita.git';
         _runGit('git fetch $flutterGit --tags -f', processUtils, workingDirectory);
       }
     }
