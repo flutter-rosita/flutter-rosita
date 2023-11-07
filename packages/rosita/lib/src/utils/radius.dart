@@ -26,13 +26,18 @@ class RositaRadiusUtils {
     if (borderRadius != null) {
       final radius = borderRadius.resolve(null);
 
+      final String clipPath;
+
       if (_isAllEquals(radius)) {
-        style.clipPath = radius.topLeft.x == 0 ? '' : 'inset(0px round ${radius.topLeft.x}px)';
-        return;
+        clipPath = radius.topLeft.x == 0 ? '' : 'inset(0px round ${radius.topLeft.x}px)';
+      } else {
+        clipPath =
+        'inset(0px round ${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft
+            .x}px)';
       }
 
-      style.clipPath =
-          'inset(0px round ${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}px)';
+      style.setProperty('-webkit-clip-path', clipPath); // Fix for Chrome < 55
+      style.clipPath = clipPath;
     }
   }
 
