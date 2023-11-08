@@ -20,9 +20,8 @@ mixin RositaRenderEditableCustomPaintMixin on RositaRenderMixin, RositaCanvasMix
 
     if (painter != null && parent != null) {
       final canvas = rositaCanvas;
-      canvas.clean(size);
-      painter.paint(canvas, size, parent);
-      canvas.checkDirty();
+
+      canvas.paintCallback(size, (_) => painter.paint(canvas, size, parent));
     } else {
       cleanAndHideRositaCanvas(size);
     }

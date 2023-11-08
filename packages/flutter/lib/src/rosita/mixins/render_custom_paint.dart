@@ -29,8 +29,6 @@ mixin RositaRenderCustomPaintMixin on RositaRenderMixin, RositaCanvasMixin {
   }
 
   void rositaPainterPaint(RositaCanvas canvas, CustomPainter painter, Size size) {
-    canvas.clean(size);
-    painter.paint(canvas, size);
-    canvas.checkDirty();
+    canvas.paintCallback(size, (_) => painter.paint(canvas, size));
   }
 }

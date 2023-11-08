@@ -10,8 +10,7 @@ mixin RositaRenderEditableMixin on RositaRenderMixin, RositaCanvasMixin {
   void rositaPaintTextPainter(TextPainter textPainter, Offset offset) {
     final size = target.size;
     final canvas = rositaCanvas;
-    canvas.clean(size);
-    textPainter.paint(canvas, offset);
-    canvas.checkDirty();
+
+    canvas.paintCallback(size, (_) => textPainter.paint(canvas, offset));
   }
 }

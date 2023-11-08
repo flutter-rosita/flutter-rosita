@@ -12,10 +12,10 @@ part 'mixins/canvas.dart';
 
 part 'mixins/paragraph.dart';
 
+typedef RositaPaintCallback = void Function(RositaPaintingContext context);
+
 class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
-  RositaCanvas(this.canvas, {int offset = 20}) {
-    this.offset = offset;
-  }
+  RositaCanvas(this.canvas);
 
   @override
   final html.CanvasElement canvas;
@@ -36,9 +36,9 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
-    _setDirty();
+    _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.arc(rect.center.dx + offset, rect.center.dy + offset, rect.width / 2, startAngle, startAngle + sweepAngle);
+    context.arc(rect.center.dx + offset.dx, rect.center.dy + offset.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
     _fillPain(paint);
   }
 
@@ -68,10 +68,17 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawLine(Offset p1, Offset p2, Paint paint) {
-    _setDirty();
+    final rect = Rect.fromLTRB(
+      math.min(p1.dx, p2.dx),
+      math.min(p1.dy, p2.dy),
+      math.max(p1.dx, p2.dx),
+      math.max(p1.dy, p2.dy),
+    );
+
+    _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.moveTo(p1.dx + offset, p1.dy + offset);
-    context.lineTo(p2.dx + offset, p2.dy + offset);
+    context.moveTo(p1.dx + offset.dx, p1.dy + offset.dy);
+    context.lineTo(p2.dx + offset.dx, p2.dy + offset.dy);
     _fillPain(paint);
   }
 
@@ -100,7 +107,9 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     if (sRect.rositaIsEllipse) {
       drawArc(sRect.outerRect, 0, math.pi * 2, false, paint);
     } else {
-      _setDirty();
+      final rect = Rect.fromLTRB(rrect.left, rrect.top, rrect.right, rrect.bottom);
+
+      _setDirty(rect, paint.strokeWidth);
       context.beginPath();
       _roundRect(sRect);
       _fillPain(paint);
@@ -145,10 +154,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
       switch (shader) {
         case RositaGradientLinearShader():
           final gradient = context.createLinearGradient(
-            shader.from.dx + offset,
-            shader.from.dy + offset,
-            shader.to.dx + offset,
-            shader.to.dy + offset,
+            shader.from.dx + offset.dx,
+            shader.from.dy + offset.dy,
+            shader.to.dx + offset.dx,
+            shader.to.dy + offset.dy,
           );
 
           final colors = shader.colors;
@@ -193,10 +202,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     // ------------------------
 
     final coords = (
-      x0: rrect.left + offset,
-      y0: rrect.top + offset,
-      x1: rrect.left + rrect.width + offset,
-      y1: rrect.top + rrect.height + offset,
+      x0: rrect.left + offset.dx,
+      y0: rrect.top + offset.dy,
+      x1: rrect.left + rrect.width + offset.dx,
+      y1: rrect.top + rrect.height + offset.dy,
     );
 
     final radius = (
@@ -249,9 +258,9 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawRect(Rect rect, Paint paint) {
-    _setDirty();
+    _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.rect(rect.left + offset, rect.top + offset, rect.width, rect.height);
+    context.rect(rect.left + offset.dx, rect.top + offset.dy, rect.width, rect.height);
     _fillPain(paint);
   }
 
@@ -298,7 +307,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
     if (bounds != null) {
       final region = html.Path2D();
-      region.rect(bounds.left + offset, bounds.top + offset, bounds.width, bounds.height);
+      region.rect(bounds.left + offset.dx, bounds.top + offset.dy, bounds.width, bounds.height);
       context.clip(region);
     }
   }

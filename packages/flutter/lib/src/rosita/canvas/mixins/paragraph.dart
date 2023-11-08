@@ -9,7 +9,9 @@ mixin _ParagraphMixin on _CanvasMixin {
     final text = textPainter.text;
 
     if (text is TextSpan) {
-      _setDirty();
+      final rect = offset & textPainter.size;
+
+      _setDirty(rect, 1);
       _drawTextSpan(text, null, offset, textPainter.textAlign);
     } else {
       assert(() {
@@ -49,7 +51,7 @@ mixin _ParagraphMixin on _CanvasMixin {
         alignX = (_size?.width ?? 0) / 2 - (measure.width ?? 0) / 2;
       }
 
-      context.fillText(string, offset.dx + this.offset + alignX, offset.dy + this.offset + alignY);
+      context.fillText(string, offset.dx + this.offset.dx + alignX, offset.dy + this.offset.dy + alignY);
     }
 
     if (text.children != null) {
