@@ -5,11 +5,30 @@ import 'package:universal_html/html.dart' as html;
 
 class RositaParagraphUtils {
   static html.CanvasElement? _canvas;
+  static html.DivElement? _paragraphsContainer;
 
   static html.CanvasRenderingContext2D? _canvasContext;
 
   static html.CanvasRenderingContext2D get canvasContext =>
       _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
+
+  static html.DivElement get paragraphsContainer {
+    if (_paragraphsContainer != null) {
+      return _paragraphsContainer!;
+    }
+
+    final paragraphsContainer = html.DivElement()..id = 'paragraphs-container';
+
+    paragraphsContainer.style
+      ..opacity = '0'
+      ..userSelect = 'none';
+
+    html.document.body!.append(paragraphsContainer);
+
+    return _paragraphsContainer ??= paragraphsContainer;
+  }
+
+  static final Map<String, html.DivElement> _paragraphsMeasureText = <String, html.DivElement>{};
 
   static String? _lastContextFont;
 
@@ -31,11 +50,10 @@ class RositaParagraphUtils {
     final fontFamily = style.fontFamily ?? defaultFontFamily;
     final fontStyle = style.fontStyle;
     final fontWeight = style.fontWeight;
-
     final font = [
       if (fontStyle != null) RositaTextUtils.maFontStyle(fontStyle),
       if (fontWeight != null) RositaTextUtils.mapFontWeight(fontWeight),
-      '${fontSize}px',
+      '${fontSize}px/$height',
       '"$fontFamily"',
     ].join(' ');
 
@@ -60,9 +78,10 @@ class RositaParagraphUtils {
     final list = text.split(' ');
     final spacerMeasure = _measureText(' ');
     final spacerWidth = spacerMeasure.width?.toDouble() ?? 0;
-    final fontBoundingBoxAscent = spacerMeasure.fontBoundingBoxAscent?.toDouble();
-    final lineHeight =
-        fontBoundingBoxAscent != null ? fontBoundingBoxAscent * (style.height ?? 1) : fontData.lineHeight;
+
+    double fontLineHeight = 0.0;
+    double fontBoundingBoxAscent = 0.0;
+
     final wordList = <double>[];
 
     for (int i = 0; i < list.length; i++) {
@@ -74,12 +93,40 @@ class RositaParagraphUtils {
       final width = measure.width?.toDouble() ?? 0;
 
       wordList.add(width);
+
+      if (i == 0) {
+        if (measure.fontBoundingBoxAscent != null && measure.fontBoundingBoxDescent != null) {
+          fontBoundingBoxAscent = measure.fontBoundingBoxAscent!.toDouble();
+          fontLineHeight = (measure.fontBoundingBoxAscent! + measure.fontBoundingBoxDescent!).toDouble();
+        } else {
+          // Fix for Chrome < 87, where TextMetrics fontBoundingBoxAscent is null
+          _paragraphsMeasureText.putIfAbsent(font, () {
+            final div = html.DivElement()..innerText = list[i];
+
+            div.style
+              ..font = font
+              ..lineHeight = '';
+
+            paragraphsContainer.append(div);
+
+            return div;
+          });
+
+          final measureText = _paragraphsMeasureText[font]!;
+
+          fontLineHeight = measureText.clientHeight.toDouble();
+          fontBoundingBoxAscent = fontLineHeight;
+        }
+      }
     }
 
     return RositaCanvasParagraphData(
       font: font,
-      lineHeight: lineHeight,
+      lineHeight: fontLineHeight,
       wordList: wordList,
+      boundingBoxAscent: fontBoundingBoxAscent,
+      minIntrinsicWidth: wordList.fold(0.0, (double max, double value) => value > max ? value : max),
+      maxIntrinsicWidth: wordList.fold(0.0, (double sum, double value) => sum + value),
     );
   }
 
@@ -98,16 +145,20 @@ class RositaCanvasFontData {
 
 class RositaCanvasParagraphData extends RositaCanvasFontData {
   final List<double> wordList;
+  final double boundingBoxAscent;
+  final double minIntrinsicWidth;
+  final double maxIntrinsicWidth;
 
   const RositaCanvasParagraphData({
     required super.font,
     required super.lineHeight,
     required this.wordList,
+    required this.boundingBoxAscent,
+    required this.minIntrinsicWidth,
+    required this.maxIntrinsicWidth,
   });
 
-  Size buildSize(BoxConstraints constraints) {
-    final biggestSize = constraints.biggest;
-
+  Size buildSize({double minWidth = 0.0, double maxWidth = double.infinity}) {
     int lines = 1;
     double maxLineWidth = 0;
     double lineWidth = 0;
@@ -115,7 +166,7 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
     for (int i = 0; i < wordList.length; i++) {
       final width = wordList[i];
 
-      if (lineWidth + width >= biggestSize.width) {
+      if (lineWidth + width >= maxWidth) {
         lines++;
         lineWidth = 0;
       }

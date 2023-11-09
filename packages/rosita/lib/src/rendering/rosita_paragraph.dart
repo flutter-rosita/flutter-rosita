@@ -101,7 +101,9 @@ class RositaRenderParagraph extends RositaRenderBox {
       style: style,
     );
 
-    size = constraints.constrain(data.buildSize(constraints));
+    size = constraints.constrain(
+      data.buildSize(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth),
+    );
   }
 
   bool _isInitialSetText = true;
