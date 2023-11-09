@@ -2573,7 +2573,7 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   }
 }
 
-class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, RositaRenderEditableCustomPaintMixin {
+class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, RositaPaintRenderObjectMixin {
   _RenderEditableCustomPaint({
     RenderEditablePainter? painter,
   }) : _painter = painter,
@@ -2610,9 +2610,6 @@ class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, Rosit
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final RenderEditable? parent = this.parent;
     assert(parent != null);
     final RenderEditablePainter? painter = this.painter;

@@ -2930,6 +2930,13 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///    dirty.
   void markNeedsPaint() {
     rositaMarkNeedsPaint();
+
+    if (isRepaintBoundary && _wasRepaintBoundary) {
+      if (owner != null) {
+        owner!.requestVisualUpdate();
+      }
+    }
+
     return; // [ROSITA] BREAK
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
