@@ -1,3 +1,10 @@
+## 0.4.1
+
+- Fix text field cursor animation
+- Fix paint text size for TextPainter
+- Fix paint on canvas with overflow
+- Fix clip path for Chrome < 55
+
 ## 0.4.0
 
 - Add rosita_engine
