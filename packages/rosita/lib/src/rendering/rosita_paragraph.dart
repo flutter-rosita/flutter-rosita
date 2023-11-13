@@ -118,7 +118,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
     final text = this.text;
     final style = this.style;
 
-    if (text == null || text == '' || style == null) {
+    if (text == null || style == null) {
       return Size.zero;
     }
 
