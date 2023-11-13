@@ -10,6 +10,7 @@ class RositaRichText extends LeafRenderObjectWidget {
     this.style,
     this.textAlign,
     this.textDirection,
+    this.softWrap = true,
     this.overflow,
     this.maxLines,
   });
@@ -22,6 +23,8 @@ class RositaRichText extends LeafRenderObjectWidget {
 
   final TextDirection? textDirection; // TODO: implement
 
+  final bool softWrap;
+
   final TextOverflow? overflow;
 
   final int? maxLines;
@@ -32,6 +35,7 @@ class RositaRichText extends LeafRenderObjectWidget {
       text: text,
       style: style,
       textAlign: textAlign,
+      softWrap: softWrap,
       overflow: overflow,
       maxLines: maxLines,
     );
@@ -43,6 +47,7 @@ class RositaRichText extends LeafRenderObjectWidget {
       ..text = text
       ..style = style
       ..textAlign = textAlign
+      ..softWrap = softWrap
       ..overflow = overflow
       ..maxLines = maxLines;
   }
