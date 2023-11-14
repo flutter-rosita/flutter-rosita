@@ -71,7 +71,7 @@ class ImageIcon extends StatelessWidget {
     final double? iconSize = size ?? iconTheme.size;
 
     if (image == null) {
-      return RositaSemantics(
+      return Semantics(
         label: semanticLabel,
         child: SizedBox(width: iconSize, height: iconSize),
       );
@@ -84,7 +84,7 @@ class ImageIcon extends StatelessWidget {
       iconColor = iconColor.withOpacity(iconColor.opacity * iconOpacity);
     }
 
-    return RositaSemantics(
+    return Semantics(
       label: semanticLabel,
       child: Image(
         image: image!,

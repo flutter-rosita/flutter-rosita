@@ -1128,7 +1128,7 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
     if (!hasDeleteButton) {
       return null;
     }
-    return RositaSemantics(
+    return Semantics(
       container: true,
       button: true,
       child: _wrapWithTooltip(
@@ -1324,7 +1324,7 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
         child: result,
       ),
     );
-    return RositaSemantics(
+    return Semantics(
       button: widget.tapEnabled,
       container: true,
       selected: widget.selected,

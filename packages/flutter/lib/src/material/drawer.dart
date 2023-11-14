@@ -290,7 +290,7 @@ class Drawer extends StatelessWidget {
     final ShapeBorder? effectiveShape = shape ?? (isDrawerStart
       ? (drawerTheme.shape ?? defaults.shape)
       : (drawerTheme.endShape ?? defaults.endShape));
-    return RositaSemantics(
+    return Semantics(
       scopesRoute: true,
       namesRoute: true,
       explicitChildNodes: true,
@@ -767,7 +767,7 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
                   excluding: platformHasBackButton,
                   child: GestureDetector(
                     onTap: close,
-                    child: RositaSemantics(
+                    child: Semantics(
                       label: MaterialLocalizations.of(context).modalBarrierDismissLabel,
                       child: Container( // The drawer's "scrim"
                         color: _scrimColorTween.evaluate(_controller),

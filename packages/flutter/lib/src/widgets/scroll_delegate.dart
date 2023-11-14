@@ -502,7 +502,7 @@ class SliverChildBuilderDelegate extends SliverChildDelegate {
     if (addSemanticIndexes) {
       final int? semanticIndex = semanticIndexCallback(child, index);
       if (semanticIndex != null) {
-        child = RositaIndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+        child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
       }
     }
     if (addAutomaticKeepAlives) {
@@ -716,7 +716,7 @@ class SliverChildListDelegate extends SliverChildDelegate {
     if (addSemanticIndexes) {
       final int? semanticIndex = semanticIndexCallback(child, index);
       if (semanticIndex != null) {
-        child = RositaIndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+        child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
       }
     }
     if (addAutomaticKeepAlives) {

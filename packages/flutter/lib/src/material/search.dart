@@ -575,7 +575,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
         routeName = searchFieldLabel;
     }
 
-    return RositaSemantics(
+    return Semantics(
       explicitChildNodes: true,
       scopesRoute: true,
       namesRoute: true,

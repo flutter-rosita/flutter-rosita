@@ -528,7 +528,7 @@ class _RadioState<T> extends State<Radio<T>> with TickerProviderStateMixin, Togg
         accessibilitySelected = widget._selected;
     }
 
-    return RositaSemantics(
+    return Semantics(
       inMutuallyExclusiveGroup: true,
       checked: widget._selected,
       selected: accessibilitySelected,

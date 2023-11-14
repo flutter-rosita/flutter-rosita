@@ -392,7 +392,7 @@ class _NavigationDestinationSemantics extends StatelessWidget {
     return _StatusTransitionWidgetBuilder(
       animation: destinationInfo.selectedAnimation,
       builder: (BuildContext context, Widget? child) {
-        return RositaSemantics(
+        return Semantics(
           selected: _isForwardOrCompleted(destinationInfo.selectedAnimation),
           container: true,
           child: child,
@@ -402,7 +402,7 @@ class _NavigationDestinationSemantics extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           child,
-          RositaSemantics(
+          Semantics(
             label: localizations.tabLabel(
               tabIndex: destinationInfo.index + 1,
               tabCount: destinationInfo.totalNumberOfDestinations,

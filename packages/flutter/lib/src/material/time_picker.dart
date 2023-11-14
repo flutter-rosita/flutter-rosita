@@ -404,7 +404,7 @@ class _HourControl extends StatelessWidget {
       alwaysUse24HourFormat: alwaysUse24HourFormat,
     );
 
-    return RositaSemantics(
+    return Semantics(
       value: '${localizations.timePickerHourModeAnnouncement} $formattedHour',
       excludeSemantics: true,
       increasedValue: formattedNextHour,
@@ -508,7 +508,7 @@ class _MinuteControl extends StatelessWidget {
     );
     final String formattedPreviousMinute = localizations.formatMinute(previousMinute);
 
-    return RositaSemantics(
+    return Semantics(
       excludeSemantics: true,
       value: '${localizations.timePickerMinuteModeAnnouncement} $formattedMinute',
       increasedValue: formattedNextMinute,
@@ -703,7 +703,7 @@ class _AmPmButton extends StatelessWidget {
       color: resolvedBackgroundColor,
       child: InkWell(
         onTap: Feedback.wrapForTap(onPressed, context),
-        child: RositaSemantics(
+        child: Semantics(
           checked: selected,
           inMutuallyExclusiveGroup: true,
           button: true,
@@ -2068,7 +2068,7 @@ class _HourMinuteTextFieldState extends State<_HourMinuteTextField> with Restora
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
         child: UnmanagedRestorationScope(
           bucket: bucket,
-          child: RositaSemantics(
+          child: Semantics(
             label: widget.semanticHintText,
             child: TextFormField(
               restorationId: 'hour_minute_text_form_field',

@@ -961,7 +961,7 @@ class ScrollableState extends State<Scrollable> with TickerProviderStateMixin, R
           gestures: _gestureRecognizers,
           behavior: HitTestBehavior.opaque,
           excludeFromSemantics: widget.excludeFromSemantics,
-          child: RositaSemantics(
+          child: Semantics(
             explicitChildNodes: !widget.excludeFromSemantics,
             child: IgnorePointer(
               key: _ignorePointerKey,

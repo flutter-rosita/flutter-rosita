@@ -405,7 +405,7 @@ class _MaterialBannerState extends State<MaterialBanner> {
       curve: const Threshold(0.0),
     ));
 
-    materialBanner = RositaSemantics(
+    materialBanner = Semantics(
       container: true,
       liveRegion: true,
       onDismiss: () {

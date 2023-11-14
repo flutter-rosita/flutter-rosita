@@ -105,7 +105,7 @@ class WidgetSpan extends PlaceholderSpan {
         widgets.add(
           _WidgetSpanParentData(
             span: span,
-            child: RositaSemantics(
+            child: Semantics(
               tagForChildren: PlaceholderSpanIndexSemanticsTag(index++),
               child: _AutoScaleInlineWidget(span: span, textScaleFactor: textScaleFactor, child: span.child),
             ),

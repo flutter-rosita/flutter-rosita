@@ -229,7 +229,7 @@ class _CupertinoCheckboxState extends State<CupertinoCheckbox> with TickerProvid
     final Color effectiveCheckColor = widget.checkColor
       ?? CupertinoColors.white;
 
-    return RositaSemantics(
+    return Semantics(
       checked: widget.value ?? false,
       mixed: widget.tristate ? widget.value == null : null,
       child: buildToggleable(

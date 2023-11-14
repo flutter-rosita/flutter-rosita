@@ -424,7 +424,7 @@ class _FadeInImageState extends State<FadeInImage> {
     );
 
     if (!widget.excludeFromSemantics) {
-      result = RositaSemantics(
+      result = Semantics(
         container: widget.imageSemanticLabel != null,
         image: true,
         label: widget.imageSemanticLabel ?? '',

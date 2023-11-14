@@ -781,7 +781,7 @@ class DataTable extends StatelessWidget {
     final double effectiveCheckboxHorizontalMarginEnd = checkboxHorizontalMargin
       ?? themeData.dataTableTheme.checkboxHorizontalMargin
       ?? effectiveHorizontalMargin / 2.0;
-    Widget contents = RositaSemantics(
+    Widget contents = Semantics(
       container: true,
       child: Padding(
         padding: EdgeInsetsDirectional.only(

@@ -4659,7 +4659,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
                   viewportBuilder: (BuildContext context, ViewportOffset offset) {
                     return CompositedTransformTarget(
                       link: _toolbarLayerLink,
-                      child: RositaSemantics(
+                      child: Semantics(
                         onCopy: _semanticsOnCopy(controls),
                         onCut: _semanticsOnCut(controls),
                         onPaste: _semanticsOnPaste(controls),

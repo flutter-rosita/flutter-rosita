@@ -636,7 +636,7 @@ class Text extends StatelessWidget {
       );
     }
     if (semanticsLabel != null) {
-      result = RositaSemantics(
+      result = Semantics(
         textDirection: textDirection,
         label: semanticsLabel,
         child: ExcludeSemantics(

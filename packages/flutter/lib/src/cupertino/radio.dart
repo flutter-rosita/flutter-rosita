@@ -255,7 +255,7 @@ class _CupertinoRadioState<T> extends State<CupertinoRadio<T>> with TickerProvid
         accessibilitySelected = widget._selected;
     }
 
-    return RositaSemantics(
+    return Semantics(
       inMutuallyExclusiveGroup: true,
       checked: widget._selected,
       selected: accessibilitySelected,

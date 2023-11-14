@@ -131,7 +131,7 @@ abstract class ProgressIndicator extends StatefulWidget {
     if (value != null) {
       expandedSemanticsValue ??= '${(value! * 100).round()}%';
     }
-    return RositaSemantics(
+    return Semantics(
       label: semanticsLabel,
       value: expandedSemanticsValue,
       child: child,

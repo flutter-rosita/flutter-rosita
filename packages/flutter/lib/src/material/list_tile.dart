@@ -854,7 +854,7 @@ class ListTile extends StatelessWidget {
       splashColor: splashColor,
       autofocus: autofocus,
       enableFeedback: enableFeedback ?? tileTheme.enableFeedback ?? true,
-      child: RositaSemantics(
+      child: Semantics(
         selected: selected,
         enabled: enabled,
         child: Ink(

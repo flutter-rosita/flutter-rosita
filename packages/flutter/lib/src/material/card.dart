@@ -165,7 +165,7 @@ class Card extends StatelessWidget {
     final CardTheme cardTheme = CardTheme.of(context);
     final CardTheme defaults = Theme.of(context).useMaterial3 ? _CardDefaultsM3(context) : _CardDefaultsM2(context);
 
-    return RositaSemantics(
+    return Semantics(
       container: semanticContainer,
       child: Container(
         margin: margin ?? cardTheme.margin ?? defaults.margin!,
@@ -178,7 +178,7 @@ class Card extends StatelessWidget {
           shape: shape ?? cardTheme.shape ?? defaults.shape,
           borderOnForeground: borderOnForeground,
           clipBehavior: clipBehavior ?? cardTheme.clipBehavior ?? defaults.clipBehavior!,
-          child: RositaSemantics(
+          child: Semantics(
             explicitChildNodes: !semanticContainer,
             child: child,
           ),

@@ -118,7 +118,7 @@ class _CupertinoContextMenuActionState extends State<CupertinoContextMenuAction>
           constraints: const BoxConstraints(
             minHeight: _kButtonHeight,
           ),
-          child: RositaSemantics(
+          child: Semantics(
             button: true,
             child: Container(
               decoration: BoxDecoration(

@@ -421,7 +421,7 @@ class _NavigationRailState extends State<NavigationRail> with TickerProviderStat
 
     return _ExtendedNavigationRailAnimation(
       animation: _extendedAnimation,
-      child: RositaSemantics(
+      child: Semantics(
         explicitChildNodes: true,
         child: Material(
           elevation: elevation,
@@ -763,7 +763,7 @@ class _RailDestination extends StatelessWidget {
     }
 
     final ColorScheme colors = Theme.of(context).colorScheme;
-    return RositaSemantics(
+    return Semantics(
       container: true,
       selected: selected,
       child: Stack(
@@ -782,7 +782,7 @@ class _RailDestination extends StatelessWidget {
               child: content,
             ),
           ),
-          RositaSemantics(
+          Semantics(
             label: indexLabel,
           ),
         ],

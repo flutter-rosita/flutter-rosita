@@ -349,7 +349,7 @@ class SegmentedButton<T> extends StatelessWidget {
         : button;
 
       return MergeSemantics(
-        child: RositaSemantics(
+        child: Semantics(
           checked: segmentSelected,
           inMutuallyExclusiveGroup: multiSelectionEnabled ? null : true,
           child: buttonWithTooltip,

@@ -130,7 +130,7 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
         onTap: isInteractive ? _handleTap : null,
         onTapUp: isInteractive ? _handleTapEnd : null,
         onTapCancel: isInteractive ? _handleTapEnd : null,
-        child: RositaSemantics(
+        child: Semantics(
           enabled: isInteractive,
           child: CustomPaint(
             size: size,

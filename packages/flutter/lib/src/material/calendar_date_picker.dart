@@ -377,7 +377,7 @@ class _DatePickerModeToggleButtonState extends State<_DatePickerModeToggleButton
       child: Row(
         children: <Widget>[
           Flexible(
-            child: RositaSemantics(
+            child: Semantics(
               label: MaterialLocalizations.of(context).selectYearSemanticsLabel,
               excludeSemantics: true,
               button: true,
@@ -735,7 +735,7 @@ class _MonthPickerState extends State<_MonthPicker> {
   Widget build(BuildContext context) {
     final Color controlColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
 
-    return RositaSemantics(
+    return Semantics(
       child: Column(
         children: <Widget>[
           Container(
@@ -1006,7 +1006,7 @@ class _DayPickerState extends State<_DayPicker> {
             radius: _dayPickerRowHeight / 2 + 4,
             statesController: MaterialStatesController(states),
             overlayColor: dayOverlayColor,
-            child: RositaSemantics(
+            child: Semantics(
               // We want the day of month to be spoken first irrespective of the
               // locale-specific preferences or TextDirection. This is because
               // an accessibility user is more likely to be interested in the
@@ -1215,7 +1215,7 @@ class _YearPickerState extends State<YearPicker> {
         height: decorationHeight,
         width: decorationWidth,
         child: Center(
-          child: RositaSemantics(
+          child: Semantics(
             selected: isSelected,
             button: true,
             child: Text(year.toString(), style: itemStyle),

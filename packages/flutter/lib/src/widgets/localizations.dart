@@ -629,7 +629,7 @@ class _LocalizationsState extends State<Localizations> {
     if (_locale == null) {
       return const SizedBox.shrink();
     }
-    return RositaSemantics(
+    return Semantics(
       textDirection: _textDirection,
       child: _LocalizationsScope(
         key: _localizedResourcesScopeKey,

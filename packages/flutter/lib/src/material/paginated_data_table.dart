@@ -504,7 +504,7 @@ class PaginatedDataTableState extends State<PaginatedDataTable> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               if (headerWidgets.isNotEmpty)
-                RositaSemantics(
+                Semantics(
                   container: true,
                   child: DefaultTextStyle(
                     // These typographic styles aren't quite the regular ones. We pick the closest ones from the regular

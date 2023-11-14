@@ -434,7 +434,7 @@ class _ButtonStyleState extends State<ButtonStyleButton> with TickerProviderStat
         minSize = Size.zero;
     }
 
-    return RositaSemantics(
+    return Semantics(
       container: true,
       button: widget.isSemanticButton,
       enabled: widget.enabled,

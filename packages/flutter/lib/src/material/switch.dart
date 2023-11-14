@@ -925,7 +925,7 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
       ? switchConfig.inactiveThumbRadius : switchConfig.thumbRadiusWithIcon;
     final double effectiveSplashRadius = widget.splashRadius ?? switchTheme.splashRadius ?? defaults.splashRadius!;
 
-    return RositaSemantics(
+    return Semantics(
       toggled: widget.value,
       child: GestureDetector(
         excludeFromSemantics: true,

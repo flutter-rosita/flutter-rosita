@@ -108,7 +108,7 @@ mixin MaterialRouteTransitionMixin<T> on PageRoute<T> {
     Animation<double> secondaryAnimation,
   ) {
     final Widget result = buildContent(context);
-    return RositaSemantics(
+    return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
       child: result,

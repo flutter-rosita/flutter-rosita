@@ -770,7 +770,7 @@ class IconButton extends StatelessWidget {
       );
     }
 
-    return RositaSemantics(
+    return Semantics(
       button: true,
       enabled: onPressed != null,
       child: InkResponse(
@@ -875,7 +875,7 @@ class _SelectableIconButtonState extends State<_SelectableIconButton> {
       onPressed: widget.onPressed,
       variant: widget.variant,
       toggleable: toggleable,
-      child: RositaSemantics(
+      child: Semantics(
         selected: widget.isSelected,
         child: widget.child,
       ),

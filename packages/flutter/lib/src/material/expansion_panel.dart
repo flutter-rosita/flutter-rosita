@@ -379,7 +379,7 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
       );
       if (!child.canTapOnHeader) {
         final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-        expandIconContainer = RositaSemantics(
+        expandIconContainer = Semantics(
           label: _isChildExpanded(index)? localizations.expandedIconTapHint : localizations.collapsedIconTapHint,
           container: true,
           child: expandIconContainer,

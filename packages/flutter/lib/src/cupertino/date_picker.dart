@@ -2191,7 +2191,7 @@ class _CupertinoTimerPickerState extends State<CupertinoTimerPicker> {
             ? localizations.timerPickerHour(index) + label
             : label + localizations.timerPickerHour(index);
 
-        return RositaSemantics(
+        return Semantics(
           label: semanticsLabel,
           excludeSemantics: true,
           child: _buildPickerNumberLabel(localizations.timerPickerHour(index), additionalPadding),
@@ -2257,7 +2257,7 @@ class _CupertinoTimerPickerState extends State<CupertinoTimerPicker> {
             ? localizations.timerPickerMinute(minute) + label
             : label + localizations.timerPickerMinute(minute);
 
-        return RositaSemantics(
+        return Semantics(
           label: semanticsLabel,
           excludeSemantics: true,
           child: _buildPickerNumberLabel(localizations.timerPickerMinute(minute), additionalPadding),
@@ -2323,7 +2323,7 @@ class _CupertinoTimerPickerState extends State<CupertinoTimerPicker> {
             ? localizations.timerPickerSecond(second) + label
             : label + localizations.timerPickerSecond(second);
 
-        return RositaSemantics(
+        return Semantics(
           label: semanticsLabel,
           excludeSemantics: true,
           child: _buildPickerNumberLabel(localizations.timerPickerSecond(second), additionalPadding),

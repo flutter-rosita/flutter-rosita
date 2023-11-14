@@ -252,7 +252,7 @@ class Icon extends StatelessWidget {
     final List<Shadow>? iconShadows = shadows ?? iconTheme.shadows;
 
     if (icon == null) {
-      return RositaSemantics(
+      return Semantics(
         label: semanticLabel,
         child: SizedBox(width: iconSize, height: iconSize),
       );
@@ -321,7 +321,7 @@ class Icon extends StatelessWidget {
       }
     }
 
-    return RositaSemantics(
+    return Semantics(
       label: semanticLabel,
       child: ExcludeSemantics(
         child: SizedBox(

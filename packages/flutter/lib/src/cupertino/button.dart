@@ -250,7 +250,7 @@ class _CupertinoButtonState extends State<CupertinoButton> with SingleTickerProv
         onTapUp: enabled ? _handleTapUp : null,
         onTapCancel: enabled ? _handleTapCancel : null,
         onTap: widget.onPressed,
-        child: RositaSemantics(
+        child: Semantics(
           button: true,
           child: ConstrainedBox(
             constraints: widget.minSize == null

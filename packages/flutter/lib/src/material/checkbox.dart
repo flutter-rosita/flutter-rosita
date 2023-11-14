@@ -593,7 +593,7 @@ class _CheckboxState extends State<Checkbox> with TickerProviderStateMixin, Togg
       ?? checkboxTheme.splashRadius
       ?? defaults.splashRadius!;
 
-    return RositaSemantics(
+    return Semantics(
       label: widget.semanticLabel,
       checked: widget.value ?? false,
       mixed: widget.tristate ? widget.value == null : null,

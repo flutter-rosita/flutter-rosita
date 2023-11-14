@@ -966,7 +966,7 @@ class _AppBarState extends State<AppBar> {
 
       title = _AppBarTitleBox(child: title);
       if (rositaEnableSemantics && !widget.excludeHeaderSemantics) {
-        title = RositaSemantics(
+        title = Semantics(
           namesRoute: namesRoute,
           header: true,
           child: title,
@@ -1100,12 +1100,12 @@ class _AppBarState extends State<AppBar> {
       appBar = Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
-          RositaSemantics(
+          Semantics(
             sortKey: const OrdinalSortKey(1.0),
             explicitChildNodes: true,
             child: widget.flexibleSpace,
           ),
-          RositaSemantics(
+          Semantics(
             sortKey: const OrdinalSortKey(0.0),
             explicitChildNodes: true,
             // Creates a material widget to prevent the flexibleSpace from
@@ -1129,7 +1129,7 @@ class _AppBarState extends State<AppBar> {
         theme.useMaterial3 ? const Color(0x00000000) : null,
       );
 
-    return RositaSemantics(
+    return Semantics(
       container: true,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: overlayStyle,
@@ -1146,7 +1146,7 @@ class _AppBarState extends State<AppBar> {
             ?? appBarTheme.surfaceTintColor
             ?? defaults.surfaceTintColor,
           shape: widget.shape ?? appBarTheme.shape ?? defaults.shape,
-          child: RositaSemantics(
+          child: Semantics(
             explicitChildNodes: true,
             child: appBar,
           ),
@@ -1285,7 +1285,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         title: effectiveTitle,
         actions: actions,
         flexibleSpace: (title == null && flexibleSpace != null && !excludeHeaderSemantics)
-          ? RositaSemantics(
+          ? Semantics(
               header: true,
               child: flexibleSpace,
             )

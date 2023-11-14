@@ -1636,7 +1636,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
             child: Row(children: <Widget>[
               SizedBox(width: MediaQuery.sizeOf(context).width < 360 ? 42 : 72),
               Expanded(
-                child: RositaSemantics(
+                child: Semantics(
                   label: '$helpText $startDateText to $endDateText',
                   excludeSemantics: true,
                   child: Column(
@@ -2452,7 +2452,7 @@ class _MonthItemState extends State<_MonthItem> {
     Widget dayWidget = Container(
       decoration: decoration,
       child: Center(
-        child: RositaSemantics(
+        child: Semantics(
           label: semanticLabel,
           selected: isSelectedDayStart || isSelectedDayEnd,
           child: ExcludeSemantics(
