@@ -20,6 +20,18 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
     return imageElement;
   }
 
+  String? _blobUrl;
+
+  @override
+  void rositaDetach() {
+    super.rositaDetach();
+
+    if (_blobUrl != null) {
+      RositaImageUtils.revokeBlobObjectUrl(_blobUrl!);
+      _blobUrl = null;
+    }
+  }
+
   @override
   void rositaPaint() {
     final style = htmlElement.style;
@@ -28,11 +40,19 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
     final imageData = target.image;
 
     if (image != null) {
-      imageElement.src = RositaImageUtils.buildImageProviderPath(image);
+      if (image is MemoryImage) {
+        RositaImageUtils.buildMemoryImageBlobPath(image).then((value) {
+          if (value != null) {
+            imageElement.src = _blobUrl = value;
+          }
+        });
+      } else {
+        imageElement.src = _blobUrl = RositaImageUtils.buildImageProviderPath(image);
+      }
     } else if (imageData != null) {
       RositaImageUtils.buildImageBlobPath(imageData).then((value) {
         if (value != null) {
-          imageElement.src = value;
+          imageElement.src = _blobUrl = value;
         }
       });
     }

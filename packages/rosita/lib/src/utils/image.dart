@@ -21,4 +21,12 @@ class RositaImageUtils {
 
     return null;
   }
+
+  static Future<String?> buildMemoryImageBlobPath(MemoryImage image) async {
+    return html.Url.createObjectUrlFromBlob(html.Blob([image.bytes]));
+  }
+
+  static void revokeBlobObjectUrl(String url) {
+    return html.Url.revokeObjectUrl(url);
+  }
 }
