@@ -101,7 +101,8 @@ class RositaParagraphUtils {
         } else {
           // Fix for Chrome < 87, where TextMetrics fontBoundingBoxAscent is null
           _paragraphsMeasureText.putIfAbsent(font, () {
-            final div = html.DivElement()..innerText = list[i];
+            final firstWord = list[i];
+            final div = html.DivElement()..innerText = firstWord.isEmpty || firstWord == ' '  ? '&nbsp;' : firstWord;
 
             div.style
               ..font = font
