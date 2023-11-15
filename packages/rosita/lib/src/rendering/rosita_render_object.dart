@@ -118,49 +118,51 @@ mixin RositaRenderMixin {
   }
 
   void rositaAttach() {
-    RenderObject? parentElement = parent;
-
-    ContainerParentDataMixin? containerParentDataMixin;
-
-    if (target.parentData is ContainerParentDataMixin) {
-      containerParentDataMixin = target.parentData! as ContainerParentDataMixin;
-    }
-
-    while (parentElement != null) {
-      if (containerParentDataMixin == null && parentElement.parentData is ContainerParentDataMixin) {
-        containerParentDataMixin = parentElement.parentData! as ContainerParentDataMixin;
-      }
-
-      if (parentElement is RositaRenderMixin && (parentElement as RositaRenderMixin).hasHtmlElement) {
-        break;
-      }
-      parentElement = parentElement.parent;
-    }
-
-    final parentHtmlElement = parentElement is RositaRenderMixin && (parentElement as RositaRenderMixin).hasHtmlElement
-        ? (parentElement as RositaRenderMixin).htmlElement
-        : null;
-
     assert(() {
       htmlElement.setAttribute('rosita-debug-object', describeIdentity(this));
       return true;
     }());
 
-    if (parentHtmlElement != null) {
-      if (containerParentDataMixin != null && containerParentDataMixin.nextSibling != null) {
-        final afterElement = containerParentDataMixin.nextSibling as RositaRenderMixin;
-        final afterHtmlElement = (afterElement.hasHtmlElement
-                ? afterElement
-                : (afterElement.findFirstChildWithHtmlElement() as RositaRenderMixin?))
-            ?.htmlElement;
+    html.HtmlElement? parentHtmlElement;
+    html.HtmlElement? afterHtmlElement;
 
-        if (afterHtmlElement != null && identical(parentHtmlElement, afterHtmlElement.parent)) {
-          parentHtmlElement.insertBefore(htmlElement, afterHtmlElement);
-          return;
+    RenderObject? parentElement = parent;
+    ParentData? parentData = this.parentData;
+
+    while (parentElement != null) {
+      if (parentElement is RositaRenderMixin && (parentElement as RositaRenderMixin).hasHtmlElement) {
+        parentHtmlElement = (parentElement as RositaRenderMixin).htmlElement;
+
+        if (parentData is ContainerParentDataMixin) {
+          while (afterHtmlElement == null && parentData is ContainerParentDataMixin) {
+            final afterElement = parentData.nextSibling;
+
+            parentData = afterElement?.parentData;
+
+            if (afterElement is RositaRenderMixin) {
+              if ((afterElement as RositaRenderMixin).hasHtmlElement) {
+                afterHtmlElement = (afterElement as RositaRenderMixin).htmlElement;
+              } else {
+                afterHtmlElement =
+                    ((afterElement as RositaRenderMixin).findFirstChildWithHtmlElement() as RositaRenderMixin?)
+                        ?.htmlElement;
+              }
+
+              while (afterHtmlElement != null && !identical(parentHtmlElement, afterHtmlElement.parentNode)) {
+                afterHtmlElement = afterHtmlElement.parentNode as html.HtmlElement?;
+              }
+            }
+          }
         }
+        break;
       }
 
-      parentHtmlElement.append(htmlElement);
+      parentData = parentElement.parentData;
+      parentElement = parentElement.parent;
+    }
+
+    if (parentHtmlElement != null) {
+      parentHtmlElement.insertBefore(htmlElement, afterHtmlElement);
     } else {
       throw Exception('Parent HtmlElement not found for: $this');
     }
