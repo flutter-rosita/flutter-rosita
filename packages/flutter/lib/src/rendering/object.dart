@@ -237,6 +237,10 @@ class PaintingContext extends ClipContext {
   /// into the layer subtree associated with this painting context. Otherwise,
   /// the child will be painted into the current PictureLayer for this context.
   void paintChild(RenderObject child, Offset offset) {
+    if (child.hasHtmlElement) {
+      return;
+    }
+
     assert(() {
       debugOnProfilePaint?.call(child);
       return true;
