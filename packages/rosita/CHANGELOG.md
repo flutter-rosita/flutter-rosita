@@ -1,3 +1,8 @@
+## 0.4.3
+
+- Fix paintChild when hasHtmlElement
+- Fix text height
+
 ## 0.4.2
 
 - Fix text size in table cell
