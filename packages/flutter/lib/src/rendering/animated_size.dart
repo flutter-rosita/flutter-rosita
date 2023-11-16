@@ -333,9 +333,6 @@ class RenderAnimatedSize extends RenderAligningShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null && _hasVisualOverflow && clipBehavior != Clip.none) {
       final Rect rect = Offset.zero & size;
       _clipRectLayer.layer = context.pushClipRect(

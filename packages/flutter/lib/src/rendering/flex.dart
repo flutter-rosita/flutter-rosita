@@ -1039,9 +1039,6 @@ class RenderFlex extends RenderBox with ContainerRenderObjectMixin<RenderBox, Fl
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (!_hasOverflow) {
       defaultPaint(context, offset);
       return;

@@ -149,9 +149,6 @@ class RenderErrorBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     try {
       context.canvas.drawRect(offset & size, Paint() .. color = backgroundColor);
       if (_paragraph != null) {

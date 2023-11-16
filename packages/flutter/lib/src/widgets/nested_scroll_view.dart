@@ -1824,9 +1824,6 @@ class RenderSliverOverlapAbsorber extends RenderSliver with RenderObjectWithChil
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       context.paintChild(child!, offset);
     }

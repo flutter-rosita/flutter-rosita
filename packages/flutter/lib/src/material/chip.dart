@@ -2097,9 +2097,6 @@ class _RenderChip extends RenderBox with SlottedContainerRenderObjectMixin<_Chip
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     _paintAvatar(context, offset);
     if (deleteIconShowing) {
       _paintChild(context, offset, deleteIcon, isEnabled);

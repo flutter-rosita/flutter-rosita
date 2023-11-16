@@ -533,9 +533,6 @@ class _RenderSingleChildViewport extends RenderBox with RenderObjectWithChildMix
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       final Offset paintOffset = _paintOffset;
 

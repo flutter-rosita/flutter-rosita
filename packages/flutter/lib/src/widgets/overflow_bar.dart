@@ -565,9 +565,6 @@ class _RenderOverflowBar extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     defaultPaint(context, offset);
   }
 

@@ -622,9 +622,6 @@ class _RenderSegmentedButton<T> extends RenderBox with
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final Canvas canvas = context.canvas;
     final Rect borderRect = offset & size;
     final Path borderClipPath = enabledBorder.getInnerPath(borderRect, textDirection: textDirection);

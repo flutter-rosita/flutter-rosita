@@ -213,9 +213,6 @@ class RenderAndroidView extends PlatformViewRenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (_viewController.textureId == null || _currentTextureSize == null) {
       return;
     }
@@ -366,9 +363,6 @@ class RenderUiKitView extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     context.addLayer(PlatformViewLayer(
       rect: offset & size,
       viewId: _viewController.id,
@@ -697,9 +691,6 @@ class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin, Ro
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     context.addLayer(PlatformViewLayer(
       rect: offset & size,
       viewId: _controller.viewId,

@@ -138,9 +138,6 @@ class _RenderCompositionCallback extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, ui.Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (enabled) {
       _cancelCallback ??= context.addCompositionCallback(compositeCallback);
     }

@@ -272,19 +272,19 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   Rect getDestinationClipBounds() {
-    throw UnimplementedError();
+    throw UnimplementedError('getDestinationClipBounds');
   }
 
   @override
   Rect getLocalClipBounds() {
-    throw UnimplementedError();
+    throw UnimplementedError('getLocalClipBounds');
   }
 
   @override
-  int getSaveCount() => throw UnimplementedError();
+  int getSaveCount() => 1;
 
   @override
-  Float64List getTransform() => throw UnimplementedError();
+  Float64List getTransform() => throw UnimplementedError('getTransform');
 
   @override
   void restore() {

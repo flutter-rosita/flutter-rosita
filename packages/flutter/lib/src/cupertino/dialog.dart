@@ -1236,9 +1236,6 @@ class _RenderCupertinoDialog extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (isActionSheet) {
       final MultiChildLayoutParentData contentParentData = contentSection!.parentData! as MultiChildLayoutParentData;
       contentSection!.paint(context, offset + contentParentData.offset);
@@ -2235,9 +2232,6 @@ class _RenderCupertinoDialogActions extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final Canvas canvas = context.canvas;
 
     if (!isActionSheet && _isSingleButtonRow(size.width)) {

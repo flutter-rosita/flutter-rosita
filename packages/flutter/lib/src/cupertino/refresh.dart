@@ -164,9 +164,6 @@ class _RenderCupertinoSliverRefresh extends RenderSliver
 
   @override
   void paint(PaintingContext paintContext, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (constraints.overlap < 0.0 ||
         constraints.scrollOffset + child!.size.height > 0) {
       paintContext.paintChild(child!, offset);

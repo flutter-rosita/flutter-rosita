@@ -259,7 +259,7 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
 /// Keyboard handling, IME handling, scrolling, toggling the [showCursor] value
 /// to actually blink the cursor, and other features not mentioned above are the
 /// responsibility of higher layers and not handled by this object.
-class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RositaCanvasMixin, RositaRenderEditableMixin implements TextLayoutMetrics {
+class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RositaCanvasMixin, RositaPaintRenderObjectMixin implements TextLayoutMetrics {
   /// Creates a render object that implements the visual aspects of a text field.
   ///
   /// The [textAlign] argument must not be null. It defaults to [TextAlign.start].
@@ -2493,13 +2493,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   }
 
   @override
-  void rositaLayout() {
-    super.rositaLayout();
-
-    rositaPaintTextPainter(_textPainter, _paintOffset);
-  }
-
-  @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     if (child == _foregroundRenderObject || child == _backgroundRenderObject) {
       return;
@@ -2509,9 +2502,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     _computeTextMetricsIfNeeded();
     if (_hasVisualOverflow && clipBehavior != Clip.none) {
       _clipRectLayer.layer = context.pushClipRect(

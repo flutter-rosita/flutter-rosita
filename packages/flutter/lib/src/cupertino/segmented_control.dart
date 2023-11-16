@@ -671,9 +671,6 @@ class _RenderSegmentedControl<T> extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     RenderBox? child = firstChild;
     int index = 0;
     while (child != null) {

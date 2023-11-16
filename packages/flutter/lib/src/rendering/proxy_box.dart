@@ -123,10 +123,6 @@ mixin RenderProxyBoxMixin<T extends RenderBox> on RenderBox, RenderObjectWithChi
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
-
     final RenderBox? child = this.child;
     if (child == null) {
       return;
@@ -942,9 +938,6 @@ class RenderOpacity extends RenderProxyBox with RositaRenderOpacityMixin {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child == null || _alpha == 0) {
       return;
     }
@@ -1070,9 +1063,6 @@ mixin RenderAnimatedOpacityMixin<T extends RenderObject> on RenderObjectWithChil
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (_alpha == 0) {
       return;
     }
@@ -1174,9 +1164,6 @@ class RenderShaderMask extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       assert(needsCompositing);
       layer ??= ShaderMaskLayer();
@@ -1247,9 +1234,6 @@ class RenderBackdropFilter extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       assert(needsCompositing);
       layer ??= BackdropFilterLayer();
@@ -1551,9 +1535,6 @@ class RenderClipRect extends _RenderCustomClip<Rect> with RositaRenderClipRectMi
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       if (clipBehavior != Clip.none) {
         _updateClip();
@@ -1657,9 +1638,6 @@ class RenderClipRRect extends _RenderCustomClip<RRect> with RositaRenderClipRRec
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       if (clipBehavior != Clip.none) {
         _updateClip();
@@ -1748,9 +1726,6 @@ class RenderClipOval extends _RenderCustomClip<Rect> with RositaRenderClipOvalMi
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       if (clipBehavior != Clip.none) {
         _updateClip();
@@ -1831,9 +1806,6 @@ class RenderClipPath extends _RenderCustomClip<Path> with RositaRenderClipPathMi
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       if (clipBehavior != Clip.none) {
         _updateClip();
@@ -2031,9 +2003,6 @@ class RenderPhysicalModel extends _RenderPhysicalModelBase<RRect> with RositaRen
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child == null) {
       layer = null;
       return;
@@ -2149,9 +2118,6 @@ class RenderPhysicalShape extends _RenderPhysicalModelBase<Path> with RositaRend
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child == null) {
       layer = null;
       return;
@@ -2325,9 +2291,6 @@ class RenderDecoratedBox extends RenderProxyBox with RositaRenderDecoratedBoxMix
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     _painter ??= _decoration.createBoxPainter(markNeedsPaint);
     final ImageConfiguration filledConfiguration = configuration.copyWith(size: size);
     if (position == DecorationPosition.background) {
@@ -2603,9 +2566,6 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       final Matrix4 transform = _effectiveTransform!;
       if (filterQuality == null) {
@@ -2899,9 +2859,6 @@ class RenderFittedBox extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child == null || size.isEmpty || child!.size.isEmpty) {
       return;
     }
@@ -3034,9 +2991,6 @@ class RenderFractionalTranslation extends RenderProxyBox with RositaRenderFracti
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     assert(!debugNeedsLayout);
     if (child != null) {
       super.paint(context, Offset(
@@ -3843,9 +3797,6 @@ class RenderOffstage extends RenderProxyBox with RositaRenderOffstageMixin {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (offstage) {
       return;
     }
@@ -4874,9 +4825,6 @@ class RenderLeaderLayer extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (layer == null) {
       layer = LeaderLayer(link: link, offset: offset);
     } else {
@@ -5062,9 +5010,6 @@ class RenderFollowerLayer extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final Size? leaderSize = link.leaderSize;
     assert(
       link.leaderSize != null || link.leader == null || leaderAnchor == Alignment.topLeft,
@@ -5176,9 +5121,6 @@ class RenderAnnotatedRegion<T extends Object> extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     // Annotated region layers are not retained because they do not create engine layers.
     final AnnotatedRegionLayer<T> layer = AnnotatedRegionLayer<T>(
       value,

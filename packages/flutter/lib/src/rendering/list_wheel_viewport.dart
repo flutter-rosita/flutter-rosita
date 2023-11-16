@@ -815,9 +815,6 @@ class RenderListWheelViewport
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (childCount > 0) {
       if (_shouldClipAtCurrentOffset() && clipBehavior != Clip.none) {
         _clipRectLayer.layer = context.pushClipRect(

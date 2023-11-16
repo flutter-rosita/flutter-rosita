@@ -168,9 +168,6 @@ class RenderPerformanceOverlay extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     assert(needsCompositing);
     context.addLayer(PerformanceOverlayLayer(
       overlayRect: Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height),

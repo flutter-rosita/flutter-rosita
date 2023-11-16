@@ -95,9 +95,6 @@ class TextureBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     context.addLayer(TextureLayer(
       rect: Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height),
       textureId: _textureId,

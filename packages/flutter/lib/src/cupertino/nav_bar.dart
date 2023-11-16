@@ -996,9 +996,6 @@ class _RenderLargeTitle extends RenderShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final RenderBox? child = this.child;
 
     if (child == null) {

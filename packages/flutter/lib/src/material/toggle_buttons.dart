@@ -1283,9 +1283,6 @@ class _SelectToggleButtonRenderObject extends RenderShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     super.paint(context, offset);
     final Offset bottomRight = size.bottomRight(offset);
     final Rect outer = Rect.fromLTRB(offset.dx, offset.dy, bottomRight.dx, bottomRight.dy);

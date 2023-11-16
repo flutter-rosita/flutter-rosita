@@ -396,9 +396,6 @@ class RenderFlow extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     _clipRectLayer.layer = context.pushClipRect(
       needsCompositing,
       offset,

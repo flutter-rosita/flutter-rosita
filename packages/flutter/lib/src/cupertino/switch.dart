@@ -617,9 +617,6 @@ class _RenderCupertinoSwitch extends RenderConstrainedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final Canvas canvas = context.canvas;
 
     final double currentValue = _state.position.value;

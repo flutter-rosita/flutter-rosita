@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
 
@@ -592,7 +593,7 @@ class _MaterialState extends State<Material> with TickerProviderStateMixin {
   }
 }
 
-class _RenderInkFeatures extends RenderProxyBox implements MaterialInkController {
+class _RenderInkFeatures extends RenderProxyBox with RositaCanvasMixin, RositaPaintRenderObjectMixin implements MaterialInkController {
   _RenderInkFeatures({
     RenderBox? child,
     required this.vsync,
@@ -650,9 +651,6 @@ class _RenderInkFeatures extends RenderProxyBox implements MaterialInkController
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final List<InkFeature>? inkFeatures = _inkFeatures;
     if (inkFeatures != null && inkFeatures.isNotEmpty) {
       final Canvas canvas = context.canvas;

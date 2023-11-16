@@ -350,9 +350,6 @@ class _RenderCupertinoTextSelectionToolbarShape extends RenderShiftedBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child == null) {
       return;
     }
@@ -1023,9 +1020,6 @@ class _RenderCupertinoTextSelectionToolbarItems extends RenderBox with Container
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     visitChildren((RenderObject renderObjectChild) {
       final RenderBox child = renderObjectChild as RenderBox;
       final ToolbarItemsParentData childParentData = child.parentData! as ToolbarItemsParentData;

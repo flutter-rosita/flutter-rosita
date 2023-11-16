@@ -203,9 +203,6 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       context.paintChild(child!, offset);
     }

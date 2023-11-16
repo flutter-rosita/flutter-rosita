@@ -298,9 +298,6 @@ abstract class RenderSliverPersistentHeader extends RenderSliver with RenderObje
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null && geometry!.visible) {
       switch (applyGrowthDirectionToAxisDirection(constraints.axisDirection, constraints.growthDirection)) {
         case AxisDirection.up:

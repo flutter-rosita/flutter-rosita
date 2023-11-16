@@ -1201,9 +1201,6 @@ class RenderTable extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     assert(_children.length == rows * columns);
     if (rows * columns == 0) {
       if (border != null) {

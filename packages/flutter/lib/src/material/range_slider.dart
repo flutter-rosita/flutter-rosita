@@ -1391,9 +1391,6 @@ class _RenderRangeSlider extends RenderBox with RelayoutWhenSystemFontsChangeMix
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final double startValue = _state.startPositionController.value;
     final double endValue = _state.endPositionController.value;
 
@@ -1836,9 +1833,6 @@ class _RenderValueIndicator extends RenderBox with RelayoutWhenSystemFontsChange
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     _state.paintBottomValueIndicator?.call(context, offset);
     _state.paintTopValueIndicator?.call(context, offset);
   }

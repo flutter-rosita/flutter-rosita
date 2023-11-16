@@ -1546,10 +1546,6 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
   @override
   void paint(PaintingContext context, Offset offset) {
     void doPaint(RenderBox? child) {
-      if (kIsRosita) {
-        return;
-      }
-
       if (child != null) {
         context.paintChild(child, _boxParentData(child).offset + offset);
       }

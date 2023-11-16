@@ -639,9 +639,6 @@ class _RenderMagnification extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final Offset thisCenter = Alignment.center.alongSize(size) + offset;
     final Matrix4 matrix = Matrix4.identity()
       ..translate(

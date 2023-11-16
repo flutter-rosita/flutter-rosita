@@ -58,9 +58,6 @@ abstract class RenderProxySliver extends RenderSliver with RenderObjectWithChild
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null) {
       context.paintChild(child!, offset);
     }
@@ -171,9 +168,6 @@ class RenderSliverOpacity extends RenderProxySliver {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (child != null && child!.geometry!.visible) {
       if (_alpha == 0) {
         // No need to keep the layer. We'll create a new one if necessary.
@@ -378,9 +372,6 @@ class RenderSliverOffstage extends RenderProxySliver {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (offstage) {
       return;
     }

@@ -1204,13 +1204,15 @@ class TextPainter {
       paragraph.dispose();
       assert(debugSize == size);
     }
-    rositaSkipCallback(() {
-      assert(!_rebuildParagraphForPaint);
-      canvas.drawParagraph(layoutCache.paragraph, offset + layoutCache.paintOffset);
-    });
 
-    canvas as RositaCanvas;
-    canvas.drawRositaParagraph(this, offset + layoutCache.paintOffset);
+    if (canvas is RositaCanvas) {
+      canvas.drawRositaParagraph(this, offset + layoutCache.paintOffset);
+    } else {
+      rositaSkipCallback(() {
+        assert(!_rebuildParagraphForPaint);
+        canvas.drawParagraph(layoutCache.paragraph, offset + layoutCache.paintOffset);
+      });
+    }
   }
 
   // Returns true if value falls in the valid range of the UTF16 encoding.

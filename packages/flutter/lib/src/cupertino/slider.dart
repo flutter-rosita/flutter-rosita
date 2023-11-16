@@ -515,9 +515,6 @@ class _RenderCupertinoSlider extends RenderConstrainedBox implements MouseTracke
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final double visualPosition;
     final Color leftColor;
     final Color rightColor;

@@ -638,9 +638,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (firstChild == null) {
       return;
     }

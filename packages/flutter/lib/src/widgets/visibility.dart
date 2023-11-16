@@ -601,9 +601,6 @@ class _RenderVisibility extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (!visible) {
       return;
     }
@@ -671,9 +668,6 @@ class _RenderSliverVisibility extends RenderProxySliver {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     if (!visible) {
       return;
     }

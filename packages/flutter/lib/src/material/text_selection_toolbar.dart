@@ -329,9 +329,6 @@ class _TextSelectionToolbarTrailingEdgeAlignRenderBox extends RenderProxyBox {
   // Paint at the offset set in the parent data.
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final ToolbarItemsParentData childParentData = child!.parentData! as ToolbarItemsParentData;
     context.paintChild(child!, childParentData.offset + offset);
   }
@@ -587,9 +584,6 @@ class _RenderTextSelectionToolbarItemsLayout extends RenderBox with ContainerRen
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     visitChildren((RenderObject renderObjectChild) {
       final RenderBox child = renderObjectChild as RenderBox;
       final ToolbarItemsParentData childParentData = child.parentData! as ToolbarItemsParentData;

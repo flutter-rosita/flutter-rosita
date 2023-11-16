@@ -742,9 +742,6 @@ class _RenderDropdownMenuBody extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     final RenderBox? child = firstChild;
     if (child != null) {
       final _DropdownMenuBodyParentData childParentData = child.parentData! as _DropdownMenuBodyParentData;

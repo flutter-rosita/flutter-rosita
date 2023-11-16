@@ -1471,9 +1471,6 @@ class _RenderListTile extends RenderBox with SlottedContainerRenderObjectMixin<_
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     void doPaint(RenderBox? child) {
       if (child != null) {
         final BoxParentData parentData = child.parentData! as BoxParentData;

@@ -1915,9 +1915,6 @@ class _RenderValueIndicator extends RenderBox with RelayoutWhenSystemFontsChange
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     _state.paintValueIndicator?.call(context, offset);
   }
 

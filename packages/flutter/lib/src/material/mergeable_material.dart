@@ -722,9 +722,6 @@ class _RenderMergeableMaterialListBody extends RenderListBody {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (kIsRosita) {
-      return;
-    }
     RenderBox? child = firstChild;
     int index = 0;
     while (child != null) {

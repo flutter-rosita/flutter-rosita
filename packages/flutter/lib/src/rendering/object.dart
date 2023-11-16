@@ -108,7 +108,9 @@ class PaintingContext extends ClipContext {
   ///  * [RenderObject.isRepaintBoundary], which determines if a [RenderObject]
   ///    has a composited layer.
   static void repaintCompositedChild(RenderObject child, { bool debugAlsoPaintedParent = false }) {
-    assert(child._needsPaint);
+    rositaSkipCallback(() {
+      assert(child._needsPaint);
+    });
     _repaintCompositedChild(
       child,
       debugAlsoPaintedParent: debugAlsoPaintedParent,
