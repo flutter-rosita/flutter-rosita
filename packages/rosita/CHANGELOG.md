@@ -1,3 +1,11 @@
+## 0.4.2
+
+- Fix text size in table cell
+- Fix TextField size
+- Fix cursor hit test for some cases
+- Add support MemoryImage and revoke blob object
+- Fix stack children render objects orders on change widget list
+
 ## 0.4.1
 
 - Fix text field cursor animation
