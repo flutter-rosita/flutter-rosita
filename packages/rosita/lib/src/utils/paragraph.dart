@@ -95,29 +95,23 @@ class RositaParagraphUtils {
       wordList.add(width);
 
       if (i == 0) {
-        if (measure.fontBoundingBoxAscent != null && measure.fontBoundingBoxDescent != null) {
-          fontBoundingBoxAscent = measure.fontBoundingBoxAscent!.toDouble();
-          fontLineHeight = (measure.fontBoundingBoxAscent! + measure.fontBoundingBoxDescent!).toDouble();
-        } else {
-          // Fix for Chrome < 87, where TextMetrics fontBoundingBoxAscent is null
-          _paragraphsMeasureText.putIfAbsent(font, () {
-            final firstWord = list[i];
-            final div = html.DivElement()..innerText = firstWord.isEmpty || firstWord == ' '  ? '&nbsp;' : firstWord;
+        _paragraphsMeasureText.putIfAbsent(font, () {
+          final firstWord = list[i];
+          final div = html.DivElement()..innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
 
-            div.style
-              ..font = font
-              ..lineHeight = '';
+          div.style
+            ..font = font
+            ..lineHeight = '';
 
-            paragraphsContainer.append(div);
+          paragraphsContainer.append(div);
 
-            return div;
-          });
+          return div;
+        });
 
-          final measureText = _paragraphsMeasureText[font]!;
+        final measureText = _paragraphsMeasureText[font]!;
 
-          fontLineHeight = measureText.clientHeight.toDouble();
-          fontBoundingBoxAscent = fontLineHeight;
-        }
+        fontLineHeight = measureText.clientHeight.toDouble();
+        fontBoundingBoxAscent = fontLineHeight;
       }
     }
 
