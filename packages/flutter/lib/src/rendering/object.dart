@@ -2085,7 +2085,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
         markNeedsSemanticsUpdate();
       }
     }
-    rositaAttachToRenderObject();
+    if (kIsRosita) {
+      rositaAttachToRenderObject();
+    }
   }
 
   /// Mark this node as detached.
@@ -2100,7 +2102,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   /// method, as in `super.detach()`.
   @mustCallSuper
   void detach() {
-    rositaDetachFromRenderObject();
+    if (kIsRosita) {
+      rositaDetachFromRenderObject();
+    }
     assert(_owner != null);
     _owner = null;
     assert(parent == null || attached == parent!.attached);
@@ -2355,7 +2359,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       if (rositaEnableSemantics) {
         markNeedsSemanticsUpdate();
       }
-      rositaMarkNeedsLayout();
+      if (kIsRosita) {
+        rositaMarkNeedsLayout();
+      }
     } catch (e, stack) {
       _reportException('performLayout', e, stack);
     }
@@ -2468,8 +2474,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
         visitChildren(_propagateRelayoutBoundaryToChild);
       }
 
-      rositaMarkNeedsLayout();
-
+      if (kIsRosita) {
+        rositaMarkNeedsLayout();
+      }
       if (!kReleaseMode && debugProfileLayoutsEnabled) {
         FlutterTimeline.finishSync();
       }
@@ -2523,7 +2530,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       if (rositaEnableSemantics) {
         markNeedsSemanticsUpdate();
       }
-      rositaMarkNeedsLayout();
+      if (kIsRosita) {
+        rositaMarkNeedsLayout();
+      }
       assert(() {
         debugAssertDoesMeetConstraints();
         return true;
@@ -2935,15 +2944,17 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///    layer, thus limiting the number of nodes that [markNeedsPaint] must mark
   ///    dirty.
   void markNeedsPaint() {
-    rositaMarkNeedsPaint();
+    if (kIsRosita) {
+      rositaMarkNeedsPaint();
 
-    if (isRepaintBoundary && _wasRepaintBoundary) {
-      if (owner != null) {
-        owner!.requestVisualUpdate();
+      if (isRepaintBoundary && _wasRepaintBoundary) {
+        if (owner != null) {
+          owner!.requestVisualUpdate();
+        }
       }
-    }
 
-    return; // [ROSITA] BREAK
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
     if (_needsPaint) {
@@ -3006,8 +3017,10 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///  * [RenderOpacity], which uses this method when its opacity is updated to
   ///    update the layer opacity without repainting children.
   void markNeedsCompositedLayerUpdate() {
-    rositaMarkNeedsPaint();
-    return; // [ROSITA] BREAK
+    if (kIsRosita) {
+      rositaMarkNeedsPaint();
+      return; // [ROSITA] BREAK
+    }
     assert(!_debugDisposed);
     assert(owner == null || !owner!.debugDoingPaint);
     if (_needsCompositedLayerUpdate || _needsPaint) {
@@ -3064,7 +3077,9 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
   ///
   /// See [RenderView] for an example of how this function is used.
   void scheduleInitialPaint(ContainerLayer rootLayer) {
-    return; // [ROSITA] BREAK
+    if (kIsRosita) {
+      return; // [ROSITA] BREAK
+    }
     assert(rootLayer.attached);
     assert(attached);
     assert(parent is! RenderObject);

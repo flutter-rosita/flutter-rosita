@@ -37,11 +37,11 @@ const rositaEnableRoutesChanged = !rositaDisableRoutesChanged;
 const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHILDREN', defaultValue: true);
 
 const rositaDisableUpdateCompositingBits =
-    bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: true);
+    bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: kIsRosita);
 
 const rositaEnableUpdateCompositingBits = !rositaDisableUpdateCompositingBits;
 
 const rositaDisableLayoutMarkNeedsPaint =
-    bool.fromEnvironment('ROSITA_DISABLE_LAYOUT_MARK_NEEDS_PAINT', defaultValue: true);
+    bool.fromEnvironment('ROSITA_DISABLE_LAYOUT_MARK_NEEDS_PAINT', defaultValue: kIsRosita);
 
 const rositaEnableLayoutMarkNeedsPaint = !rositaDisableLayoutMarkNeedsPaint;

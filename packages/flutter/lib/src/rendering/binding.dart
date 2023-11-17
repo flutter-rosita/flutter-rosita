@@ -359,7 +359,9 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
 
   void _handlePersistentFrameCallback(Duration timeStamp) {
     drawFrame();
-    rositaDrawFrame();
+    if (kIsRosita) {
+      rositaDrawFrame();
+    }
 
     if (RositaScrollUtils.scrolled) {
       RositaScrollUtils.callAfterDrawFrame();

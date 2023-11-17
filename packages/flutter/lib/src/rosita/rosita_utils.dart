@@ -2,7 +2,13 @@
 
 import 'dart:ui';
 
+import 'package:flutter/rosita.dart';
+
 void rositaSkipCallback(VoidCallback skipCallback, [VoidCallback? callback]) {
-  // Skip call function
-  callback?.call();
+  if (kIsRosita) {
+    // Skip call function
+    callback?.call();
+  } else {
+    skipCallback.call();
+  }
 }
