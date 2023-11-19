@@ -21,7 +21,8 @@ class RositaParagraphUtils {
 
     paragraphsContainer.style
       ..opacity = '0'
-      ..userSelect = 'none';
+      ..userSelect = 'none'
+      ..pointerEvents = 'none';
 
     html.document.body!.append(paragraphsContainer);
 
