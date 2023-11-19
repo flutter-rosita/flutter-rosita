@@ -3103,8 +3103,10 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
     assert(parent is! RenderObject);
     assert(!owner!._debugDoingPaint);
     assert(isRepaintBoundary);
-    assert(_layerHandle.layer != null); // use scheduleInitialPaint the first time
-    _layerHandle.layer!.detach();
+    if (!kIsRosita) {
+      assert(_layerHandle.layer != null); // use scheduleInitialPaint the first time
+      _layerHandle.layer!.detach();
+    }
     _layerHandle.layer = rootLayer;
     markNeedsPaint();
   }

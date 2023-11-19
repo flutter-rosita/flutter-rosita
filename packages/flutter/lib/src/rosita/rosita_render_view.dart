@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -48,5 +49,20 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
 
     styleElement.text = buffer.toString();
     return styleElement;
+  }
+
+  double? _devicePixelRatio;
+
+  @override
+  void rositaLayout() {
+    super.rositaLayout();
+
+    final devicePixelRatio = target.configuration.devicePixelRatio /
+        WidgetsBinding.instance.platformDispatcher.implicitView!.devicePixelRatio;
+
+    if (_devicePixelRatio != devicePixelRatio) {
+      _devicePixelRatio = devicePixelRatio;
+      htmlElement.style.transform = devicePixelRatio != 1.0 ? 'scale($devicePixelRatio)' : '';
+    }
   }
 }
