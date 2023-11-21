@@ -11,6 +11,12 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
   Offset? get localOffset => _localOffset;
 
+  String _styleTransform = '';
+
+  String get styleTransform => _styleTransform;
+
+  set styleTransform(String value) => _styleTransform = value;
+
   @override
   void rositaLayout() {
     super.rositaLayout();
@@ -24,8 +30,7 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
     final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
 
-    style.left = '${offset.dx}px';
-    style.top = '${offset.dy}px';
+    style.transform = 'translate(${offset.dx}px,${offset.dy}px)$_styleTransform';
 
     _localOffset = offset;
   }

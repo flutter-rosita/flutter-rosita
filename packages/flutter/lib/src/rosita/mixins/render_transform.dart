@@ -11,25 +11,21 @@ mixin RositaRenderTransform on RositaRenderBoxMixin {
   @override
   void rositaPaint() {
     final style = htmlElement.style;
-    final origin = target.origin;
+    final origin = target.origin ?? Offset.zero;
     final transform = target.rositaTransform;
-
-    if (origin != null) {
-      final offset = origin + (localOffset ?? Offset.zero);
-
-      style.left = '${offset.dx}px';
-      style.top = '${offset.dy}px';
-    }
+    final offset = origin + (localOffset ?? Offset.zero);
 
     if (transform != null) {
       if (transform.isIdentity()) {
-        style.transform = '';
+        styleTransform = '';
       } else if (_isScale(transform.storage)) {
-        style.transform = 'scale(${transform.storage[0]},${transform.storage[5]})';
+        styleTransform = 'scale(${transform.storage[0]},${transform.storage[5]})';
       } else {
-        style.transform = 'matrix3d(${transform.storage.join(',')})';
+        styleTransform = 'matrix3d(${transform.storage.join(',')})';
       }
     }
+
+    style.transform = 'translate(${offset.dx}px,${offset.dy}px)$styleTransform';
   }
 
   bool _isScale(Float64List list) {

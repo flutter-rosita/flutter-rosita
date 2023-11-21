@@ -16,8 +16,7 @@ mixin RositaRenderFractionalTranslationMixin on RositaRenderBoxMixin {
       final Size(:width, :height) = childRenderObject.size;
       final Offset(:dx, :dy) = target.translation;
 
-      style.left = '${width * dx}px';
-      style.top = '${height * dy}px';
+      style.transform = 'translate(${width * dx}px,${height * dy}px)$styleTransform';
     }
   }
 }

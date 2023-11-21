@@ -67,8 +67,7 @@ mixin _CanvasMixin {
     _offset = Offset(-rect.left, -rect.top);
     offsetRect = rect;
 
-    canvas.style.left = '${rect.left}px';
-    canvas.style.top = '${rect.top}px';
+    canvas.style.transform = 'translate(${rect.left}px,${rect.top}px)';
 
     canvas.width = rect.width.toInt();
     canvas.height = rect.height.toInt();
