@@ -98,11 +98,6 @@ mixin RositaRenderMixin {
     if (hasHtmlElement && attached) {
       _rositaNeedsLayout = true;
       rositaOwner._rositaNodesNeedingLayout.add(this);
-
-      if (_rositaFirstLayout && (this is! RenderBox || (this as RenderBox).hasSize)) {
-        _rositaFirstLayout = false;
-        rositaMarkNeedsPaint();
-      }
     }
   }
 
@@ -175,7 +170,12 @@ mixin RositaRenderMixin {
   }
 
   @mustCallSuper
-  void rositaLayout() {}
+  void rositaLayout() {
+    if (_rositaFirstLayout) {
+      _rositaFirstLayout = false;
+      rositaMarkNeedsPaint();
+    }
+  }
 
   void rositaPaint() {}
 
