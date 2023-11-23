@@ -323,7 +323,29 @@ class Hero extends StatefulWidget {
       element.visitChildren(visitor);
     }
 
-    context.visitChildElements(visitor);
+    if (rositaEnableVisitChildren) {
+      (context as Element).rositaVisitChildren(context, (Element element) {
+        final Widget widget = element.widget;
+        if (widget is Hero) {
+          final StatefulElement hero = element as StatefulElement;
+          final Object tag = widget.tag;
+          if (Navigator.of(hero) == navigator) {
+            inviteHero(hero, tag);
+          } else {
+            final ModalRoute<Object?>? heroRoute = ModalRoute.of(hero);
+            if (heroRoute != null && heroRoute is PageRoute && heroRoute.isCurrent) {
+              inviteHero(hero, tag);
+            }
+          }
+        } else if (widget is HeroMode && !widget.enabled) {
+          return false;
+        }
+
+        return true;
+      });
+    } else {
+      context.visitChildElements(visitor);
+    }
     return result;
   }
 
