@@ -1937,10 +1937,6 @@ class _InactiveElements with RositaElementMixin {
   final Set<Element> _elements = HashSet<Element>();
 
   void _unmount(Element element) {
-    if (rositaEnableVisitChildren) {
-      rositaVisitChildrenFromLeaf(element, (Element el) => el.unmount());
-      return;
-    }
     assert(element._lifecycleState == _ElementLifecycle.inactive);
     assert(() {
       if (debugPrintGlobalKeyedWidgetLifecycle) {
@@ -1987,7 +1983,10 @@ class _InactiveElements with RositaElementMixin {
     assert(element._parent == null);
     if (element._lifecycleState == _ElementLifecycle.active) {
       if (rositaEnableVisitChildren) {
-        rositaVisitChildren(element, (Element el) => el.deactivate());
+        rositaVisitChildren(element, (Element el) {
+          el.deactivate();
+          return true;
+        });
       } else {
         _deactivateRecursively(element);
       }
@@ -4291,7 +4290,10 @@ abstract class Element extends DiagnosticableTree with RositaElementMixin implem
     }());
     _updateDepth(_parent!.depth);
     if (rositaEnableVisitChildren) {
-      rositaVisitChildren(this, (Element el) => el.activate());
+      rositaVisitChildren(this, (Element el) {
+        el.activate();
+        return true;
+      });
     } else {
       _activateRecursively(this);
     }
