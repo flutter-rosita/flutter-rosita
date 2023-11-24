@@ -58,6 +58,22 @@ class RenderRositaImage extends RositaRenderBox {
         _fit = fit,
         _alignment = alignment;
 
+  html.ImageElement get imageElement => htmlElement as html.ImageElement;
+
+  @override
+  html.HtmlElement? createRositaElement() {
+    final imageElement = html.ImageElement();
+    final style = imageElement.style;
+
+    imageElement.src = src;
+
+    RositaRadiusUtils.applyBorderRadius(style, borderRadius);
+    RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
+    RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
+
+    return imageElement;
+  }
+
   String? get src => _src;
   String? _src;
 
@@ -66,7 +82,7 @@ class RenderRositaImage extends RositaRenderBox {
       return;
     }
     _src = value;
-    markNeedsPaint();
+    imageElement.src = value;
   }
 
   BorderRadiusGeometry? get borderRadius => _borderRadius;
@@ -77,7 +93,7 @@ class RenderRositaImage extends RositaRenderBox {
       return;
     }
     _borderRadius = value;
-    markNeedsPaint();
+    RositaRadiusUtils.applyBorderRadius(imageElement.style, value);
   }
 
   BoxFit? get fit => _fit;
@@ -88,7 +104,7 @@ class RenderRositaImage extends RositaRenderBox {
       return;
     }
     _fit = value;
-    markNeedsPaint();
+    RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement.style, value);
   }
 
   AlignmentGeometry? get alignment => _alignment;
@@ -99,7 +115,7 @@ class RenderRositaImage extends RositaRenderBox {
       return;
     }
     _alignment = value;
-    markNeedsPaint();
+    RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement.style, value);
   }
 
   @override
@@ -114,27 +130,6 @@ class RenderRositaImage extends RositaRenderBox {
           );
   }
 
-  html.ImageElement? _imageElement;
-
-  html.ImageElement get imageElement {
-    _imageElement ??= html.ImageElement();
-
-    final imageElement = _imageElement!;
-
-    htmlElement.append(imageElement);
-
-    return imageElement;
-  }
-
   @override
-  void rositaPaint() {
-    if (src != null) {
-      final style = imageElement.style;
-      imageElement.src = src;
-
-      RositaRadiusUtils.applyBorderRadius(style, borderRadius);
-      RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
-      RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
-    }
-  }
+  void rositaPaint() {}
 }

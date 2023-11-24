@@ -8,17 +8,10 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
   @override
   RenderImage get target => this as RenderImage;
 
-  html.ImageElement? _imageElement;
+  html.ImageElement get imageElement => htmlElement as html.ImageElement;
 
-  html.ImageElement get imageElement {
-    _imageElement ??= html.ImageElement();
-
-    final imageElement = _imageElement!;
-
-    htmlElement.append(imageElement);
-
-    return imageElement;
-  }
+  @override
+  html.HtmlElement? createRositaElement() => html.ImageElement();
 
   String? _blobUrl;
 

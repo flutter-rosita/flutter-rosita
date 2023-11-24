@@ -38,12 +38,8 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
       'position: absolute;',
       'box-sizing: border-box;',
       '}',
-      '.rosita-root-element canvas {',
+      '.rosita-root-element canvas, .rosita-root-element img {',
       'position: absolute;',
-      '}',
-      '.rosita-root-element img {',
-      'width: 100%;',
-      'height: 100%;',
       '}',
     ]);
 

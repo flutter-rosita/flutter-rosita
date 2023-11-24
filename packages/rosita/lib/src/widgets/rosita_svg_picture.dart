@@ -65,6 +65,24 @@ class RenderRositaSvgPicture extends RositaRenderBox {
         _fit = fit,
         _alignment = alignment;
 
+  html.ImageElement get imageElement => htmlElement as html.ImageElement;
+
+  @override
+  html.HtmlElement? createRositaElement() {
+    final imageElement = html.ImageElement();
+    final style = imageElement.style;
+
+    imageElement.src = src;
+
+    RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
+    RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
+
+    imageElement.width = width?.toInt();
+    imageElement.height = height?.toInt();
+
+    return imageElement;
+  }
+
   String? get src => _src;
   String? _src;
 
@@ -73,7 +91,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _src = value;
-    markNeedsPaint();
+    imageElement.src = value;
   }
 
   double? get width => _width;
@@ -84,7 +102,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _width = value;
-    markNeedsPaint();
+    imageElement.width = value?.toInt();
   }
 
   double? get height => _height;
@@ -95,7 +113,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _height = value;
-    markNeedsPaint();
+    imageElement.height = value?.toInt();
   }
 
   BoxFit? get fit => _fit;
@@ -106,7 +124,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _fit = value;
-    markNeedsPaint();
+    RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement.style, value);
   }
 
   AlignmentGeometry? get alignment => _alignment;
@@ -117,7 +135,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _alignment = value;
-    markNeedsPaint();
+    RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement.style, value);
   }
 
   @override
@@ -128,34 +146,6 @@ class RenderRositaSvgPicture extends RositaRenderBox {
     );
   }
 
-  html.ImageElement? _imageElement;
-
-  html.ImageElement get imageElement {
-    _imageElement ??= html.ImageElement();
-
-    final imageElement = rositaCastNullableToNonNullable ? _imageElement as html.ImageElement : _imageElement!;
-
-    htmlElement.append(imageElement);
-
-    return imageElement;
-  }
-
   @override
-  void rositaPaint() {
-    if (src != null) {
-      final style = imageElement.style;
-      imageElement.src = src;
-
-      if (width != null) {
-        imageElement.width = width!.toInt();
-      }
-
-      if (height != null) {
-        imageElement.height = height!.toInt();
-      }
-
-      RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
-      RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
-    }
-  }
+  void rositaPaint() {}
 }
