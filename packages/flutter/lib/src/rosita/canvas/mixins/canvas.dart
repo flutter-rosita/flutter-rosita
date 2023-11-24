@@ -67,10 +67,16 @@ mixin _CanvasMixin {
     _offset = Offset(-rect.left, -rect.top);
     offsetRect = rect;
 
-    canvas.style.transform = 'translate(${rect.left}px,${rect.top}px)';
+    final Rect(:left, :top, :width, :height) = rect;
 
-    canvas.width = rect.width.toInt();
-    canvas.height = rect.height.toInt();
+    if (left != 0 || top != 0) {
+      canvas.style.transform = 'translate(${left}px,${top}px)';
+    } else {
+      canvas.style.transform = '';
+    }
+
+    canvas.width = width.toInt();
+    canvas.height = height.toInt();
   }
 
   void _checkRectOverflow(Rect rect, double weight) {

@@ -29,8 +29,13 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
     style.height = '${size.height}px';
 
     final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
+    final Offset(:dx, :dy) = offset;
 
-    style.transform = 'translate(${offset.dx}px,${offset.dy}px)$_styleTransform';
+    if (dx != 0 || dy != 0) {
+      style.transform = 'translate(${dx}px,${dy}px)$_styleTransform';
+    } else {
+      style.transform = _styleTransform;
+    }
 
     _localOffset = offset;
   }

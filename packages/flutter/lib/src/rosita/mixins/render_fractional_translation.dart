@@ -15,8 +15,14 @@ mixin RositaRenderFractionalTranslationMixin on RositaRenderBoxMixin {
       final style = htmlElement.style;
       final Size(:width, :height) = childRenderObject.size;
       final Offset(:dx, :dy) = target.translation;
+      final x = width * dx;
+      final y = height * dy;
 
-      style.transform = 'translate(${width * dx}px,${height * dy}px)$styleTransform';
+      if (x != 0 || y != 0) {
+        style.transform = 'translate(${x}px,${y}px)$styleTransform';
+      } else {
+        style.transform = styleTransform;
+      }
     }
   }
 }

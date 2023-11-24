@@ -70,7 +70,13 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
       if (_localOffset != offset) {
         _localOffset = offset;
 
-        style.transform = 'translate(${offset.dx}px,${offset.dy}px)';
+        final Offset(:dx, :dy) = offset;
+
+        if (dx != 0 || dy != 0) {
+          style.transform = 'translate(${dx}px,${dy}px)';
+        } else {
+          style.transform = '';
+        }
 
         RositaScrollUtils.onScroll();
       }

@@ -15,6 +15,7 @@ mixin RositaRenderTransform on RositaRenderBoxMixin {
     final transform = target.rositaTransform;
     final offset = origin + (localOffset ?? Offset.zero);
     final alignment = target.alignment?.resolve(target.textDirection);
+    final Offset(:dx, :dy) = offset;
 
     if (transform != null) {
       if (transform.isIdentity()) {
@@ -30,7 +31,11 @@ mixin RositaRenderTransform on RositaRenderBoxMixin {
         ? '${(1 + alignment.x) / 2 * 100}% ${(1 + alignment.y) / 2 * 100}%'
         : '';
 
-    style.transform = 'translate(${offset.dx}px,${offset.dy}px)$styleTransform';
+    if (dx != 0 || dy != 0) {
+      style.transform = 'translate(${dx}px,${dy}px)$styleTransform';
+    } else {
+      style.transform = styleTransform;
+    }
   }
 
   bool _isScale(Float64List list) {
