@@ -576,6 +576,11 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     }
     _obscureText = value;
     _cachedAttributedValue = null;
+
+    if (kIsRosita) {
+      rositaMarkNeedsPaint();
+    }
+
     if (rositaEnableSemantics) {
       markNeedsSemanticsUpdate();
     }
