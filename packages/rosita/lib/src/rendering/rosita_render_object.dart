@@ -165,6 +165,13 @@ mixin RositaRenderMixin {
 
   @mustCallSuper
   void rositaDetach() {
+    final parent = this.parent as RositaRenderMixin?;
+
+    if (parent != null && parent._rositaNeedsDetach && parent.hasHtmlElement) {
+      _htmlElement = null;
+      return;
+    }
+
     _htmlElement?.remove();
     _htmlElement = null;
   }
@@ -235,7 +242,7 @@ mixin RositaPipelineOwnerMixin {
       final List<RositaRenderMixin> dirtyNodes = _rositaNodesNeedingDetach;
       _rositaNodesNeedingDetach = <RositaRenderMixin>[];
 
-      for (final node in dirtyNodes) {
+      for (final node in dirtyNodes.reversed) {
         node._rositaNeedsDetach = false;
 
         if (node.hasHtmlElement && !node.attached) {
