@@ -1,3 +1,17 @@
+## 0.4.4
+
+- Fix mouse press events
+- Fix render to custom scale devicePixelRatio
+- Optimize render with ccs transform translate
+- Optimize rositaMarkNeedsLayout
+- Refactor rositaVisitChildren
+- Optimize method Hero._allHeroesFor with rositaVisitChildren
+- Fix repaint text field on change obscureText property
+- Add support RenderTransform alignment
+- Optimize set style transform
+- Optimize Rosita images set style property
+- Optimize rositaDetach
+
 ## 0.4.3
 
 - Fix paintChild when hasHtmlElement
