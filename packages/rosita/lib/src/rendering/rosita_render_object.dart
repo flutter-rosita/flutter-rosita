@@ -40,8 +40,6 @@ mixin RositaRenderMixin {
         _rositaNeedsLayout = false;
         _rositaNeedsPaint = false;
         rositaMarkNeedsAttach();
-        rositaMarkNeedsLayout();
-        rositaMarkNeedsPaint();
       }
     }
   }
@@ -264,7 +262,7 @@ mixin RositaPipelineOwnerMixin {
       for (final node in dirtyNodes..sort((RositaRenderMixin a, RositaRenderMixin b) => a.depth - b.depth)) {
         node._rositaNeedsLayout = false;
 
-        if (node.hasHtmlElement && (node is! RenderBox || (node as RenderBox).hasSize)) {
+        if (node.hasHtmlElement) {
           node.rositaLayout();
         }
       }
@@ -283,7 +281,7 @@ mixin RositaPipelineOwnerMixin {
       for (final node in dirtyNodes) {
         node._rositaNeedsPaint = false;
 
-        if (node.hasHtmlElement && (node is! RenderBox || (node as RenderBox).hasSize)) {
+        if (node.hasHtmlElement) {
           node.rositaPaint();
         }
       }

@@ -2359,9 +2359,6 @@ abstract class RenderObject with DiagnosticableTreeMixin, RositaRenderMixin impl
       if (rositaEnableSemantics) {
         markNeedsSemanticsUpdate();
       }
-      if (kIsRosita) {
-        rositaMarkNeedsLayout();
-      }
     } catch (e, stack) {
       _reportException('performLayout', e, stack);
     }

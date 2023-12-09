@@ -152,6 +152,9 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   Matrix4? _rootTransform;
 
   TransformLayer _updateMatricesAndCreateNewRootLayer() {
+    if (kIsRosita) {
+      rositaMarkNeedsLayout();
+    }
     _rootTransform = configuration.toMatrix();
     final TransformLayer rootLayer = TransformLayer(transform: _rootTransform);
     rootLayer.attach(this);
