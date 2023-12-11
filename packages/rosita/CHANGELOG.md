@@ -1,3 +1,7 @@
+## 0.4.5
+
+- Optimize Rosita call layout and paint
+
 ## 0.4.4
 
 - Fix mouse press events
