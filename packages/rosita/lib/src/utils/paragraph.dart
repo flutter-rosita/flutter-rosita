@@ -38,9 +38,10 @@ class RositaParagraphUtils {
   static String get defaultFontFamily {
     return _defaultFontFamily ??= switch (defaultTargetPlatform) {
       TargetPlatform.iOS => '.SF UI Display',
-      TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.linux => 'Roboto',
       TargetPlatform.windows => 'Segoe UI',
       TargetPlatform.macOS => '.AppleSystemUIFont',
+      // Default to: android, fuchsia, linux and other forks platforms
+      _ => 'Roboto',
     };
   }
 
