@@ -1,3 +1,7 @@
+## 0.4.6
+
+- Fix switch TargetPlatform to Flutter forks
+
 ## 0.4.5
 
 - Optimize Rosita call layout and paint
