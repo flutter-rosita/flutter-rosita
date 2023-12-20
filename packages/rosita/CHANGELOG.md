@@ -1,3 +1,7 @@
+## 0.4.7
+
+- Add support TextOverflow
+
 ## 0.4.6
 
 - Fix switch TargetPlatform to Flutter forks
