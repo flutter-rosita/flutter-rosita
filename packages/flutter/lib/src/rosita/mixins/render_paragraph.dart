@@ -17,8 +17,6 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
     RositaTextUtils.applyTextStyle(
       htmlElement.style,
       textAlign: target.textAlign,
-      overflow: target.overflow,
-      maxLines: target.maxLines,
     );
 
     _appendTextSpan(text, htmlElement);

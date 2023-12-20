@@ -24,7 +24,6 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
       return;
     }
     _text = value;
-    _isInitialSetText = true;
     setLayout();
   }
 
@@ -92,6 +91,8 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
   }
 
   void setLayout() {
+    _textSize = null;
+    _isInitialSetText = true;
     _paragraphData = null;
     markNeedsLayout();
     markNeedsPaint();
@@ -109,9 +110,37 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
     );
   }
 
+  bool _textDidExceedMaxLines = false;
+  bool _didOverflowHeight = false;
+  bool _didOverflowWidth = false;
+
+  Size? _textSize;
+
   @override
   void performLayout() {
-    size = constraints.constrain(_layoutText(minWidth: 0, maxWidth: constraints.maxWidth));
+    final BoxConstraints constraints = this.constraints;
+    final int? maxLines = this.maxLines;
+    final Size textSize = _layoutText(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
+    size = constraints.constrain(textSize);
+
+    switch (overflow) {
+      case TextOverflow.visible:
+        _textDidExceedMaxLines = false;
+        _didOverflowHeight = false;
+        _didOverflowWidth = false;
+      default:
+        _textDidExceedMaxLines = maxLines != null && _paragraphData!.lines > maxLines;
+        _didOverflowHeight = size.height < textSize.height;
+        _didOverflowWidth = size.width < textSize.width;
+    }
+
+    if (_textSize == null) {
+      _textSize = textSize;
+    } else if (_textSize != textSize) {
+      _textSize = textSize;
+      _isInitialSetText = true;
+      markNeedsPaint();
+    }
   }
 
   Size _layoutText({double minWidth = 0.0, double maxWidth = double.infinity}) {
@@ -129,10 +158,12 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
 
     final bool widthMatters = softWrap || overflow == TextOverflow.ellipsis;
 
-    return _paragraphData!.buildSize(
+    _paragraphData!.layout(
       minWidth: minWidth,
       maxWidth: widthMatters ? maxWidth : double.infinity,
     );
+
+    return _paragraphData!.size;
   }
 
   @override
@@ -140,7 +171,6 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
     _layoutText();
     return _paragraphData!.minIntrinsicWidth;
   }
-
 
   @override
   double computeMaxIntrinsicWidth(double height) {
@@ -165,7 +195,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
   @override
   void systemFontsDidChange() {
     super.systemFontsDidChange();
-    _paragraphData = null;
+    setLayout();
   }
 
   bool _isInitialSetText = true;
@@ -183,17 +213,66 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
 
     style.display = '';
 
-    if (_isInitialSetText) {
-      htmlElement.innerText = text;
-      _isInitialSetText = false;
-    }
-
     RositaTextUtils.applyTextStyle(
       style,
       textStyle: textStyle,
       textAlign: textAlign,
-      overflow: overflow,
-      maxLines: maxLines,
     );
+
+    if (!_isInitialSetText) return;
+
+    _isInitialSetText = false;
+
+    final bool hasVisualOverflow = _textDidExceedMaxLines || _didOverflowHeight || _didOverflowWidth;
+
+    assert(() {
+      if (hasVisualOverflow) {
+        htmlElement.setAttribute('rosita-debug-overflow', 'true');
+      } else {
+        htmlElement.removeAttribute('rosita-debug-overflow');
+      }
+      return true;
+    }());
+
+    if (hasVisualOverflow == false) {
+      htmlElement.innerText = text;
+      return;
+    }
+
+    final List<String> wordList = text.split(' ');
+    final buffer = StringBuffer();
+    final wordsCount = _paragraphData!.takeWordsCount(size, maxLines);
+
+    for (int i = 0; i < wordsCount; i++) {
+      if (i % 2 == 0) {
+        final word = wordList[i ~/ 2];
+
+        buffer.write(word);
+      } else {
+        buffer.write(' ');
+      }
+
+      final delta = wordsCount - i;
+
+      if (delta < 1 && delta > 0 && (i + 1) % 2 == 0) {
+        final word = wordList[(i + 1) ~/ 2];
+
+        buffer.write(word.substring(0, ((wordsCount - i) * word.length).floor()));
+      }
+    }
+
+    final string = buffer.toString();
+
+    switch (overflow) {
+      case TextOverflow.ellipsis:
+        if (string.length > 2) {
+          htmlElement.innerText = '${string.substring(0, string.length - 2)}...';
+
+          return;
+        }
+      default:
+    }
+
+    htmlElement.innerText = string;
   }
 }

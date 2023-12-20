@@ -146,7 +146,7 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
   final double minIntrinsicWidth;
   final double maxIntrinsicWidth;
 
-  const RositaCanvasParagraphData({
+  RositaCanvasParagraphData({
     required super.font,
     required super.lineHeight,
     required this.wordList,
@@ -155,7 +155,15 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
     required this.maxIntrinsicWidth,
   });
 
-  Size buildSize({double minWidth = 0.0, double maxWidth = double.infinity}) {
+  Size? _size;
+
+  Size get size => _size!;
+
+  int? _lines;
+
+  int get lines => _lines!;
+
+  void layout({double minWidth = 0.0, double maxWidth = double.infinity}) {
     int lines = 1;
     double maxLineWidth = 0;
     double lineWidth = 0;
@@ -163,7 +171,7 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
     for (int i = 0; i < wordList.length; i++) {
       final width = wordList[i];
 
-      if (lineWidth + width >= maxWidth) {
+      if (lineWidth + width > maxWidth) {
         lines++;
         lineWidth = 0;
       }
@@ -175,9 +183,51 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
       }
     }
 
-    return Size(
-      maxLineWidth,
+    _size = Size(
+      lines > 1 && maxWidth.isFinite ? maxWidth : maxLineWidth,
       lines * lineHeight,
     );
+
+    _lines = lines;
+  }
+
+  double takeWordsCount(Size size, int? maxLines) {
+    final maxWidth = size.width;
+    final maxHeight = size.height;
+
+    double worldCount = 0;
+
+    int lines = 1;
+    double maxLineWidth = 0;
+    double lineWidth = 0;
+
+    for (int i = 0; i < wordList.length; i++) {
+      final width = wordList[i];
+
+      if (lineWidth + width > maxWidth) {
+        lines++;
+
+        if (maxLines != null && lines > maxLines || lines * lineHeight >= maxHeight) {
+          worldCount = worldCount + (maxWidth - lineWidth - width) / width;
+
+          if (worldCount < .0) {
+            return .0;
+          }
+
+          return worldCount;
+        }
+
+        lineWidth = 0;
+      }
+
+      lineWidth += width;
+
+      if (lineWidth > maxLineWidth) {
+        maxLineWidth = lineWidth;
+      }
+      worldCount += 1.0;
+    }
+
+    return worldCount;
   }
 }

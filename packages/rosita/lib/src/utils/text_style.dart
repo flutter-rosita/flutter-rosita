@@ -9,20 +9,8 @@ class RositaTextUtils {
     html.CssStyleDeclaration style, {
     TextStyle? textStyle,
     TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
   }) {
     if (textAlign != null) style.textAlign = _mapTextAlign(textAlign);
-    if (overflow != null) {
-      style.textOverflow = _mapTextOverflow(overflow);
-      style.overflowX = _mapOverflow(overflow);
-    }
-    if (maxLines == 1) {
-      style.whiteSpace = 'nowrap';
-    } else if (maxLines != null) {
-      style.overflowY = 'clip';
-    }
-
     if (textStyle != null) {
       if (textStyle.color != null) {
         style.color = textStyle.color.toStyleString();
@@ -70,16 +58,5 @@ class RositaTextUtils {
         TextAlign.justify => 'justify',
         TextAlign.start => 'start',
         TextAlign.end => 'end',
-      };
-
-  static String _mapTextOverflow(TextOverflow overflow) => switch (overflow) {
-        TextOverflow.clip => 'clip',
-        TextOverflow.ellipsis => 'ellipsis',
-        _ => '',
-      };
-
-  static String _mapOverflow(TextOverflow overflow) => switch (overflow) {
-        TextOverflow.clip || TextOverflow.ellipsis => 'clip',
-        _ => '',
       };
 }

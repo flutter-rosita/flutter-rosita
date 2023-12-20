@@ -1103,9 +1103,10 @@ class TextPainter {
           text: plainText,
           style: textStyle,
         );
-        
-        
-        _rositaSize = _rositaParagraphData?.buildSize(minWidth: minWidth, maxWidth: maxWidth);
+
+        _rositaParagraphData!.layout(minWidth: minWidth, maxWidth: maxWidth);
+
+        _rositaSize = _rositaParagraphData!.size;
       }
     }
     
