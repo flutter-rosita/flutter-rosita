@@ -600,10 +600,10 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
     if (rositaEnableUpdateCompositingBits) {
       rootPipelineOwner.flushCompositingBits();
     }
-    rositaSkipCallback(rootPipelineOwner.flushPaint());
+    rositaSkipCallback(rootPipelineOwner.flushPaint);
     if (sendFramesToEngine) {
       for (final RenderView renderView in renderViews) {
-        rositaSkipCallback(renderView.compositeFrame()); // this sends the bits to the GPU
+        rositaSkipCallback(renderView.compositeFrame); // this sends the bits to the GPU
       }
       if (rositaEnableSemantics) {
         rootPipelineOwner.flushSemantics(); // this sends the semantics to the OS.
