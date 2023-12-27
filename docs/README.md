@@ -17,6 +17,9 @@ It is worth trying Rosita if Flutter WEB html renderer is not fast enough for yo
 `flutter-rosita` substitutes the original [`flutter`](https://docs.flutter.dev/reference/flutter-cli) CLI command. Only the command line interface is supported.
 
 ```sh
+# Update package config with Flutter Rosita
+flutter-rosita pub get
+
 # Build the project and run WEB (either in debug or release mode).
 flutter-rosita run
 flutter-rosita run --release

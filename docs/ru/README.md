@@ -17,6 +17,9 @@ Flutter Rosita - это форк с изменениями для ускорен
 `flutter-rosita` заменяет исходную команду [`flutter`](https://docs.flutter.dev/reference/flutter-cli) CLI. Поддерживается только интерфейс командной строки.
 
 ```sh
+# Обновить конфиг зависимостей с Flutter Rosita
+flutter-rosita pub get
+
 # Запуск проекта под WEB (в режиме debug или в режиме release).
 flutter-rosita run
 flutter-rosita run --release
