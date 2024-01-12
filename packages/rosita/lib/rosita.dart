@@ -45,3 +45,6 @@ const rositaDisableLayoutMarkNeedsPaint =
     bool.fromEnvironment('ROSITA_DISABLE_LAYOUT_MARK_NEEDS_PAINT', defaultValue: kIsRosita);
 
 const rositaEnableLayoutMarkNeedsPaint = !rositaDisableLayoutMarkNeedsPaint;
+
+const rositaDisableHeroFlightAlwaysOnTickCheckUpdate =
+    bool.fromEnvironment('ROSITA_DISABLE_HERO_FLIGHT_ALWAYS_ON_TICK_CHECK_UPDATE', defaultValue: kIsRosita);

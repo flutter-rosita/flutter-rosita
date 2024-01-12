@@ -647,7 +647,17 @@ class _HeroFlight {
     }
   }
 
+  bool _rositaToHeroOriginInitialized = false;
+
   void onTick() {
+    if (rositaDisableHeroFlightAlwaysOnTickCheckUpdate) {
+      if (_rositaToHeroOriginInitialized) {
+        return;
+      } else {
+        _rositaToHeroOriginInitialized = true;
+      }
+    }
+
     final RenderBox? toHeroBox = (!_aborted && manifest.toHero.mounted)
       ? manifest.toHero.context.findRenderObject() as RenderBox?
       : null;
