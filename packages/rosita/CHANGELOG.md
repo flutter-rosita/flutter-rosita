@@ -1,3 +1,7 @@
+## 0.4.8
+
+- Optimization HeroFlight
+
 ## 0.4.7
 
 - Add support TextOverflow
