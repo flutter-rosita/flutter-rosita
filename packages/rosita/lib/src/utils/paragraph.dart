@@ -191,7 +191,7 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
     _lines = lines;
   }
 
-  double takeWordsCount(Size size, int? maxLines) {
+  ({double words, int lines}) takeWordsCount(Size size, int? maxLines) {
     final maxWidth = size.width;
     final maxHeight = size.height;
 
@@ -207,14 +207,14 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
       if (lineWidth + width > maxWidth) {
         lines++;
 
-        if (maxLines != null && lines > maxLines || lines * lineHeight >= maxHeight) {
+        if (maxLines != null && lines > maxLines || lines * lineHeight > maxHeight) {
           worldCount = worldCount + (maxWidth - lineWidth - width) / width;
 
           if (worldCount < .0) {
-            return .0;
+            return (words: .0, lines: 0);
           }
 
-          return worldCount;
+          return (words: worldCount, lines: lines - 1);
         }
 
         lineWidth = 0;
@@ -228,6 +228,6 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
       worldCount += 1.0;
     }
 
-    return worldCount;
+    return (words: worldCount, lines: lines);
   }
 }

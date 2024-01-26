@@ -1,6 +1,8 @@
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
 
+const String _kEllipsis = '\u2026';
+
 class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFontsChangeMixin {
   RositaRenderParagraph({
     String? text,
@@ -120,8 +122,9 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
   void performLayout() {
     final BoxConstraints constraints = this.constraints;
     final int? maxLines = this.maxLines;
-    final Size textSize = _layoutText(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
-    size = constraints.constrain(textSize);
+    Size textSize = _layoutText(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
+
+    final constrainSize = constraints.constrain(textSize);
 
     switch (overflow) {
       case TextOverflow.visible:
@@ -130,9 +133,19 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
         _didOverflowWidth = false;
       default:
         _textDidExceedMaxLines = maxLines != null && _paragraphData!.lines > maxLines;
-        _didOverflowHeight = size.height < textSize.height;
-        _didOverflowWidth = size.width < textSize.width;
+        _didOverflowHeight = constrainSize.height < textSize.height;
+        _didOverflowWidth = constrainSize.width < textSize.width;
     }
+
+    final bool hasVisualOverflow = _textDidExceedMaxLines || _didOverflowHeight || _didOverflowWidth;
+
+    if (hasVisualOverflow) {
+      final wordsCount = _paragraphData!.takeWordsCount(constrainSize, maxLines);
+      final linesCount = wordsCount.lines;
+      textSize = Size(constrainSize.width, linesCount * _paragraphData!.lineHeight);
+    }
+
+    size = constraints.constrain(textSize);
 
     if (_textSize == null) {
       _textSize = textSize;
@@ -241,7 +254,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
 
     final List<String> wordList = text.split(' ');
     final buffer = StringBuffer();
-    final wordsCount = _paragraphData!.takeWordsCount(size, maxLines);
+    final wordsCount = _paragraphData!.takeWordsCount(size, maxLines).words;
 
     for (int i = 0; i < wordsCount; i++) {
       if (i % 2 == 0) {
@@ -266,7 +279,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
     switch (overflow) {
       case TextOverflow.ellipsis:
         if (string.length > 2) {
-          htmlElement.innerText = '${string.substring(0, string.length - 2)}...';
+          htmlElement.innerText = '${string.substring(0, string.length - 2)}$_kEllipsis';
 
           return;
         }
