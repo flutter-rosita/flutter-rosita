@@ -1,3 +1,8 @@
+## 0.4.9
+
+- Add support _RenderVisibility and _RenderSliverVisibility
+- Fix RositaRenderParagraph size with TextOverflow.ellipsis
+
 ## 0.4.8
 
 - Optimization HeroFlight
