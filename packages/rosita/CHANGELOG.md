@@ -1,3 +1,7 @@
+## 0.4.10
+
+- Add support TextScaler
+
 ## 0.4.9
 
 - Add support _RenderVisibility and _RenderSliverVisibility
