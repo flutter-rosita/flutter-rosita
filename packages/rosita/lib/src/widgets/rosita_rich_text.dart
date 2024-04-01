@@ -8,6 +8,7 @@ class RositaRichText extends LeafRenderObjectWidget {
     this.text, {
     super.key,
     this.style,
+    this.textScaler,
     this.textAlign,
     this.textDirection,
     this.softWrap = true,
@@ -18,6 +19,8 @@ class RositaRichText extends LeafRenderObjectWidget {
   final String? text;
 
   final TextStyle? style;
+
+  final TextScaler? textScaler;
 
   final TextAlign? textAlign;
 
@@ -34,6 +37,7 @@ class RositaRichText extends LeafRenderObjectWidget {
     return RositaRenderParagraph(
       text: text,
       style: style,
+      textScaler: textScaler,
       textAlign: textAlign,
       softWrap: softWrap,
       overflow: overflow,

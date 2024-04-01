@@ -36,6 +36,7 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
     RositaTextUtils.applyTextStyle(
       element.style,
       textStyle: style,
+      textScaler: target.textScaler,
     );
 
     parent.append(element);

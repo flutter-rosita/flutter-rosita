@@ -1157,7 +1157,7 @@ class TextPainter {
           style: textStyle,
         );
 
-        _rositaParagraphData!.layout(minWidth: minWidth, maxWidth: maxWidth);
+        _rositaParagraphData!.layout(minWidth: minWidth, maxWidth: maxWidth, textScaler: textScaler);
 
         _rositaSize = _rositaParagraphData!.size;
       }

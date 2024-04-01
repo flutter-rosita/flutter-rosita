@@ -53,7 +53,7 @@ class RositaParagraphUtils {
     final fontStyle = style.fontStyle;
     final fontWeight = style.fontWeight;
     final font = [
-      if (fontStyle != null) RositaTextUtils.maFontStyle(fontStyle),
+      if (fontStyle != null) RositaTextUtils.mapFontStyle(fontStyle),
       if (fontWeight != null) RositaTextUtils.mapFontWeight(fontWeight),
       '${fontSize}px/$height',
       '"$fontFamily"',
@@ -163,13 +163,13 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
 
   int get lines => _lines!;
 
-  void layout({double minWidth = 0.0, double maxWidth = double.infinity}) {
+  void layout({double minWidth = 0.0, double maxWidth = double.infinity, required TextScaler textScaler}) {
     int lines = 1;
     double maxLineWidth = 0;
     double lineWidth = 0;
 
     for (int i = 0; i < wordList.length; i++) {
-      final width = wordList[i];
+      final width = textScaler.scale(wordList[i]);
 
       if (lineWidth + width > maxWidth) {
         lines++;
@@ -185,13 +185,13 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
 
     _size = Size(
       lines > 1 && maxWidth.isFinite ? maxWidth : maxLineWidth,
-      lines * lineHeight,
+      lines * textScaler.scale(lineHeight),
     );
 
     _lines = lines;
   }
 
-  ({double words, int lines}) takeWordsCount(Size size, int? maxLines) {
+  ({double words, int lines}) takeWordsCount(Size size, int? maxLines, TextScaler textScaler) {
     final maxWidth = size.width;
     final maxHeight = size.height;
 
@@ -202,12 +202,12 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
     double lineWidth = 0;
 
     for (int i = 0; i < wordList.length; i++) {
-      final width = wordList[i];
+      final width = textScaler.scale(wordList[i]);
 
       if (lineWidth + width > maxWidth) {
         lines++;
 
-        if (maxLines != null && lines > maxLines || lines * lineHeight > maxHeight) {
+        if (maxLines != null && lines > maxLines || lines * textScaler.scale(lineHeight) > maxHeight) {
           worldCount = worldCount + (maxWidth - lineWidth - width) / width;
 
           if (worldCount < .0) {

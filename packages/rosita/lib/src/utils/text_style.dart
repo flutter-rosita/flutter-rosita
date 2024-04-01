@@ -9,6 +9,7 @@ class RositaTextUtils {
     html.CssStyleDeclaration style, {
     TextStyle? textStyle,
     TextAlign? textAlign,
+    TextScaler? textScaler,
   }) {
     if (textAlign != null) style.textAlign = _mapTextAlign(textAlign);
     if (textStyle != null) {
@@ -19,16 +20,28 @@ class RositaTextUtils {
         style.fontFamily = "'${textStyle.fontFamily}'";
       }
       if (textStyle.fontSize != null) {
-        style.fontSize = '${textStyle.fontSize!.floor()}px';
+        double fontSize = textStyle.fontSize!;
+
+        if (textScaler != null) {
+          fontSize = textScaler.scale(fontSize);
+        }
+
+        style.fontSize = '${fontSize}px';
       }
       if (textStyle.fontSize != null && textStyle.height != null) {
-        style.lineHeight = '${(textStyle.fontSize! * textStyle.height!).round()}px';
+        double fontSize = textStyle.fontSize! * textStyle.height!;
+
+        if (textScaler != null) {
+          fontSize = textScaler.scale(fontSize);
+        }
+
+        style.lineHeight = '${fontSize}px';
       }
       if (textStyle.fontWeight != null) {
         style.fontWeight = mapFontWeight(textStyle.fontWeight!);
       }
       if (textStyle.fontStyle != null) {
-        style.fontStyle = maFontStyle(textStyle.fontStyle!);
+        style.fontStyle = mapFontStyle(textStyle.fontStyle!);
       }
     }
   }
@@ -46,7 +59,7 @@ class RositaTextUtils {
         _ => '',
       };
 
-  static String maFontStyle(FontStyle value) => switch (value) {
+  static String mapFontStyle(FontStyle value) => switch (value) {
         FontStyle.normal => 'normal',
         FontStyle.italic => 'italic',
       };

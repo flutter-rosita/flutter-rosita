@@ -7,12 +7,14 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
   RositaRenderParagraph({
     String? text,
     TextStyle? style,
+    TextScaler? textScaler,
     TextAlign? textAlign,
     TextOverflow? overflow,
     int? maxLines,
     bool softWrap = true,
   })  : _text = text,
         _style = style,
+        _textScaler = textScaler,
         _textAlign = textAlign,
         _overflow = overflow,
         _maxLines = maxLines,
@@ -46,6 +48,18 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
       _style = value;
       markNeedsPaint();
     }
+  }
+
+  TextScaler get textScaler => _textScaler ?? TextScaler.noScaling;
+  TextScaler? _textScaler;
+
+  set textScaler(TextScaler? value) {
+    if (value == textScaler) {
+      return;
+    }
+    _textScaler = textScaler;
+
+    setLayout();
   }
 
   TextAlign? get textAlign => _textAlign;
@@ -140,7 +154,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
     final bool hasVisualOverflow = _textDidExceedMaxLines || _didOverflowHeight || _didOverflowWidth;
 
     if (hasVisualOverflow) {
-      final wordsCount = _paragraphData!.takeWordsCount(constrainSize, maxLines);
+      final wordsCount = _paragraphData!.takeWordsCount(constrainSize, maxLines, textScaler);
       final linesCount = wordsCount.lines;
       textSize = Size(constrainSize.width, linesCount * _paragraphData!.lineHeight);
     }
@@ -174,6 +188,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
     _paragraphData!.layout(
       minWidth: minWidth,
       maxWidth: widthMatters ? maxWidth : double.infinity,
+      textScaler: textScaler,
     );
 
     return _paragraphData!.size;
@@ -254,7 +269,7 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
 
     final List<String> wordList = text.split(' ');
     final buffer = StringBuffer();
-    final wordsCount = _paragraphData!.takeWordsCount(size, maxLines).words;
+    final wordsCount = _paragraphData!.takeWordsCount(size, maxLines, textScaler).words;
 
     for (int i = 0; i < wordsCount; i++) {
       if (i % 2 == 0) {
