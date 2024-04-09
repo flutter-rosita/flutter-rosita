@@ -52,7 +52,7 @@ mixin RositaRenderClipOvalMixin on RositaRenderMixin {
         BorderRadius.all(ellipticalRadius),
       );
     } else {
-      htmlElement.style.clipPath = '';
+      htmlElement.style.overflow = '';
     }
   }
 }
@@ -70,7 +70,7 @@ mixin RositaRenderClipPathMixin on RositaRenderMixin {
 
       RositaRadiusUtils.applyCustomClipper(htmlElement.style, clipper, target.size);
     } else {
-      htmlElement.style.clipPath = '';
+      htmlElement.style.overflow = '';
     }
   }
 }

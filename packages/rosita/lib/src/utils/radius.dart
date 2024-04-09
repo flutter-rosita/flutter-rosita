@@ -24,20 +24,9 @@ class RositaRadiusUtils {
 
   static void applyClipBorderRadius(html.CssStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
     if (borderRadius != null) {
-      final radius = borderRadius.resolve(null);
+      applyBorderRadius(style, borderRadius);
 
-      final String clipPath;
-
-      if (_isAllEquals(radius)) {
-        clipPath = radius.topLeft.x == 0 ? '' : 'inset(0px round ${radius.topLeft.x}px)';
-      } else {
-        clipPath =
-        'inset(0px round ${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft
-            .x}px)';
-      }
-
-      style.setProperty('-webkit-clip-path', clipPath); // Fix for Chrome < 55
-      style.clipPath = clipPath;
+      style.overflow = 'hidden';
     }
   }
 
