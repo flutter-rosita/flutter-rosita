@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:math' as math;
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -64,11 +66,69 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
         RositaBoxFitUtils.applyAlignmentToBackgroundPosition(style, image.alignment);
       }
 
+      final gradient = decoration.gradient;
+
+      if (gradient != null) {
+        final Gradient(:colors, :stops) = gradient;
+
+        final stringBuffer = StringBuffer();
+
+        for (int i = 0; i < colors.length; i++) {
+          final color = colors[i];
+          final stop = stops != null ? stops[i] : null;
+
+          if (i > 0) {
+            stringBuffer.write(',');
+          }
+
+          stringBuffer.write(color.toStyleString());
+
+          if (stop != null) {
+            stringBuffer.write(' ${stop * 100}%');
+          }
+        }
+
+        if (gradient is LinearGradient) {
+          final LinearGradient(:begin, :end) = gradient;
+          final angle = _getAngle(begin.resolve(null), end.resolve(null));
+
+          style.background = 'linear-gradient(${angle}deg,$stringBuffer)';
+        } else if (gradient is RadialGradient) {
+          style.background = 'radial-gradient($stringBuffer)';
+        } else if (gradient is SweepGradient) {
+          style.background = 'conic-gradient($stringBuffer)';
+        }
+      }
+
       final border = decoration.border;
 
       if (border != null) {
         RositaBorderUtils.applyBorderStyle(style, border);
       }
     }
+  }
+
+  double _getLength(Alignment vector) => math.sqrt(vector.x * vector.x + vector.y * vector.y);
+
+  (double x, double y) _getNormalized(Alignment vector) {
+    final length = _getLength(vector);
+    return (vector.x / length, vector.y / length);
+  }
+
+  double _getCos(Alignment begin, Alignment end) {
+    double x1, x2, y1, y2;
+    (x1, y1) = _getNormalized(begin);
+    (x2, y2) = _getNormalized(end);
+    final length = _getLength(Alignment(x1 - x2, y1 - y2));
+    return (y1 - y2) / length;
+  }
+
+  double _getAngle(Alignment begin, Alignment end) {
+    final cos = _getCos(begin, end);
+    double angle = math.acos(cos) * 180 / math.pi;
+    if (end.x - begin.x < 0) {
+      angle = 360 - angle;
+    }
+    return angle;
   }
 }
