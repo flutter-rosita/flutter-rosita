@@ -1,3 +1,8 @@
+## 0.4.11
+
+- Initial support BoxDecoration gradient
+- Fix round clip for Chrome 53
+
 ## 0.4.10
 
 - Add support TextScaler
