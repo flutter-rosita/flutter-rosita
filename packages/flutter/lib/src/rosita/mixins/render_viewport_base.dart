@@ -9,13 +9,12 @@ mixin RositaRenderViewportBaseMixin on RositaRenderMixin {
   RenderViewportBase get target => this as RenderViewportBase;
 
   @override
-  html.HtmlElement? createRositaElement() {
-    final htmlElement = super.createRositaElement()!;
-
-    if (target.clipBehavior != Clip.none) {
+  void rositaPaint() {
+    // ignore: INVALID_USE_OF_PROTECTED_MEMBER
+    if (target.hasVisualOverflow && target.clipBehavior != Clip.none) {
       htmlElement.style.overflow = 'hidden';
+    } else {
+      htmlElement.style.overflow = '';
     }
-
-    return htmlElement;
   }
 }
