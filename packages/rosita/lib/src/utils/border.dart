@@ -3,7 +3,11 @@ import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RositaBorderUtils {
-  static void applyBorderStyle(html.CssStyleDeclaration style, BoxBorder? border) {
+  static void applyBorderStyle(
+    html.CssStyleDeclaration style,
+    html.CssStyleDeclaration? firstChildStyle,
+    BoxBorder border,
+  ) {
     switch (border) {
       case Border():
         final Border(:top, :right, :bottom, :left) = border;
@@ -12,6 +16,9 @@ class RositaBorderUtils {
         style.borderRight = _mapBorderSide(right);
         style.borderBottom = _mapBorderSide(bottom);
         style.borderLeft = _mapBorderSide(left);
+
+        firstChildStyle?.left = '${-left.width}px';
+        firstChildStyle?.top = '${-top.width}px';
       case BorderDirectional():
         final BorderDirectional(:top, :start, :bottom, :end) = border;
 

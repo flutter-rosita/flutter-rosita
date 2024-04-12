@@ -103,7 +103,9 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
       final border = decoration.border;
 
       if (border != null) {
-        RositaBorderUtils.applyBorderStyle(style, border);
+        final firstChild = targetHtmlElement.firstChild as html.HtmlElement?;
+
+        RositaBorderUtils.applyBorderStyle(style, firstChild?.style, border);
       }
     }
   }
