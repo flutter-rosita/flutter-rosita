@@ -1,3 +1,8 @@
+## 0.4.12
+
+- Fix clipping RenderViewportBase when hasVisualOverflow is false
+- Fix child offset in BoxDecoration with border style
+
 ## 0.4.11
 
 - Initial support BoxDecoration gradient
