@@ -1,3 +1,7 @@
+## 0.4.13
+
+- Add color blend to RositaSvgPicture
+
 ## 0.4.12
 
 - Fix clipping RenderViewportBase when hasVisualOverflow is false
