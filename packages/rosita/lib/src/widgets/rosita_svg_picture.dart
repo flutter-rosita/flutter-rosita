@@ -168,7 +168,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
           'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
 
       style.backgroundColor = color.toStyleString();
-      style.mask = 'url($src)';
+      style.maskImage = 'url($src)';
       style.maskRepeat = 'no-repeat';
       style.maskPosition = style.objectPosition;
       style.maskSize = switch (fit) {
@@ -183,7 +183,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       };
     } else {
       style.backgroundColor = '';
-      style.mask = '';
+      style.maskImage = '';
       imageElement.src = src;
     }
   }
