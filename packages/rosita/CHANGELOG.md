@@ -1,3 +1,7 @@
+## 0.4.14
+
+- Fix color blend RositaSvgPicture to old Chrome Browser
+
 ## 0.4.13
 
 - Add color blend to RositaSvgPicture
