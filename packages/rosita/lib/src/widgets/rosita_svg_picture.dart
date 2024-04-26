@@ -10,6 +10,7 @@ class RositaSvgPicture extends LeafRenderObjectWidget {
     super.key,
     this.fit = BoxFit.contain,
     this.alignment = Alignment.center,
+    this.color,
     this.width,
     this.height,
     String? package,
@@ -20,6 +21,7 @@ class RositaSvgPicture extends LeafRenderObjectWidget {
     super.key,
     this.fit = BoxFit.contain,
     this.alignment = Alignment.center,
+    this.color,
     this.width,
     this.height,
   }) : src = url;
@@ -29,6 +31,7 @@ class RositaSvgPicture extends LeafRenderObjectWidget {
   final String? src;
   final double? width;
   final double? height;
+  final Color? color;
 
   @override
   RenderRositaSvgPicture createRenderObject(BuildContext context) {
@@ -38,6 +41,7 @@ class RositaSvgPicture extends LeafRenderObjectWidget {
       height: height,
       fit: fit,
       alignment: alignment,
+      color: color,
     );
   }
 
@@ -48,7 +52,8 @@ class RositaSvgPicture extends LeafRenderObjectWidget {
       ..width = width
       ..height = height
       ..fit = fit
-      ..alignment = alignment;
+      ..alignment = alignment
+      ..color = color;
   }
 }
 
@@ -59,29 +64,18 @@ class RenderRositaSvgPicture extends RositaRenderBox {
     double? height,
     BoxFit? fit,
     AlignmentGeometry? alignment,
+    Color? color,
   })  : _src = src,
         _width = width,
         _height = height,
         _fit = fit,
-        _alignment = alignment;
+        _alignment = alignment,
+        _color = color;
 
   html.ImageElement get imageElement => htmlElement as html.ImageElement;
 
   @override
-  html.HtmlElement? createRositaElement() {
-    final imageElement = html.ImageElement();
-    final style = imageElement.style;
-
-    imageElement.src = src;
-
-    RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
-    RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
-
-    imageElement.width = width?.toInt();
-    imageElement.height = height?.toInt();
-
-    return imageElement;
-  }
+  html.HtmlElement? createRositaElement() => html.ImageElement();
 
   String? get src => _src;
   String? _src;
@@ -91,7 +85,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _src = value;
-    imageElement.src = value;
+    markNeedsPaint();
   }
 
   double? get width => _width;
@@ -102,7 +96,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _width = value;
-    imageElement.width = value?.toInt();
+    markNeedsPaint();
   }
 
   double? get height => _height;
@@ -113,7 +107,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _height = value;
-    imageElement.height = value?.toInt();
+    markNeedsPaint();
   }
 
   BoxFit? get fit => _fit;
@@ -124,7 +118,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _fit = value;
-    RositaBoxFitUtils.applyBoxFitToObjectFit(imageElement.style, value);
+    markNeedsPaint();
   }
 
   AlignmentGeometry? get alignment => _alignment;
@@ -135,7 +129,18 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       return;
     }
     _alignment = value;
-    RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement.style, value);
+    markNeedsPaint();
+  }
+
+  Color? get color => _color;
+  Color? _color;
+
+  set color(Color? value) {
+    if (value == _color) {
+      return;
+    }
+    _color = value;
+    markNeedsPaint();
   }
 
   @override
@@ -147,5 +152,39 @@ class RenderRositaSvgPicture extends RositaRenderBox {
   }
 
   @override
-  void rositaPaint() {}
+  void rositaPaint() {
+    final src = _src;
+    final color = _color;
+    final style = imageElement.style;
+
+    RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
+    RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
+
+    imageElement.width = width?.toInt();
+    imageElement.height = height?.toInt();
+
+    if (src != null && color != null) {
+      imageElement.src =
+          'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
+
+      style.backgroundColor = color.toStyleString();
+      style.mask = 'url($src)';
+      style.maskRepeat = 'no-repeat';
+      style.maskPosition = style.objectPosition;
+      style.maskSize = switch (fit) {
+        null => '',
+        BoxFit.fill => 'auto',
+        BoxFit.contain => 'contain',
+        BoxFit.cover => 'cover',
+        BoxFit.fitWidth => '100% auto',
+        BoxFit.fitHeight => 'auto 100%',
+        BoxFit.none => 'auto',
+        BoxFit.scaleDown => '100%',
+      };
+    } else {
+      style.backgroundColor = '';
+      style.mask = '';
+      imageElement.src = src;
+    }
+  }
 }

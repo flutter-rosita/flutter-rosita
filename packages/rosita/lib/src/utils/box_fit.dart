@@ -56,7 +56,7 @@ class RositaBoxFitUtils {
       Alignment.topCenter => 'top',
       Alignment.topRight => 'top right',
       Alignment.centerLeft => 'left',
-      Alignment.center => '',
+      Alignment.center => 'center',
       Alignment.centerRight => 'right',
       Alignment.bottomLeft => 'bottom left',
       Alignment.bottomCenter => 'bottom',
