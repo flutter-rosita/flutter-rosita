@@ -38,7 +38,8 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
     _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.arc(rect.center.dx + offset.dx, rect.center.dy + offset.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
+    context.arc(
+        rect.center.dx + offset.dx, rect.center.dy + offset.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
     _fillPain(paint);
   }
 

@@ -3,6 +3,14 @@ part of '../rosita_canvas.dart';
 mixin _CanvasMixin {
   static const double _defaultOffset = 10.0;
 
+  double get _devicePixelRatio {
+    final num devicePixelRatio = html.window.devicePixelRatio;
+    final int outerWidth = html.window.outerWidth;
+    final int innerWidth = html.window.innerWidth ?? outerWidth;
+
+    return devicePixelRatio / (outerWidth / innerWidth);
+  }
+
   Rect offsetRect = Rect.zero;
 
   Offset? _offset;
@@ -57,6 +65,11 @@ mixin _CanvasMixin {
       context.clearRect(0, 0, offsetRect.width, offsetRect.height);
       _isDirty = false;
     }
+
+    if (_devicePixelRatio != 1) {
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.scale(_devicePixelRatio, _devicePixelRatio);
+    }
   }
 
   void checkDirty() {
@@ -68,15 +81,18 @@ mixin _CanvasMixin {
     offsetRect = rect;
 
     final Rect(:left, :top, :width, :height) = rect;
+    final double scale = _devicePixelRatio;
 
-    if (left != 0 || top != 0) {
+    if (scale != 1) {
+      canvas.style.transform = 'scale(${1 / scale})translate(${left * scale - width}px,${top * scale - height}px)';
+    } else if (left != 0 || top != 0) {
       canvas.style.transform = 'translate(${left}px,${top}px)';
     } else {
       canvas.style.transform = '';
     }
 
-    canvas.width = width.toInt();
-    canvas.height = height.toInt();
+    canvas.width = (width * scale).toInt();
+    canvas.height = (height * scale).toInt();
   }
 
   void _checkRectOverflow(Rect rect, double weight) {
