@@ -1608,12 +1608,10 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
             : labelElement.findFirstChildWithHtmlElement()?.htmlElement;
 
         if (labelHtmlElement != null) {
-          final double offsetDx = (labelWidth - lerpDouble(labelWidth, floatWidth, t)!) / 2;
           // ignore: always_specify_types
           final style = labelHtmlElement.style;
-          style.transform = 'scale($scale)';
-          style.marginTop = '${dy}px';
-          style.marginLeft = '${dx - offsetDx}px';
+          style.transform =
+              'translate(${dx - labelWidth / 2 * (1 - scale)}px,${(labelOffset.dy + dy) * scale}px)scale($scale)';
         }
       } else {
         layer = context.pushTransform(
