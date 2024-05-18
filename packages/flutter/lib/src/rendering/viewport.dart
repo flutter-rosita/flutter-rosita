@@ -652,6 +652,8 @@ abstract class RenderViewportBase<ParentDataClass extends ContainerParentDataMix
       child = advance(child);
     }
 
+    rositaCheckVisualOverflow();
+
     // we made it without a correction, whee!
     return 0.0;
   }

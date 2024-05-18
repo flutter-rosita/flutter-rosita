@@ -2,19 +2,26 @@
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
 
 mixin RositaRenderViewportBaseMixin on RositaRenderMixin {
   @override
   RenderViewportBase get target => this as RenderViewportBase;
 
+  bool _hasVisualOverflow = false;
+
   @override
   void rositaPaint() {
+    rositaCheckVisualOverflow();
+  }
+
+  void rositaCheckVisualOverflow() {
     // ignore: INVALID_USE_OF_PROTECTED_MEMBER
-    if (target.hasVisualOverflow && target.clipBehavior != Clip.none) {
-      htmlElement.style.overflow = 'hidden';
-    } else {
-      htmlElement.style.overflow = '';
+    final hasVisualOverflow = target.hasVisualOverflow && target.clipBehavior != Clip.none;
+
+    if (_hasVisualOverflow != hasVisualOverflow) {
+      _hasVisualOverflow = hasVisualOverflow;
+
+      htmlElement.style.overflow = hasVisualOverflow ? 'hidden' : '';
     }
   }
 }
