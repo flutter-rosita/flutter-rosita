@@ -107,7 +107,7 @@ class _HtmlElementViewController extends PlatformViewController {
     };
     await SystemChannels.platform_views.invokeMethod<void>('create', args);
 
-    RositaPlatformViewRegister.createPlatformView((viewId: viewId, viewType: viewType));
+    RositaPlatformViewRegister.createPlatformView(viewId: viewId, viewType: viewType);
 
     _initialized = true;
   }
