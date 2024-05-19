@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -32,7 +33,11 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void clipRRect(RRect rrect, {bool doAntiAlias = true}) {}
 
   @override
-  void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {}
+  void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
+    final region = html.Path2D();
+    region.rect(rect.left + offset.dx, rect.top + offset.dy, rect.width, rect.height);
+    context.clip(region);
+  }
 
   @override
   void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
@@ -291,6 +296,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void restore() {
     context.restore();
     _lastContextFont = null;
+    resetMatrixTransform();
   }
 
   @override
@@ -300,7 +306,9 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void rotate(double radians) {}
 
   @override
-  void save() {}
+  void save() {
+    context.save();
+  }
 
   @override
   void saveLayer(Rect? bounds, Paint paint) {
@@ -323,5 +331,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void transform(Float64List matrix4) {}
 
   @override
-  void translate(double dx, double dy) {}
+  void translate(double dx, double dy) {
+    context.translate(dx, dy);
+  }
 }

@@ -66,10 +66,7 @@ mixin _CanvasMixin {
       _isDirty = false;
     }
 
-    if (_devicePixelRatio != 1) {
-      context.setTransform(1, 0, 0, 1, 0, 0);
-      context.scale(_devicePixelRatio, _devicePixelRatio);
-    }
+    resetMatrixTransform();
   }
 
   void checkDirty() {
@@ -122,5 +119,15 @@ mixin _CanvasMixin {
         offsetRect.bottom + bottom,
       ),
     );
+  }
+
+  void resetMatrixTransform() {
+    context.setTransform(1, 0, 0, 1, 0, 0);
+
+    final double devicePixelRatio = _devicePixelRatio;
+
+    if (devicePixelRatio != 1) {
+      context.scale(devicePixelRatio, devicePixelRatio);
+    }
   }
 }
