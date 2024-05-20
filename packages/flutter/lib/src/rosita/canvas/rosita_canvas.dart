@@ -43,9 +43,19 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
     _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.arc(
-        rect.center.dx + offset.dx, rect.center.dy + offset.dy, rect.width / 2, startAngle, startAngle + sweepAngle);
+    _createArcPath(rect, startAngle, sweepAngle, useCenter);
     _fillPain(paint);
+  }
+
+  void _createArcPath(Rect rect, double startAngle, double sweepAngle, bool useCenter, [bool anticlockwise = false]) {
+    context.arc(
+      rect.center.dx + offset.dx,
+      rect.center.dy + offset.dy,
+      rect.width / 2,
+      startAngle,
+      startAngle + sweepAngle,
+      anticlockwise,
+    );
   }
 
   @override
@@ -146,8 +156,17 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
     context.beginPath();
 
-    _roundRect(sOuterRect, false);
-    _roundRect(sInnerRect);
+    if (sOuterRect.isCircle) {
+      _createArcPath(sOuterRect.outerRect, 0, math.pi * 2, false, true);
+    } else {
+      _createRoundRectPath(sOuterRect, false);
+    }
+
+    if (sInnerRect.isCircle) {
+      _createArcPath(sInnerRect.outerRect, 0, math.pi * 2, false);
+    } else {
+      _createRoundRectPath(sInnerRect);
+    }
     _fillPain(paint);
 
     context.fill();
@@ -164,7 +183,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
       _setDirty(rect, paint.strokeWidth);
       context.beginPath();
-      _roundRect(sRect);
+      _createRoundRectPath(sRect);
       context.closePath();
       _fillPain(paint);
     }
@@ -248,7 +267,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   Color _modulateInvertColor(Color color) =>
       Color.fromARGB(255 - color.alpha, 255 - color.red, 255 - color.green, 255 - color.blue);
 
-  void _roundRect(RRect rrect, [bool isInner = true]) {
+  void _createRoundRectPath(RRect rrect, [bool isInner = true]) {
     // ------------------------
     // | x0 y0 | .... | x1 y0 |
     // | ..... | .... | ..... |
