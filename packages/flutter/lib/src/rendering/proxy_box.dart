@@ -2626,7 +2626,7 @@ class RenderTransform extends RenderProxyBox with RositaRenderTransform {
 }
 
 /// Scales and positions its child within itself according to [fit].
-class RenderFittedBox extends RenderProxyBox {
+class RenderFittedBox extends RenderProxyBox with RositaRenderFittedBoxMixin {
   /// Scales and positions its child within itself.
   RenderFittedBox({
     BoxFit fit = BoxFit.contain,
