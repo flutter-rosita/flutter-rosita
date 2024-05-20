@@ -16,6 +16,7 @@ export 'src/rosita/mixins/render_opacity.dart';
 export 'src/rosita/mixins/render_paragraph.dart';
 export 'src/rosita/mixins/render_physical_model.dart';
 export 'src/rosita/mixins/render_physical_shape.dart';
+export 'src/rosita/mixins/render_single_child_viewport.dart';
 export 'src/rosita/mixins/render_sliver.dart';
 export 'src/rosita/mixins/render_sliver_persistent_header.dart';
 export 'src/rosita/mixins/render_theater.dart';
