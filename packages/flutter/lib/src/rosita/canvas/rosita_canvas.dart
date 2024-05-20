@@ -61,9 +61,6 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawColor(Color color, BlendMode blendMode) {}
 
   @override
-  void drawDRRect(RRect outer, RRect inner, Paint paint) {}
-
-  @override
   void drawImage(Image image, Offset offset, Paint paint) {}
 
   @override
@@ -139,6 +136,24 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawPoints(PointMode pointMode, List<Offset> points, Paint paint) {}
 
   @override
+  void drawDRRect(RRect outer, RRect inner, Paint paint) {
+    final sOuterRect = outer.scaleRadii();
+    final sInnerRect = inner.scaleRadii();
+
+    final rect = Rect.fromLTRB(outer.left, outer.top, outer.right, outer.bottom);
+
+    _setDirty(rect, paint.strokeWidth);
+
+    context.beginPath();
+
+    _roundRect(sOuterRect, false);
+    _roundRect(sInnerRect);
+    _fillPain(paint);
+
+    context.fill();
+  }
+
+  @override
   void drawRRect(RRect rrect, Paint paint) {
     final sRect = rrect.scaleRadii();
 
@@ -150,6 +165,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
       _setDirty(rect, paint.strokeWidth);
       context.beginPath();
       _roundRect(sRect);
+      context.closePath();
       _fillPain(paint);
     }
   }
@@ -232,7 +248,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   Color _modulateInvertColor(Color color) =>
       Color.fromARGB(255 - color.alpha, 255 - color.red, 255 - color.green, 255 - color.blue);
 
-  void _roundRect(RRect rrect) {
+  void _roundRect(RRect rrect, [bool isInner = true]) {
     // ------------------------
     // | x0 y0 | .... | x1 y0 |
     // | ..... | .... | ..... |
@@ -264,27 +280,43 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
       bl: (x0: coords.x0 + radius.blX, y0: coords.y1, x1: coords.x0, y1: coords.y1 - radius.blY),
     );
 
-    context.beginPath();
+    if (isInner) {
+      context.moveTo(points.tl.x1, points.tl.y1);
 
-    context.moveTo(points.tl.x1, points.tl.y1);
+      // TR
+      context.lineTo(points.tr.x0, points.tr.y0);
+      context.quadraticCurveTo(coords.x1, coords.y0, points.tr.x1, points.tr.y1);
 
-    // TR
-    context.lineTo(points.tr.x0, points.tr.y0);
-    context.quadraticCurveTo(coords.x1, coords.y0, points.tr.x1, points.tr.y1);
+      // BR
+      context.lineTo(points.br.x0, points.br.y0);
+      context.quadraticCurveTo(coords.x1, coords.y1, points.br.x1, points.br.y1);
 
-    // BR
-    context.lineTo(points.br.x0, points.br.y0);
-    context.quadraticCurveTo(coords.x1, coords.y1, points.br.x1, points.br.y1);
+      // BL
+      context.lineTo(points.bl.x0, points.bl.y0);
+      context.quadraticCurveTo(coords.x0, coords.y1, points.bl.x1, points.bl.y1);
 
-    // BL
-    context.lineTo(points.bl.x0, points.bl.y0);
-    context.quadraticCurveTo(coords.x0, coords.y1, points.bl.x1, points.bl.y1);
+      // TL
+      context.lineTo(points.tl.x0, points.tl.y0);
+      context.quadraticCurveTo(coords.x0, coords.y0, points.tl.x1, points.tl.y1);
+    } else {
+      context.moveTo(points.tr.x0, points.tr.y0);
 
-    // TL
-    context.lineTo(points.tl.x0, points.tl.y0);
-    context.quadraticCurveTo(coords.x0, coords.y0, points.tl.x1, points.tl.y1);
+      // TL
+      context.lineTo(points.tl.x1, points.tl.y1);
+      context.quadraticCurveTo(coords.x0, coords.y0, points.tl.x0, points.tl.y0);
 
-    context.closePath();
+      // BL
+      context.lineTo(points.bl.x1, points.bl.y1);
+      context.quadraticCurveTo(coords.x0, coords.y1, points.bl.x0, points.bl.y0);
+
+      // BR
+      context.lineTo(points.br.x1, points.br.y1);
+      context.quadraticCurveTo(coords.x1, coords.y1, points.br.x0, points.br.y0);
+
+      // BR
+      context.lineTo(points.tr.x1, points.tr.y1);
+      context.quadraticCurveTo(coords.x1, coords.y0, points.tr.x0, points.tr.y0);
+    }
   }
 
   @override
