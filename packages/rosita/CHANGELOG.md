@@ -1,3 +1,19 @@
+## 0.4.15
+
+- Initial support RenderFittedBox
+- Fix canvas drawDRRect with circle path
+- Add support SingleChildScrollView
+- Add support canvas drawRRect
+- Add support canvas drawPath
+- Fix _RenderDecorationLayout children order paint
+- Fix paint EditableText on update text controller value
+- Fix overlay SliverPersistentHeader in scroll
+- Fix paint InkWell Egor
+- Fix work HtmlElementView Egor
+- Fix scroll clipping in scrollable_positioned_list
+- Fix blurry painting in canvas
+- Fix label offset in input decorator
+
 ## 0.4.14
 
 - Fix color blend RositaSvgPicture to old Chrome Browser
@@ -103,9 +119,10 @@
 - Add optimization constant rositaDisableRoutesChanged (ROSITA_DISABLE_ROUTES_CHANGED)
 - Add optimization constant rositaEnableVisitChildren (ROSITA_ENABLE_VISIT_CHILDREN)
 - Add method RositaSemantics as constructor to disable Semantics widget
-- Disable calls updateCompositingBits, add constant rositaDisableUpdateCompositingBits (ROSITA_DISABLE_UPDATE_COMPOSITING_BITS)
-  - skip call flushCompositingBits and markNeedsCompositingBitsUpdate
-  - skip build RepaintBoundary widget
+- Disable calls updateCompositingBits, add constant rositaDisableUpdateCompositingBits (
+  ROSITA_DISABLE_UPDATE_COMPOSITING_BITS)
+    - skip call flushCompositingBits and markNeedsCompositingBitsUpdate
+    - skip build RepaintBoundary widget
 - Disable markNeedsPaint calls on layout
 - Remove rositaSkipSlowFrames constant
 
