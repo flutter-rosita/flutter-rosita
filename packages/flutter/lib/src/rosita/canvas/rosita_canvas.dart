@@ -98,7 +98,39 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   void drawParagraph(Paragraph paragraph, Offset offset) {}
 
   @override
-  void drawPath(Path path, Paint paint) {}
+  void drawPath(Path path, Paint paint) {
+    if (path is RositaSurfacePath) {
+      final pathRef = path.pathRef;
+      final pointsLength = pathRef.countPoints();
+
+      if (pointsLength > 1) {
+        final rect = path.getBounds() as Rect;
+        _setDirty(rect, paint.strokeWidth);
+
+        context.beginPath();
+
+        for (int i = 0; i < pointsLength; i++) {
+          final point = pathRef.atPoint(i) as Offset;
+
+          if (i == 0) {
+            context.moveTo(point.dx + offset.dx, point.dy + offset.dy);
+          } else {
+            context.lineTo(point.dx + offset.dx, point.dy + offset.dy);
+          }
+        }
+
+        final fLastMoveToIndex = path.fLastMoveToIndex;
+
+        if (fLastMoveToIndex >= 0) {
+          final point = pathRef.atPoint(fLastMoveToIndex) as Offset;
+          context.lineTo(point.dx + offset.dx, point.dy + offset.dy);
+          context.closePath();
+        }
+
+        _fillPain(paint);
+      }
+    }
+  }
 
   @override
   void drawPicture(Picture picture) {}
