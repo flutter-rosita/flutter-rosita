@@ -12,6 +12,9 @@ class RositaParagraphUtils {
   static html.CanvasRenderingContext2D get canvasContext =>
       _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
 
+  static int? _fixScaleFactor;
+  static int get fixScaleFactor => _fixScaleFactor ??= html.window.navigator.userAgent.contains('Firefox') ? 2 : 1;
+
   static html.DivElement get paragraphsContainer {
     if (_paragraphsContainer != null) {
       return _paragraphsContainer!;
@@ -45,8 +48,8 @@ class RositaParagraphUtils {
     };
   }
 
-  static RositaCanvasFontData buildFontData({required TextStyle style}) {
-    final fontSize = style.fontSize ?? 10;
+  static RositaCanvasFontData buildFontData({required TextStyle style, int fixScaleFactor = 1}) {
+    final fontSize = (style.fontSize ?? 10) * fixScaleFactor;
     final height = style.height ?? 1;
     final lineHeight = fontSize * height;
     final fontFamily = style.fontFamily ?? defaultFontFamily;
@@ -69,7 +72,7 @@ class RositaParagraphUtils {
     required String text,
     required TextStyle style,
   }) {
-    final fontData = buildFontData(style: style);
+    final fontData = buildFontData(style: style, fixScaleFactor: fixScaleFactor);
     final font = fontData.font;
 
     if (_lastContextFont != font) {
@@ -79,7 +82,7 @@ class RositaParagraphUtils {
 
     final list = text.split(' ');
     final spacerMeasure = _measureText(' ');
-    final spacerWidth = spacerMeasure.width?.toDouble() ?? 0;
+    final spacerWidth = (spacerMeasure.width?.toDouble() ?? 0) / fixScaleFactor;
 
     double fontLineHeight = 0.0;
     double fontBoundingBoxAscent = 0.0;
@@ -92,7 +95,7 @@ class RositaParagraphUtils {
       }
 
       final measure = _measureText(list[i]);
-      final width = measure.width?.toDouble() ?? 0;
+      final width = (measure.width?.toDouble() ?? 0) / fixScaleFactor;
 
       wordList.add(width);
 
@@ -112,7 +115,7 @@ class RositaParagraphUtils {
 
         final measureText = _paragraphsMeasureText[font]!;
 
-        fontLineHeight = measureText.clientHeight.toDouble();
+        fontLineHeight = measureText.clientHeight.toDouble() / fixScaleFactor;
         fontBoundingBoxAscent = fontLineHeight;
       }
     }

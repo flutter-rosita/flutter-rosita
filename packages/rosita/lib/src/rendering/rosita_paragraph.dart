@@ -293,8 +293,8 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
 
     switch (overflow) {
       case TextOverflow.ellipsis:
-        if (string.length > 2) {
-          htmlElement.innerText = '${string.substring(0, string.length - 2)}$_kEllipsis';
+        if (string.length > 3) {
+          htmlElement.innerText = '${string.substring(0, string.length - 3)}$_kEllipsis';
 
           return;
         }
