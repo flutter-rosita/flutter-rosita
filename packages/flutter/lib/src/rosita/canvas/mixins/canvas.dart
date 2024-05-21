@@ -21,9 +21,22 @@ mixin _CanvasMixin {
 
   bool get isMarkNeedRepaint => _isMarkNeedRepaint;
 
+  double _translateX = 0;
+  double _translateY = 0;
+
+  void _setTranslate(double dx, double dy) {
+    _translateX = dx;
+    _translateY = dy;
+  }
+
   void _setDirty(Rect rect, double weight) {
     _isDirty = true;
-    _checkRectOverflow(rect, weight);
+
+    if (_translateX == 0 && _translateY == 0) {
+      _checkRectOverflow(rect, weight);
+    } else {
+      _checkRectOverflow(rect.translate(_translateX, _translateY), weight);
+    }
   }
 
   Size? _size;
@@ -132,10 +145,13 @@ mixin _CanvasMixin {
         offsetRect.bottom + bottom,
       ),
     );
+
+    _updateCanvasSize();
   }
 
   void resetMatrixTransform() {
     context.setTransform(1, 0, 0, 1, 0, 0);
+    _setTranslate(0, 0);
 
     final double devicePixelRatio = _devicePixelRatio;
 

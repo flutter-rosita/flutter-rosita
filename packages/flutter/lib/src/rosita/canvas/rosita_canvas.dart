@@ -179,7 +179,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     if (sRect.rositaIsEllipse) {
       drawArc(sRect.outerRect, 0, math.pi * 2, false, paint);
     } else {
-      final rect = Rect.fromLTRB(rrect.left, rrect.top, rrect.right, rrect.bottom);
+      final rect = rrect.outerRect;
 
       _setDirty(rect, paint.strokeWidth);
       context.beginPath();
@@ -416,5 +416,6 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   @override
   void translate(double dx, double dy) {
     context.translate(dx, dy);
+    _setTranslate(dx, dy);
   }
 }
