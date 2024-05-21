@@ -12,8 +12,7 @@ class RositaParagraphUtils {
   static html.CanvasRenderingContext2D get canvasContext =>
       _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
 
-  static int? _fixScaleFactor;
-  static int get fixScaleFactor => _fixScaleFactor ??= html.window.navigator.userAgent.contains('Firefox') ? 2 : 1;
+  static double get fixScaleFactor => RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
 
   static html.DivElement get paragraphsContainer {
     if (_paragraphsContainer != null) {
@@ -48,7 +47,7 @@ class RositaParagraphUtils {
     };
   }
 
-  static RositaCanvasFontData buildFontData({required TextStyle style, int fixScaleFactor = 1}) {
+  static RositaCanvasFontData buildFontData({required TextStyle style, double fixScaleFactor = 1}) {
     final fontSize = (style.fontSize ?? 10) * fixScaleFactor;
     final height = style.height ?? 1;
     final lineHeight = fontSize * height;

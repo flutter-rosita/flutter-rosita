@@ -3,13 +3,7 @@ part of '../rosita_canvas.dart';
 mixin _CanvasMixin {
   static const double _defaultOffset = 10.0;
 
-  double get _devicePixelRatio {
-    final num devicePixelRatio = html.window.devicePixelRatio;
-    final int outerWidth = html.window.outerWidth;
-    final int innerWidth = html.window.innerWidth ?? outerWidth;
-
-    return devicePixelRatio / (outerWidth / innerWidth);
-  }
+  double get _devicePixelRatio => RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
 
   Rect offsetRect = Rect.zero;
 
@@ -59,6 +53,8 @@ mixin _CanvasMixin {
       }
     }
 
+    _updateCanvasSize();
+
     _isMarkNeedRepaint = false;
 
     if (_isDirty) {
@@ -77,16 +73,33 @@ mixin _CanvasMixin {
     _offset = Offset(-rect.left, -rect.top);
     offsetRect = rect;
 
-    final Rect(:left, :top, :width, :height) = rect;
-    final double scale = _devicePixelRatio;
+    final Rect(:left, :top) = rect;
 
-    if (scale != 1) {
-      canvas.style.transform = 'scale(${1 / scale})translate(${left * scale - width}px,${top * scale - height}px)';
-    } else if (left != 0 || top != 0) {
+    if (left != 0 || top != 0) {
       canvas.style.transform = 'translate(${left}px,${top}px)';
     } else {
       canvas.style.transform = '';
     }
+  }
+
+  double? _previousPixelRatio;
+  double? _previousWidth;
+  double? _previousHeight;
+
+  void _updateCanvasSize() {
+    final double scale = _devicePixelRatio;
+    final Rect(:double width, :double height) = offsetRect;
+
+    if (_previousPixelRatio == scale && _previousWidth == width && _previousHeight == height) {
+      return;
+    }
+
+    _previousPixelRatio = scale;
+    _previousWidth = width;
+    _previousHeight = height;
+
+    canvas.style.width = '${width}px';
+    canvas.style.height = '${height}px';
 
     canvas.width = (width * scale).toInt();
     canvas.height = (height * scale).toInt();
