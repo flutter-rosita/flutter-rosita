@@ -43,15 +43,20 @@ class RositaRadiusUtils {
       switch (shape) {
         case RoundedRectangleBorder():
           RositaRadiusUtils.applyClipBorderRadius(style, shape.borderRadius);
-        case StadiumBorder():
+
+          return;
+        case StadiumBorder() || CircleBorder():
           RositaRadiusUtils.applyClipBorderRadius(
             style,
             BorderRadius.all(
               Radius.circular(size.shortestSide / 2),
             ),
           );
+          return;
       }
-    } else if (clipper is CustomClipper<Path>) {
+    }
+
+    if (clipper is CustomClipper<Path>) {
       final path = clipper.getClip(size);
 
       if (path is RositaSurfacePath) {
@@ -143,6 +148,8 @@ class RositaRadiusUtils {
 
         style.setProperty('clip-path', 'path("$result")');
       }
+
+      return;
     }
   }
 }
