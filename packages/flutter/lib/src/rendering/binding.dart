@@ -451,8 +451,8 @@ mixin RendererBinding on BindingBase, ServicesBinding, SchedulerBinding, Gesture
       rositaDrawFrame();
     }
 
-    if (RositaScrollUtils.scrolled) {
-      RositaScrollUtils.callAfterDrawFrame();
+    if (RositaCursorUtils.changed) {
+      RositaCursorUtils.callAfterDrawFrame();
       _scheduleMouseTrackerUpdate();
     }
   }

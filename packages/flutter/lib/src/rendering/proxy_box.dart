@@ -3272,6 +3272,8 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSki
   MouseCursor _cursor;
   set cursor(MouseCursor value) {
     if (_cursor != value) {
+      RositaCursorUtils.onChange();
+
       _cursor = value;
       // A repaint is needed in order to trigger a device update of
       // [MouseTracker] so that this new value can be found.
@@ -3287,10 +3289,14 @@ class RenderMouseRegion extends RenderProxyBoxWithHitTestBehavior with RositaSki
   void attach(PipelineOwner owner) {
     super.attach(owner);
     _validForMouseTracker = true;
+
+    RositaCursorUtils.onChange();
   }
 
   @override
   void detach() {
+    RositaCursorUtils.onChange();
+
     // It's possible that the renderObject be detached during mouse events
     // dispatching, set the [MouseTrackerAnnotation.validForMouseTracker] false to prevent
     // the callbacks from being called.

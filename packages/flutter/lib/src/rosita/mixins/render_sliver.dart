@@ -78,7 +78,7 @@ mixin RositaRenderSliverMixin on RositaRenderMixin {
           style.transform = '';
         }
 
-        RositaScrollUtils.onScroll();
+        RositaCursorUtils.onChange();
       }
     } else if (parentData is SliverLogicalContainerParentData) {
     } else if (parentData != null) {
