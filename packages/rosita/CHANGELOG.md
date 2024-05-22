@@ -1,3 +1,13 @@
+## 0.4.16
+
+- Fix initial position label in input text decoration
+- Fix update cursor
+- Add support clip shape CircleBorder
+- Add support CustomClipper<Path>
+- Fix clipped canvas paint after translate
+- Fix repaint canvas on change devicePixelRatio
+- Fix wrap text in Firefox
+
 ## 0.4.15
 
 - Initial support RenderFittedBox
