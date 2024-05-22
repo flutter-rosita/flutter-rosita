@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 
@@ -1620,8 +1621,11 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
         if (labelHtmlElement != null) {
           // ignore: always_specify_types
           final style = labelHtmlElement.style;
-          style.transform =
-              'translate(${dx - labelWidth / 2 * (1 - scale)}px,${(labelOffset.dy + dy) * scale}px)scale($scale)';
+
+          scheduleMicrotask(() {
+            style.transform =
+                'translate(${dx - labelWidth / 2 * (1 - scale)}px,${(labelOffset.dy + dy) * scale}px)scale($scale)';
+          });
         }
       } else {
         layer = context.pushTransform(
