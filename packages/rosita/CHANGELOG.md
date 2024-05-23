@@ -1,3 +1,10 @@
+## 0.4.17
+
+Fix using rosita dependency
+
+- move method applyCustomClipper from rosita package to flutter-rosita
+- add support ShapeDecoration
+
 ## 0.4.16
 
 - Fix initial position label in input text decoration
