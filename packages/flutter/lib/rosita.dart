@@ -26,6 +26,7 @@ export 'src/rosita/mixins/render_viewport_base.dart';
 export 'src/rosita/mixins/render_visibility.dart';
 export 'src/rosita/mixins/rosita_canvas_mixin.dart';
 export 'src/rosita/rosita_painting_context.dart';
+export 'src/rosita/rosita_path_utils.dart';
 export 'src/rosita/rosita_render_view.dart';
 export 'src/rosita/rosita_skip_render_object.dart';
 export 'src/rosita/rosita_utils.dart';

@@ -47,57 +47,15 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
       DecorationPosition.background => htmlElement,
       DecorationPosition.foreground => foregroundHtmlElement,
     };
+    final style = targetHtmlElement.style;
 
     if (decoration is BoxDecoration) {
-      final style = targetHtmlElement.style;
-      style.background = decoration.color.toStyleString();
+      _fillStyle(style, decoration.color, decoration.image, decoration.gradient);
 
       if (decoration.borderRadius != null) {
         RositaRadiusUtils.applyBorderRadius(style, decoration.borderRadius);
       } else {
         style.borderRadius = decoration.shape == BoxShape.circle ? '100%' : '';
-      }
-
-      final image = decoration.image;
-
-      if (image != null) {
-        style.backgroundImage = 'url(${RositaImageUtils.buildImageProviderPath(image.image)})';
-        RositaBoxFitUtils.applyBoxFitToBackgroundSize(style, image.fit);
-        RositaBoxFitUtils.applyAlignmentToBackgroundPosition(style, image.alignment);
-      }
-
-      final gradient = decoration.gradient;
-
-      if (gradient != null) {
-        final Gradient(:colors, :stops) = gradient;
-
-        final stringBuffer = StringBuffer();
-
-        for (int i = 0; i < colors.length; i++) {
-          final color = colors[i];
-          final stop = stops != null ? stops[i] : null;
-
-          if (i > 0) {
-            stringBuffer.write(',');
-          }
-
-          stringBuffer.write(color.toStyleString());
-
-          if (stop != null) {
-            stringBuffer.write(' ${stop * 100}%');
-          }
-        }
-
-        if (gradient is LinearGradient) {
-          final LinearGradient(:begin, :end) = gradient;
-          final angle = _getAngle(begin.resolve(null), end.resolve(null));
-
-          style.background = 'linear-gradient(${angle}deg,$stringBuffer)';
-        } else if (gradient is RadialGradient) {
-          style.background = 'radial-gradient($stringBuffer)';
-        } else if (gradient is SweepGradient) {
-          style.background = 'conic-gradient($stringBuffer)';
-        }
       }
 
       final border = decoration.border;
@@ -106,6 +64,57 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
         final firstChild = targetHtmlElement.firstChild as html.HtmlElement?;
 
         RositaBorderUtils.applyBorderStyle(style, firstChild?.style, border);
+      }
+    } else if (decoration is ShapeDecoration) {
+      _fillStyle(style, decoration.color, decoration.image, decoration.gradient);
+
+      final path = decoration.getClipPath(
+        decoration.padding.resolve(TextDirection.ltr).topLeft & target.size,
+        TextDirection.ltr,
+      );
+
+      RositaPathUtils.applyCustomClipperPath(style, path);
+    }
+  }
+
+  void _fillStyle(html.CssStyleDeclaration style, Color? color, DecorationImage? image, Gradient? gradient) {
+    style.background = color.toStyleString();
+
+    if (image != null) {
+      style.backgroundImage = 'url(${RositaImageUtils.buildImageProviderPath(image.image)})';
+      RositaBoxFitUtils.applyBoxFitToBackgroundSize(style, image.fit);
+      RositaBoxFitUtils.applyAlignmentToBackgroundPosition(style, image.alignment);
+    }
+
+    if (gradient != null) {
+      final Gradient(:colors, :stops) = gradient;
+
+      final stringBuffer = StringBuffer();
+
+      for (int i = 0; i < colors.length; i++) {
+        final color = colors[i];
+        final stop = stops != null ? stops[i] : null;
+
+        if (i > 0) {
+          stringBuffer.write(',');
+        }
+
+        stringBuffer.write(color.toStyleString());
+
+        if (stop != null) {
+          stringBuffer.write(' ${stop * 100}%');
+        }
+      }
+
+      if (gradient is LinearGradient) {
+        final LinearGradient(:begin, :end) = gradient;
+        final angle = _getAngle(begin.resolve(null), end.resolve(null));
+
+        style.background = 'linear-gradient(${angle}deg,$stringBuffer)';
+      } else if (gradient is RadialGradient) {
+        style.background = 'radial-gradient($stringBuffer)';
+      } else if (gradient is SweepGradient) {
+        style.background = 'conic-gradient($stringBuffer)';
       }
     }
   }

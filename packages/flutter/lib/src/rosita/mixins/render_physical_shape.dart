@@ -15,6 +15,6 @@ mixin RositaRenderPhysicalShapeMixin on RositaRenderMixin {
 
     final clipper = target.clipper;
 
-    RositaRadiusUtils.applyCustomClipper(style, clipper, target.size);
+    RositaPathUtils.applyCustomClipper(style, clipper, target.size);
   }
 }

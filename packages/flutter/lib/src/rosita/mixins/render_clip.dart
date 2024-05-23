@@ -68,7 +68,7 @@ mixin RositaRenderClipPathMixin on RositaRenderMixin {
     if (target.clipBehavior != Clip.none) {
       final clipper = target.clipper;
 
-      RositaRadiusUtils.applyCustomClipper(htmlElement.style, clipper, target.size);
+      RositaPathUtils.applyCustomClipper(htmlElement.style, clipper, target.size);
     } else {
       htmlElement.style.overflow = '';
     }
