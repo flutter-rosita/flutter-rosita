@@ -17,8 +17,6 @@ mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin
 
   @override
   void rositaDetach() {
-    super.rositaDetach();
-
     if (_blobUrl != null) {
       RositaImageUtils.revokeBlobObjectUrl(_blobUrl!);
       _blobUrl = null;

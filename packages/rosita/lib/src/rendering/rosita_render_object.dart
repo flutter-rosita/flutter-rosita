@@ -161,8 +161,9 @@ mixin RositaRenderMixin {
     }
   }
 
-  @mustCallSuper
-  void rositaDetach() {
+  void _rositaDetach() {
+    rositaDetach();
+
     final parent = this.parent as RositaRenderMixin?;
 
     if (parent != null && parent._rositaNeedsDetach && parent.hasHtmlElement) {
@@ -173,6 +174,8 @@ mixin RositaRenderMixin {
     _htmlElement?.remove();
     _htmlElement = null;
   }
+
+  void rositaDetach() {}
 
   @mustCallSuper
   void rositaLayout() {
@@ -244,7 +247,7 @@ mixin RositaPipelineOwnerMixin {
         node._rositaNeedsDetach = false;
 
         if (node.hasHtmlElement && !node.attached) {
-          node.rositaDetach();
+          node._rositaDetach();
         }
       }
 

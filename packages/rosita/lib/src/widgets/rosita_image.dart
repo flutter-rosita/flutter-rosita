@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
 import 'package:universal_html/html.dart' as html;
@@ -11,6 +13,8 @@ class RositaImage extends LeafRenderObjectWidget {
     this.borderRadius,
     this.fit,
     this.alignment = Alignment.center,
+    this.onLoad,
+    this.onError,
     String? package,
   }) : src = package == null ? 'assets/$name' : 'assets/packages/$package/$name';
 
@@ -20,12 +24,16 @@ class RositaImage extends LeafRenderObjectWidget {
     this.borderRadius,
     this.fit,
     this.alignment = Alignment.center,
+    this.onLoad,
+    this.onError,
   }) : src = url;
 
   final String src;
   final AlignmentGeometry alignment;
   final BorderRadiusGeometry? borderRadius;
   final BoxFit? fit;
+  final VoidCallback? onLoad;
+  final VoidCallback? onError;
 
   @override
   RenderRositaImage createRenderObject(BuildContext context) {
@@ -34,6 +42,8 @@ class RositaImage extends LeafRenderObjectWidget {
       borderRadius: borderRadius,
       fit: fit,
       alignment: alignment,
+      onLoad: onLoad,
+      onError: onError,
     );
   }
 
@@ -43,7 +53,9 @@ class RositaImage extends LeafRenderObjectWidget {
       ..src = src
       ..borderRadius = borderRadius
       ..fit = fit
-      ..alignment = alignment;
+      ..alignment = alignment
+      ..onLoad = onLoad
+      ..onError = onError;
   }
 }
 
@@ -53,10 +65,14 @@ class RenderRositaImage extends RositaRenderBox {
     BorderRadiusGeometry? borderRadius,
     BoxFit? fit,
     AlignmentGeometry? alignment,
+    VoidCallback? onLoad,
+    VoidCallback? onError,
   })  : _src = src,
         _borderRadius = borderRadius,
         _fit = fit,
-        _alignment = alignment;
+        _alignment = alignment,
+        _onLoad = onLoad,
+        _onError = onError;
 
   html.ImageElement get imageElement => htmlElement as html.ImageElement;
 
@@ -70,6 +86,9 @@ class RenderRositaImage extends RositaRenderBox {
     RositaRadiusUtils.applyBorderRadius(style, borderRadius);
     RositaBoxFitUtils.applyBoxFitToObjectFit(style, fit);
     RositaBoxFitUtils.applyAlignmentToObjectPosition(style, alignment);
+
+    _setListenerOnLoad(imageElement, onLoad);
+    _setListenerOnError(imageElement, onError);
 
     return imageElement;
   }
@@ -118,6 +137,56 @@ class RenderRositaImage extends RositaRenderBox {
     RositaBoxFitUtils.applyAlignmentToObjectPosition(imageElement.style, value);
   }
 
+  VoidCallback? get onLoad => _onLoad;
+  VoidCallback? _onLoad;
+
+  set onLoad(VoidCallback? value) {
+    if (identical(_onLoad, value)) {
+      return;
+    }
+    _onLoad = value;
+
+    _setListenerOnLoad(imageElement, value);
+  }
+
+  StreamSubscription? _onLoadStreamSubscription;
+
+  void _setListenerOnLoad(html.ImageElement imageElement, VoidCallback?  callback) {
+    _onLoadStreamSubscription?.cancel();
+    _onLoadStreamSubscription = null;
+
+    if (callback != null) {
+      _onLoadStreamSubscription = imageElement.onLoad.listen((event) {
+        callback.call();
+      });
+    }
+  }
+
+  VoidCallback? get onError => _onError;
+  VoidCallback? _onError;
+
+  set onError(VoidCallback? value) {
+    if (identical(_onError, value)) {
+      return;
+    }
+    _onError = value;
+
+    _setListenerOnError(imageElement, value);
+  }
+
+  StreamSubscription? _onErrorStreamSubscription;
+
+  void _setListenerOnError(html.ImageElement imageElement, VoidCallback?  callback) {
+    _onErrorStreamSubscription?.cancel();
+    _onErrorStreamSubscription = null;
+
+    if (callback != null) {
+      _onErrorStreamSubscription = imageElement.onError.listen((event) {
+        callback.call();
+      });
+    }
+  }
+
   @override
   void performLayout() {
     final biggestSize = constraints.biggest;
@@ -132,4 +201,13 @@ class RenderRositaImage extends RositaRenderBox {
 
   @override
   void rositaPaint() {}
+
+  @override
+  void rositaDetach() {
+    _onLoadStreamSubscription?.cancel();
+    _onLoadStreamSubscription = null;
+
+    _onErrorStreamSubscription?.cancel();
+    _onErrorStreamSubscription = null;
+  }
 }

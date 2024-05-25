@@ -36,7 +36,6 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
   void rositaDetach() {
     _foregroundHtmlElement?.remove();
     _foregroundHtmlElement = null;
-    super.rositaDetach();
   }
 
   @override

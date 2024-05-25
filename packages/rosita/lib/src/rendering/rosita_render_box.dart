@@ -13,7 +13,6 @@ abstract class RositaRenderBox extends RenderBox {
 
   void rositaAttach();
 
-  @mustCallSuper
   void rositaDetach();
 
   @mustCallSuper
@@ -34,7 +33,6 @@ abstract class RositaRenderProxyBoxWithHitTestBehavior extends RenderProxyBoxWit
 
   void rositaAttach();
 
-  @mustCallSuper
   void rositaDetach();
 
   @mustCallSuper

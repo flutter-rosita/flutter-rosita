@@ -1,5 +1,6 @@
-import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
+
+import 'package:flutter/rendering.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RositaImageUtils {
@@ -28,5 +29,12 @@ class RositaImageUtils {
 
   static void revokeBlobObjectUrl(String url) {
     return html.Url.revokeObjectUrl(url);
+  }
+
+  static bool imageIsComplete(String src) {
+    final imageElement = html.ImageElement();
+    imageElement.src = src;
+
+    return imageElement.complete ?? false;
   }
 }
