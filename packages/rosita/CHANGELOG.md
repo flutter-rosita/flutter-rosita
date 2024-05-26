@@ -1,3 +1,7 @@
+## 0.4.18
+
+- Add RositaFadeImage widget
+
 ## 0.4.17
 
 Fix using rosita dependency
