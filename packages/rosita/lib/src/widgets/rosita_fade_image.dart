@@ -102,7 +102,7 @@ class _RositaFadeImageState extends State<RositaFadeImage> {
           : null,
     );
 
-    if (_isLoaded && !_hasError) {
+    if (_isLoaded && !_hasError || !hasPlaceholder) {
       return image;
     }
 
