@@ -11,8 +11,18 @@ class RositaParagraphUtils {
 
   static html.CanvasRenderingContext2D get canvasContext =>
       _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
+  
+  static bool? _isChrome;
+  
+  static bool get isChrome => _isChrome ??= html.window.navigator.userAgent.contains('Chrome');
 
-  static double get fixScaleFactor => RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
+  static double get fixScaleFactor {
+    if (isChrome) {
+      return 1.0;
+    }
+
+    return RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
+  }
 
   static html.DivElement get paragraphsContainer {
     if (_paragraphsContainer != null) {
