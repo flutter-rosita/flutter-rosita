@@ -1,3 +1,8 @@
+## 0.4.19
+
+- Fix RositaFadeImage without placeholder
+- Fix measure text for webOS with Chrome
+
 ## 0.4.18
 
 - Add RositaFadeImage widget
