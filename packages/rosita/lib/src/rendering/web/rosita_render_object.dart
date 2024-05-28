@@ -1,15 +1,12 @@
+part of '../web_rendering.dart';
+
 // ignore_for_file: public_member_api_docs, avoid_print, always_specify_types
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
-import 'package:rosita/rosita.dart';
-import 'package:universal_html/html.dart' as html;
-
 mixin RositaRenderMixin {
-  html.HtmlElement? _htmlElement;
+  web.HTMLElement? _htmlElement;
 
-  html.HtmlElement get htmlElement =>
-      rositaCastNullableToNonNullable ? _htmlElement as html.HtmlElement : _htmlElement!;
+  web.HTMLElement get htmlElement =>
+      rositaCastNullableToNonNullable ? _htmlElement as web.HTMLElement : _htmlElement!;
 
   bool get hasHtmlElement => _htmlElement != null;
 
@@ -50,7 +47,7 @@ mixin RositaRenderMixin {
 
   // Rosita
 
-  html.HtmlElement? createRositaElement() => html.DivElement();
+  web.HTMLElement? createRositaElement() => web.HTMLDivElement();
 
   RenderObject get target => this as RenderObject;
 
@@ -116,8 +113,8 @@ mixin RositaRenderMixin {
       return true;
     }());
 
-    html.HtmlElement? parentHtmlElement;
-    html.HtmlElement? afterHtmlElement;
+    web.HTMLElement? parentHtmlElement;
+    web.HTMLElement? afterHtmlElement;
 
     RenderObject? parentElement = parent;
     ParentData? parentData = this.parentData;
@@ -142,7 +139,7 @@ mixin RositaRenderMixin {
               }
 
               while (afterHtmlElement != null && !identical(parentHtmlElement, afterHtmlElement.parentNode)) {
-                afterHtmlElement = afterHtmlElement.parentNode as html.HtmlElement?;
+                afterHtmlElement = afterHtmlElement.parentNode as web.HTMLElement?;
               }
             }
           }
@@ -293,12 +290,6 @@ mixin RositaPipelineOwnerMixin {
         child.rositaFlushPaint();
       }
     } finally {}
-  }
-
-  static void rositaDrawFrame(VoidCallback callback) {
-    html.window.requestAnimationFrame((highResTime) {
-      callback();
-    });
   }
 
   bool get rositaFlushNeeded =>

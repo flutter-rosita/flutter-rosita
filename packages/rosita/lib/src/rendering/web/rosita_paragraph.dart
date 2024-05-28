@@ -1,5 +1,4 @@
-import 'package:flutter/rendering.dart';
-import 'package:rosita/rosita.dart';
+part of '../web_rendering.dart';
 
 const String _kEllipsis = '\u2026';
 

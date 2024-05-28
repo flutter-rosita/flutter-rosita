@@ -1,7 +1,7 @@
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaOpacityUtils {
-  static void applyOpacity(html.CssStyleDeclaration style, double? opacity) {
+  static void applyOpacity(web.CSSStyleDeclaration style, double? opacity) {
     if (opacity == null) {
       style.display = '';
       style.opacity = '1';

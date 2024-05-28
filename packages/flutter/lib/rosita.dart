@@ -1,4 +1,4 @@
-export 'package:rosita/rosita.dart';
+export 'package:rosita/rosita_web.dart';
 
 export 'src/rosita/canvas/rosita_canvas.dart';
 export 'src/rosita/mixins/paint_render_object.dart';

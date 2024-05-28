@@ -4,20 +4,20 @@ import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as web;
 
 mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
   @override
   RenderDecoratedBox get target => this as RenderDecoratedBox;
 
-  html.HtmlElement? _foregroundHtmlElement;
+  web.HTMLElement? _foregroundHtmlElement;
 
-  html.HtmlElement get foregroundHtmlElement {
+  web.HTMLElement get foregroundHtmlElement {
     if (_foregroundHtmlElement != null) {
       return _foregroundHtmlElement!;
     }
 
-    final foregroundHtmlElement = html.DivElement();
+    final foregroundHtmlElement = web.HTMLDivElement();
 
     foregroundHtmlElement.style
       ..width = '100%'
@@ -42,7 +42,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
   void rositaPaint() {
     final target = this.target;
     final decoration = target.decoration;
-    final html.HtmlElement targetHtmlElement = switch (target.position) {
+    final web.HTMLElement targetHtmlElement = switch (target.position) {
       DecorationPosition.background => htmlElement,
       DecorationPosition.foreground => foregroundHtmlElement,
     };
@@ -60,9 +60,9 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
       final border = decoration.border;
 
       if (border != null) {
-        final firstChild = targetHtmlElement.firstChild as html.HtmlElement?;
+        final firstChild = targetHtmlElement.firstChild as web.HTMLElement?;
 
-        RositaBorderUtils.applyBorderStyle(style, firstChild?.style, border);
+        RositaBorderUtils.applyBorderStyle(style, firstChild?.style, border, target.configuration.textDirection);
       }
     } else if (decoration is ShapeDecoration) {
       _fillStyle(style, decoration.color, decoration.image, decoration.gradient);
@@ -76,7 +76,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     }
   }
 
-  void _fillStyle(html.CssStyleDeclaration style, Color? color, DecorationImage? image, Gradient? gradient) {
+  void _fillStyle(web.CSSStyleDeclaration style, Color? color, DecorationImage? image, Gradient? gradient) {
     style.background = color.toStyleString();
 
     if (image != null) {

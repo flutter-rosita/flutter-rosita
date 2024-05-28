@@ -1,20 +1,17 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
-import 'package:rosita/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaParagraphUtils {
-  static html.CanvasElement? _canvas;
-  static html.DivElement? _paragraphsContainer;
+  static web.HTMLCanvasElement? _canvas;
+  static web.HTMLDivElement? _paragraphsContainer;
 
-  static html.CanvasRenderingContext2D? _canvasContext;
+  static web.CanvasRenderingContext2D? _canvasContext;
 
-  static html.CanvasRenderingContext2D get canvasContext =>
-      _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
-
+  static web.CanvasRenderingContext2D get canvasContext =>
+      _canvasContext ??= (_canvas ??= web.HTMLCanvasElement()).context2D;
+  
   static bool? _isChrome;
-
-  static bool get isChrome => _isChrome ??= html.window.navigator.userAgent.contains('Chrome');
+  
+  static bool get isChrome => _isChrome ??= web.window.navigator.userAgent.contains('Chrome');
 
   static double get fixScaleFactor {
     if (isChrome) {
@@ -24,24 +21,24 @@ class RositaParagraphUtils {
     return RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
   }
 
-  static html.DivElement get paragraphsContainer {
+  static web.HTMLDivElement get paragraphsContainer {
     if (_paragraphsContainer != null) {
       return _paragraphsContainer!;
     }
 
-    final paragraphsContainer = html.DivElement()..id = 'paragraphs-container';
+    final paragraphsContainer = web.HTMLDivElement()..id = 'paragraphs-container';
 
     paragraphsContainer.style
       ..opacity = '0'
       ..userSelect = 'none'
       ..pointerEvents = 'none';
 
-    html.document.body!.append(paragraphsContainer);
+    web.document.body!.append(paragraphsContainer);
 
     return _paragraphsContainer ??= paragraphsContainer;
   }
 
-  static final Map<String, html.DivElement> _paragraphsMeasureText = <String, html.DivElement>{};
+  static final Map<String, web.HTMLDivElement> _paragraphsMeasureText = <String, web.HTMLDivElement>{};
 
   static String? _lastContextFont;
 
@@ -111,7 +108,7 @@ class RositaParagraphUtils {
       if (i == 0) {
         _paragraphsMeasureText.putIfAbsent(font, () {
           final firstWord = list[i];
-          final div = html.DivElement()..innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
+          final div = web.HTMLDivElement()..innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
 
           div.style
             ..font = font
@@ -139,7 +136,7 @@ class RositaParagraphUtils {
     );
   }
 
-  static html.TextMetrics _measureText(String string) => canvasContext.measureText(string);
+  static web.TextMetrics _measureText(String string) => canvasContext.measureText(string);
 }
 
 class RositaCanvasFontData {
@@ -175,25 +172,13 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
 
   int get lines => _lines!;
 
-  bool _wordBreak = false;
-
-  bool get wordBreak => _wordBreak;
-
   void layout({double minWidth = 0.0, double maxWidth = double.infinity, required TextScaler textScaler}) {
-    _wordBreak = false;
-
     int lines = 1;
     double maxLineWidth = 0;
     double lineWidth = 0;
 
     for (int i = 0; i < wordList.length; i++) {
-      double width = textScaler.scale(wordList[i]);
-
-      if (width > maxWidth) {
-        _wordBreak = true;
-        lines += width ~/ maxWidth;
-        width = width % maxWidth;
-      }
+      final width = textScaler.scale(wordList[i]);
 
       if (lineWidth + width > maxWidth) {
         lines++;
@@ -235,7 +220,7 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
           worldCount = worldCount + (maxWidth - lineWidth - width) / width;
 
           if (worldCount < .0) {
-            return (words: worldCount + 1, lines: maxLines ?? lines - 1);
+            return (words: .0, lines: 0);
           }
 
           return (words: worldCount, lines: lines - 1);

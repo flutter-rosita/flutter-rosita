@@ -1,8 +1,6 @@
-library rosita;
-
 export 'src/extensions/color.dart';
 export 'src/extensions/rrect.dart';
-export 'src/rendering/rendering.dart';
+export 'src/rendering/web_rendering.dart';
 export 'src/rosita_constants.dart';
 export 'src/widgets/rosita_color_r_box.dart';
 export 'src/widgets/rosita_element.dart';

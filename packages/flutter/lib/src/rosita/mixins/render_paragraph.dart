@@ -2,7 +2,7 @@
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as web;
 
 mixin RositaRenderParagraphMixin on RositaRenderMixin {
   @override
@@ -12,7 +12,7 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
   void rositaPaint() {
     final text = target.text;
 
-    htmlElement.innerHtml = '';
+    htmlElement.innerHTML = '';
 
     RositaTextUtils.applyTextStyle(
       htmlElement.style,
@@ -22,13 +22,13 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
     _appendTextSpan(text, htmlElement);
   }
 
-  void _appendTextSpan(InlineSpan text, html.HtmlElement parent) {
+  void _appendTextSpan(InlineSpan text, web.HTMLElement parent) {
     final style = text.style;
 
-    final element = html.SpanElement();
+    final element = web.HTMLSpanElement();
 
     if (text is TextSpan && text.text != null) {
-      element.text = text.text;
+      element.text = text.text!;
     } else {
       element.text = ' ';
     }

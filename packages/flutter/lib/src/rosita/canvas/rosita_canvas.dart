@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:js_interop';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
@@ -7,7 +8,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:rosita/rosita_web.dart';
+import 'package:web/web.dart' as web;
 
 part 'mixins/canvas.dart';
 
@@ -19,12 +21,12 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   RositaCanvas(this.canvas);
 
   @override
-  final html.CanvasElement canvas;
+  final web.HTMLCanvasElement canvas;
 
-  html.CanvasRenderingContext2D? _context;
+  web.CanvasRenderingContext2D? _context;
 
   @override
-  html.CanvasRenderingContext2D get context => _context ??= canvas.context2D;
+  web.CanvasRenderingContext2D get context => _context ??= canvas.context2D;
 
   @override
   void clipPath(Path path, {bool doAntiAlias = true}) {}
@@ -34,7 +36,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
-    final region = html.Path2D();
+    final region = web.Path2D();
     region.rect(rect.left + offset.dx, rect.top + offset.dy, rect.width, rect.height);
     context.clip(region);
   }
@@ -194,10 +196,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
     switch (paint.style) {
       case PaintingStyle.fill:
-        context.fillStyle = style;
+        context.fillStyle = style as JSAny;
         context.fill();
       case PaintingStyle.stroke:
-        context.strokeStyle = style;
+        context.strokeStyle = style as JSAny;
         context.lineWidth = paint.strokeWidth;
         context.stroke();
     }
@@ -398,7 +400,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     context.save();
 
     if (bounds != null) {
-      final region = html.Path2D();
+      final region = web.Path2D();
       region.rect(bounds.left + offset.dx, bounds.top + offset.dy, bounds.width, bounds.height);
       context.clip(region);
     }

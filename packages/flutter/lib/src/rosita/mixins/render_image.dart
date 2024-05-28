@@ -2,16 +2,16 @@
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as web;
 
 mixin RositaRenderImageMixin on RositaRenderMixin, RositaImageProviderProxyMixin {
   @override
   RenderImage get target => this as RenderImage;
 
-  html.ImageElement get imageElement => htmlElement as html.ImageElement;
+  web.HTMLImageElement get imageElement => htmlElement as web.HTMLImageElement;
 
   @override
-  html.HtmlElement? createRositaElement() => html.ImageElement();
+  web.HTMLElement? createRositaElement() => web.HTMLImageElement();
 
   String? _blobUrl;
 

@@ -3,19 +3,19 @@
 import 'dart:ui';
 
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as web;
 
 mixin RositaCanvasMixin on RositaRenderMixin {
-  html.CanvasElement? _canvasElement;
+  web.HTMLCanvasElement? _canvasElement;
 
-  html.CanvasElement? _foregroundCanvasElement;
+  web.HTMLCanvasElement? _foregroundCanvasElement;
 
-  html.CanvasElement get canvasElement {
+  web.HTMLCanvasElement get canvasElement {
     if (_canvasElement != null) {
       // ignore: cast_nullable_to_non_nullable
-      return rositaCastNullableToNonNullable ? _canvasElement as html.CanvasElement : _canvasElement!;
+      return rositaCastNullableToNonNullable ? _canvasElement as web.HTMLCanvasElement : _canvasElement!;
     }
-    final canvas = _canvasElement = html.CanvasElement();
+    final canvas = _canvasElement = web.HTMLCanvasElement();
     final firstChild = htmlElement.firstChild;
 
     htmlElement.insertBefore(canvas, firstChild);
@@ -23,14 +23,14 @@ mixin RositaCanvasMixin on RositaRenderMixin {
     return canvas;
   }
 
-  html.CanvasElement get foregroundCanvasElement {
+  web.HTMLCanvasElement get foregroundCanvasElement {
     if (_foregroundCanvasElement != null) {
       return rositaCastNullableToNonNullable
           // ignore: cast_nullable_to_non_nullable
-          ? _foregroundCanvasElement as html.CanvasElement
+          ? _foregroundCanvasElement as web.HTMLCanvasElement
           : _foregroundCanvasElement!;
     }
-    final canvas = _foregroundCanvasElement = html.CanvasElement();
+    final canvas = _foregroundCanvasElement = web.HTMLCanvasElement();
 
     htmlElement.append(canvas);
 

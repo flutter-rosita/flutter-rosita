@@ -1,8 +1,7 @@
-import 'package:flutter/rendering.dart';
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaBoxFitUtils {
-  static void applyBoxFitToObjectFit(html.CssStyleDeclaration style, BoxFit? fit) {
+  static void applyBoxFitToObjectFit(web.CSSStyleDeclaration style, BoxFit? fit) {
     switch (fit) {
       case BoxFit.fitWidth:
         style.width = '100%';
@@ -24,7 +23,7 @@ class RositaBoxFitUtils {
     };
   }
 
-  static void applyBoxFitToBackgroundSize(html.CssStyleDeclaration style, BoxFit? fit) {
+  static Future<void> applyBoxFitToBackgroundSize(web.CssStyleDeclaration style, BoxFit? fit) async {
     style.backgroundSize = _mapperBoxFitToBackgroundSize(fit);
   }
 
@@ -39,11 +38,11 @@ class RositaBoxFitUtils {
     };
   }
 
-  static void applyAlignmentToObjectPosition(html.CssStyleDeclaration style, AlignmentGeometry? alignment) {
+  static void applyAlignmentToObjectPosition(web.CSSStyleDeclaration style, AlignmentGeometry? alignment) {
     style.objectPosition = _mapperAlignmentGeometry(alignment);
   }
 
-  static void applyAlignmentToBackgroundPosition(html.CssStyleDeclaration style, AlignmentGeometry? alignment) {
+  static void applyAlignmentToBackgroundPosition(web.CSSStyleDeclaration style, AlignmentGeometry? alignment) {
     style.backgroundPosition = _mapperAlignmentGeometry(alignment);
   }
 

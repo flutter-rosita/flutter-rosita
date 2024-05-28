@@ -1,5 +1,4 @@
-import 'package:flutter/rendering.dart';
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaRadiusUtils {
   static bool _isAllEquals(BorderRadius borderRadius) {
@@ -8,7 +7,7 @@ class RositaRadiusUtils {
         borderRadius.bottomRight.x == borderRadius.bottomLeft.x;
   }
 
-  static void applyBorderRadius(html.CssStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
+  static void applyBorderRadius(web.CSSStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
     if (borderRadius != null) {
       final radius = borderRadius.resolve(null);
 
@@ -22,7 +21,7 @@ class RositaRadiusUtils {
     }
   }
 
-  static void applyClipBorderRadius(html.CssStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
+  static void applyClipBorderRadius(web.CSSStyleDeclaration style, BorderRadiusGeometry? borderRadius) {
     if (borderRadius != null) {
       applyBorderRadius(style, borderRadius);
 

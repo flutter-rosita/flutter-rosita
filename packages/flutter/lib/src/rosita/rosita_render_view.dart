@@ -1,12 +1,13 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'package:web/web.dart' as web;
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:rosita/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:rosita/rosita_web.dart';
 
 mixin RositaRenderViewMixin on RositaRenderMixin {
-  html.HtmlElement? _rositaRootElement;
+  web.HTMLElement? _rositaRootElement;
 
   @override
   RenderView get target => this as RenderView;
@@ -17,9 +18,9 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
       return;
     }
 
-    final fltGlassPane = html.document.getElementsByTagName('flt-glass-pane').first as html.HtmlElement;
+    final fltGlassPane = web.document.getElementsByTagName('flt-glass-pane').item(0)! as web.HTMLElement;
     final root = fltGlassPane.shadowRoot ?? fltGlassPane;
-    final rositaRootElement = html.DivElement()..className = 'rosita-root-element';
+    final rositaRootElement = web.HTMLDivElement()..className = 'rosita-root-element';
 
     root.append(rositaRootElement);
     root.append(createStyleElement());
@@ -29,8 +30,8 @@ mixin RositaRenderViewMixin on RositaRenderMixin {
     rositaRootElement.append(htmlElement);
   }
 
-  html.StyleElement createStyleElement() {
-    final styleElement = html.StyleElement();
+  web.HTMLStyleElement createStyleElement() {
+    final styleElement = web.HTMLStyleElement();
     final buffer = StringBuffer();
 
     buffer.writeAll([

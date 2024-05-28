@@ -40,7 +40,7 @@ mixin _ParagraphMixin on _CanvasMixin {
         context.font = font;
       }
 
-      context.fillStyle = style.color.toStyleString();
+      context.fillStyle = style.color.toStyleString() as JSAny;
 
       final measure = context.measureText(string);
 

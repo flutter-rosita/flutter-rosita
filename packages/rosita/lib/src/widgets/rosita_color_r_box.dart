@@ -14,7 +14,7 @@ class RositaColorRBox extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _RenderRositaColorRBox(
+    return RenderRositaColorRBox(
       color: color,
       borderRadius: borderRadius,
     );
@@ -22,49 +22,8 @@ class RositaColorRBox extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderObject renderObject) {
-    (renderObject as _RenderRositaColorRBox)
+    (renderObject as RenderRositaColorRBox)
       ..color = color
       ..borderRadius = borderRadius;
-  }
-}
-
-class _RenderRositaColorRBox extends RositaRenderProxyBoxWithHitTestBehavior {
-  _RenderRositaColorRBox({
-    required Color color,
-    BorderRadius? borderRadius,
-  })  : _color = color,
-        _borderRadius = borderRadius;
-
-  Color get color => _color;
-
-  Color _color;
-
-  set color(Color value) {
-    if (value == _color) {
-      return;
-    }
-    _color = value;
-    markNeedsPaint();
-  }
-
-  BorderRadius? get borderRadius => _borderRadius;
-
-  BorderRadius? _borderRadius;
-
-  set borderRadius(BorderRadius? value) {
-    if (value == _borderRadius) {
-      return;
-    }
-    _borderRadius = value;
-    markNeedsPaint();
-  }
-
-  @override
-  void rositaPaint() {
-    final style = htmlElement.style;
-
-    style.backgroundColor = color.toStyleString();
-
-    RositaRadiusUtils.applyBorderRadius(style, borderRadius);
   }
 }

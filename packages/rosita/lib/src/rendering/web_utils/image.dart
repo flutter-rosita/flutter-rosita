@@ -1,7 +1,4 @@
-import 'dart:ui' as ui;
-
-import 'package:flutter/rendering.dart';
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaImageUtils {
   static String buildImageProviderPath(ImageProvider? image) {
@@ -17,24 +14,24 @@ class RositaImageUtils {
     final buffer = byteData?.buffer;
 
     if (buffer != null) {
-      return html.Url.createObjectUrlFromBlob(html.Blob([buffer.asUint8List()], 'image/png'));
+      return web.URL.createObjectURL(web.Blob(buffer.asUint8List() as JSArray<web.BlobPart>, web.BlobPropertyBag(type: 'image/png')));
     }
 
     return null;
   }
 
   static Future<String?> buildMemoryImageBlobPath(MemoryImage image) async {
-    return html.Url.createObjectUrlFromBlob(html.Blob([image.bytes]));
+    return web.URL.createObjectURL(web.Blob(image.bytes as JSArray<web.BlobPart>));
   }
 
   static void revokeBlobObjectUrl(String url) {
-    return html.Url.revokeObjectUrl(url);
+    return web.URL.revokeObjectURL(url);
   }
 
   static bool imageIsComplete(String src) {
-    final imageElement = html.ImageElement();
+    final imageElement = web.HTMLImageElement();
     imageElement.src = src;
 
-    return imageElement.complete ?? false;
+    return imageElement.complete;
   }
 }

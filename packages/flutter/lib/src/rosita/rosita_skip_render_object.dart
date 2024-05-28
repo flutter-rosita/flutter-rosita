@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:rosita/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:rosita/rosita_web.dart';
+import 'package:web/web.dart' as web;
 
 mixin RositaSkipRenderObjectMixin on RositaRenderMixin {
   @override
-  html.HtmlElement? createRositaElement() {
+  web.HTMLElement? createRositaElement() {
     // Skip create HTML element
     return null;
   }

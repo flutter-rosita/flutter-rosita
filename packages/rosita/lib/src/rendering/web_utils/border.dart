@@ -1,12 +1,11 @@
-import 'package:flutter/rendering.dart';
-import 'package:rosita/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaBorderUtils {
   static void applyBorderStyle(
-    html.CssStyleDeclaration style,
-    html.CssStyleDeclaration? firstChildStyle,
+    web.CSSStyleDeclaration style,
+    web.CSSStyleDeclaration? firstChildStyle,
     BoxBorder border,
+    TextDirection? textDirection,
   ) {
     switch (border) {
       case Border():
@@ -23,9 +22,10 @@ class RositaBorderUtils {
         final BorderDirectional(:top, :start, :bottom, :end) = border;
 
         style.borderTop = _mapBorderSide(top);
-        style.borderStart = _mapBorderSide(start);
         style.borderBottom = _mapBorderSide(bottom);
-        style.borderEnd = _mapBorderSide(end);
+
+        style.borderLeft = _mapBorderSide(start);
+        style.borderRight = _mapBorderSide(end);
     }
   }
 

@@ -1,3 +1,5 @@
+part of '../web_rendering.dart';
+
 class RositaCursorUtils {
   static bool _changed = false;
 

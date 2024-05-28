@@ -1,12 +1,8 @@
-// ignore_for_file: public_member_api_docs, always_specify_types
-
-import 'package:flutter/rendering.dart';
-import 'package:rosita/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+part of '../web_rendering.dart';
 
 class RositaTextUtils {
   static void applyTextStyle(
-    html.CssStyleDeclaration style, {
+    web.CSSStyleDeclaration style, {
     TextStyle? textStyle,
     TextAlign? textAlign,
     TextScaler? textScaler,

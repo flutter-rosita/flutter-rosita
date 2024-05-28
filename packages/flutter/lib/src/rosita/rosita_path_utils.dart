@@ -7,11 +7,11 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
-import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:rosita/rosita_web.dart';
+import 'package:web/web.dart' as web;
 
 class RositaPathUtils {
-  static void applyCustomClipper(html.CssStyleDeclaration style, CustomClipper? clipper, Size size) {
+  static void applyCustomClipper(web.CSSStyleDeclaration style, CustomClipper? clipper, Size size) {
     if (clipper is ShapeBorderClipper) {
       final shape = clipper.shape;
 
@@ -38,7 +38,7 @@ class RositaPathUtils {
     }
   }
 
-  static void applyCustomClipperPath(html.CssStyleDeclaration style, Path path) {
+  static void applyCustomClipperPath(web.CSSStyleDeclaration style, Path path) {
     if (path is RositaSurfacePath) {
       final pathRef = path.pathRef;
       final StringBuffer sb = StringBuffer();

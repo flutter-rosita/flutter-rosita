@@ -1,17 +1,18 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as web;
 
 mixin RositaPlatformViewRenderBoxMixin on RositaRenderMixin {
   @override
   PlatformViewRenderBox get target => this as PlatformViewRenderBox;
 
-  html.HtmlElement? _childHtmlElement;
+  web.HTMLElement? _childHtmlElement;
 
   int? _viewId;
 
@@ -38,7 +39,7 @@ mixin RositaPlatformViewRenderBoxMixin on RositaRenderMixin {
 
         if (el != null) {
           _childHtmlElement = el;
-          htmlElement.append(el);
+          htmlElement.append(el as JSAny);
         }
       });
     }
@@ -46,12 +47,12 @@ mixin RositaPlatformViewRenderBoxMixin on RositaRenderMixin {
 }
 
 class RositaPlatformViewRegister {
-  static final _viewMap = <int, html.HtmlElement>{};
+  static final _viewMap = <int, web.HTMLElement>{};
 
   static void createPlatformView({required int viewId, required String viewType}) {
     final view = ui_web.platformViewRegistry.getViewById(viewId);
 
-    if (view is html.HtmlElement) {
+    if (view is web.HTMLElement) {
       _viewMap[viewId] = view;
     }
   }

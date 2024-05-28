@@ -11,9 +11,9 @@ mixin _CanvasMixin {
 
   Offset get offset => _offset!;
 
-  html.CanvasElement get canvas;
+  web.HTMLCanvasElement get canvas;
 
-  html.CanvasRenderingContext2D get context;
+  web.CanvasRenderingContext2D get context;
 
   bool _isDirty = false;
 
@@ -150,7 +150,7 @@ mixin _CanvasMixin {
   }
 
   void resetMatrixTransform() {
-    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.setTransform(1 as JSAny, 0, 0, 1, 0, 0);
     _setTranslate(0, 0);
 
     final double devicePixelRatio = _devicePixelRatio;
