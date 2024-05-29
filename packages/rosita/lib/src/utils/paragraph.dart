@@ -11,9 +11,9 @@ class RositaParagraphUtils {
 
   static html.CanvasRenderingContext2D get canvasContext =>
       _canvasContext ??= (_canvas ??= html.CanvasElement()).context2D;
-  
+
   static bool? _isChrome;
-  
+
   static bool get isChrome => _isChrome ??= html.window.navigator.userAgent.contains('Chrome');
 
   static double get fixScaleFactor {
@@ -175,13 +175,25 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
 
   int get lines => _lines!;
 
+  bool _wordBreak = false;
+
+  bool get wordBreak => _wordBreak;
+
   void layout({double minWidth = 0.0, double maxWidth = double.infinity, required TextScaler textScaler}) {
+    _wordBreak = false;
+
     int lines = 1;
     double maxLineWidth = 0;
     double lineWidth = 0;
 
     for (int i = 0; i < wordList.length; i++) {
-      final width = textScaler.scale(wordList[i]);
+      double width = textScaler.scale(wordList[i]);
+
+      if (width > maxWidth) {
+        _wordBreak = true;
+        lines += width ~/ maxWidth;
+        width = width % maxWidth;
+      }
 
       if (lineWidth + width > maxWidth) {
         lines++;
@@ -223,7 +235,7 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
           worldCount = worldCount + (maxWidth - lineWidth - width) / width;
 
           if (worldCount < .0) {
-            return (words: .0, lines: 0);
+            return (words: worldCount + 1, lines: maxLines ?? lines - 1);
           }
 
           return (words: worldCount, lines: lines - 1);

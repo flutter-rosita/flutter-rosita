@@ -239,6 +239,8 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
       return;
     }
 
+    final paragraphData = _paragraphData!;
+
     style.display = '';
 
     RositaTextUtils.applyTextStyle(
@@ -264,14 +266,23 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
 
     if (hasVisualOverflow == false) {
       htmlElement.innerText = text;
+
+      style.wordBreak = paragraphData.wordBreak ? 'break-word' : '';
       return;
     }
 
     final List<String> wordList = text.split(' ');
     final buffer = StringBuffer();
-    final wordsCount = _paragraphData!.takeWordsCount(size, maxLines, textScaler).words;
+    final wordsCount = paragraphData.takeWordsCount(size, maxLines, textScaler).words;
 
     for (int i = 0; i < wordsCount; i++) {
+      if (i == 0 && wordsCount < 1) {
+        final word = wordList[0];
+
+        buffer.write(word.substring(0, (wordsCount * word.length).floor()));
+        break;
+      }
+
       if (i % 2 == 0) {
         final word = wordList[i ~/ 2];
 
