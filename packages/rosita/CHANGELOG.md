@@ -1,3 +1,7 @@
+## 0.4.20
+
+- Add support word-break
+
 ## 0.4.19
 
 - Fix RositaFadeImage without placeholder
