@@ -1957,7 +1957,9 @@ abstract class RenderBox extends RenderObject with RositaRenderBoxMixin {
   }
 
   /// Whether this render object has undergone layout and has a [size].
-  bool get hasSize => _size != null;
+  bool get hasSize => kIsRosita ? _rositaHasSize : _size != null;
+
+  bool _rositaHasSize = false;
 
   /// The size of this render box computed during layout.
   ///
@@ -2034,6 +2036,7 @@ abstract class RenderBox extends RenderObject with RositaRenderBoxMixin {
       return true;
     }());
     _size = value;
+    _rositaHasSize = true;
     assert(() {
       debugAssertDoesMeetConstraints();
       return true;
