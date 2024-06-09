@@ -111,8 +111,9 @@ mixin _CanvasMixin {
     _previousWidth = width;
     _previousHeight = height;
 
-    canvas.style.width = '${width}px';
-    canvas.style.height = '${height}px';
+    (canvas.style as JSObject)
+      ..setProperty('width' as JSAny, (width as JSAny).add('px' as JSAny))
+      ..setProperty('height' as JSAny, (height as JSAny).add('px' as JSAny));
 
     canvas.width = (width * scale).toInt();
     canvas.height = (height * scale).toInt();

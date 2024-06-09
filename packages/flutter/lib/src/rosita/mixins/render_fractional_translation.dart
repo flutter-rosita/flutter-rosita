@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
@@ -19,9 +21,17 @@ mixin RositaRenderFractionalTranslationMixin on RositaRenderBoxMixin {
       final y = height * dy;
 
       if (x != 0 || y != 0) {
-        style.transform = 'translate(${x}px,${y}px)$styleTransform';
+        (style as JSObject).setProperty(
+          'transform' as JSAny,
+          ('translate(' as JSAny)
+              .add(x as JSAny)
+              .add('px,' as JSAny)
+              .add(y as JSAny)
+              .add('px)' as JSAny)
+              .add(styleTransform),
+        );
       } else {
-        style.transform = styleTransform;
+        (style as JSObject).setProperty('transform' as JSAny, styleTransform);
       }
     }
   }

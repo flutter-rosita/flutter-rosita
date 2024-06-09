@@ -10,7 +10,7 @@ class RositaTextUtils {
     if (textAlign != null) style.textAlign = _mapTextAlign(textAlign);
     if (textStyle != null) {
       if (textStyle.color != null) {
-        style.color = textStyle.color.toStyleString();
+        (style as JSObject).setProperty('color' as JSAny, textStyle.color.toStyleJSAny());
       }
       if (textStyle.fontFamily != null) {
         style.fontFamily = "'${textStyle.fontFamily}'";
@@ -22,7 +22,7 @@ class RositaTextUtils {
           fontSize = textScaler.scale(fontSize);
         }
 
-        style.fontSize = '${fontSize}px';
+        (style as JSObject).setProperty('fontSize' as JSAny, (fontSize as JSAny).add('px' as JSAny));
       }
       if (textStyle.fontSize != null && textStyle.height != null) {
         double fontSize = textStyle.fontSize! * textStyle.height!;
@@ -31,7 +31,7 @@ class RositaTextUtils {
           fontSize = textScaler.scale(fontSize);
         }
 
-        style.lineHeight = '${fontSize}px';
+        (style as JSObject).setProperty('lineHeight' as JSAny, (fontSize as JSAny).add('px' as JSAny));
       }
       if (textStyle.fontWeight != null) {
         style.fontWeight = mapFontWeight(textStyle.fontWeight!);

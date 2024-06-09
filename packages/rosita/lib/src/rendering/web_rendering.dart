@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita.dart';
+import 'package:rosita/src/extensions/web_color.dart';
 import 'package:web/web.dart' as web;
 
 part 'web/render_rosita_image.dart';

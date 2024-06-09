@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
@@ -77,7 +79,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
   }
 
   void _fillStyle(web.CSSStyleDeclaration style, Color? color, DecorationImage? image, Gradient? gradient) {
-    style.background = color.toStyleString();
+    (style as JSObject).setProperty('background' as JSAny, color.toStyleJSAny());
 
     if (image != null) {
       style.backgroundImage = 'url(${RositaImageUtils.buildImageProviderPath(image.image)})';

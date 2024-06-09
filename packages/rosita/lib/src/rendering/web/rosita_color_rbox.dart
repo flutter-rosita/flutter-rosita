@@ -35,7 +35,7 @@ class RenderRositaColorRBox extends RositaRenderProxyBoxWithHitTestBehavior {
   void rositaPaint() {
     final style = htmlElement.style;
 
-    style.backgroundColor = color.toStyleString();
+    (style as JSObject).setProperty('backgroundColor' as JSAny, color.toStyleJSAny());
 
     RositaRadiusUtils.applyBorderRadius(style, borderRadius);
   }

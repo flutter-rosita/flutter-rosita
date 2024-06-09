@@ -118,7 +118,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       imageElement.src =
       'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
 
-      style.backgroundColor = color.toStyleString();
+      (style as JSObject).setProperty('backgroundColor' as JSAny, color.toStyleJSAny());
       style.maskImage = 'url($src)';
       style.maskRepeat = 'no-repeat';
       style.maskPosition = style.objectPosition;

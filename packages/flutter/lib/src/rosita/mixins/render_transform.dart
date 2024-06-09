@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -19,22 +21,39 @@ mixin RositaRenderTransform on RositaRenderBoxMixin {
 
     if (transform != null) {
       if (transform.isIdentity()) {
-        styleTransform = '';
+        styleTransform = '' as JSAny;
       } else if (_isScale(transform.storage)) {
-        styleTransform = 'scale(${transform.storage[0]},${transform.storage[5]})';
+        styleTransform = ('scale(' as JSAny)
+            .add(transform.storage[0] as JSAny)
+            .add(',' as JSAny)
+            .add(transform.storage[5] as JSAny)
+            .add(')' as JSAny);
       } else {
-        styleTransform = 'matrix3d(${transform.storage.join(',')})';
+        styleTransform = 'matrix3d(${transform.storage.join(',')})' as JSAny;
       }
     }
 
-    style.transformOrigin = alignment != null && alignment != Alignment.center
-        ? '${(1 + alignment.x) / 2 * 100}% ${(1 + alignment.y) / 2 * 100}%'
-        : '';
+    (style as JSObject).setProperty(
+        'transformOrigin' as JSAny,
+        alignment != null && alignment != Alignment.center
+            ? ((1 + alignment.x) / 2 * 100 as JSAny)
+                .add('% ' as JSAny)
+                .add((1 + alignment.y) / 2 * 100 as JSAny)
+                .add('%' as JSAny)
+            : '' as JSAny);
 
     if (dx != 0 || dy != 0) {
-      style.transform = 'translate(${dx}px,${dy}px)$styleTransform';
+      (style as JSObject).setProperty(
+        'transform' as JSAny,
+        ('translate(' as JSAny)
+            .add(dx as JSAny)
+            .add('px,' as JSAny)
+            .add(dy as JSAny)
+            .add('px)' as JSAny)
+            .add(styleTransform),
+      );
     } else {
-      style.transform = styleTransform;
+      (style as JSObject).setProperty('transform' as JSAny, styleTransform);
     }
   }
 

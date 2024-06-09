@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 
@@ -20,7 +23,8 @@ mixin RositaRenderFittedBoxMixin on RositaRenderMixin {
 
       final childStyle = childHtmlElement.style;
 
-      childStyle.transform = 'scale($scale,$scale)';
+      (childStyle as JSObject).setProperty('transform' as JSAny,
+          ('scale(' as JSAny).add(scale as JSAny).add(',' as JSAny).add(scale as JSAny).add(')' as JSAny));
       childStyle.transformOrigin = 'top left';
     }
   }

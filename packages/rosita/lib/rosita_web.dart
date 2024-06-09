@@ -1,5 +1,6 @@
 export 'src/extensions/color.dart';
 export 'src/extensions/rrect.dart';
+export 'src/extensions/web_color.dart';
 export 'src/rendering/web_rendering.dart';
 export 'src/rosita_constants.dart';
 export 'src/widgets/rosita_color_r_box.dart';

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';

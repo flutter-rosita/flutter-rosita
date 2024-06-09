@@ -12,12 +12,21 @@ class RositaRadiusUtils {
       final radius = borderRadius.resolve(null);
 
       if (_isAllEquals(radius)) {
-        style.borderRadius = radius.topLeft.x == 0 ? '' : '${radius.topLeft.x}px';
+        (style as JSObject).setProperty('borderRadius' as JSAny,
+            (radius.topLeft.x == 0 ? '' : (radius.topLeft.x as JSAny).add('px' as JSAny)) as JSAny);
         return;
       }
 
-      style.borderRadius =
-          '${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}px';
+      (style as JSObject).setProperty(
+          'borderRadius' as JSAny,
+          (radius.topLeft.x as JSAny)
+              .add('px ' as JSAny)
+              .add(radius.topRight.x as JSAny)
+              .add('px ' as JSAny)
+              .add(radius.bottomRight.x as JSAny)
+              .add('px ' as JSAny)
+              .and(radius.bottomLeft.x as JSAny)
+              .add('px' as JSAny));
     }
   }
 

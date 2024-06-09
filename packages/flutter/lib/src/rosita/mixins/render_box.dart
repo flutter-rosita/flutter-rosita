@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
 
@@ -11,11 +14,11 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
   Offset? get localOffset => _localOffset;
 
-  String _styleTransform = '';
+  JSAny _styleTransform = '' as JSAny;
 
-  String get styleTransform => _styleTransform;
+  JSAny get styleTransform => _styleTransform;
 
-  set styleTransform(String value) => _styleTransform = value;
+  set styleTransform(JSAny value) => _styleTransform = value;
 
   @override
   void rositaLayout() {
@@ -25,16 +28,24 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
     final size = target.size;
     final style = htmlElement.style;
 
-    style.width = '${size.width}px';
-    style.height = '${size.height}px';
+    (style as JSObject)
+      ..setProperty('width' as JSAny, (size.width as JSAny).add('px' as JSAny))
+      ..setProperty('height' as JSAny, (size.height as JSAny).add('px' as JSAny));
 
     final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
     final Offset(:dx, :dy) = offset;
 
     if (dx != 0 || dy != 0) {
-      style.transform = 'translate(${dx}px,${dy}px)$_styleTransform';
+      (style as JSObject).setProperty(
+          'transform' as JSAny,
+          ('translate(' as JSAny)
+              .add(dx as JSAny)
+              .add('px,' as JSAny)
+              .add(dy as JSAny)
+              .add('px)' as JSAny)
+              .add(_styleTransform));
     } else {
-      style.transform = _styleTransform;
+      (style as JSObject).setProperty('transform' as JSAny, _styleTransform);
     }
 
     _localOffset = offset;

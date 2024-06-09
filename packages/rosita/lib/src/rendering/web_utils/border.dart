@@ -11,30 +11,34 @@ class RositaBorderUtils {
       case Border():
         final Border(:top, :right, :bottom, :left) = border;
 
-        style.borderTop = _mapBorderSide(top);
-        style.borderRight = _mapBorderSide(right);
-        style.borderBottom = _mapBorderSide(bottom);
-        style.borderLeft = _mapBorderSide(left);
+        (style as JSObject).setProperty('borderTop' as JSAny, _mapBorderSide(top));
+        (style as JSObject).setProperty('borderRight' as JSAny, _mapBorderSide(right));
+        (style as JSObject).setProperty('borderBottom' as JSAny, _mapBorderSide(bottom));
+        (style as JSObject).setProperty('borderLeft' as JSAny, _mapBorderSide(left));
 
         firstChildStyle?.left = '${-left.width}px';
         firstChildStyle?.top = '${-top.width}px';
       case BorderDirectional():
         final BorderDirectional(:top, :start, :bottom, :end) = border;
 
-        style.borderTop = _mapBorderSide(top);
-        style.borderBottom = _mapBorderSide(bottom);
+        (style as JSObject).setProperty('borderTop' as JSAny, _mapBorderSide(top));
+        (style as JSObject).setProperty('borderBottom' as JSAny, _mapBorderSide(bottom));
 
-        style.borderLeft = _mapBorderSide(start);
-        style.borderRight = _mapBorderSide(end);
+        (style as JSObject).setProperty('borderLeft' as JSAny, _mapBorderSide(start));
+        (style as JSObject).setProperty('borderRight' as JSAny, _mapBorderSide(end));
     }
   }
 
-  static String _mapBorderSide(BorderSide side) {
-    return '${side.width}px ${_mapBorderStyle(side.style)} ${side.color.toStyleString()}';
+  static JSAny _mapBorderSide(BorderSide side) {
+    return (side.width as JSAny)
+        .add('px ' as JSAny)
+        .add(_mapBorderStyle(side.style))
+        .add(' ' as JSAny)
+        .add(side.color.toStyleJSAny());
   }
 
-  static String _mapBorderStyle(BorderStyle style) => switch (style) {
-        BorderStyle.solid => 'solid',
-        BorderStyle.none => 'none',
+  static JSAny _mapBorderStyle(BorderStyle style) => switch (style) {
+        BorderStyle.solid => 'solid' as JSAny,
+        BorderStyle.none => 'none' as JSAny,
       };
 }

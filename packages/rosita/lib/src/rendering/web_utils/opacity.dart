@@ -7,7 +7,7 @@ class RositaOpacityUtils {
       style.opacity = '1';
     } else if (opacity > 0) {
       style.display = '';
-      style.opacity = '${opacity > 0.99 ? 1 : opacity}';
+      (style as JSObject).setProperty('opacity' as JSAny, opacity > 0.99 ? '1' as JSAny : opacity as JSAny);
     } else {
       style.display = 'none';
       style.opacity = '0';
