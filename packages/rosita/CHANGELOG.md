@@ -1,3 +1,7 @@
+## 0.5.0
+
+Refactoring from package:universal_html to package:web
+
 ## 0.4.20
 
 - Add support word-break
