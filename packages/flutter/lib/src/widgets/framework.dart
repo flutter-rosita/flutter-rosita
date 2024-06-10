@@ -5466,11 +5466,20 @@ abstract class ComponentElement extends Element with RositaSingleChildElementMix
   @override
   Element? get renderObjectAttachingChild => _child;
 
+  final bool _rositaSkipFirstBuild = false;
+
   @override
   void mount(Element? parent, Object? newSlot) {
     super.mount(parent, newSlot);
     assert(_child == null);
     assert(_lifecycleState == _ElementLifecycle.active);
+    if (kIsRosita) {
+      if (_rositaSkipFirstBuild) {
+        return;
+      }
+      rebuild();
+      return;
+    }
     _firstBuild();
     assert(_child != null);
   }
@@ -5621,6 +5630,28 @@ class StatefulElement extends ComponentElement {
   void reassemble() {
     state.reassemble();
     super.reassemble();
+  }
+
+  @override
+  final bool _rositaSkipFirstBuild = true;
+
+  @override
+  void mount(Element? parent, Object? newSlot) {
+    super.mount(parent, newSlot);
+
+    if (kIsRosita) {
+      state.initState();
+      assert(() {
+        state._debugLifecycleState = _StateLifecycle.initialized;
+        return true;
+      }());
+      state.didChangeDependencies();
+      assert(() {
+        state._debugLifecycleState = _StateLifecycle.ready;
+        return true;
+      }());
+      rebuild();
+    }
   }
 
   @override
