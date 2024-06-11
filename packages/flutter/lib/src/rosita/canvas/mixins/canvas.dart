@@ -89,7 +89,8 @@ mixin _CanvasMixin {
     final Rect(:left, :top) = rect;
 
     if (left != 0 || top != 0) {
-      canvas.style.transform = 'translate(${left}px,${top}px)';
+      (canvas.style as JSObject).setProperty('transform' as JSAny,
+          ('translate(' as JSAny).add(left as JSAny).add('px,' as JSAny).add(top as JSAny).add('px)' as JSAny));
     } else {
       canvas.style.transform = '';
     }
@@ -107,6 +108,7 @@ mixin _CanvasMixin {
       return;
     }
 
+    _transformScale = null;
     _previousPixelRatio = scale;
     _previousWidth = width;
     _previousHeight = height;
@@ -150,14 +152,21 @@ mixin _CanvasMixin {
     _updateCanvasSize();
   }
 
+  double? _transformScale;
+
   void resetMatrixTransform() {
-    context.setTransform(1 as JSAny, 0, 0, 1, 0, 0);
     _setTranslate(0, 0);
 
     final double devicePixelRatio = _devicePixelRatio;
 
-    if (devicePixelRatio != 1) {
-      context.scale(devicePixelRatio, devicePixelRatio);
+    if (_transformScale != devicePixelRatio) {
+      _transformScale = devicePixelRatio;
+
+      context.setTransform(1 as JSAny, 0, 0, 1, 0, 0);
+
+      if (devicePixelRatio != 1) {
+        context.scale(devicePixelRatio, devicePixelRatio);
+      }
     }
   }
 }
