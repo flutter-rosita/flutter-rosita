@@ -5,10 +5,11 @@ part of '../web_rendering.dart';
 mixin RositaRenderMixin {
   web.HTMLElement? _htmlElement;
 
-  web.HTMLElement get htmlElement =>
-      rositaCastNullableToNonNullable ? _htmlElement as web.HTMLElement : _htmlElement!;
+  web.HTMLElement get htmlElement => rositaCastNullableToNonNullable ? _htmlElement as web.HTMLElement : _htmlElement!;
 
-  bool get hasHtmlElement => _htmlElement != null;
+  bool _hasHtmlElement = false;
+
+  bool get hasHtmlElement => _hasHtmlElement;
 
   // RenderObject getters
 
@@ -33,6 +34,7 @@ mixin RositaRenderMixin {
 
       if (htmlElement != null) {
         _htmlElement = htmlElement;
+        _hasHtmlElement = true;
         _rositaNeedsAttach = false;
         _rositaNeedsLayout = false;
         _rositaNeedsPaint = false;
@@ -165,11 +167,13 @@ mixin RositaRenderMixin {
 
     if (parent != null && parent._rositaNeedsDetach && parent.hasHtmlElement) {
       _htmlElement = null;
+      _hasHtmlElement = false;
       return;
     }
 
     _htmlElement?.remove();
     _htmlElement = null;
+    _hasHtmlElement = false;
   }
 
   void rositaDetach() {}
