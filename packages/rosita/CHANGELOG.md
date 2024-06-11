@@ -1,3 +1,7 @@
+## 0.5.1
+
+Version up to Flutter 3.22.2
+
 ## 0.5.0
 
 Refactoring from package:universal_html to package:web
