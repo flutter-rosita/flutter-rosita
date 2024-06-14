@@ -148,8 +148,6 @@ mixin _CanvasMixin {
         offsetRect.bottom + bottom,
       ),
     );
-
-    _updateCanvasSize();
   }
 
   double? _transformScale;
