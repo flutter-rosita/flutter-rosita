@@ -20,6 +20,8 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
 
   set styleTransform(JSAny value) => _styleTransform = value;
 
+  Size? _size;
+
   @override
   void rositaLayout() {
     super.rositaLayout();
@@ -28,27 +30,34 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
     final size = target.size;
     final style = htmlElement.style;
 
-    (style as JSObject)
-      ..setProperty('width' as JSAny, (size.width as JSAny).add('px' as JSAny))
-      ..setProperty('height' as JSAny, (size.height as JSAny).add('px' as JSAny));
+    if (_size != size) {
+      _size = size;
 
-    final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
-    final Offset(:dx, :dy) = offset;
-
-    if (dx != 0 || dy != 0) {
-      (style as JSObject).setProperty(
-          'transform' as JSAny,
-          ('translate(' as JSAny)
-              .add(dx as JSAny)
-              .add('px,' as JSAny)
-              .add(dy as JSAny)
-              .add('px)' as JSAny)
-              .add(_styleTransform));
-    } else {
-      (style as JSObject).setProperty('transform' as JSAny, _styleTransform);
+      (style as JSObject)
+        ..setProperty('width' as JSAny, (size.width as JSAny).add('px' as JSAny))
+        ..setProperty('height' as JSAny, (size.height as JSAny).add('px' as JSAny));
     }
 
-    _localOffset = offset;
+    final offset = _getRenderObjectOffset(target, size) + _calculateParenOffset(target);
+
+    if (_localOffset != offset) {
+      _localOffset = offset;
+
+      final Offset(:dx, :dy) = offset;
+
+      if (dx != 0 || dy != 0) {
+        (style as JSObject).setProperty(
+            'transform' as JSAny,
+            ('translate(' as JSAny)
+                .add(dx as JSAny)
+                .add('px,' as JSAny)
+                .add(dy as JSAny)
+                .add('px)' as JSAny)
+                .add(_styleTransform));
+      } else {
+        (style as JSObject).setProperty('transform' as JSAny, _styleTransform);
+      }
+    }
   }
 
   Offset _calculateParenOffset(RenderObject object) {
