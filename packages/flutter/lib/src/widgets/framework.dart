@@ -2910,7 +2910,13 @@ class BuildOwner {
           );
         }
         try {
-          element.rebuild();
+          if (kIsRosita) {
+            if (element.dirty) {
+              element.rebuild();
+            }
+          } else {
+            element.rebuild();
+          }
         } catch (e, stack) {
           _reportException(
             ErrorDescription('while rebuilding dirty elements'),
