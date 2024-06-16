@@ -1296,6 +1296,8 @@ abstract class FlutterCommand extends Command<void> {
       dartDefines.add('FLUTTER_APP_FLAVOR=$flavor');
     }
 
+    dartDefines.add('ROSITA=true');
+
     return BuildInfo(buildMode,
       flavor,
       trackWidgetCreation: trackWidgetCreation,
