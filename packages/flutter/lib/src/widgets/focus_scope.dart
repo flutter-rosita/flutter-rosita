@@ -671,7 +671,7 @@ class _FocusState extends State<Focus> {
     _focusAttachment!.reparent(parent: widget.parentNode);
     Widget child = widget.child;
     if (widget.includeSemantics) {
-      child = Semantics(
+      child = RositaSemantics(
         focusable: _couldRequestFocus,
         focused: _hadPrimaryFocus,
         child: widget.child,
@@ -835,7 +835,7 @@ class _FocusScopeState extends _FocusState {
   @override
   Widget build(BuildContext context) {
     _focusAttachment!.reparent(parent: widget.parentNode);
-    return Semantics(
+    return RositaSemantics(
       explicitChildNodes: true,
       child: _FocusInheritedScope(
         node: focusNode,

@@ -835,7 +835,7 @@ class TooltipState extends State<Tooltip> with SingleTickerProviderStateMixin {
     }
     assert(debugCheckHasOverlay(context));
     final bool excludeFromSemantics = widget.excludeFromSemantics ?? _tooltipTheme.excludeFromSemantics ?? _defaultExcludeFromSemantics;
-    Widget result = Semantics(
+    Widget result = RositaSemantics(
       tooltip: excludeFromSemantics ? null : _tooltipMessage,
       child: widget.child,
     );
@@ -945,7 +945,7 @@ class _TooltipOverlay extends StatelessWidget {
         constraints: BoxConstraints(minHeight: height),
         child: DefaultTextStyle(
           style: Theme.of(context).textTheme.bodyMedium!,
-          child: Semantics(
+          child: RositaSemantics(
             container: true,
             child: Container(
               decoration: decoration,

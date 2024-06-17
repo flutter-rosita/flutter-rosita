@@ -223,7 +223,7 @@ class Card extends StatelessWidget {
       defaults = _CardDefaultsM2(context);
     }
 
-    return Semantics(
+    return RositaSemantics(
       container: semanticContainer,
       child: Container(
         margin: margin ?? cardTheme.margin ?? defaults.margin!,
@@ -236,7 +236,7 @@ class Card extends StatelessWidget {
           shape: shape ?? cardTheme.shape ?? defaults.shape,
           borderOnForeground: borderOnForeground,
           clipBehavior: clipBehavior ?? cardTheme.clipBehavior ?? defaults.clipBehavior!,
-          child: Semantics(
+          child: RositaSemantics(
             explicitChildNodes: !semanticContainer,
             child: child,
           ),

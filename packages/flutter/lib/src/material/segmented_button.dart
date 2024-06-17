@@ -501,7 +501,7 @@ class SegmentedButtonState<T> extends State<SegmentedButton<T>> {
         : button;
 
       return MergeSemantics(
-        child: Semantics(
+        child: RositaSemantics(
           checked: segmentSelected,
           inMutuallyExclusiveGroup: widget.multiSelectionEnabled ? null : true,
           child: buttonWithTooltip,

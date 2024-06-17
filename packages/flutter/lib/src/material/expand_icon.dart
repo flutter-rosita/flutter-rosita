@@ -166,7 +166,7 @@ class _ExpandIconState extends State<ExpandIcon> with SingleTickerProviderStateM
     final MaterialLocalizations localizations = MaterialLocalizations.of(context);
     final String onTapHint = widget.isExpanded ? localizations.expandedIconTapHint : localizations.collapsedIconTapHint;
 
-    return Semantics(
+    return RositaSemantics(
       onTapHint: widget.onPressed == null ? null : onTapHint,
       child: IconButton(
         padding: widget.padding,

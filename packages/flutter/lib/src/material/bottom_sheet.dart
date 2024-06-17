@@ -454,7 +454,7 @@ class _DragHandle extends StatelessWidget {
     return MouseRegion(
       onEnter: (PointerEnterEvent event) => handleHover(true),
       onExit: (PointerExitEvent event) => handleHover(false),
-      child: Semantics(
+      child: RositaSemantics(
         label: MaterialLocalizations.of(context).modalBarrierDismissLabel,
         container: true,
         onTap: onSemanticsTap,
@@ -743,7 +743,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         final double animationValue = animationCurve.transform(
             widget.route.animation!.value,
         );
-        return Semantics(
+        return RositaSemantics(
           scopesRoute: true,
           namesRoute: true,
           label: routeLabel,

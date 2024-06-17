@@ -182,7 +182,7 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
             style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle.copyWith(color: inactive),
             child: Padding(
               padding: EdgeInsets.only(bottom: bottomPadding),
-              child: Semantics(
+              child: RositaSemantics(
                 explicitChildNodes: true,
                 child: Row(
                   // Align bottom since we want the labels to be aligned.
@@ -222,7 +222,7 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
             // Make tab items part of the EditableText tap region so that
             // switching tabs doesn't unfocus text fields.
             child: TextFieldTapRegion(
-              child: Semantics(
+              child: RositaSemantics(
                 selected: active,
                 hint: localizations.tabSemanticsLabel(
                   tabIndex: index + 1,

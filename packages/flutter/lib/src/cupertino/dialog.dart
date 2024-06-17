@@ -356,7 +356,7 @@ class _CupertinoAlertDialogState extends State<CupertinoAlertDialog> {
                           : _kCupertinoDialogWidth,
                       child: CupertinoPopupSurface(
                         isSurfacePainted: false,
-                        child: Semantics(
+                        child: RositaSemantics(
                           namesRoute: true,
                           scopesRoute: true,
                           explicitChildNodes: true,
@@ -653,7 +653,7 @@ class _CupertinoActionSheetState extends State<CupertinoActionSheet> {
       child: ScrollConfiguration(
         // A CupertinoScrollbar is built-in below
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: Semantics(
+        child: RositaSemantics(
           namesRoute: true,
           scopesRoute: true,
           explicitChildNodes: true,
@@ -734,7 +734,7 @@ class CupertinoActionSheetAction extends StatelessWidget {
           constraints: const BoxConstraints(
             minHeight: _kActionSheetButtonHeight,
           ),
-          child: Semantics(
+          child: RositaSemantics(
             button: true,
             child: Container(
               alignment: Alignment.center,
@@ -1687,7 +1687,7 @@ class CupertinoDialogAction extends StatelessWidget {
             constraints: BoxConstraints(
               maxWidth: fontSizeRatio * (dialogWidth - (2 * padding)),
             ),
-            child: Semantics(
+            child: RositaSemantics(
               button: true,
               onTap: onPressed,
               child: DefaultTextStyle(

@@ -604,13 +604,13 @@ class _BottomNavigationTile extends StatelessWidget {
       );
     }
 
-    result = Semantics(
+    result = RositaSemantics(
       selected: selected,
       container: true,
       child: Stack(
         children: <Widget>[
           result,
-          Semantics(
+          RositaSemantics(
             label: indexLabel,
           ),
         ],
@@ -1137,7 +1137,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> with TickerPr
       BottomNavigationBarType.shifting => _backgroundColor,
     };
 
-    return Semantics(
+    return RositaSemantics(
       explicitChildNodes: true,
       child: _Bar(
         layout: layout,

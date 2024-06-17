@@ -10,5 +10,6 @@ export 'src/widgets/rosita_fade_image.dart';
 export 'src/widgets/rosita_image.dart';
 export 'src/widgets/rosita_repaint_boundary.dart';
 export 'src/widgets/rosita_rich_text.dart';
+export 'src/widgets/rosita_semantic.dart';
 export 'src/widgets/rosita_svg_picture.dart';
 export 'src/widgets/rosita_text.dart';

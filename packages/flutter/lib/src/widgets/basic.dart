@@ -7315,9 +7315,9 @@ class Semantics extends SingleChildRenderObjectWidget {
   /// void _myLongPress() { }
   ///
   /// Widget build(BuildContext context) {
-  ///   return Semantics(
+  ///   return RositaSemantics(
   ///     onTap: _myTap,
-  ///     child: Semantics(
+  ///     child: RositaSemantics(
   ///       blockUserActions: true,
   ///       onLongPress: _myLongPress,
   ///       child: const Text('label'),

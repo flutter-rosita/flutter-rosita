@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -1936,7 +1937,7 @@ class _SubmenuButtonState extends State<SubmenuButton> {
           }
         }
         child = MergeSemantics(
-          child: Semantics(
+          child: RositaSemantics(
             expanded: _enabled && controller.isOpen,
             child: TextButton(
               style: mergedStyle,

@@ -716,7 +716,7 @@ class _ExpansionTileState extends State<ExpansionTile> with SingleTickerProvider
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Semantics(
+          RositaSemantics(
             hint: semanticsHint,
             onTapHint: onTapHint,
             child: ListTileTheme.merge(

@@ -862,7 +862,7 @@ class _DatePickerHeader extends StatelessWidget {
 
     switch (orientation) {
       case Orientation.portrait:
-        return Semantics(
+        return RositaSemantics(
           container: true,
           child: SizedBox(
             height: _datePickerHeaderPortraitHeight,
@@ -884,7 +884,7 @@ class _DatePickerHeader extends StatelessWidget {
                       children: <Widget>[
                         Expanded(child: title),
                         if (entryModeButton != null)
-                         Semantics(
+                         RositaSemantics(
                           container: true,
                           child: entryModeButton,
                         ),
@@ -897,7 +897,7 @@ class _DatePickerHeader extends StatelessWidget {
           ),
         );
       case Orientation.landscape:
-        return Semantics(
+        return RositaSemantics(
           container: true,
           child:SizedBox(
             width: _datePickerHeaderLandscapeWidth,
@@ -925,7 +925,7 @@ class _DatePickerHeader extends StatelessWidget {
                   if (entryModeButton != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Semantics(
+                      child: RositaSemantics(
                         container: true,
                         child: entryModeButton,
                       ),
@@ -1680,7 +1680,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
             child: Row(children: <Widget>[
               SizedBox(width: MediaQuery.sizeOf(context).width < 360 ? 42 : 72),
               Expanded(
-                child: Semantics(
+                child: RositaSemantics(
                   label: '$helpText $startDateText to $endDateText',
                   excludeSemantics: true,
                   child: Column(
@@ -2498,7 +2498,7 @@ class _MonthItemState extends State<_MonthItem> {
           height: _monthItemHeaderHeight,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: AlignmentDirectional.centerStart,
-          child: ExcludeSemantics(
+          child: RositaExcludeSemantics(
             child: Text(
               localizations.formatMonthYear(widget.displayedMonth),
               style: textTheme.bodyMedium!.apply(color: themeData.colorScheme.onSurface),
@@ -2680,10 +2680,10 @@ class _DayItemState extends State<_DayItem> {
     Widget dayWidget = Container(
       decoration: decoration,
       child: Center(
-        child: Semantics(
+        child: RositaSemantics(
           label: semanticLabel,
           selected: widget.isSelectedDayStart || widget.isSelectedDayEnd,
-          child: ExcludeSemantics(
+          child: RositaExcludeSemantics(
             child: Text(dayText, style: itemStyle),
           ),
         ),

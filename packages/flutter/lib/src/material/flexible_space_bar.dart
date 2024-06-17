@@ -291,7 +291,7 @@ class _FlexibleSpaceBarState extends State<FlexibleSpaceBar> {
             case TargetPlatform.fuchsia:
             case TargetPlatform.linux:
             case TargetPlatform.windows:
-              title = Semantics(
+              title = RositaSemantics(
                 namesRoute: true,
                 child: widget.title,
               );

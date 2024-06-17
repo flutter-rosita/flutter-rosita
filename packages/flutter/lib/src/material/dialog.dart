@@ -780,7 +780,7 @@ class AlertDialog extends StatelessWidget {
         child: DefaultTextStyle(
           style: titleTextStyle ?? dialogTheme.titleTextStyle ?? defaults.titleTextStyle!,
           textAlign: icon == null ? TextAlign.start : TextAlign.center,
-          child: Semantics(
+          child: RositaSemantics(
             // For iOS platform, the focus always lands on the title.
             // Set nameRoute to false to avoid title being announce twice.
             namesRoute: label == null && theme.platform != TargetPlatform.iOS,
@@ -810,7 +810,7 @@ class AlertDialog extends StatelessWidget {
         ),
         child: DefaultTextStyle(
           style: contentTextStyle ?? dialogTheme.contentTextStyle ?? defaults.contentTextStyle!,
-          child: Semantics(
+          child: RositaSemantics(
             container: true,
             child: content,
           ),
@@ -873,7 +873,7 @@ class AlertDialog extends StatelessWidget {
     );
 
     if (label != null) {
-      dialogChild = Semantics(
+      dialogChild = RositaSemantics(
         scopesRoute: true,
         explicitChildNodes: true,
         namesRoute: true,
@@ -1242,7 +1242,7 @@ class SimpleDialog extends StatelessWidget {
         ),
         child: DefaultTextStyle(
           style: defaultTextStyle,
-          child: Semantics(
+          child: RositaSemantics(
             // For iOS platform, the focus always lands on the title.
             // Set nameRoute to false to avoid title being announce twice.
             namesRoute: label == null && theme.platform != TargetPlatform.iOS,
@@ -1285,7 +1285,7 @@ class SimpleDialog extends StatelessWidget {
     );
 
     if (label != null) {
-      dialogChild = Semantics(
+      dialogChild = RositaSemantics(
         scopesRoute: true,
         explicitChildNodes: true,
         namesRoute: true,

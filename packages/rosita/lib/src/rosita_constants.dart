@@ -1,17 +1,17 @@
 const kIsRosita = bool.fromEnvironment('ROSITA');
 
-const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', defaultValue: true);
+const rositaDisableSemantics = bool.fromEnvironment('ROSITA_DISABLE_SEMANTICS', defaultValue: kIsRosita);
 
 const rositaEnableSemantics = !rositaDisableSemantics;
 
 const rositaCastNullableToNonNullable =
-    bool.fromEnvironment('ROSITA_CAST_NULLABLE_TO_NON_NULLABLE', defaultValue: true);
+    bool.fromEnvironment('ROSITA_CAST_NULLABLE_TO_NON_NULLABLE', defaultValue: kIsRosita);
 
-const rositaDisableRoutesChanged = bool.fromEnvironment('ROSITA_DISABLE_ROUTES_CHANGED', defaultValue: true);
+const rositaDisableRoutesChanged = bool.fromEnvironment('ROSITA_DISABLE_ROUTES_CHANGED', defaultValue: kIsRosita);
 
 const rositaEnableRoutesChanged = !rositaDisableRoutesChanged;
 
-const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHILDREN', defaultValue: true);
+const rositaEnableVisitChildren = bool.fromEnvironment('ROSITA_ENABLE_VISIT_CHILDREN', defaultValue: kIsRosita);
 
 const rositaDisableUpdateCompositingBits =
     bool.fromEnvironment('ROSITA_DISABLE_UPDATE_COMPOSITING_BITS', defaultValue: kIsRosita);

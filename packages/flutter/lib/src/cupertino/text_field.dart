@@ -1135,7 +1135,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField> with Restoratio
   Widget _buildClearButton() {
     final String clearLabel = widget.clearButtonSemanticLabel ?? CupertinoLocalizations.of(context).clearButtonLabel;
 
-    return Semantics(
+    return RositaSemantics(
       button: true,
       label: clearLabel,
       child: GestureDetector(
@@ -1425,7 +1425,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField> with Restoratio
       ),
     );
 
-    return Semantics(
+    return RositaSemantics(
       enabled: enabled,
       onTap: !enabled || widget.readOnly ? null : () {
         if (!controller.selection.isValid) {

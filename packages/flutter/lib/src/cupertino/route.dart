@@ -160,7 +160,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     final Widget child = buildContent(context);
-    return Semantics(
+    return RositaSemantics(
       scopesRoute: true,
       explicitChildNodes: true,
       child: child,

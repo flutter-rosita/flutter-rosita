@@ -1324,7 +1324,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
             onExit: handleMouseExit,
             child: DefaultSelectionStyle.merge(
               mouseCursor: effectiveMouseCursor,
-              child: Semantics(
+              child: RositaSemantics(
                 onTap: widget.excludeFromSemantics || widget.onTap == null ? null : simulateTap,
                 onLongPress: widget.excludeFromSemantics || widget.onLongPress == null ? null : simulateLongPress,
                 child: GestureDetector(

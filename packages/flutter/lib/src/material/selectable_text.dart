@@ -798,7 +798,7 @@ class _SelectableTextState extends State<SelectableText> implements TextSelectio
       ),
     );
 
-    return Semantics(
+    return RositaSemantics(
       label: widget.semanticsLabel,
       excludeSemantics: widget.semanticsLabel != null,
       onLongPress: () {

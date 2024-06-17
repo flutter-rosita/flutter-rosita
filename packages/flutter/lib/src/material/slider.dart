@@ -888,7 +888,7 @@ class _SliderState extends State<Slider> with TickerProviderStateMixin {
       : MediaQuery.textScalerOf(context);
     final double effectiveTextScale = textScaler.scale(fontSizeToScale) / fontSizeToScale;
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       slider: true,
       onDidGainAccessibilityFocus: handleDidGainAccessibilityFocus,

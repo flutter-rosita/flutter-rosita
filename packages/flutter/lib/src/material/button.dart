@@ -417,7 +417,7 @@ class _RawMaterialButtonState extends State<RawMaterialButton> with MaterialStat
         minSize = Size.zero;
     }
 
-    return Semantics(
+    return RositaSemantics(
       container: true,
       button: true,
       enabled: widget.enabled,

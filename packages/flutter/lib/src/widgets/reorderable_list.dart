@@ -1017,7 +1017,7 @@ class SliverReorderableListState extends State<SliverReorderableList> with Ticke
     //
     // Also apply the relevant custom accessibility actions for moving the item
     // up, down, to the start, and to the end of the list.
-    return Semantics(
+    return RositaSemantics(
       container: true,
       customSemanticsActions: semanticsActions,
       child: child,

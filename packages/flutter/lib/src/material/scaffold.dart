@@ -3262,7 +3262,7 @@ class _StandardBottomSheetState extends State<_StandardBottomSheet> {
           child: child,
         );
       },
-      child: Semantics(
+      child: RositaSemantics(
         container: true,
         onDismiss: !widget.isPersistent ? close : null,
         child:  NotificationListener<DraggableScrollableNotification>(

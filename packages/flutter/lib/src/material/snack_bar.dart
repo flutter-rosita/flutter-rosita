@@ -786,7 +786,7 @@ class _SnackBarState extends State<SnackBar> {
       );
     }
 
-    snackBar = Semantics(
+    snackBar = RositaSemantics(
       container: true,
       liveRegion: true,
       onDismiss: () {
