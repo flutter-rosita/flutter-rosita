@@ -36,4 +36,10 @@ abstract class RositaRenderProxyBoxWithHitTestBehavior extends RenderProxyBoxWit
   void rositaLayout();
 
   void rositaPaint();
+
+  JSAny get styleTransform;
+
+  set styleTransform(JSAny value);
+
+  Offset? get localOffset;
 }

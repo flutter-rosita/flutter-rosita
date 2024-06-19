@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
 import 'package:rosita/src/extensions/web_color.dart';
 import 'package:web/web.dart' as web;
@@ -20,6 +21,8 @@ part 'web/rosita_paragraph.dart';
 part 'web/rosita_render_box.dart';
 
 part 'web/rosita_render_object.dart';
+
+part 'web_utils/animation_transition.dart';
 
 part 'web_utils/border.dart';
 

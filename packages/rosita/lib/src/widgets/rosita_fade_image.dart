@@ -130,7 +130,7 @@ class _RositaFadeImageState extends State<RositaFadeImage> {
   }
 
   Widget _fade(Widget image, bool visible) {
-    return AnimatedOpacity(
+    return RositaAnimatedOpacity(
       opacity: visible ? 1.0 : 0,
       duration: widget.fadeInDuration,
       curve: widget.fadeInCurve,
