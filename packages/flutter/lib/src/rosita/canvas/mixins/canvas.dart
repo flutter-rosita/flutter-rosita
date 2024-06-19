@@ -153,11 +153,12 @@ mixin _CanvasMixin {
   double? _transformScale;
 
   void resetMatrixTransform() {
+    final double devicePixelRatio = _devicePixelRatio;
+    final bool neededResetTransform = _translateX != 0 || _translateY != 0 || _transformScale != devicePixelRatio;
+
     _setTranslate(0, 0);
 
-    final double devicePixelRatio = _devicePixelRatio;
-
-    if (_transformScale != devicePixelRatio) {
+    if (neededResetTransform) {
       _transformScale = devicePixelRatio;
 
       context.setTransform(1 as JSAny, 0, 0, 1, 0, 0);
