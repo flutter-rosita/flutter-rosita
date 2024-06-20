@@ -14,14 +14,16 @@ class RositaImageUtils {
     final buffer = byteData?.buffer;
 
     if (buffer != null) {
-      return web.URL.createObjectURL(web.Blob(buffer.asUint8List() as JSArray<web.BlobPart>, web.BlobPropertyBag(type: 'image/png')));
+      return web.URL.createObjectURL(
+        web.Blob([buffer.asUint8List()] as JSArray<JSAny>, web.BlobPropertyBag(type: 'image/png')),
+      );
     }
 
     return null;
   }
 
   static Future<String?> buildMemoryImageBlobPath(MemoryImage image) async {
-    return web.URL.createObjectURL(web.Blob(image.bytes as JSArray<web.BlobPart>));
+    return web.URL.createObjectURL(web.Blob([image.bytes] as JSArray<JSAny>));
   }
 
   static void revokeBlobObjectUrl(String url) {
