@@ -137,7 +137,7 @@ class _RositaFadeImageState extends State<RositaFadeImage> {
       child: image,
       onEnd: () {
         _isLoaded = true;
-        setState(() {});
+        // setState(() {}); // Disabled
       },
     );
   }
