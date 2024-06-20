@@ -1,3 +1,14 @@
+## 0.5.2
+
+- Fix create Blob url
+- Fix canvas paint with offset
+- Add optimized AnimationBuilder
+- Disable Semantics widget with RositaSemantics
+- Optimization with rebuild only dirty elements
+- Fix run debug mode with Rosita
+- Optimization RositaCanvas painting
+- Optimization rositaLayout
+
 ## 0.5.1
 
 Version up to Flutter 3.22.2
