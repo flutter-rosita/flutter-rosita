@@ -44,6 +44,11 @@ class RenderRositaAnimatedOpacity extends AnimatedRenderProxyBoxWithHitTestBehav
   }
 
   @override
+  bool paintsChild(RenderObject child) {
+    return _alpha > 0;
+  }
+
+  @override
   void paint(PaintingContext context, Offset offset) {
     final child = this.child;
 

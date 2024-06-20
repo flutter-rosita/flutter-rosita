@@ -46,12 +46,14 @@ class RositaAnimatedOpacity extends StatelessWidget {
       );
     }
 
-    return RositaAnimatedOpacityFlutter(
-      opacity: opacity,
-      curve: curve,
-      duration: duration,
-      onEnd: onEnd,
-      child: child,
+    return RepaintBoundary(
+      child: RositaAnimatedOpacityFlutter(
+        opacity: opacity,
+        curve: curve,
+        duration: duration,
+        onEnd: onEnd,
+        child: child,
+      ),
     );
   }
 }
