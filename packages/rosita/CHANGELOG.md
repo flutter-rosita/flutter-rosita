@@ -1,3 +1,8 @@
+## 0.5.3
+
+- Disable setState on end opacity transition to RositaFadeImage widget
+- Fix RositaAnimatedOpacity
+
 ## 0.5.2
 
 - Fix create Blob url
