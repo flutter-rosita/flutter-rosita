@@ -25,3 +25,6 @@ const rositaEnableLayoutMarkNeedsPaint = !rositaDisableLayoutMarkNeedsPaint;
 
 const rositaDisableHeroFlightAlwaysOnTickCheckUpdate =
     bool.fromEnvironment('ROSITA_DISABLE_HERO_FLIGHT_ALWAYS_ON_TICK_CHECK_UPDATE', defaultValue: kIsRosita);
+
+const rositaTryMeasureTextInOnePass =
+    bool.fromEnvironment('ROSITA_TRY_MEASURE_TEXT_IN_ONE_PASS', defaultValue: kIsRosita);

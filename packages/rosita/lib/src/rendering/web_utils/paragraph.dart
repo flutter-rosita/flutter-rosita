@@ -8,9 +8,9 @@ class RositaParagraphUtils {
 
   static web.CanvasRenderingContext2D get canvasContext =>
       _canvasContext ??= (_canvas ??= web.HTMLCanvasElement()).context2D;
-  
+
   static bool? _isChrome;
-  
+
   static bool get isChrome => _isChrome ??= web.window.navigator.userAgent.contains('Chrome');
 
   static double get fixScaleFactor {
@@ -86,12 +86,97 @@ class RositaParagraphUtils {
       canvasContext.font = font;
     }
 
+    final textLength = text.length;
+
+    _paragraphsMeasureText.putIfAbsent(font, () {
+      final firstWord =
+          text.substring(0, min(2, textLength)); // 2 symbols for layout line height - icons can be more than one symbol
+      final div = web.HTMLDivElement()..innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
+
+      div.style
+        ..font = font
+        ..lineHeight = '';
+
+      paragraphsContainer.append(div);
+
+      return div;
+    });
+
+    final measureText = _paragraphsMeasureText[font]!;
+    final fontLineHeight = measureText.clientHeight.toDouble() / fixScaleFactor;
+    final fontBoundingBoxAscent = fontLineHeight;
+
+    double? cacheWidth;
+
+    double totalWidth() => cacheWidth ??= _measureText(text).width.toDouble() / fixScaleFactor;
+
+    final spacesIndex = <int>[];
+    int spacesCount = 0;
+
+    if (text.contains(' ')) {
+      for (int i = 0; i < textLength; i++) {
+        final symbol = text[i];
+
+        if (symbol == ' ') {
+          spacesIndex.add(i);
+          spacesCount++;
+        } else if (i + 1 == textLength) {
+          spacesIndex.add(i + 1);
+        }
+      }
+    }
+
+    if (spacesCount == 0) {
+      final width = totalWidth();
+
+      return RositaCanvasParagraphData(
+        font: font,
+        lineHeight: fontLineHeight,
+        wordList: [width],
+        boundingBoxAscent: fontBoundingBoxAscent,
+        minIntrinsicWidth: width,
+        maxIntrinsicWidth: width,
+      );
+    }
+
+    if (rositaTryMeasureTextInOnePass) {
+      final width = totalWidth();
+      final wordList = <double>[];
+      final spacerMeasure = _measureText(' ');
+      final spacerWidth = spacerMeasure.width.toDouble() / fixScaleFactor;
+      final widthWithoutSpaces = width - spacesCount * spacerWidth;
+      final symbolWidth = widthWithoutSpaces / (textLength - spacesCount);
+
+      int previousSpaceIndex = -1;
+
+      for (int i = 0; i < spacesIndex.length; i++) {
+        if (i > 0) {
+          wordList.add(spacerWidth);
+        }
+
+        final spaceIndex = spacesIndex[i];
+        final wordLength = spaceIndex - previousSpaceIndex - 1;
+
+        if (wordLength > 0) {
+          wordList.add(wordLength * symbolWidth);
+        }
+
+        previousSpaceIndex = spaceIndex;
+      }
+
+      return RositaCanvasParagraphData(
+        font: font,
+        lineHeight: fontLineHeight,
+        wordList: wordList,
+        boundingBoxAscent: fontBoundingBoxAscent,
+        minIntrinsicWidth: wordList.fold(0.0, (double max, double value) => value > max ? value : max),
+        maxIntrinsicWidth: width,
+      );
+    }
+
     final list = text.split(' ');
     final spacerMeasure = _measureText(' ');
-    final spacerWidth = (spacerMeasure.width?.toDouble() ?? 0) / fixScaleFactor;
-
-    double fontLineHeight = 0.0;
-    double fontBoundingBoxAscent = 0.0;
+    final spacerWidth = spacerMeasure.width.toDouble() / fixScaleFactor;
 
     final wordList = <double>[];
 
@@ -101,29 +186,9 @@ class RositaParagraphUtils {
       }
 
       final measure = _measureText(list[i]);
-      final width = (measure.width?.toDouble() ?? 0) / fixScaleFactor;
+      final width = measure.width.toDouble() / fixScaleFactor;
 
       wordList.add(width);
-
-      if (i == 0) {
-        _paragraphsMeasureText.putIfAbsent(font, () {
-          final firstWord = list[i];
-          final div = web.HTMLDivElement()..innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
-
-          div.style
-            ..font = font
-            ..lineHeight = '';
-
-          paragraphsContainer.append(div);
-
-          return div;
-        });
-
-        final measureText = _paragraphsMeasureText[font]!;
-
-        fontLineHeight = measureText.clientHeight.toDouble() / fixScaleFactor;
-        fontBoundingBoxAscent = fontLineHeight;
-      }
     }
 
     return RositaCanvasParagraphData(
