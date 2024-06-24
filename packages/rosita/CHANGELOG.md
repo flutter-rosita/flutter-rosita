@@ -1,3 +1,7 @@
+## 0.5.4
+
+- Optimize measure text metrics
+
 ## 0.5.3
 
 - Disable setState on end opacity transition to RositaFadeImage widget
