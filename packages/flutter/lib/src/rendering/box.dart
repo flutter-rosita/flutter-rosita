@@ -926,9 +926,9 @@ class BoxHitTestEntry extends HitTestEntry<RenderBox> {
 ///
 /// ** See code in examples/api/lib/rendering/box/parent_data.0.dart **
 /// {@end-tool}
-class BoxParentData extends ParentData {
+class BoxParentData extends ParentData with RositaBoxParentDataMixin {
   /// The offset at which to paint the child in the parent's coordinate system.
-  Offset offset = Offset.zero;
+  // Offset offset = Offset.zero; // Use rosita offset
 
   @override
   String toString() => 'offset=$offset';

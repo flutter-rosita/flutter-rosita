@@ -82,6 +82,8 @@ mixin RositaRenderBoxMixin on RositaRenderMixin {
     final parentData = object.parentData;
 
     if (parentData is BoxParentData) {
+      parentData.rositaIsReady = true;
+
       return parentData.offset;
     } else if (parentData is SliverLogicalParentData) {
       double offset = parentData.layoutOffset ?? 0.0;

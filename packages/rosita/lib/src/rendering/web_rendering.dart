@@ -23,6 +23,8 @@ part 'web/rosita_render_box.dart';
 
 part 'web/rosita_render_object.dart';
 
+part 'web/rosita_box_parent_data.dart';
+
 part 'web_utils/animation_transition.dart';
 
 part 'web_utils/border.dart';

@@ -26,6 +26,12 @@ mixin RositaRenderMixin {
   // Call from RenderObject methods
 
   void rositaAttachToRenderObject() {
+    final parentData = target.parentData;
+
+    if (parentData is RositaBoxParentDataMixin) {
+      (parentData as RositaBoxParentDataMixin).rositaCallback = rositaMarkNeedsLayout;
+    }
+
     if (hasHtmlElement) {
       _rositaNeedsAttach = false;
       rositaMarkNeedsAttach();
@@ -45,6 +51,10 @@ mixin RositaRenderMixin {
 
   void rositaDetachFromRenderObject() {
     rositaMarkNeedsDetach();
+
+    if (parentData is RositaBoxParentDataMixin) {
+      (parentData as RositaBoxParentDataMixin).rositaCallback = null;
+    }
   }
 
   // Rosita
