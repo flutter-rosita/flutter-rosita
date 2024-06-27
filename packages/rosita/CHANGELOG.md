@@ -1,3 +1,8 @@
+## 0.5.5
+
+- Fix RositaAnimatedOpacity widget
+- Fix update RenderObject offset on update BoxParentData
+
 ## 0.5.4
 
 - Optimize measure text metrics
