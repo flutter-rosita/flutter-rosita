@@ -22,6 +22,7 @@ class RenderRositaAnimatedOpacity extends AnimatedRenderProxyBoxWithHitTestBehav
 
     setupTicker();
 
+    _beginOpacity = ui.clampDouble(_alpha / 255, 0 ,1);
     _endOpacity = value;
 
     markNeedsPaint();

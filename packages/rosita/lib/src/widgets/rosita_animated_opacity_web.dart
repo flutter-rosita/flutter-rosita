@@ -32,6 +32,8 @@ class RositaAnimatedOpacityWeb extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderRositaAnimatedOpacity renderObject) {
-    renderObject.opacity = opacity;
+    renderObject
+      ..opacity = opacity
+      ..onEnd = onEnd;
   }
 }

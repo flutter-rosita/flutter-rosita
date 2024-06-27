@@ -11,14 +11,14 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
     required this.curve,
     required this.duration,
     required double opacity,
-    this.onEnd,
-  }) : _opacity = opacity;
+    VoidCallback? onEnd,
+  })  : _opacity = opacity,
+        _onEnd = onEnd;
 
   @override
   web.HTMLElement? createRositaElement() {
     final htmlElement = web.HTMLDivElement();
     final curve = this.curve;
-    final onEnd = this.onEnd;
 
     RositaAnimationTransitionUtils.applyTransition(
       htmlElement.style,
@@ -29,7 +29,7 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
 
     if (onEnd != null) {
       _onEndStreamSubscription = htmlElement.onTransitionEnd.listen((event) {
-        onEnd.call();
+        onEnd?.call();
       });
     }
 
@@ -43,11 +43,30 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
     _onEndStreamSubscription = null;
   }
 
+  VoidCallback? _onEnd;
+
+  VoidCallback? get onEnd => _onEnd;
+
+  set onEnd(VoidCallback? value) {
+    if (_onEnd == value) {
+      return;
+    }
+
+    if (value == null) {
+      _onEndStreamSubscription?.cancel();
+      _onEndStreamSubscription = null;
+    } else if (_onEnd == null) {
+      _onEndStreamSubscription = htmlElement.onTransitionEnd.listen((event) {
+        onEnd?.call();
+      });
+    }
+
+    _onEnd = value;
+  }
+
   final Curve curve;
 
   final Duration duration;
-
-  final VoidCallback? onEnd;
 
   double _opacity;
 
