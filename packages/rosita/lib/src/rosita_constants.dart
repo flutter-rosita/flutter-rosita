@@ -28,3 +28,5 @@ const rositaDisableHeroFlightAlwaysOnTickCheckUpdate =
 
 const rositaTryMeasureTextInOnePass =
     bool.fromEnvironment('ROSITA_TRY_MEASURE_TEXT_IN_ONE_PASS', defaultValue: kIsRosita);
+
+const rositaOptimizeModalScope = bool.fromEnvironment('ROSITA_OPTIMIZE_MODAL_SCOPE', defaultValue: kIsRosita);

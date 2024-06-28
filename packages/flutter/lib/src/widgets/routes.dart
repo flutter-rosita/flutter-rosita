@@ -959,7 +959,7 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
       if (widget.route.animation != null) widget.route.animation!,
       if (widget.route.secondaryAnimation != null) widget.route.secondaryAnimation!,
     ];
-    _listenable = Listenable.merge(animations);
+    _listenable = Listenable.merge(rositaOptimizeModalScope ? const<Listenable>[] : animations);
   }
 
   @override
