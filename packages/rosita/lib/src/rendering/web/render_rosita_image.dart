@@ -19,7 +19,9 @@ class RenderRositaImage extends RositaRenderBox {
 
   @override
   web.HTMLElement? createRositaElement() {
-    final imageElement = web.HTMLImageElement();
+    final imageElement = web.HTMLImageElement()
+      ..loading = 'lazy'
+      ..decoding = 'async';
     final style = imageElement.style;
     final src = this.src;
 
@@ -93,13 +95,13 @@ class RenderRositaImage extends RositaRenderBox {
 
   StreamSubscription? _onLoadStreamSubscription;
 
-  void _setListenerOnLoad(web.HTMLImageElement imageElement, VoidCallback?  callback) {
-    _onLoadStreamSubscription?.cancel();
-    _onLoadStreamSubscription = null;
-
-    if (callback != null) {
-      _onLoadStreamSubscription = imageElement.onLoad.listen((event) {
-        callback.call();
+  void _setListenerOnLoad(web.HTMLImageElement imageElement, VoidCallback? callback) {
+    if (callback == null) {
+      _onLoadStreamSubscription?.cancel();
+      _onLoadStreamSubscription = null;
+    } else {
+      _onLoadStreamSubscription ??= imageElement.onLoad.listen((event) {
+        _onLoad?.call();
       });
     }
   }
@@ -118,13 +120,13 @@ class RenderRositaImage extends RositaRenderBox {
 
   StreamSubscription? _onErrorStreamSubscription;
 
-  void _setListenerOnError(web.HTMLImageElement imageElement, VoidCallback?  callback) {
-    _onErrorStreamSubscription?.cancel();
-    _onErrorStreamSubscription = null;
-
-    if (callback != null) {
-      _onErrorStreamSubscription = imageElement.onError.listen((event) {
-        callback.call();
+  void _setListenerOnError(web.HTMLImageElement imageElement, VoidCallback? callback) {
+    if (callback == null) {
+      _onErrorStreamSubscription?.cancel();
+      _onErrorStreamSubscription = null;
+    } else {
+      _onErrorStreamSubscription ??= imageElement.onError.listen((event) {
+        _onError?.call();
       });
     }
   }
@@ -136,9 +138,9 @@ class RenderRositaImage extends RositaRenderBox {
     size = biggestSize.isFinite
         ? biggestSize
         : Size(
-      biggestSize.width == double.infinity ? biggestSize.height : biggestSize.width,
-      biggestSize.height == double.infinity ? biggestSize.width : biggestSize.height,
-    );
+            biggestSize.width == double.infinity ? biggestSize.height : biggestSize.width,
+            biggestSize.height == double.infinity ? biggestSize.width : biggestSize.height,
+          );
   }
 
   @override

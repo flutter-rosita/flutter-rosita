@@ -48,20 +48,20 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
   VoidCallback? get onEnd => _onEnd;
 
   set onEnd(VoidCallback? value) {
-    if (_onEnd == value) {
+    if (identical(_onEnd, value)) {
       return;
     }
+
+    _onEnd = value;
 
     if (value == null) {
       _onEndStreamSubscription?.cancel();
       _onEndStreamSubscription = null;
-    } else if (_onEnd == null) {
-      _onEndStreamSubscription = htmlElement.onTransitionEnd.listen((event) {
+    } else {
+      _onEndStreamSubscription ??= htmlElement.onTransitionEnd.listen((event) {
         onEnd?.call();
       });
     }
-
-    _onEnd = value;
   }
 
   final Curve curve;

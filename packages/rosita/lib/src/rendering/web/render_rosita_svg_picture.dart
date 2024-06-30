@@ -18,7 +18,9 @@ class RenderRositaSvgPicture extends RositaRenderBox {
   web.HTMLImageElement get imageElement => htmlElement as web.HTMLImageElement;
 
   @override
-  web.HTMLElement? createRositaElement() => web.HTMLImageElement();
+  web.HTMLElement? createRositaElement() => web.HTMLImageElement()
+    ..loading = 'lazy'
+    ..decoding = 'async';
 
   String? get src => _src;
   String? _src;
@@ -116,7 +118,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
 
     if (src != null && color != null) {
       imageElement.src =
-      'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
+          'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
 
       (style as JSObject).setProperty('backgroundColor' as JSAny, color.toStyleJSAny());
       style.maskImage = 'url($src)';
