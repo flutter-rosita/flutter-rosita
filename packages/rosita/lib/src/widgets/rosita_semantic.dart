@@ -144,7 +144,7 @@ Widget RositaSemantics({
     );
   }
 
-  return child ?? const SizedBox.shrink();
+  return SizedBox(child: child);
 }
 
 // ignore: non_constant_identifier_names
@@ -157,7 +157,7 @@ Widget RositaBlockSemantics({Key? key, bool blocking = true, Widget? child}) {
     );
   }
 
-  return child ?? const SizedBox.shrink();
+  return SizedBox(child: child);
 }
 
 // ignore: non_constant_identifier_names
@@ -170,5 +170,5 @@ Widget RositaExcludeSemantics({Key? key, bool excluding = true, Widget? child}) 
     );
   }
 
-  return child ?? const SizedBox.shrink();
+  return SizedBox(child: child);
 }
