@@ -1,3 +1,9 @@
+## 0.5.6
+
+- Fix RositaSemantics
+- Optimization Rosita Image
+- Add const rositaOptimizeModalScope
+
 ## 0.5.5
 
 - Fix RositaAnimatedOpacity widget
