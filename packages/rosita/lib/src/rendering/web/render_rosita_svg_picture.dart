@@ -126,13 +126,13 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       style.maskPosition = style.objectPosition;
       style.maskSize = switch (fit) {
         null => '',
-        BoxFit.fill => 'auto',
+        BoxFit.fill => '100%',
         BoxFit.contain => 'contain',
         BoxFit.cover => 'cover',
         BoxFit.fitWidth => '100% auto',
         BoxFit.fitHeight => 'auto 100%',
         BoxFit.none => 'auto',
-        BoxFit.scaleDown => '100%',
+        BoxFit.scaleDown => 'auto',
       };
     } else {
       style.backgroundColor = '';
