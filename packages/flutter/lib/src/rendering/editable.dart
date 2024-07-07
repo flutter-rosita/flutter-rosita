@@ -391,6 +391,9 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     addAll(children);
   }
 
+  @override
+  bool get rositaNeededCheckRectOverflow => true;
+
   /// Child render objects
   _RenderEditableCustomPaint? _foregroundRenderObject;
   _RenderEditableCustomPaint? _backgroundRenderObject;
@@ -2678,6 +2681,9 @@ class _RenderEditableCustomPaint extends RenderBox with RositaCanvasMixin, Rosit
     RenderEditablePainter? painter,
   }) : _painter = painter,
        super();
+
+  @override
+  bool get rositaNeededCheckRectOverflow => true;
 
   @override
   RenderEditable? get parent => super.parent as RenderEditable?;

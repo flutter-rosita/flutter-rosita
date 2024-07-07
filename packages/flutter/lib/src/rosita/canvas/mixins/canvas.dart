@@ -3,6 +3,8 @@ part of '../rosita_canvas.dart';
 mixin _CanvasMixin {
   static const double _defaultOffset = 10.0;
 
+  bool get neededCheckRectOverflow;
+
   double get _devicePixelRatio => RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
 
   Rect offsetRect = Rect.zero;
@@ -32,10 +34,12 @@ mixin _CanvasMixin {
   void _setDirty(Rect rect, double weight) {
     _isDirty = true;
 
-    if (_translateX == 0 && _translateY == 0) {
-      _checkRectOverflow(rect, weight);
-    } else {
-      _checkRectOverflow(rect.translate(_translateX, _translateY), weight);
+    if (neededCheckRectOverflow) {
+      if (_translateX == 0 && _translateY == 0) {
+        _checkRectOverflow(rect, weight);
+      } else {
+        _checkRectOverflow(rect.translate(_translateX, _translateY), weight);
+      }
     }
   }
 

@@ -736,6 +736,9 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
 
   static const double subtextGap = 8.0;
 
+  @override
+  bool get rositaNeededCheckRectOverflow => true;
+
   RenderBox? get icon => childForSlot(_DecorationSlot.icon);
   RenderBox? get input => childForSlot(_DecorationSlot.input);
   RenderBox? get label => childForSlot(_DecorationSlot.label);

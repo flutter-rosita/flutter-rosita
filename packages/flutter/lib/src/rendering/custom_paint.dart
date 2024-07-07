@@ -391,6 +391,9 @@ class RenderCustomPaint extends RenderProxyBox with RositaCanvasMixin, RositaRen
        _preferredSize = preferredSize,
        super(child);
 
+  @override
+  bool get rositaNeededCheckRectOverflow => true;
+
   /// The background custom paint delegate.
   ///
   /// This painter, if non-null, is called to paint behind the children.

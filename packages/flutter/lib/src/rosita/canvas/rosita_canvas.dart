@@ -19,7 +19,10 @@ part 'mixins/paragraph.dart';
 typedef RositaPaintCallback = void Function(RositaPaintingContext context);
 
 class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
-  RositaCanvas(this.canvas);
+  RositaCanvas(this.canvas, {this.neededCheckRectOverflow = false});
+
+  @override
+  final bool neededCheckRectOverflow;
 
   @override
   final web.HTMLCanvasElement canvas;

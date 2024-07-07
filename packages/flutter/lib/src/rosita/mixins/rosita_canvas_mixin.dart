@@ -6,6 +6,8 @@ import 'package:flutter/rosita.dart';
 import 'package:web/web.dart' as web;
 
 mixin RositaCanvasMixin on RositaRenderMixin {
+  bool get rositaNeededCheckRectOverflow => false;
+
   web.HTMLCanvasElement? _canvasElement;
 
   web.HTMLCanvasElement? _foregroundCanvasElement;
@@ -39,11 +41,17 @@ mixin RositaCanvasMixin on RositaRenderMixin {
 
   RositaCanvas? _rositaCanvas;
 
-  RositaCanvas get rositaCanvas => _rositaCanvas ??= RositaCanvas(canvasElement);
+  RositaCanvas get rositaCanvas => _rositaCanvas ??= RositaCanvas(
+        canvasElement,
+        neededCheckRectOverflow: rositaNeededCheckRectOverflow,
+      );
 
   RositaCanvas? _foregroundCanvas;
 
-  RositaCanvas get foregroundCanvas => _foregroundCanvas ??= RositaCanvas(foregroundCanvasElement);
+  RositaCanvas get foregroundCanvas => _foregroundCanvas ??= RositaCanvas(
+        foregroundCanvasElement,
+        neededCheckRectOverflow: rositaNeededCheckRectOverflow,
+      );
 
   void cleanAndHideRositaCanvas(Size size) {
     final rositaCanvas = _rositaCanvas;
