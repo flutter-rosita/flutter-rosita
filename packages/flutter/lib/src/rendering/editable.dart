@@ -2864,11 +2864,18 @@ class _TextHighlightPainter extends RenderEditablePainter {
     );
 
     for (final TextBox box in boxes) {
-      canvas.drawRect(
-        box.toRect().shift(renderEditable._paintOffset)
-          .intersect(Rect.fromLTWH(0, 0, textPainter.width, textPainter.height)),
-        highlightPaint,
-      );
+      if (kIsRosita) {
+        canvas.drawRect(
+          box.toRect().shift(renderEditable._paintOffset),
+          highlightPaint,
+        );
+      } else {
+        canvas.drawRect(
+          box.toRect().shift(renderEditable._paintOffset)
+              .intersect(Rect.fromLTWH(0, 0, textPainter.width, textPainter.height)),
+          highlightPaint,
+        );
+      }
     }
   }
 
