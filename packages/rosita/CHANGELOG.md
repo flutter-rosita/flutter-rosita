@@ -1,3 +1,9 @@
+## 0.5.7
+
+- Fix overflow inkwell canvas with scroll
+- Fix selection text
+- Fix SVG box fitting
+
 ## 0.5.6
 
 - Fix RositaSemantics
