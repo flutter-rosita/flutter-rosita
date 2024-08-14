@@ -1,3 +1,7 @@
+## 0.5.8
+
+- Fix RositaCanvasParagraphData layout when maxWidth is zero
+
 ## 0.5.7
 
 - Fix overflow inkwell canvas with scroll
