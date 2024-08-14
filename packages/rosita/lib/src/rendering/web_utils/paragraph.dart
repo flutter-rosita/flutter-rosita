@@ -248,6 +248,13 @@ class RositaCanvasParagraphData extends RositaCanvasFontData {
     double maxLineWidth = 0;
     double lineWidth = 0;
 
+    if (maxWidth == 0) {
+      _size = Size(0, textScaler.scale(lineHeight));
+      _lines = 1;
+      _wordBreak = false;
+      return;
+    }
+
     for (int i = 0; i < wordList.length; i++) {
       double width = textScaler.scale(wordList[i]);
 
