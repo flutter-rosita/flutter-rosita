@@ -40,8 +40,14 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
+    final pixelRatio = _devicePixelRatio;
     final region = web.Path2D();
-    region.rect(rect.left + offset.dx, rect.top + offset.dy, rect.width, rect.height);
+    region.rect(
+      (rect.left + offset.dx) * pixelRatio,
+      (rect.top + offset.dy) * pixelRatio,
+      (rect.width) * pixelRatio,
+      (rect.height) * pixelRatio,
+    );
     context.clip(region);
   }
 
@@ -54,10 +60,12 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
   }
 
   void _createArcPath(Rect rect, double startAngle, double sweepAngle, bool useCenter, [bool anticlockwise = false]) {
+    final pixelRatio = _devicePixelRatio;
+
     context.arc(
-      rect.center.dx + offset.dx,
-      rect.center.dy + offset.dy,
-      rect.width / 2,
+      (rect.center.dx + offset.dx) * pixelRatio,
+      (rect.center.dy + offset.dy) * pixelRatio,
+      (rect.width / 2) * pixelRatio,
       startAngle,
       startAngle + sweepAngle,
       anticlockwise,
@@ -87,6 +95,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawLine(Offset p1, Offset p2, Paint paint) {
+    final pixelRatio = _devicePixelRatio;
     final rect = Rect.fromLTRB(
       math.min(p1.dx, p2.dx),
       math.min(p1.dy, p2.dy),
@@ -96,8 +105,8 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
     _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.moveTo(p1.dx + offset.dx, p1.dy + offset.dy);
-    context.lineTo(p2.dx + offset.dx, p2.dy + offset.dy);
+    context.moveTo((p1.dx + offset.dx) * pixelRatio, (p1.dy + offset.dy) * pixelRatio);
+    context.lineTo((p2.dx + offset.dx) * pixelRatio, (p2.dy + offset.dy) * pixelRatio);
     _fillPain(paint);
   }
 
@@ -117,6 +126,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
       final pointsLength = pathRef.countPoints();
 
       if (pointsLength > 1) {
+        final pixelRatio = _devicePixelRatio;
         final rect = path.getBounds() as Rect;
         _setDirty(rect, paint.strokeWidth);
 
@@ -126,9 +136,9 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
           final point = pathRef.atPoint(i) as Offset;
 
           if (i == 0) {
-            context.moveTo(point.dx + offset.dx, point.dy + offset.dy);
+            context.moveTo((point.dx + offset.dx) * pixelRatio, (point.dy + offset.dy) * pixelRatio);
           } else {
-            context.lineTo(point.dx + offset.dx, point.dy + offset.dy);
+            context.lineTo((point.dx + offset.dx) * pixelRatio, (point.dy + offset.dy) * pixelRatio);
           }
         }
 
@@ -136,7 +146,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
         if (fLastMoveToIndex >= 0) {
           final point = pathRef.atPoint(fLastMoveToIndex) as Offset;
-          context.lineTo(point.dx + offset.dx, point.dy + offset.dy);
+          context.lineTo((point.dx + offset.dx) * pixelRatio, (point.dy + offset.dy) * pixelRatio);
           context.closePath();
         }
 
@@ -204,7 +214,7 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
         context.fill();
       case PaintingStyle.stroke:
         context.strokeStyle = style as JSAny;
-        context.lineWidth = paint.strokeWidth;
+        context.lineWidth = paint.strokeWidth * _devicePixelRatio;
         context.stroke();
     }
 
@@ -232,11 +242,13 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     if (shader is RositaGradient) {
       switch (shader) {
         case RositaGradientLinearShader():
+          final pixelRatio = _devicePixelRatio;
+
           final gradient = context.createLinearGradient(
-            shader.from.dx + offset.dx,
-            shader.from.dy + offset.dy,
-            shader.to.dx + offset.dx,
-            shader.to.dy + offset.dy,
+            (shader.from.dx + offset.dx) * pixelRatio,
+            (shader.from.dy + offset.dy) * pixelRatio,
+            (shader.to.dx + offset.dx) * pixelRatio,
+            (shader.to.dy + offset.dy) * pixelRatio,
           );
 
           final colors = shader.colors;
@@ -280,22 +292,24 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     // | x0 y1 | .... | x1 y1 |
     // ------------------------
 
+    final pixelRatio = _devicePixelRatio;
+
     final coords = (
-      x0: rrect.left + offset.dx,
-      y0: rrect.top + offset.dy,
-      x1: rrect.left + rrect.width + offset.dx,
-      y1: rrect.top + rrect.height + offset.dy,
+      x0: (rrect.left + offset.dx) * pixelRatio,
+      y0: (rrect.top + offset.dy) * pixelRatio,
+      x1: (rrect.left + rrect.width + offset.dx) * pixelRatio,
+      y1: (rrect.top + rrect.height + offset.dy) * pixelRatio,
     );
 
     final radius = (
-      tlX: rrect.tlRadiusX,
-      tlY: rrect.tlRadiusY,
-      trX: rrect.trRadiusX,
-      trY: rrect.trRadiusY,
-      brX: rrect.brRadiusX,
-      brY: rrect.brRadiusY,
-      blX: rrect.blRadiusX,
-      blY: rrect.blRadiusY,
+      tlX: rrect.tlRadiusX * pixelRatio,
+      tlY: rrect.tlRadiusY * pixelRatio,
+      trX: rrect.trRadiusX * pixelRatio,
+      trY: rrect.trRadiusY * pixelRatio,
+      brX: rrect.brRadiusX * pixelRatio,
+      brY: rrect.brRadiusY * pixelRatio,
+      blX: rrect.blRadiusX * pixelRatio,
+      blY: rrect.blRadiusY * pixelRatio,
     );
 
     final points = (
@@ -353,9 +367,16 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void drawRect(Rect rect, Paint paint) {
+    final pixelRatio = _devicePixelRatio;
+
     _setDirty(rect, paint.strokeWidth);
     context.beginPath();
-    context.rect(rect.left + offset.dx, rect.top + offset.dy, rect.width, rect.height);
+    context.rect(
+      (rect.left + offset.dx) * pixelRatio,
+      (rect.top + offset.dy) * pixelRatio,
+      rect.width * pixelRatio,
+      rect.height * pixelRatio,
+    );
     _fillPain(paint);
   }
 
@@ -404,8 +425,14 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     context.save();
 
     if (bounds != null) {
+      final pixelRatio = _devicePixelRatio;
       final region = web.Path2D();
-      region.rect(bounds.left + offset.dx, bounds.top + offset.dy, bounds.width, bounds.height);
+      region.rect(
+        (bounds.left + offset.dx) * pixelRatio,
+        (bounds.top + offset.dy) * pixelRatio,
+        (bounds.width) * pixelRatio,
+        (bounds.height) * pixelRatio,
+      );
       context.clip(region);
     }
   }
@@ -421,7 +448,6 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
 
   @override
   void translate(double dx, double dy) {
-    context.translate(dx, dy);
     _setTranslate(dx, dy);
   }
 }

@@ -5,7 +5,7 @@ mixin _CanvasMixin {
 
   bool get neededCheckRectOverflow;
 
-  double get _devicePixelRatio => RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
+  late double _devicePixelRatio;
 
   Rect offsetRect = Rect.zero;
 
@@ -27,8 +27,12 @@ mixin _CanvasMixin {
   double _translateY = 0;
 
   void _setTranslate(double dx, double dy) {
-    _translateX = dx;
-    _translateY = dy;
+    _translateX += dx;
+    _translateY += dy;
+
+    final double pixelRatio = _devicePixelRatio;
+
+    context.translate(dx * pixelRatio, dy * pixelRatio);
   }
 
   void _setDirty(Rect rect, double weight) {
@@ -60,6 +64,8 @@ mixin _CanvasMixin {
   }
 
   void clean(Size size) {
+    _devicePixelRatio = RendererBinding.instance.renderViews.first.flutterView.devicePixelRatio;
+
     if (_size != size) {
       _size = size;
 
@@ -75,7 +81,7 @@ mixin _CanvasMixin {
     _isMarkNeedRepaint = false;
 
     if (_isDirty) {
-      context.clearRect(0, 0, offsetRect.width, offsetRect.height);
+      context.clearRect(0, 0, offsetRect.width * _devicePixelRatio, offsetRect.height * _devicePixelRatio);
       _isDirty = false;
     }
 
@@ -112,7 +118,6 @@ mixin _CanvasMixin {
       return;
     }
 
-    _transformScale = null;
     _previousPixelRatio = scale;
     _previousWidth = width;
     _previousHeight = height;
@@ -154,22 +159,9 @@ mixin _CanvasMixin {
     );
   }
 
-  double? _transformScale;
-
   void resetMatrixTransform() {
-    final double devicePixelRatio = _devicePixelRatio;
-    final bool neededResetTransform = _translateX != 0 || _translateY != 0 || _transformScale != devicePixelRatio;
-
-    _setTranslate(0, 0);
-
-    if (neededResetTransform) {
-      _transformScale = devicePixelRatio;
-
-      context.setTransform(1 as JSAny, 0, 0, 1, 0, 0);
-
-      if (devicePixelRatio != 1) {
-        context.scale(devicePixelRatio, devicePixelRatio);
-      }
+    if (_translateX != 0 || _translateY != 0) {
+      _setTranslate(-_translateX, -_translateY);
     }
   }
 }

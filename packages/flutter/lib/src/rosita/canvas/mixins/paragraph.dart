@@ -31,7 +31,8 @@ mixin _ParagraphMixin on _CanvasMixin {
       return;
     }
 
-    final data = RositaParagraphUtils.buildFontData(style: style);
+    final pixelRatio = _devicePixelRatio;
+    final data = RositaParagraphUtils.buildFontData(style: style, fixScaleFactor: pixelRatio);
     final font = data.font;
 
     if (string != null) {
@@ -48,10 +49,14 @@ mixin _ParagraphMixin on _CanvasMixin {
       final double alignY = measure.fontBoundingBoxAscent?.toDouble() ?? data.lineHeight;
 
       if (offset == Offset.zero && textAlign == TextAlign.center) {
-        alignX = (_size?.width ?? 0) / 2 - (measure.width ?? 0) / 2;
+        alignX = (_size?.width ?? 0) * pixelRatio / 2 - (measure.width ?? 0) / 2;
       }
 
-      context.fillText(string, offset.dx + this.offset.dx + alignX, offset.dy + this.offset.dy + alignY);
+      context.fillText(
+        string,
+        (offset.dx + this.offset.dx) * pixelRatio + alignX,
+        (offset.dy + this.offset.dy) * pixelRatio + alignY,
+      );
     }
 
     if (text.children != null) {
