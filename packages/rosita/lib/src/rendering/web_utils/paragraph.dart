@@ -38,7 +38,7 @@ class RositaParagraphUtils {
     return _paragraphsContainer ??= paragraphsContainer;
   }
 
-  static final Map<String, web.HTMLDivElement> _paragraphsMeasureText = <String, web.HTMLDivElement>{};
+  static final Map<String, double> _paragraphsMeasureTextHeight = <String, double>{};
 
   static String? _lastContextFont;
 
@@ -74,6 +74,8 @@ class RositaParagraphUtils {
     );
   }
 
+  static bool? _supportedMeasureTextHeight;
+
   static RositaCanvasParagraphData buildParagraphData({
     required String text,
     required TextStyle style,
@@ -88,10 +90,25 @@ class RositaParagraphUtils {
 
     final textLength = text.length;
 
-    _paragraphsMeasureText.putIfAbsent(font, () {
+    _paragraphsMeasureTextHeight.putIfAbsent(font, () {
       final firstWord =
           text.substring(0, min(2, textLength)); // 2 symbols for layout line height - icons can be more than one symbol
-      final div = web.HTMLDivElement()..innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
+      final innerText = firstWord.isEmpty || firstWord == ' ' ? '&nbsp;' : firstWord;
+
+      if (_supportedMeasureTextHeight ?? true) {
+        final textMetrics = _measureText(innerText);
+
+        // ignore: unnecessary_null_comparison
+        if (textMetrics.fontBoundingBoxAscent == null) {
+          _supportedMeasureTextHeight = false;
+        } else {
+          _supportedMeasureTextHeight = true;
+
+          return (textMetrics.fontBoundingBoxAscent + textMetrics.fontBoundingBoxDescent).toDouble();
+        }
+      }
+
+      final div = web.HTMLDivElement()..innerText = innerText;
 
       div.style
         ..font = font
@@ -99,11 +116,11 @@ class RositaParagraphUtils {
 
       paragraphsContainer.append(div);
 
-      return div;
+      return div.clientHeight.toDouble();
     });
 
-    final measureText = _paragraphsMeasureText[font]!;
-    final fontLineHeight = measureText.clientHeight.toDouble() / fixScaleFactor;
+    final measureTextHeight = _paragraphsMeasureTextHeight[font]!;
+    final fontLineHeight = measureTextHeight / fixScaleFactor;
     final fontBoundingBoxAscent = fontLineHeight;
 
     double? cacheWidth;
