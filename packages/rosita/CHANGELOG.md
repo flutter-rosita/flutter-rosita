@@ -1,3 +1,8 @@
+## 0.5.9
+
+- Optimize RositaCanvas without setTransform
+- Optimize RositaParagraphUtils
+
 ## 0.5.8
 
 - Fix RositaCanvasParagraphData layout when maxWidth is zero
