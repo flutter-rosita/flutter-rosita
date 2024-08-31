@@ -44,6 +44,11 @@ mixin RositaPlatformViewRenderBoxMixin on RositaRenderMixin {
       });
     }
   }
+
+  @override
+  void rositaDetach() {
+    _childHtmlElement = null;
+  }
 }
 
 class RositaPlatformViewRegister {
