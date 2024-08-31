@@ -70,4 +70,12 @@ mixin RositaCanvasMixin on RositaRenderMixin {
       foregroundCanvas.checkDirty();
     }
   }
+
+  @override
+  void rositaDetach() {
+    _rositaCanvas = null;
+    _foregroundCanvas = null;
+    _canvasElement = null;
+    _foregroundCanvasElement = null;
+  }
 }
