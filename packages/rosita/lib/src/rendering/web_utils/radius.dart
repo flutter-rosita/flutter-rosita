@@ -18,15 +18,9 @@ class RositaRadiusUtils {
       }
 
       (style as JSObject).setProperty(
-          'borderRadius' as JSAny,
-          (radius.topLeft.x as JSAny)
-              .add('px ' as JSAny)
-              .add(radius.topRight.x as JSAny)
-              .add('px ' as JSAny)
-              .add(radius.bottomRight.x as JSAny)
-              .add('px ' as JSAny)
-              .and(radius.bottomLeft.x as JSAny)
-              .add('px' as JSAny));
+        'borderRadius' as JSAny,
+        '${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}' as JSAny,
+      );
     }
   }
 
