@@ -267,6 +267,12 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
       htmlElement.innerText = text;
 
       style.wordBreak = paragraphData.wordBreak ? 'break-word' : '';
+
+      if (paragraphData.lines > 1) {
+        style.whiteSpace = '';
+      } else {
+        style.whiteSpace = 'nowrap';
+      }
       return;
     }
 
