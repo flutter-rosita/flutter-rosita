@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
 import 'dart:ui';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/rosita.dart';
@@ -37,7 +39,8 @@ mixin RositaRenderShaderMaskMixin on RositaRenderMixin {
 
         final value = stringBuffer.toString();
 
-        style.maskImage = value;
+        (style as JSObject).setProperty('maskImage' as JSAny, value as JSAny);
+        (style as JSObject).setProperty('-webkit-mask-image' as JSAny, value as JSAny);
       case RositaGradientRadialShader():
         break;
       case RositaGradientSweepShader():

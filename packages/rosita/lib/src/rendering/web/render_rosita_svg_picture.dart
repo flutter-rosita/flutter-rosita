@@ -121,10 +121,11 @@ class RenderRositaSvgPicture extends RositaRenderBox {
           'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
 
       (style as JSObject).setProperty('backgroundColor' as JSAny, color.toStyleJSAny());
-      style.maskImage = 'url($src)';
-      style.maskRepeat = 'no-repeat';
-      style.maskPosition = style.objectPosition;
-      style.maskSize = switch (fit) {
+
+      final maskImage = 'url($src)';
+      const maskNoRepeat = 'no-repeat';
+      final maskPosition = style.objectPosition;
+      final maskSize = switch (fit) {
         null => '',
         BoxFit.fill => '100%',
         BoxFit.contain => 'contain',
@@ -134,9 +135,23 @@ class RenderRositaSvgPicture extends RositaRenderBox {
         BoxFit.none => 'auto',
         BoxFit.scaleDown => 'auto',
       };
+
+      (style as JSObject).setProperty('maskImage' as JSAny, maskImage as JSAny);
+      (style as JSObject).setProperty('-webkit-mask-image' as JSAny, maskImage as JSAny);
+
+      (style as JSObject).setProperty('maskRepeat' as JSAny, maskNoRepeat as JSAny);
+      (style as JSObject).setProperty('-webkit-mask-repeat' as JSAny, maskNoRepeat as JSAny);
+
+      (style as JSObject).setProperty('maskPosition' as JSAny, maskPosition as JSAny);
+      (style as JSObject).setProperty('-webkit-mask-position' as JSAny, maskPosition as JSAny);
+
+      (style as JSObject).setProperty('maskSize' as JSAny, maskSize as JSAny);
+      (style as JSObject).setProperty('-webkit-mask-size' as JSAny, maskSize as JSAny);
     } else {
-      style.backgroundColor = '';
-      style.maskImage = '';
+      (style as JSObject).setProperty('backgroundColor' as JSAny, '' as JSAny);
+      (style as JSObject).setProperty('maskImage' as JSAny, '' as JSAny);
+      (style as JSObject).setProperty('-webkit-mask-image' as JSAny, '' as JSAny);
+
       imageElement.src = src ?? '';
     }
   }
