@@ -15,6 +15,8 @@ part 'web/render_rosita_image.dart';
 
 part 'web/render_rosita_svg_picture.dart';
 
+part 'web/rosita_box_parent_data.dart';
+
 part 'web/rosita_color_rbox.dart';
 
 part 'web/rosita_paragraph.dart';
@@ -23,7 +25,7 @@ part 'web/rosita_render_box.dart';
 
 part 'web/rosita_render_object.dart';
 
-part 'web/rosita_box_parent_data.dart';
+part 'web_utils/alignment.dart';
 
 part 'web_utils/animation_transition.dart';
 
