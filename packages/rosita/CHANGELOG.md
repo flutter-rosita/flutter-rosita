@@ -1,3 +1,12 @@
+## 0.5.10
+
+- Add support CSS maskImage to Chrome 53
+- Initial support RenderShaderMask
+- Fix borderRadius Dart compilation
+- Fix wrapping text when the measurement text is incorrect
+- Add rositaDetach to RositaPlatformViewRenderBoxMixin
+- Detach rosita canvas after RenderObject detached
+
 ## 0.5.9
 
 - Optimize RositaCanvas without setTransform
