@@ -50,6 +50,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     final style = targetHtmlElement.style;
 
     if (decoration is BoxDecoration) {
+      _shadowsStyle(style, decoration.boxShadow);
       _fillStyle(style, decoration.color, decoration.image, decoration.gradient);
 
       if (decoration.borderRadius != null) {
@@ -66,6 +67,7 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
         RositaBorderUtils.applyBorderStyle(style, firstChild?.style, border, target.configuration.textDirection);
       }
     } else if (decoration is ShapeDecoration) {
+      _shadowsStyle(style, decoration.shadows);
       _fillStyle(style, decoration.color, decoration.image, decoration.gradient);
 
       final path = decoration.getClipPath(
@@ -119,4 +121,20 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
     }
   }
 
+  void _shadowsStyle(web.CSSStyleDeclaration style, List<BoxShadow>? shadows) {
+    if (shadows != null && shadows.isNotEmpty) {
+      final stringBuffer = StringBuffer();
+
+      for (int i = 0; i < shadows.length; i++) {
+        final shadow = shadows[i];
+
+        stringBuffer.write(
+            '${shadow.offset.dx}px ${shadow.offset.dy}px ${shadow.blurRadius}px ${shadow.spreadRadius}px ${shadow.color.toStyleString()}');
+      }
+
+      style.boxShadow = stringBuffer.toString();
+    } else {
+      style.boxShadow = '';
+    }
+  }
 }
