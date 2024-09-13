@@ -1,3 +1,7 @@
+## 0.6.0
+
+- Version up Flutter to 3.24.2
+
 ## 0.5.10
 
 - Add support CSS maskImage to Chrome 53
