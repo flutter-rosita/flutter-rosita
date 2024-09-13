@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 
@@ -1468,7 +1469,7 @@ class _RenderDecoration extends RenderBox with SlottedContainerRenderObjectMixin
       decoration.borderGap.extent = 0.0;
     }
 
-    rositaMarkNeedsPaint(); // TODO: @ead ckeck
+    rositaMarkNeedsPaint();
   }
 
   void _paintLabel(PaintingContext context, Offset offset) {
