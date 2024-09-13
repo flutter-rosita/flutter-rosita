@@ -70,6 +70,7 @@ Widget RositaSemantics({
   SetTextHandler? onSetText,
   VoidCallback? onDidGainAccessibilityFocus,
   VoidCallback? onDidLoseAccessibilityFocus,
+  VoidCallback? onFocus,
   Map<CustomSemanticsAction, VoidCallback>? customSemanticsActions,
 }) {
   if (rositaEnableSemantics || key != null) {
@@ -139,6 +140,7 @@ Widget RositaSemantics({
       onSetText: onSetText,
       onDidGainAccessibilityFocus: onDidGainAccessibilityFocus,
       onDidLoseAccessibilityFocus: onDidLoseAccessibilityFocus,
+      onFocus: onFocus,
       customSemanticsActions: customSemanticsActions,
       child: child,
     );
