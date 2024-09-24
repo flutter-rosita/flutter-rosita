@@ -12,7 +12,12 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
   void rositaPaint() {
     final text = target.text;
 
-    htmlElement.innerHTML = '';
+    web.HTMLElement? children = htmlElement.lastChild as web.HTMLElement?;
+
+    while (children != null) {
+      children.remove();
+      children = htmlElement.lastChild as web.HTMLElement?;
+    }
 
     RositaTextUtils.applyTextStyle(
       htmlElement.style,
