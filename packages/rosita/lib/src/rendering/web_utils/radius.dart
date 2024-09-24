@@ -19,7 +19,7 @@ class RositaRadiusUtils {
 
       (style as JSObject).setProperty(
         'borderRadius' as JSAny,
-        '${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}' as JSAny,
+        '${radius.topLeft.x}px ${radius.topRight.x}px ${radius.bottomRight.x}px ${radius.bottomLeft.x}px' as JSAny,
       );
     }
   }
