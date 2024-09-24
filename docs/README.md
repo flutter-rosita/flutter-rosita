@@ -2,7 +2,7 @@
 
 # Flutter Rosita
 
-Enhance Your Flutter Web Experience with Flutter Rosita
+Enhance Your [Flutter](https://github.com/flutter/flutter) Web Experience with Flutter Rosita
 
 Flutter Rosita is a fork of the popular Flutter framework, designed to address the performance challenges of web-based applications built with standard Flutter Web. If you've found the HTML rendering in Flutter Web to be sluggish or unresponsive, Rosita offers a compelling solution.
 
