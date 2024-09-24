@@ -1,3 +1,7 @@
+## 0.6.1
+
+- Fix RositaRadiusUtils.applyBorderRadius
+
 ## 0.6.0
 
 - Version up Flutter to 3.24.2
