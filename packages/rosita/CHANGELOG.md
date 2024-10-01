@@ -1,3 +1,10 @@
+## 0.6.2
+
+Refactor AnimatedOpacity with RositaAnimatedOpacityState
+
+- Add RositaAnimatedOpacityState to AnimatedOpacity.createState()
+- Remove RositaAnimatedOpacity widget
+
 ## 0.6.1
 
 - Fix RositaRadiusUtils.applyBorderRadius
