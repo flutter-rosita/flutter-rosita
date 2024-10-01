@@ -1,3 +1,7 @@
+## 0.6.3
+
+Fix rounded opacity value in method RositaOpacityUtils.applyOpacity
+
 ## 0.6.2
 
 Refactor AnimatedOpacity with RositaAnimatedOpacityState
