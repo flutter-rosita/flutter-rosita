@@ -43,19 +43,6 @@ dependencies:
   rosita: ^0.6.0
 ```
 
-### RositaAnimatedOpacity vs AnimatedOpacity
-
-RositaAnimatedOpacity - work with Flutter too.
-On the web, it works through CSS transitions, which do not cause the rebuild of rendered objects.
-
-```dart
-return RositaAnimatedOpacity(
-  opacity: visible ? 1.0 : 0,
-  duration: Diration(seconds: 1),
-  child: image,
-);
-```
-
 ### RositaFadeImage vs FadeInImage / CachedNetworkImage / OctoImage
 
 ```dart
