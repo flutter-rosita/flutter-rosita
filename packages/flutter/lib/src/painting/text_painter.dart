@@ -237,7 +237,7 @@ class WordBoundary extends TextBoundary {
     final bool hardBreakRulesApply = innerCodePoint == null || outerCodeUnit == null
     // WB3a & WB3b: always break before and after newlines.
                                   || _isNewline(innerCodePoint) || _isNewline(outerCodeUnit);
-    return hardBreakRulesApply || !_regExpSpaceSeparatorOrPunctuaion.hasMatch(String.fromCharCode(innerCodePoint));
+    return hardBreakRulesApply || !kIsRosita && !_regExpSpaceSeparatorOrPunctuaion.hasMatch(String.fromCharCode(innerCodePoint));
   }
 
   /// Returns a [TextBoundary] suitable for handling keyboard navigation
@@ -367,7 +367,7 @@ class _TextLayout {
       0x00A0 ||         // no-break space
       0x2007 ||         // figure space
       0x202F => false,  // narrow no-break space
-      _ => _regExpSpaceSeparators.hasMatch(lastCodeUnit),
+      _ => !kIsRosita && _regExpSpaceSeparators.hasMatch(lastCodeUnit),
     };
 
     final double baseline = lineMetrics.baseline;
