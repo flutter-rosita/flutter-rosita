@@ -775,6 +775,7 @@ class TextPainter {
 
     _text = value;
     _cachedPlainText = null;
+    _rositaParagraphData = null;
 
     if (comparison.index >= RenderComparison.layout.index) {
       markNeedsLayout();

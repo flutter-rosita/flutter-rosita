@@ -9,6 +9,12 @@ mixin RositaRenderParagraphMixin on RositaRenderMixin {
   RenderParagraph get target => this as RenderParagraph;
 
   @override
+  void rositaMarkNeedsLayout() {
+    super.rositaMarkNeedsLayout();
+    rositaMarkNeedsPaint();
+  }
+
+  @override
   void rositaPaint() {
     final text = target.text;
 
