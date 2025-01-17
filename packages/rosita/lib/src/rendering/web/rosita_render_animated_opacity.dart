@@ -15,6 +15,8 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
   })  : _opacity = opacity,
         _onEnd = onEnd;
 
+  bool _isDisplayNone = false;
+
   @override
   web.HTMLElement? createRositaElement() {
     final htmlElement = web.HTMLDivElement();
@@ -27,11 +29,14 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
       duration: duration,
     );
 
-    if (onEnd != null) {
-      _onEndStreamSubscription = htmlElement.onTransitionEnd.listen((event) {
-        onEnd?.call();
-      });
-    }
+    _onEndStreamSubscription = htmlElement.onTransitionEnd.listen((event) {
+      if (_opacity == 0) {
+        _isDisplayNone = true;
+        htmlElement.style.display = 'none';
+      }
+
+      onEnd?.call();
+    });
 
     return htmlElement;
   }
@@ -74,6 +79,11 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
 
   set opacity(double value) {
     if (_opacity == value) return;
+
+    if (_isDisplayNone && value != 0) {
+      htmlElement.style.display = '';
+      _isDisplayNone = false;
+    }
 
     _opacity = value;
 
