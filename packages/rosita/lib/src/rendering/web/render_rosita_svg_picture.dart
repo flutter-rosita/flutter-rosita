@@ -120,7 +120,7 @@ class RenderRositaSvgPicture extends RositaRenderBox {
       imageElement.src =
           'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // TRANSPARENT 1x1 GIF
 
-      (style as JSObject).setProperty('backgroundColor' as JSAny, color.toStyleJSAny());
+      (style as JSObject).setProperty('backgroundColor'.toJS, color.toStyleJSAny());
 
       final maskImage = 'url($src)';
       const maskNoRepeat = 'no-repeat';
@@ -136,21 +136,21 @@ class RenderRositaSvgPicture extends RositaRenderBox {
         BoxFit.scaleDown => 'auto',
       };
 
-      (style as JSObject).setProperty('maskImage' as JSAny, maskImage as JSAny);
-      (style as JSObject).setProperty('-webkit-mask-image' as JSAny, maskImage as JSAny);
+      (style as JSObject).setProperty('maskImage'.toJS, maskImage.toJS);
+      (style as JSObject).setProperty('-webkit-mask-image'.toJS, maskImage.toJS);
 
-      (style as JSObject).setProperty('maskRepeat' as JSAny, maskNoRepeat as JSAny);
-      (style as JSObject).setProperty('-webkit-mask-repeat' as JSAny, maskNoRepeat as JSAny);
+      (style as JSObject).setProperty('maskRepeat'.toJS, maskNoRepeat.toJS);
+      (style as JSObject).setProperty('-webkit-mask-repeat'.toJS, maskNoRepeat.toJS);
 
-      (style as JSObject).setProperty('maskPosition' as JSAny, maskPosition as JSAny);
-      (style as JSObject).setProperty('-webkit-mask-position' as JSAny, maskPosition as JSAny);
+      (style as JSObject).setProperty('maskPosition'.toJS, maskPosition.toJS);
+      (style as JSObject).setProperty('-webkit-mask-position'.toJS, maskPosition.toJS);
 
-      (style as JSObject).setProperty('maskSize' as JSAny, maskSize as JSAny);
-      (style as JSObject).setProperty('-webkit-mask-size' as JSAny, maskSize as JSAny);
+      (style as JSObject).setProperty('maskSize'.toJS, maskSize.toJS);
+      (style as JSObject).setProperty('-webkit-mask-size'.toJS, maskSize.toJS);
     } else {
-      (style as JSObject).setProperty('backgroundColor' as JSAny, '' as JSAny);
-      (style as JSObject).setProperty('maskImage' as JSAny, '' as JSAny);
-      (style as JSObject).setProperty('-webkit-mask-image' as JSAny, '' as JSAny);
+      (style as JSObject).setProperty('backgroundColor'.toJS, ''.toJS);
+      (style as JSObject).setProperty('maskImage'.toJS, ''.toJS);
+      (style as JSObject).setProperty('-webkit-mask-image'.toJS, ''.toJS);
 
       imageElement.src = src ?? '';
     }

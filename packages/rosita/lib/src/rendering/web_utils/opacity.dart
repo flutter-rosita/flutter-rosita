@@ -12,7 +12,7 @@ class RositaOpacityUtils {
       style.opacity = '0';
     } else {
       style.display = '';
-      (style as JSObject).setProperty('opacity' as JSAny, opacity as JSAny);
+      (style as JSObject).setProperty('opacity'.toJS, opacity?.toJS);
     }
   }
 }

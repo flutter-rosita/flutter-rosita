@@ -8,17 +8,17 @@ extension RositaColorExtensionJSAny on Color? {
     final color = this;
 
     if (color == null) {
-      return '' as JSAny;
+      return ''.toJS;
     }
 
-    return ('rgba(' as JSAny)
-        .add(color.red as JSAny)
-        .add(',' as JSAny)
-        .add(color.green as JSAny)
-        .add(',' as JSAny)
-        .add(color.blue as JSAny)
-        .add(',' as JSAny)
-        .add(color.alpha / 255 as JSAny)
-        .add(')' as JSAny);
+    return ('rgba('.toJS)
+        .add((color.r * 255).toInt().toJS)
+        .add(','.toJS)
+        .add((color.g * 255).toJS)
+        .add(','.toJS)
+        .add((color.b * 255).toJS)
+        .add(','.toJS)
+        .add(color.a.toJS)
+        .add(')'.toJS);
   }
 }

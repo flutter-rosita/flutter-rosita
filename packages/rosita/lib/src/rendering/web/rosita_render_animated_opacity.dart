@@ -94,6 +94,6 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
   void rositaPaint() {
     final style = htmlElement.style;
 
-    (style as JSObject).setProperty('opacity' as JSAny, _opacity as JSAny);
+    (style as JSObject).setProperty('opacity'.toJS, _opacity.toJS);
   }
 }

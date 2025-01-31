@@ -8,19 +8,19 @@ class RositaAnimationTransitionUtils {
     required Duration duration,
   }) {
     final JSAny curveString = switch (curve) {
-      Cubic() => ('cubic-bezier(' as JSAny)
-          .add(curve.a as JSAny)
-          .add(',' as JSAny)
-          .add(curve.b as JSAny)
-          .add(',' as JSAny)
-          .add(curve.c as JSAny)
-          .add(',' as JSAny)
-          .add(curve.d as JSAny)
-          .add(')' as JSAny),
-      _ => 'linear' as JSAny,
+      Cubic() => ('cubic-bezier('.toJS)
+          .add(curve.a.toJS)
+          .add(','.toJS)
+          .add(curve.b.toJS)
+          .add(','.toJS)
+          .add(curve.c.toJS)
+          .add(','.toJS)
+          .add(curve.d.toJS)
+          .add(')'.toJS),
+      _ => 'linear'.toJS,
     };
 
-    (style as JSObject).setProperty('transition' as JSAny,
-        (animations as JSAny).add(' ' as JSAny).add(duration.inMilliseconds as JSAny).add('ms ' as JSAny).add(curveString));
+    (style as JSObject).setProperty('transition'.toJS,
+        (animations.toJS).add(' '.toJS).add(duration.inMilliseconds.toJS).add('ms '.toJS).add(curveString));
   }
 }

@@ -10,6 +10,6 @@ extension RositaColorExtension on Color? {
       return '';
     }
 
-    return 'rgba(${color.red},${color.green},${color.blue},${color.alpha / 255})';
+    return 'rgba(${(color.r * 255).toInt()},${(color.g * 255).toInt()},${(color.b * 255).toInt()},${color.a})';
   }
 }
