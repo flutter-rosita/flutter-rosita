@@ -1,3 +1,7 @@
+## 0.7.0
+
+Version up dependency web top ^1.0.0
+
 ## 0.6.4
 
 Optimize layerize
