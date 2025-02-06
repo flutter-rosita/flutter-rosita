@@ -18,6 +18,9 @@ class RenderRositaImage extends RositaRenderBox {
   web.HTMLImageElement get imageElement => htmlElement as web.HTMLImageElement;
 
   @override
+  bool hitTestSelf(Offset position) => true;
+
+  @override
   web.HTMLElement? createRositaElement() {
     final imageElement = web.HTMLImageElement()
       ..loading = 'lazy'

@@ -18,6 +18,9 @@ class RenderRositaSvgPicture extends RositaRenderBox {
   web.HTMLImageElement get imageElement => htmlElement as web.HTMLImageElement;
 
   @override
+  bool hitTestSelf(Offset position) => true;
+
+  @override
   web.HTMLElement? createRositaElement() => web.HTMLImageElement()
     ..loading = 'lazy'
     ..decoding = 'async';
