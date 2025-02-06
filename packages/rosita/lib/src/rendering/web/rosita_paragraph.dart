@@ -19,6 +19,9 @@ class RositaRenderParagraph extends RositaRenderBox with RelayoutWhenSystemFonts
         _maxLines = maxLines,
         _softWrap = softWrap;
 
+  @override
+  bool hitTestSelf(Offset position) => true;
+
   String? get text => _text;
   String? _text;
 
