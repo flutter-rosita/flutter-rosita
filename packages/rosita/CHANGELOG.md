@@ -1,3 +1,7 @@
+## 0.6.5
+
+Fix hitTestSelf for: RositaRenderParagraph, RenderRositaSvgPicture, RenderRositaImage
+
 ## 0.6.4
 
 Optimize layerize
