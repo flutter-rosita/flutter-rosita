@@ -1,3 +1,7 @@
+## 0.7.1
+
+Fix hitTestSelf for: RositaRenderParagraph, RenderRositaSvgPicture, RenderRositaImage
+
 ## 0.7.0
 
 Version up dependency web top ^1.0.0
