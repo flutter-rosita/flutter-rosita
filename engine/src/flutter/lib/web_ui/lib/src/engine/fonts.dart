@@ -58,6 +58,7 @@ Future<FontManifest> fetchFontManifest(ui_web.AssetManager assetManager) async {
         final Map<String, dynamic> fontFamily = fontFamilyJson as Map<String, dynamic>;
         final String familyName = fontFamily.readString('family');
         final List<dynamic> fontAssets = fontFamily.readList('fonts');
+
         return FontFamily(
           familyName,
           fontAssets.map((dynamic fontAssetJson) {
