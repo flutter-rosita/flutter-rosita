@@ -7,8 +7,8 @@ part of ui;
 // For documentation see https://github.com/flutter/engine/blob/main/lib/ui/painting.dart
 
 abstract class Path {
-  factory Path() => engine.renderer.createPath();
-  factory Path.from(Path source) => engine.renderer.copyPath(source);
+  factory Path() => RositaSurfacePath();
+  factory Path.from(Path source) => RositaSurfacePath.from(source);
   PathFillType get fillType;
   set fillType(PathFillType value);
   void moveTo(double x, double y);
