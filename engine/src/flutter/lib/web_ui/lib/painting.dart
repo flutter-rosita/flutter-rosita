@@ -353,7 +353,7 @@ abstract class Gradient implements Shader {
     Float64List? matrix4,
   ]) {
     final Float32List? matrix = matrix4 == null ? null : engine.toMatrix32(matrix4);
-    return engine.renderer.createLinearGradient(from, to, colors, colorStops, tileMode, matrix);
+    return RositaGradientLinearShader(from, to, colors, colorStops, tileMode, matrix);
   }
 
   factory Gradient.radial(
@@ -371,7 +371,9 @@ abstract class Gradient implements Shader {
     // If focal == center and the focal radius is 0.0, it's still a regular radial gradient
     final Float32List? matrix32 = matrix4 != null ? engine.toMatrix32(matrix4) : null;
     if (focal == null || (focal == center && focalRadius == 0.0)) {
-      return engine.renderer.createRadialGradient(
+      return RositaGradientRadialShader(
+        focal,
+        focalRadius,
         center,
         radius,
         colors,
@@ -383,7 +385,7 @@ abstract class Gradient implements Shader {
       assert(
         center != Offset.zero || focal != Offset.zero,
       ); // will result in exception(s) in Skia side
-      return engine.renderer.createConicalGradient(
+      return RositaGradientRadialShader(
         focal,
         focalRadius,
         center,
@@ -403,7 +405,7 @@ abstract class Gradient implements Shader {
     double startAngle = 0.0,
     double endAngle = math.pi * 2,
     Float64List? matrix4,
-  ]) => engine.renderer.createSweepGradient(
+  ]) => RositaGradientSweepShader(
     center,
     colors,
     colorStops,
@@ -567,7 +569,7 @@ enum FilterQuality { none, low, medium, high }
 
 class ImageFilter {
   factory ImageFilter.blur({double sigmaX = 0.0, double sigmaY = 0.0, TileMode? tileMode}) =>
-      engine.renderer.createBlurImageFilter(sigmaX: sigmaX, sigmaY: sigmaY, tileMode: tileMode);
+      RositaBlurImageFilter(sigmaX: sigmaX, sigmaY: sigmaY, tileMode: tileMode);
 
   factory ImageFilter.dilate({double radiusX = 0.0, double radiusY = 0.0}) =>
       engine.renderer.createDilateImageFilter(radiusX: radiusX, radiusY: radiusY);

@@ -53,8 +53,8 @@ class ResourceManager {
       // The resourcesHost *must* be a sibling of the rootElement.
       rootElement.parent!.prepend(resourcesHost);
     } else {
-      final DomShadowRoot renderingHost = _domManager.renderingHost;
-      renderingHost.prepend(resourcesHost);
+      final DomNode renderingHost = _domManager.renderingHost;
+      renderingHost.append(resourcesHost);
     }
     return resourcesHost;
   }
