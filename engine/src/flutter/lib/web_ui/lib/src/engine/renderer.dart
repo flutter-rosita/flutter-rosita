@@ -53,7 +53,8 @@ abstract class Renderer {
         }
         return true;
       }());
-      return useCanvasKit ? CanvasKitRenderer() : HtmlRenderer();
+      return HtmlRenderer();
+      // return useCanvasKit ? CanvasKitRenderer() : HtmlRenderer(); // ROSITA uses HTML renderer
     }
   }
 
