@@ -38,7 +38,7 @@ if [ -f "$FLUTTER_ROOT/DEPS" ] && [ -f "$FLUTTER_ROOT/engine/src/.gn" ]; then
 
   if [[ "$BRANCH" != "stable" && "$BRANCH" != "beta" ]]; then
     # Write the engine version out so downstream tools know what to look for.
-    echo $ENGINE_VERSION > "$FLUTTER_ROOT/bin/internal/engine.version"
+#    echo $ENGINE_VERSION > "$FLUTTER_ROOT/bin/internal/engine.version" # Rosita disabled this line
 
     # The realm on CI is passed in.
     if [ -n "${FLUTTER_REALM}" ]; then
