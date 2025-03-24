@@ -1282,6 +1282,7 @@ class _RenderTheater extends RenderBox
   void markNeedsLayout() {
     if (!_skipMarkNeedsLayout) {
       super.markNeedsLayout();
+      rositaMarkNeedsLayout();
     }
   }
 
