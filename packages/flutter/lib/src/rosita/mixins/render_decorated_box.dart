@@ -53,10 +53,12 @@ mixin RositaRenderDecoratedBoxMixin on RositaRenderMixin {
       _shadowsStyle(style, decoration.boxShadow);
       _fillStyle(style, decoration.color, decoration.image, decoration.gradient);
 
-      if (decoration.borderRadius != null) {
+      if (decoration.shape == BoxShape.circle) {
+        (style as JSObject).setProperty('clipPath'.toJS, 'circle()'.toJS);
+        (style as JSObject).setProperty('-webkit-clip-path'.toJS, 'circle()'.toJS);
+        (style as JSObject).setProperty('borderRadius'.toJS, '100%'.toJS);
+      } else if (decoration.borderRadius != null) {
         RositaRadiusUtils.applyBorderRadius(style, decoration.borderRadius);
-      } else {
-        style.borderRadius = decoration.shape == BoxShape.circle ? '100%' : '';
       }
 
       final border = decoration.border;
