@@ -1590,7 +1590,7 @@ class TextPainter {
     final _TextPainterLayoutCacheWithOffset cachedLayout = _layoutCache!;
     // If nothing is laid out, top start is the only reasonable place to place
     // the cursor.
-    if (cachedLayout.paragraph.numberOfLines < 1) {
+    if (cachedLayout.paragraph.numberOfLines < 1 || plainText.isEmpty) {
       // TODO(LongCatIsLooong): assert when an invalid position is given.
       return null;
     }

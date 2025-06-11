@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/semantics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rosita/rosita.dart';
@@ -72,6 +74,10 @@ Widget RositaSemantics({
   VoidCallback? onDidLoseAccessibilityFocus,
   VoidCallback? onFocus,
   Map<CustomSemanticsAction, VoidCallback>? customSemanticsActions,
+  ui.SemanticsRole? role,
+  Set<String>? controlsNodes,
+  SemanticsValidationResult validationResult = SemanticsValidationResult.none,
+  ui.SemanticsInputType? inputType,
 }) {
   if (rositaEnableSemantics || key != null) {
     return Semantics(
@@ -142,6 +148,10 @@ Widget RositaSemantics({
       onDidLoseAccessibilityFocus: onDidLoseAccessibilityFocus,
       onFocus: onFocus,
       customSemanticsActions: customSemanticsActions,
+      role: role,
+      controlsNodes: controlsNodes,
+      validationResult: validationResult,
+      inputType: inputType,
       child: child,
     );
   }
