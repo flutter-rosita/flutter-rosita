@@ -1,3 +1,7 @@
+## 0.8.0
+
+- Version up Flutter to 3.32.2
+
 ## 0.7.1
 
 Fix hitTestSelf for: RositaRenderParagraph, RenderRositaSvgPicture, RenderRositaImage
