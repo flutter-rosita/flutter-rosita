@@ -380,6 +380,10 @@ class RositaCanvas with _CanvasMixin, _ParagraphMixin implements Canvas {
     _fillPain(paint);
   }
 
+  void clipRSuperellipse(RSuperellipse rsuperellipse, {bool doAntiAlias = true}) {}
+
+  void drawRSuperellipse(RSuperellipse rsuperellipse, Paint paint) {}
+
   @override
   void drawShadow(Path path, Color color, double elevation, bool transparentOccluder) {}
 
