@@ -21,16 +21,6 @@ import 'picture.dart';
 import 'picture_recorder.dart';
 import 'rasterizer.dart';
 
-/// Used for clipping and filter svg resources.
-///
-/// Position needs to be absolute since these svgs are sandwiched between
-/// canvas elements and can cause layout shifts otherwise.
-final SVGSVGElement kSvgResourceHeader =
-    createSVGSVGElement()
-      ..setAttribute('width', 0)
-      ..setAttribute('height', 0)
-      ..style.position = 'absolute';
-
 /// This composites HTML views into the [ui.Scene].
 class HtmlViewEmbedder {
   HtmlViewEmbedder(this.sceneHost, this.rasterizer);
