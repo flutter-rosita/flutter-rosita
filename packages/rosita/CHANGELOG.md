@@ -1,3 +1,7 @@
+## 0.8.1
+
+- Provide RenderRositaAnimatedOpacity to export. Add get opacity to RenderRositaAnimatedOpacity.
+
 ## 0.8.0
 
 - Version up Flutter to 3.32.2
