@@ -17,6 +17,8 @@ class RenderRositaAnimatedOpacity extends AnimatedRenderProxyBoxWithHitTestBehav
   double _endOpacity;
   int _alpha;
 
+  double get opacity =>  ui.clampDouble(_alpha / 255, 0 ,1);
+
   set opacity(double value) {
     if (_endOpacity == value) return;
 

@@ -3,6 +3,7 @@ import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/rendering.dart';
 import 'package:rosita/rosita_web.dart';
 import 'package:web/web.dart' as web;
 
@@ -75,6 +76,8 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
 
   double _opacity;
 
+  double get opacity => _opacity;
+
   StreamSubscription? _onEndStreamSubscription;
 
   set opacity(double value) {
@@ -88,6 +91,11 @@ class RenderRositaAnimatedOpacity extends RositaRenderProxyBoxWithHitTestBehavio
     _opacity = value;
 
     markNeedsPaint();
+  }
+
+  @override
+  bool paintsChild(RenderObject child) {
+    return _opacity > 0;
   }
 
   @override

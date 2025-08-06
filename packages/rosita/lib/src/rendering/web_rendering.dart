@@ -11,6 +11,8 @@ import 'package:rosita/rosita.dart';
 import 'package:rosita/src/extensions/web_color.dart';
 import 'package:web/web.dart' as web;
 
+export 'web/rosita_render_animated_opacity.dart';
+
 part 'web/render_rosita_image.dart';
 
 part 'web/render_rosita_svg_picture.dart';
