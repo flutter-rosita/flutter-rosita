@@ -13,7 +13,7 @@ library browser_api;
 
 import 'dart:async';
 import 'dart:js_interop';
-import 'dart:js_util' as js_util;
+import 'dart:js_interop_unsafe';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
@@ -28,15 +28,15 @@ import 'vector_math.dart';
 /// Returns true if [object] has property [name], false otherwise.
 ///
 /// This is equivalent to writing `name in object` in plain JavaScript.
-bool hasJsProperty(Object object, String name) {
-  return js_util.hasProperty(object, name);
+bool hasJsProperty(JSObject object, String name) {
+  return object.has(name);
 }
 
 /// Returns the value of property [name] from a JavaScript [object].
 ///
 /// This is equivalent to writing `object.name` in plain JavaScript.
 T getJsProperty<T>(Object object, String name) {
-  return js_util.getProperty<T>(object, name);
+  return (object as JSObject).getProperty(name.toJS) as T;
 }
 
 const Set<String> _safeJsProperties = <String>{'decoding', '__flutter_state'};
@@ -44,21 +44,22 @@ const Set<String> _safeJsProperties = <String>{'decoding', '__flutter_state'};
 /// Sets the value of property [name] on a JavaScript [object].
 ///
 /// This is equivalent to writing `object.name = value` in plain JavaScript.
-T setJsProperty<T>(Object object, String name, T value) {
+T setJsProperty<T>(JSObject object, String name, T value) {
   assert(
   _safeJsProperties.contains(name),
   'Attempted to set property "$name" on a JavaScript object. This property '
       'has not been checked for safety. Possible solutions to this problem:\n'
       ' - Do not set this property.\n'
-      ' - Use a `js_util` API that does the same thing.\n'
       ' - Ensure that the property is safe then add it to _safeJsProperties set.',
   );
-  return js_util.setProperty<T>(object, name, value);
+  object.setProperty(name.toJS, value as JSAny);
+  return value;
 }
 
 /// Converts a JavaScript `Promise` into Dart [Future].
-Future<T> promiseToFuture<T>(Object jsPromise) {
-  return js_util.promiseToFuture<T>(jsPromise);
+Future<T> promiseToFuture<T>(Object jsPromise) async {
+  final value = await (jsPromise as JSPromise).toDart;
+  return value as T;
 }
 
 /// Parses a string [source] into a double.
@@ -70,7 +71,7 @@ Future<T> promiseToFuture<T>(Object jsPromise) {
 num? parseFloat(String source) {
   // Using JavaScript's `parseFloat` here because it can parse values
   // like "20px", while Dart's `double.tryParse` fails.
-  final num? result = js_util.callMethod(domWindow, 'parseFloat', <Object>[source]);
+  final num? result = domWindow.callMethod('parseFloat'.toJS,  <Object>[source].toJSAnyDeep);
 
   if (result == null || result.isNaN) {
     return null;
@@ -86,7 +87,7 @@ num? parseFloat(String source) {
 /// This getter calls the `hasFocus` method of the `Document` interface.
 /// See for more details:
 /// https://developer.mozilla.org/en-US/docs/Web/API/Document/hasFocus
-bool get windowHasFocus => js_util.callMethod<bool>(domDocument, 'hasFocus', <dynamic>[]);
+bool get windowHasFocus => domDocument.callMethod('hasFocus'.toJS, <dynamic>[].toJSAnyDeep);
 
 /// Parses the font size of [element] and returns the value without a unit.
 num? parseFontSize(DomElement element) {
@@ -94,17 +95,12 @@ num? parseFontSize(DomElement element) {
 
   if (hasJsProperty(element, 'computedStyleMap')) {
     // Use the newer `computedStyleMap` API available on some browsers.
-    final Object? computedStyleMap = js_util.callMethod<Object?>(
-      element,
-      'computedStyleMap',
-      const <Object?>[],
-    );
+    final Object? computedStyleMap =
+      (element as JSObject).callMethod('computedStyleMap'.toJS, <Object?>[].toJSAnyDeep);
     if (computedStyleMap is Object) {
-      final Object? fontSizeObject = js_util.callMethod<Object?>(computedStyleMap, 'get', <Object?>[
-        'font-size',
-      ]);
+      final Object? fontSizeObject = (computedStyleMap as JSObject).callMethod('get'.toJS, <Object?>['font-size'].toJSAnyDeep);
       if (fontSizeObject is Object) {
-        fontSize = js_util.getProperty<num>(fontSizeObject, 'value');
+        fontSize = (fontSizeObject as JSObject).getProperty('value'.toJS);
       }
     }
   }
@@ -122,7 +118,7 @@ num? parseFontSize(DomElement element) {
 void vibrate(int durationMs) {
   final DomNavigator navigator = domWindow.navigator;
   if (hasJsProperty(navigator, 'vibrate')) {
-    js_util.callMethod<void>(navigator, 'vibrate', <num>[durationMs]);
+    navigator.callMethod('vibrate'.toJS, <num>[durationMs].toJSAnyDeep);
   }
 }
 
@@ -132,11 +128,7 @@ void vibrate(int durationMs) {
 /// succeed and will return a non-null element. This is not always true. For
 /// example, when Safari on iOS runs out of memory it returns null.
 DomHTMLCanvasElement? tryCreateCanvasElement(int width, int height) {
-  final DomHTMLCanvasElement? canvas = js_util.callMethod<DomHTMLCanvasElement?>(
-    domDocument,
-    'createElement',
-    <dynamic>['CANVAS'],
-  );
+  final DomHTMLCanvasElement? canvas = domDocument.callMethod('createElement'.toJS, <dynamic>['CANVAS'].toJSAnyDeep);
   if (canvas == null) {
     return null;
   }
@@ -288,11 +280,11 @@ extension type ImageTrack(JSObject _) implements JSObject {
 }
 
 void scaleCanvas2D(Object context2d, num x, num y) {
-  js_util.callMethod<void>(context2d, 'scale', <dynamic>[x, y]);
+  (context2d as JSObject).callMethod('scale'.toJS, <dynamic>[x, y].toJSAnyDeep);
 }
 
 void drawImageCanvas2D(Object context2d, Object imageSource, num width, num height) {
-  js_util.callMethod<void>(context2d, 'drawImage', <dynamic>[imageSource, width, height]);
+  (context2d as JSObject).callMethod('drawImage'.toJS, <dynamic>[imageSource, width, height].toJSAnyDeep);
 }
 
 void vertexAttribPointerGlContext(
@@ -304,14 +296,14 @@ void vertexAttribPointerGlContext(
     num stride,
     num offset,
     ) {
-  js_util.callMethod<void>(glContext, 'vertexAttribPointer', <dynamic>[
+  (glContext as JSObject).callMethod('vertexAttribPointer'.toJS, <dynamic>[
     index,
     size,
     type,
     normalized,
     stride,
     offset,
-  ]);
+  ].toJSAnyDeep);
 }
 
 /// Compiled and cached gl program.
@@ -385,7 +377,7 @@ class GlContext {
   void drawImage(DomCanvasRenderingContext2D context, double left, double top) {
     // Actual size of canvas may be larger than viewport size. Use
     // source/destination to draw part of the image data.
-    js_util.callMethod<void>(context, 'drawImage', <dynamic>[
+    context.callMethod('drawImage'.toJS, <dynamic>[
       _canvas,
       0,
       0,
@@ -395,7 +387,7 @@ class GlContext {
       top,
       _widthInPixels,
       _heightInPixels,
-    ]);
+    ].toJSAnyDeep);
   }
 
   GlProgram cacheProgram(String vertexShaderSource, String fragmentShaderSource) {
@@ -421,12 +413,12 @@ class GlContext {
     if (shader == null) {
       throw Exception(error);
     }
-    js_util.callMethod<void>(glContext, 'shaderSource', <dynamic>[shader, source]);
-    js_util.callMethod<void>(glContext, 'compileShader', <dynamic>[shader]);
-    final bool shaderStatus = js_util.callMethod<bool>(glContext, 'getShaderParameter', <dynamic>[
+    (glContext as JSObject).callMethod('shaderSource'.toJS, <dynamic>[shader, source].toJSAnyDeep);
+    (glContext as JSObject).callMethod('compileShader'.toJS, <dynamic>[shader].toJSAnyDeep);
+    final bool shaderStatus = (glContext as JSObject).callMethod('getShaderParameter'.toJS, <dynamic>[
       shader,
       compileStatus,
-    ]);
+    ].toJSAnyDeep);
     if (!shaderStatus) {
       throw Exception('Shader compilation failed: ${getShaderInfoLog(shader)}');
     }
@@ -434,59 +426,59 @@ class GlContext {
   }
 
   Object createProgram() =>
-      js_util.callMethod<Object>(glContext, 'createProgram', const <dynamic>[]);
+      (glContext as JSObject).callMethod('createProgram'.toJS, const <dynamic>[].toJSAnyDeep);
 
   void attachShader(Object? program, Object shader) {
-    js_util.callMethod<void>(glContext, 'attachShader', <dynamic>[program, shader]);
+    (glContext as JSObject).callMethod('attachShader'.toJS, <dynamic>[program, shader].toJSAnyDeep);
   }
 
   void linkProgram(Object program) {
-    js_util.callMethod<void>(glContext, 'linkProgram', <dynamic>[program]);
-    final bool programStatus = js_util.callMethod<bool>(glContext, 'getProgramParameter', <dynamic>[
+    (glContext as JSObject).callMethod('linkProgram'.toJS, <dynamic>[program].toJSAnyDeep);
+    final bool programStatus = (glContext as JSObject).callMethod('getProgramParameter'.toJS, <dynamic>[
       program,
       kLinkStatus,
-    ]);
+    ].toJSAnyDeep);
     if (!programStatus) {
       throw Exception(getProgramInfoLog(program));
     }
   }
 
   void useProgram(GlProgram program) {
-    js_util.callMethod<void>(glContext, 'useProgram', <dynamic>[program.program]);
+    (glContext as JSObject).callMethod('useProgram'.toJS, <dynamic>[program.program].toJSAnyDeep);
   }
 
-  Object? createBuffer() => js_util.callMethod(glContext, 'createBuffer', const <dynamic>[]);
+  Object? createBuffer() => (glContext as JSObject).callMethod('createBuffer'.toJS, const <dynamic>[].toJSAnyDeep);
 
   void bindArrayBuffer(Object? buffer) {
-    js_util.callMethod<void>(glContext, 'bindBuffer', <dynamic>[kArrayBuffer, buffer]);
+    (glContext as JSObject).callMethod('bindBuffer'.toJS, <dynamic>[kArrayBuffer, buffer].toJSAnyDeep);
   }
 
   Object? createVertexArray() =>
-      js_util.callMethod(glContext, 'createVertexArray', const <dynamic>[]);
+      (glContext as JSObject).callMethod('createVertexArray'.toJS, const <dynamic>[].toJSAnyDeep);
 
   void bindVertexArray(Object vertexObjectArray) {
-    js_util.callMethod<void>(glContext, 'bindVertexArray', <dynamic>[vertexObjectArray]);
+    (glContext as JSObject).callMethod('bindVertexArray'.toJS, <dynamic>[vertexObjectArray].toJSAnyDeep);
   }
 
   void unbindVertexArray() {
-    js_util.callMethod<void>(glContext, 'bindVertexArray', <dynamic>[null]);
+    (glContext as JSObject).callMethod('bindVertexArray'.toJS, <dynamic>[null].toJSAnyDeep);
   }
 
   void bindElementArrayBuffer(Object? buffer) {
-    js_util.callMethod<void>(glContext, 'bindBuffer', <dynamic>[kElementArrayBuffer, buffer]);
+    (glContext as JSObject).callMethod('bindBuffer'.toJS, <dynamic>[kElementArrayBuffer, buffer].toJSAnyDeep);
   }
 
-  Object? createTexture() => js_util.callMethod(glContext, 'createTexture', const <dynamic>[]);
+  Object? createTexture() => (glContext as JSObject).callMethod('createTexture'.toJS, const <dynamic>[].toJSAnyDeep);
 
   void generateMipmap(dynamic target) =>
-      js_util.callMethod(glContext, 'generateMipmap', <dynamic>[target]);
+      (glContext as JSObject).callMethod('generateMipmap'.toJS, <dynamic>[target].toJSAnyDeep);
 
   void bindTexture(dynamic target, Object? buffer) {
-    js_util.callMethod<void>(glContext, 'bindTexture', <dynamic>[target, buffer]);
+    (glContext as JSObject).callMethod('bindTexture'.toJS, <dynamic>[target, buffer].toJSAnyDeep);
   }
 
   void activeTexture(double textureUnit) {
-    js_util.callMethod<void>(glContext, 'activeTexture', <dynamic>[textureUnit]);
+    (glContext as JSObject).callMethod('activeTexture'.toJS, <dynamic>[textureUnit].toJSAnyDeep);
   }
 
   void texImage2D(
@@ -501,16 +493,16 @@ class GlContext {
         int border = 0,
       }) {
     if (width == null) {
-      js_util.callMethod<void>(glContext, 'texImage2D', <dynamic>[
+      (glContext as JSObject).callMethod('texImage2D'.toJS, <dynamic>[
         target,
         level,
         internalFormat,
         format,
         dataType,
         pixels,
-      ]);
+      ].toJSAnyDeep);
     } else {
-      js_util.callMethod<void>(glContext, 'texImage2D', <dynamic>[
+      (glContext as JSObject).callMethod('texImage2D'.toJS, <dynamic>[
         target,
         level,
         internalFormat,
@@ -520,67 +512,67 @@ class GlContext {
         format,
         dataType,
         pixels,
-      ]);
+      ].toJSAnyDeep);
     }
   }
 
   void texParameteri(dynamic target, dynamic parameterName, dynamic value) {
-    js_util.callMethod<void>(glContext, 'texParameteri', <dynamic>[target, parameterName, value]);
+    (glContext as JSObject).callMethod('texParameteri'.toJS, <dynamic>[target, parameterName, value].toJSAnyDeep);
   }
 
   void deleteBuffer(Object buffer) {
-    js_util.callMethod<void>(glContext, 'deleteBuffer', <dynamic>[buffer]);
+    (glContext as JSObject).callMethod('deleteBuffer'.toJS, <dynamic>[buffer].toJSAnyDeep);
   }
 
   void bufferData(TypedData? data, dynamic type) {
-    js_util.callMethod<void>(glContext, 'bufferData', <dynamic>[kArrayBuffer, data, type]);
+    (glContext as JSObject).callMethod('bufferData'.toJS, <dynamic>[kArrayBuffer, data, type].toJSAnyDeep);
   }
 
   void bufferElementData(TypedData? data, dynamic type) {
-    js_util.callMethod<void>(glContext, 'bufferData', <dynamic>[kElementArrayBuffer, data, type]);
+    (glContext as JSObject).callMethod('bufferData'.toJS, <dynamic>[kElementArrayBuffer, data, type].toJSAnyDeep);
   }
 
   void enableVertexAttribArray(dynamic index) {
-    js_util.callMethod<void>(glContext, 'enableVertexAttribArray', <dynamic>[index]);
+    (glContext as JSObject).callMethod('enableVertexAttribArray'.toJS, <dynamic>[index].toJSAnyDeep);
   }
 
   /// Clear background.
   void clear() {
-    js_util.callMethod<void>(glContext, 'clear', <dynamic>[kColorBufferBit]);
+    (glContext as JSObject).callMethod('clear'.toJS, <dynamic>[kColorBufferBit].toJSAnyDeep);
   }
 
   /// Destroys gl context.
   void dispose() {
     final Object? loseContextExtension = _getExtension('WEBGL_lose_context');
     if (loseContextExtension != null) {
-      js_util.callMethod<void>(loseContextExtension, 'loseContext', const <dynamic>[]);
+      (loseContextExtension as JSObject).callMethod('loseContext'.toJS, const <dynamic>[].toJSAnyDeep);
     }
   }
 
   void deleteProgram(Object program) {
-    js_util.callMethod<void>(glContext, 'deleteProgram', <dynamic>[program]);
+    (glContext as JSObject).callMethod('deleteProgram'.toJS, <dynamic>[program].toJSAnyDeep);
   }
 
   void deleteShader(Object shader) {
-    js_util.callMethod<void>(glContext, 'deleteShader', <dynamic>[shader]);
+    (glContext as JSObject).callMethod('deleteShader'.toJS, <dynamic>[shader].toJSAnyDeep);
   }
 
   Object? _getExtension(String extensionName) =>
-      js_util.callMethod<Object?>(glContext, 'getExtension', <dynamic>[extensionName]);
+      (glContext as JSObject).callMethod('getExtension'.toJS, <dynamic>[extensionName].toJSAnyDeep);
 
   void drawTriangles(int triangleCount, ui.VertexMode vertexMode) {
     final dynamic mode = _triangleTypeFromMode(vertexMode);
-    js_util.callMethod<void>(glContext, 'drawArrays', <dynamic>[mode, 0, triangleCount]);
+    (glContext as JSObject).callMethod('drawArrays'.toJS, <dynamic>[mode, 0, triangleCount].toJSAnyDeep);
   }
 
   void drawElements(dynamic type, int indexCount, dynamic indexType) {
-    js_util.callMethod<void>(glContext, 'drawElements', <dynamic>[type, indexCount, indexType, 0]);
+    (glContext as JSObject).callMethod('drawElements'.toJS, <dynamic>[type, indexCount, indexType, 0].toJSAnyDeep);
   }
 
   /// Sets affine transformation from normalized device coordinates
   /// to window coordinates
   void viewport(double x, double y, double width, double height) {
-    js_util.callMethod<void>(glContext, 'viewport', <dynamic>[x, y, width, height]);
+    (glContext as JSObject).callMethod('viewport'.toJS, <dynamic>[x, y, width, height].toJSAnyDeep);
   }
 
   Object _triangleTypeFromMode(ui.VertexMode mode) {
@@ -594,74 +586,74 @@ class GlContext {
     }
   }
 
-  Object? _createShader(String shaderType) => js_util.callMethod(
-    glContext,
-    'createShader',
-    <Object?>[js_util.getProperty<Object?>(glContext, shaderType)],
+  Object? _createShader(String shaderType) => (
+    glContext as JSObject).callMethod(
+    'createShader'.toJS,
+    <Object?>[(glContext as JSObject).getProperty(shaderType.toJS)].toJSAnyDeep,
   );
 
   /// Error state of gl context.
-  Object? get error => js_util.callMethod(glContext, 'getError', const <dynamic>[]);
+  Object? get error => (glContext as JSObject).callMethod('getError'.toJS, const <dynamic>[].toJSAnyDeep);
 
   /// Shader compiler error, if this returns [kFalse], to get details use
   /// [getShaderInfoLog].
-  Object? get compileStatus => _kCompileStatus ??= js_util.getProperty(glContext, 'COMPILE_STATUS');
+  Object? get compileStatus => _kCompileStatus ??= (glContext as JSObject).callMethod('COMPILE_STATUS'.toJS);
 
-  Object? get kArrayBuffer => _kArrayBuffer ??= js_util.getProperty(glContext, 'ARRAY_BUFFER');
+  Object? get kArrayBuffer => _kArrayBuffer ??= (glContext as JSObject).callMethod('ARRAY_BUFFER'.toJS);
 
   Object? get kElementArrayBuffer =>
-      _kElementArrayBuffer ??= js_util.getProperty(glContext, 'ELEMENT_ARRAY_BUFFER');
+      _kElementArrayBuffer ??= (glContext as JSObject).callMethod('ELEMENT_ARRAY_BUFFER'.toJS);
 
-  Object get kLinkStatus => _kLinkStatus ??= js_util.getProperty<Object>(glContext, 'LINK_STATUS');
+  Object get kLinkStatus => _kLinkStatus ??= (glContext as JSObject).callMethod('LINK_STATUS'.toJS)!;
 
-  Object get kFloat => _kFloat ??= js_util.getProperty<Object>(glContext, 'FLOAT');
+  Object get kFloat => _kFloat ??= (glContext as JSObject).callMethod('FLOAT'.toJS)!;
 
-  Object? get kRGBA => _kRGBA ??= js_util.getProperty(glContext, 'RGBA');
+  Object? get kRGBA => _kRGBA ??= (glContext as JSObject).callMethod('RGBA'.toJS);
 
   Object get kUnsignedByte =>
-      _kUnsignedByte ??= js_util.getProperty<Object>(glContext, 'UNSIGNED_BYTE');
+      _kUnsignedByte ??= (glContext as JSObject).callMethod('UNSIGNED_BYTE'.toJS)!;
 
   Object? get kUnsignedShort =>
-      _kUnsignedShort ??= js_util.getProperty(glContext, 'UNSIGNED_SHORT');
+      _kUnsignedShort ??= (glContext as JSObject).callMethod('UNSIGNED_SHORT'.toJS)!;
 
-  Object? get kStaticDraw => _kStaticDraw ??= js_util.getProperty(glContext, 'STATIC_DRAW');
+  Object? get kStaticDraw => _kStaticDraw ??= (glContext as JSObject).callMethod('STATIC_DRAW'.toJS);
 
-  Object get kTriangles => _kTriangles ??= js_util.getProperty<Object>(glContext, 'TRIANGLES');
+  Object get kTriangles => _kTriangles ??= (glContext as JSObject).callMethod('TRIANGLES'.toJS)!;
 
-  Object get kTriangleFan => _kTriangles ??= js_util.getProperty<Object>(glContext, 'TRIANGLE_FAN');
+  Object get kTriangleFan => _kTriangles ??= (glContext as JSObject).callMethod('TRIANGLE_FAN'.toJS)!;
 
   Object get kTriangleStrip =>
-      _kTriangles ??= js_util.getProperty<Object>(glContext, 'TRIANGLE_STRIP');
+      _kTriangles ??= (glContext as JSObject).callMethod('TRIANGLE_STRIP'.toJS)!;
 
   Object? get kColorBufferBit =>
-      _kColorBufferBit ??= js_util.getProperty(glContext, 'COLOR_BUFFER_BIT');
+      _kColorBufferBit ??= (glContext as JSObject).callMethod('COLOR_BUFFER_BIT'.toJS);
 
-  Object? get kTexture2D => _kTexture2D ??= js_util.getProperty(glContext, 'TEXTURE_2D');
+  Object? get kTexture2D => _kTexture2D ??= (glContext as JSObject).callMethod('TEXTURE_2D'.toJS);
 
-  double get kTexture0 => _kTexture0 ??= js_util.getProperty<double>(glContext, 'TEXTURE0');
+  double get kTexture0 => _kTexture0 ??= (glContext as JSObject).callMethod('TEXTURE0'.toJS)!;
 
-  Object? get kTextureWrapS => _kTextureWrapS ??= js_util.getProperty(glContext, 'TEXTURE_WRAP_S');
+  Object? get kTextureWrapS => _kTextureWrapS ??= (glContext as JSObject).callMethod('TEXTURE_WRAP_S'.toJS);
 
-  Object? get kTextureWrapT => _kTextureWrapT ??= js_util.getProperty(glContext, 'TEXTURE_WRAP_T');
+  Object? get kTextureWrapT => _kTextureWrapT ??= (glContext as JSObject).callMethod('TEXTURE_WRAP_T'.toJS);
 
-  Object? get kRepeat => _kRepeat ??= js_util.getProperty(glContext, 'REPEAT');
+  Object? get kRepeat => _kRepeat ??= (glContext as JSObject).callMethod('REPEAT'.toJS);
 
-  Object? get kClampToEdge => _kClampToEdge ??= js_util.getProperty(glContext, 'CLAMP_TO_EDGE');
+  Object? get kClampToEdge => _kClampToEdge ??= (glContext as JSObject).callMethod('CLAMP_TO_EDGE'.toJS);
 
   Object? get kMirroredRepeat =>
-      _kMirroredRepeat ??= js_util.getProperty(glContext, 'MIRRORED_REPEAT');
+      _kMirroredRepeat ??= (glContext as JSObject).callMethod('MIRRORED_REPEAT'.toJS);
 
-  Object? get kLinear => _kLinear ??= js_util.getProperty(glContext, 'LINEAR');
+  Object? get kLinear => _kLinear ??= (glContext as JSObject).callMethod('LINEAR'.toJS);
 
   Object? get kTextureMinFilter =>
-      _kTextureMinFilter ??= js_util.getProperty(glContext, 'TEXTURE_MIN_FILTER');
+      _kTextureMinFilter ??= (glContext as JSObject).callMethod('TEXTURE_MIN_FILTER'.toJS);
 
   /// Returns reference to uniform in program.
   Object getUniformLocation(Object program, String uniformName) {
-    final Object? res = js_util.callMethod(glContext, 'getUniformLocation', <dynamic>[
+    final Object? res = (glContext as JSObject).callMethod('getUniformLocation'.toJS, <dynamic>[
       program,
       uniformName,
-    ]);
+    ].toJSAnyDeep);
     if (res == null) {
       throw Exception('$uniformName not found');
     } else {
@@ -671,19 +663,19 @@ class GlContext {
 
   /// Returns true if uniform exists.
   bool containsUniform(Object program, String uniformName) {
-    final Object? res = js_util.callMethod(glContext, 'getUniformLocation', <dynamic>[
+    final Object? res = (glContext as JSObject).callMethod('getUniformLocation'.toJS, <dynamic>[
       program,
       uniformName,
-    ]);
+    ].toJSAnyDeep);
     return res != null;
   }
 
   /// Returns reference to uniform in program.
   Object getAttributeLocation(Object program, String attribName) {
-    final Object? res = js_util.callMethod(glContext, 'getAttribLocation', <dynamic>[
+    final Object? res = (glContext as JSObject).callMethod('getAttribLocation'.toJS, <dynamic>[
       program,
       attribName,
-    ]);
+    ].toJSAnyDeep);
     if (res == null) {
       throw Exception('$attribName not found');
     } else {
@@ -693,43 +685,43 @@ class GlContext {
 
   /// Sets float uniform value.
   void setUniform1f(Object uniform, double value) {
-    js_util.callMethod<void>(glContext, 'uniform1f', <dynamic>[uniform, value]);
+    (glContext as JSObject).callMethod('uniform1f'.toJS, <dynamic>[uniform, value].toJSAnyDeep);
   }
 
   /// Sets vec2 uniform values.
   void setUniform2f(Object uniform, double value1, double value2) {
-    js_util.callMethod<void>(glContext, 'uniform2f', <dynamic>[uniform, value1, value2]);
+    (glContext as JSObject).callMethod('uniform2f'.toJS, <dynamic>[uniform, value1, value2].toJSAnyDeep);
   }
 
   /// Sets vec4 uniform values.
   void setUniform4f(Object uniform, double value1, double value2, double value3, double value4) {
-    js_util.callMethod<void>(glContext, 'uniform4f', <dynamic>[
+    (glContext as JSObject).callMethod('uniform4f'.toJS, <dynamic>[
       uniform,
       value1,
       value2,
       value3,
       value4,
-    ]);
+    ].toJSAnyDeep);
   }
 
   /// Sets mat4 uniform values.
   void setUniformMatrix4fv(Object uniform, bool transpose, Float32List value) {
-    js_util.callMethod<void>(glContext, 'uniformMatrix4fv', <dynamic>[uniform, transpose, value]);
+    (glContext as JSObject).callMethod('uniformMatrix4fv'.toJS, <dynamic>[uniform, transpose, value].toJSAnyDeep);
   }
 
   /// Shader compile error log.
   Object? getShaderInfoLog(Object glShader) {
-    return js_util.callMethod(glContext, 'getShaderInfoLog', <dynamic>[glShader]);
+    return (glContext as JSObject).callMethod('getShaderInfoLog'.toJS, <dynamic>[glShader].toJSAnyDeep);
   }
 
   ///  Errors that occurred during failed linking or validation of program
   ///  objects. Typically called after [linkProgram].
   String? getProgramInfoLog(Object glProgram) {
-    return js_util.callMethod<String?>(glContext, 'getProgramInfoLog', <dynamic>[glProgram]);
+    return (glContext as JSObject).callMethod('getProgramInfoLog'.toJS, <dynamic>[glProgram].toJSAnyDeep);
   }
 
-  int? get drawingBufferWidth => js_util.getProperty<int?>(glContext, 'drawingBufferWidth');
-  int? get drawingBufferHeight => js_util.getProperty<int?>(glContext, 'drawingBufferWidth');
+  int? get drawingBufferWidth => (glContext as JSObject).getProperty('drawingBufferWidth'.toJS);
+  int? get drawingBufferHeight => (glContext as JSObject).getProperty('drawingBufferWidth'.toJS);
 
   /// Reads gl contents as image data.
   ///
@@ -741,7 +733,7 @@ class GlContext {
     if (ui_web.browser.browserEngine == ui_web.BrowserEngine.webkit ||
         ui_web.browser.browserEngine == ui_web.BrowserEngine.firefox) {
       final Uint8List pixels = Uint8List(bufferWidth * bufferHeight * kBytesPerPixel);
-      js_util.callMethod<void>(glContext, 'readPixels', <dynamic>[
+      (glContext as JSObject).callMethod('readPixels'.toJS, <dynamic>[
         0,
         0,
         bufferWidth,
@@ -749,11 +741,11 @@ class GlContext {
         kRGBA,
         kUnsignedByte,
         pixels,
-      ]);
+      ].toJSAnyDeep);
       return createDomImageData(Uint8ClampedList.fromList(pixels), bufferWidth, bufferHeight);
     } else {
       final Uint8ClampedList pixels = Uint8ClampedList(bufferWidth * bufferHeight * kBytesPerPixel);
-      js_util.callMethod<void>(glContext, 'readPixels', <dynamic>[
+      (glContext as JSObject).callMethod('readPixels'.toJS, <dynamic>[
         0,
         0,
         bufferWidth,
@@ -761,7 +753,7 @@ class GlContext {
         kRGBA,
         kUnsignedByte,
         pixels,
-      ]);
+      ].toJSAnyDeep);
       return createDomImageData(pixels, bufferWidth, bufferHeight);
     }
   }
@@ -773,13 +765,13 @@ class GlContext {
     // browser create ImageBitmap otherwise use more expensive canvas
     // allocation. However, transferToImageBitmap does not properly preserve
     // the alpha channel, so only use it if the pattern is opaque.
-    if (_canvas != null && js_util.hasProperty(_canvas!, 'transferToImageBitmap') && isOpaque) {
+    if (_canvas != null && (_canvas! as JSObject).has('transferToImageBitmap') && isOpaque) {
       // TODO(yjbanov): find out why we need to call getContext and ignore the return value.
-      js_util.callMethod<void>(_canvas!, 'getContext', <dynamic>['webgl2']);
-      final Object? imageBitmap = js_util.callMethod(
-        _canvas!,
-        'transferToImageBitmap',
-        <dynamic>[],
+      (_canvas! as JSObject).callMethod('getContext'.toJS, <dynamic>['webgl2'].toJSAnyDeep);
+      final Object? imageBitmap =
+        (_canvas! as JSObject).callMethod(
+        'transferToImageBitmap'.toJS,
+        <dynamic>[].toJSAnyDeep,
       );
       return imageBitmap;
     } else {
@@ -960,21 +952,22 @@ class OffScreenCanvas {
 
   /// Feature detection for transferToImageBitmap on OffscreenCanvas.
   bool get transferToImageBitmapSupported =>
-      js_util.hasProperty(offScreenCanvas!, 'transferToImageBitmap');
+      offScreenCanvas!.has('transferToImageBitmap');
 
   /// Creates an ImageBitmap object from the most recently rendered image
   /// of the OffscreenCanvas.
   ///
   /// !Warning API still in experimental status, feature detect before using.
   Object? transferToImageBitmap() {
-    return js_util.callMethod(offScreenCanvas!, 'transferToImageBitmap', <dynamic>[]);
+    return (offScreenCanvas! as JSObject).callMethod('transferToImageBitmap'.toJS, <dynamic>[].toJSAnyDeep);
   }
 
   /// Draws canvas contents to a rendering context.
   void transferImage(Object targetContext) {
     // Actual size of canvas may be larger than viewport size. Use
     // source/destination to draw part of the image data.
-    js_util.callMethod<void>(targetContext, 'drawImage', <dynamic>[
+    (targetContext as JSObject).callMethod('drawImage'.toJS,
+    <dynamic>[
       offScreenCanvas ?? canvasElement!,
       0,
       0,
@@ -984,7 +977,7 @@ class OffScreenCanvas {
       0,
       width,
       height,
-    ]);
+    ].toJSAnyDeep);
   }
 
   /// Converts canvas contents to an image and returns as data URL.
@@ -997,7 +990,7 @@ class OffScreenCanvas {
           'load',
           createDomEventListener((DomEvent event) {
             completer.complete(
-              js_util.getProperty<String>(js_util.getProperty<Object>(event, 'target'), 'result'),
+              (event.getProperty('target'.toJS) as JSObject).getProperty('result'.toJS)
             );
           }),
         );
@@ -1011,7 +1004,7 @@ class OffScreenCanvas {
 
   /// Draws an image to canvas for both offscreen canvas context2d.
   void drawImage(Object image, int x, int y, int width, int height) {
-    js_util.callMethod<void>(getContext2d()!, 'drawImage', <dynamic>[image, x, y, width, height]);
+    (getContext2d()! as JSObject).callMethod('drawImage'.toJS, <dynamic>[image, x, y, width, height].toJSAnyDeep);
   }
 
   /// Feature detects OffscreenCanvas.
@@ -1019,5 +1012,5 @@ class OffScreenCanvas {
       _supported ??=
       // Safari 16.4 implements OffscreenCanvas, but without WebGL support. So
       // it's not really supported in a way that is useful to us.
-      !ui_web.browser.isSafari && js_util.hasProperty(domWindow, 'OffscreenCanvas');
+      !ui_web.browser.isSafari && domWindow.hasProperty('OffscreenCanvas'.toJS).toDart;
 }
