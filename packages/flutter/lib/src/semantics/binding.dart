@@ -10,6 +10,7 @@ library;
 import 'dart:ui' as ui show AccessibilityFeatures, SemanticsActionEvent, SemanticsUpdateBuilder;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rosita.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -170,7 +171,9 @@ mixin SemanticsBinding on BindingBase {
   }
 
   void _handleFrameworkSemanticsEnabledChanged() {
-    platformDispatcher.setSemanticsTreeEnabled(semanticsEnabled);
+    if (rositaEnableSemantics) {
+      // platformDispatcher.setSemanticsTreeEnabled(semanticsEnabled);
+    }
   }
 
   /// Called whenever the platform requests an action to be performed on a

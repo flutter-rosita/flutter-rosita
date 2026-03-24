@@ -33,7 +33,7 @@ enum _CheckableKind {
 _CheckableKind _checkableKindFromSemanticsFlag(SemanticsObject semanticsObject) {
   if (semanticsObject.flags.isInMutuallyExclusiveGroup) {
     return _CheckableKind.radio;
-  } else if (semanticsObject.flags.hasToggledState) {
+  } else if (semanticsObject.flags.isToggled != ui.Tristate.none) {
     return _CheckableKind.toggle;
   } else {
     return _CheckableKind.checkbox;
@@ -46,11 +46,11 @@ _CheckableKind _checkableKindFromSemanticsFlag(SemanticsObject semanticsObject) 
 /// the [ui.SemanticsFlag.isInMutuallyExclusiveGroup] flag.
 class SemanticRadioGroup extends SemanticRole {
   SemanticRadioGroup(SemanticsObject semanticsObject)
-    : super.withBasics(
-        EngineSemanticsRole.radioGroup,
-        semanticsObject,
-        preferredLabelRepresentation: LabelRepresentation.ariaLabel,
-      ) {
+      : super.withBasics(
+    EngineSemanticsRole.radioGroup,
+    semanticsObject,
+    preferredLabelRepresentation: LabelRepresentation.ariaLabel,
+  ) {
     setAriaRole('radiogroup');
   }
 
@@ -71,8 +71,8 @@ class SemanticRadioGroup extends SemanticRole {
 /// boolean state of being "selected".
 class SemanticCheckable extends SemanticRole {
   SemanticCheckable(SemanticsObject semanticsObject)
-    : _kind = _checkableKindFromSemanticsFlag(semanticsObject),
-      super.withBasics(
+      : _kind = _checkableKindFromSemanticsFlag(semanticsObject),
+        super.withBasics(
         EngineSemanticsRole.checkable,
         semanticsObject,
         preferredLabelRepresentation: LabelRepresentation.ariaLabel,
@@ -102,7 +102,10 @@ class SemanticCheckable extends SemanticRole {
 
       setAttribute(
         'aria-checked',
-        (semanticsObject.flags.isChecked || semanticsObject.flags.isToggled) ? 'true' : 'false',
+        (semanticsObject.flags.isChecked == ui.CheckedState.isTrue ||
+            semanticsObject.flags.isToggled == ui.Tristate.isTrue)
+            ? 'true'
+            : 'false',
       );
     }
   }

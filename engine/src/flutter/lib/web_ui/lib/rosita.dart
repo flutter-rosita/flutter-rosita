@@ -5,14 +5,18 @@ class RositaBlurImageFilter implements ImageFilter {
     required this.sigmaX,
     required this.sigmaY,
     this.tileMode,
+    this.bounds,
   });
 
   final double sigmaX;
   final double sigmaY;
   final TileMode? tileMode;
+  final Rect? bounds;
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+
+  String get debugShortDescription => 'blur($sigmaX, $sigmaY, $tileMode, $bounds)';
 }
 
 sealed class RositaGradient implements Gradient {

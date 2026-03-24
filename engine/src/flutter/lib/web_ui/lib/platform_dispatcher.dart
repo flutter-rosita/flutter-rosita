@@ -102,6 +102,16 @@ abstract class PlatformDispatcher {
 
   Locale get locale;
 
+  void setApplicationLocale(Locale locale);
+
+  double? get lineHeightScaleFactorOverride;
+
+  double? get letterSpacingOverride;
+
+  double? get wordSpacingOverride;
+
+  double? get paragraphSpacingOverride;
+
   List<Locale> get locales;
 
   Locale? computePlatformResolvedLocale(List<Locale> supportedLocales);

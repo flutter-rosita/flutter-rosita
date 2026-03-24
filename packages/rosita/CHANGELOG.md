@@ -1,3 +1,7 @@
+## 0.10.0
+
+- Version up Flutter to 3.41.5
+
 ## 0.9.0
 
 - Version up Flutter to 3.35.3

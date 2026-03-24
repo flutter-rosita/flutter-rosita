@@ -79,6 +79,8 @@ Widget RositaSemantics({
   Set<String>? controlsNodes,
   SemanticsValidationResult validationResult = SemanticsValidationResult.none,
   ui.SemanticsInputType? inputType,
+  String? minValue,
+  String? maxValue,
 }) {
   if (rositaEnableSemantics || key != null) {
     return Semantics(
@@ -154,6 +156,8 @@ Widget RositaSemantics({
       validationResult: validationResult,
       inputType: inputType,
       localeForSubtree: localeForSubtree,
+      minValue: minValue,
+      maxValue: maxValue,
       child: child,
     );
   }

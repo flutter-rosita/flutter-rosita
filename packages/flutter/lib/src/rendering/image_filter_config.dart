@@ -174,10 +174,10 @@ class _DirectImageFilterConfig extends ImageFilterConfig {
   int get hashCode => filter.hashCode;
 
   @override
-  String get debugShortDescription => filter.debugShortDescription;
+  String get debugShortDescription => '${filter.runtimeType}';// filter.debugShortDescription;
 
   @override
-  String toString() => 'ImageFilterConfig(${filter.debugShortDescription})';
+  String toString() => 'ImageFilterConfig(${filter.runtimeType})';// 'ImageFilterConfig(${filter.debugShortDescription})';
 }
 
 class _BlurImageFilterConfig extends ImageFilterConfig {

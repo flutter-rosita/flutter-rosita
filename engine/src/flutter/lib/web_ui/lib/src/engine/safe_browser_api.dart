@@ -91,6 +91,7 @@ bool get windowHasFocus => domDocument.callMethod('hasFocus'.toJS, <dynamic>[].t
 
 /// Parses the font size of [element] and returns the value without a unit.
 num? parseFontSize(DomElement element) {
+  return 1;
   num? fontSize;
 
   if (hasJsProperty(element, 'computedStyleMap')) {

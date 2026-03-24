@@ -813,6 +813,16 @@ class EnginePlatformDispatcher extends ui.PlatformDispatcher {
   @override
   ui.Locale get locale => locales.isEmpty ? const ui.Locale.fromSubtags() : locales.first;
 
+  void setApplicationLocale(ui.Locale locale) {}
+
+  double? get lineHeightScaleFactorOverride => null;
+
+  double? get letterSpacingOverride => null;
+
+  double? get wordSpacingOverride => null;
+
+  double? get paragraphSpacingOverride => null;
+
   /// The full system-reported supported locales of the device.
   ///
   /// This establishes the language and formatting conventions that application

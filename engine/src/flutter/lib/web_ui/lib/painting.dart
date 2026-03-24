@@ -556,8 +556,8 @@ _ColorTransform _getColorTransform(ColorSpace source, ColorSpace destination) {
 enum FilterQuality { none, low, medium, high }
 
 class ImageFilter {
-  factory ImageFilter.blur({double sigmaX = 0.0, double sigmaY = 0.0, TileMode? tileMode}) =>
-      RositaBlurImageFilter(sigmaX: sigmaX, sigmaY: sigmaY, tileMode: tileMode);
+  factory ImageFilter.blur({double sigmaX = 0.0, double sigmaY = 0.0, TileMode? tileMode, Rect? bounds}) =>
+      RositaBlurImageFilter(sigmaX: sigmaX, sigmaY: sigmaY, tileMode: tileMode, bounds: bounds);
 
   factory ImageFilter.dilate({double radiusX = 0.0, double radiusY = 0.0}) =>
       engine.renderer.createDilateImageFilter(radiusX: radiusX, radiusY: radiusY);
